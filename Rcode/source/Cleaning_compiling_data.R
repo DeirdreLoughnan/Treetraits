@@ -12,8 +12,9 @@ phen<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
 
 trt<-read.csv("input/Tree_Traits_2015.csv",header=T, na.strings=c("","NA"))
 
+str(trt)
 #remove columns of logistics (23-25)
-trt<-trt[,c(1:22,26:29)]
+trt<-trt[,c(1:12,18:22,26:29)]
 
 #Start by changing column names in the datasets so they are least match
 colnames(trt)[colnames(trt)=="Individual"] <- "ind"
