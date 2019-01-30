@@ -61,6 +61,7 @@ trtsites<-subset(trt, site==c("SH","HF"))
 #Now I want to put together the phenology dataset and the trait data. How inconsistent are these two datasets?
 #Very different in length, what about the number of trees and 
 
+#Note id= twig level id
 length(unique(phen$ind)) #274
 length(unique(trtsites$ind)) #2196
 
@@ -79,3 +80,13 @@ new<-left_join(avg.phen, trtsites, by= c("ind","sp","site"))
 
 comb<-subset(new, Latitude>0 & Leaf.area>0)
 
+
+#Now calculating the required traits: sla, wood density, 
+
+names(comb)
+comb$sla<-comb$Leaf.area/comb$Dry.mass
+comb$wood.den<-comb$Stem.volume/comb$Stem.mass
+comb$m.dbh<-rowMeans(comb[,26:30], na.rm=TRUE)
+
+
+#Now I can prune the dataset to just the values I will be working with for this project
