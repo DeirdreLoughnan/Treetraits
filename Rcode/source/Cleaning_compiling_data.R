@@ -12,6 +12,28 @@ phen<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
 
 trt<-read.csv("input/Tree_Traits_2015.csv",header=T, na.strings=c("","NA"))
 
+#remove columns of logistics (23-25)
+trt<-trt[,c(1:22,26:29)]
+
+#Start by changing column names in the datasets so they are least match
+colnames(trt)[colnames(trt)=="Individual"] <- "ind"
+colnames(trt)[colnames(trt)=="Site"] <- "site"
+colnames(trt)[colnames(trt)=="Species"] <- "sp"
+colnames(trt)[colnames(trt)=="X.N"] <- "per.N"
+colnames(trt)[colnames(trt)=="X.C"] <- "per.C"
+
+#Many of the columns are character, but should be numeric with NA
+str(trt)
+trt$DBH<-as.numeric(as.character(trt$DBH)); unique(trt$DBH)
+trt$DBH.2<-as.numeric(as.character(trt$DBH.2)); unique(trt$DBH.2)
+trt$DBH.3<-as.numeric(as.character(trt$DBH.3)); unique(trt$DBH.2)
+trt$DBH.4<-as.numeric(as.character(trt$DBH.4)); unique(trt$DBH.2)
+trt$DBH.5<-as.numeric(as.character(trt$DBH.5)); unique(trt$DBH.2)
+
+str(trt)
+trt$per.C<-as.numeric(as.character(trt$per.C)); unique(trt$per.C)
+trt$per.N<-as.numeric(as.character(trt$per.N)); unique(trt$per.N)
+
 names(phen)
 # head(phen)
 
@@ -23,12 +45,6 @@ names(trt)
 
 #Individual, Site, Species, Latitude, Longitude, Elevation, Leaf.area, Fresh.mass, Dry.mass, Stem.vol, Stem.mass, Height, DBH, X.N, X.C, Stomatal. Length, Stomatal.Density
 
-#Start by changing column names in the datasets so they are least match
-colnames(trt)[colnames(trt)=="Individual"] <- "ind"
-colnames(trt)[colnames(trt)=="Site"] <- "site"
-colnames(trt)[colnames(trt)=="Species"] <- "sp"
-colnames(trt)[colnames(trt)=="X.N"] <- "per.N"
-colnames(trt)[colnames(trt)=="X.C"] <- "per.C"
 
 #Note that the individual ID are different between the two datasets; I am going to try and break them apart for sorting
 
@@ -86,7 +102,7 @@ comb<-subset(new, Latitude>0 & Leaf.area>0)
 names(comb)
 comb$sla<-comb$Leaf.area/comb$Dry.mass
 comb$wood.den<-comb$Stem.volume/comb$Stem.mass
-comb$m.dbh<-rowMeans(comb[,26:30], na.rm=TRUE)
-
-
+#comb$m.dbh<-colMeans(comb[,26:30], na.rm=TRUE) #this doesn't do what it should            
+comb$cn<-(comb$per.C/comb$per.N)
+str(comb)
 #Now I can prune the dataset to just the values I will be working with for this project
