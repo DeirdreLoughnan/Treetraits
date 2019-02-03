@@ -6,9 +6,28 @@
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 
+forlatex = TRUE # set to FALSE if just trying new figures, TRUE if outputting for final
+runstan = FALSE # set to TRUE to actually run stan models. FALSE if loading from previous runs
+
+# Analysis of bud burst experiment 2015. 
+
+library(memisc) # for getSummary 
+library(xtable)
+library(scales) # for alpha
+library(ggplot2)
+library(caper) # for pgls
+library(png) # readPNG for Fig 1
+
 setwd("~/Documents/github/Treetraits")
 
-phen<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
+#phen<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
+(toload <- sort(dir("./input")[grep("Budburst Data", dir('./input'))], T)[1])
+
+load(file.path("input", toload))
+
+if(forlatex) figpath = "../docs/ms/images" else figpath = "graphs"
+
+phen<- dx
 
 trt<-read.csv("input/Tree_Traits_2015.csv",header=T, na.strings=c("","NA"))
 
@@ -100,8 +119,11 @@ comb<-subset(new, Latitude>0 & Leaf.area>0)
 
 #Now calculating the required traits: sla, wood density, 
 
+#want sla to be in mm^2/g
+comb$Leaf.area.sq<-comb$Leaf.area*100
+comb$Dry.mass.g<-comb$Dry.mass*1000
 names(comb)
-comb$sla<-comb$Leaf.area/comb$Dry.mass
+comb$sla<-comb$Leaf.area.sq/comb$Dry.mass.g
 comb$wood.den<-comb$Stem.volume/comb$Stem.mass
 #comb$m.dbh<-colMeans(comb[,26:30], na.rm=TRUE) #this doesn't do what it should            
 comb$cn<-(comb$per.C/comb$per.N)
