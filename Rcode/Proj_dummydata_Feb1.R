@@ -38,7 +38,14 @@ ntot<-nsite*nsp*rep #560
 site=gl(nsite, rep, length=ntot); site
 
 #randomly generating numbers for each trait based on what I think a small tree would be
-cn, na.rm=T)
+site.v=rnorm(ntot,5,2) #Ultimatley I will be pooling across sites, so this might not be necessary
+sla.v= rnorm(ntot, 15, 1)
+ht.v=rnorm(ntot, 10, 3) #sigma should be really high bc it includes trees and woody shrubs
+cn.v=rnorm(ntot, 10, 2)
+wood.v=rnorm(ntot, 0.5, 0.05)
+stom.v=rnorm(ntot, 20, 5)
+
+range(comb$cn, na.rm=T)
 #effect sizes
 site.diff=2 # I think site 2 will be delayed by 2 days due to the 5 degree diff in lat
 sla.diff= -1
@@ -138,15 +145,12 @@ an.temp<- map(
     intercept~dnorm(10, 5),
     sla.v~dnorm(20, 1),
     ht.v~dnorm(8, 5), #sigma should be really high bc it includes trees and woody shrubs
-    cn.v~dnorm(10, 2),
-    wood.v~dnorm(0.5, 0.25),
-    stom.v~dnorm(25, 5),
+    cn.v~dnorm(30, 5),
+    wood.v~dnorm(1.5, 1),
+    stom.v~dnorm(250, 50),
     sigma~dunif(5,1)
   ),
-  data=fake.cent,
-  method="Nelder-Mead" ,
-  control=list(maxit=1e4))
+  data=fake.cent)
 
 
-        
 precis(an.temp)
