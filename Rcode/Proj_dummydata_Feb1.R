@@ -38,14 +38,7 @@ ntot<-nsite*nsp*rep #560
 site=gl(nsite, rep, length=ntot); site
 
 #randomly generating numbers for each trait based on what I think a small tree would be
-site.v=rnorm(ntot,5,2) #Ultimatley I will be pooling across sites, so this might not be necessary
-sla.v= rnorm(ntot, 15, 1)
-ht.v=rnorm(ntot, 7, 3) #sigma should be really high bc it includes trees and woody shrubs
-cn.v=rnorm(ntot, 10, 2)
-wood.v=rnorm(ntot, 0.5, 0.05)
-stom.v=rnorm(ntot, 20, 5)
-
-range(comb$cn, na.rm=T)
+cn, na.rm=T)
 #effect sizes
 site.diff=2 # I think site 2 will be delayed by 2 days due to the 5 degree diff in lat
 sla.diff= -1
@@ -66,6 +59,8 @@ stom.diff=1
 mm <- model.matrix(~(site+sla.v+ht.v+cn.v+wood.v+stom.v), data.frame(site,sla.v,ht.v,cn.v,wood.v,stom.v))
 mm
 
+df<-data.frame(site,sla.v,ht.v,cn.v,wood.v,stom.v)
+range(df$ht.v)
 # #stomatal density on its own
 # for (i in 1:ntot){
 #   phen[i]<-int+stom.diff*stom.v[i]+rnorm(1,15, sigma)
@@ -111,16 +106,17 @@ coeff <- c(1, site.diff, sla.diff, ht.diff, cn.diff, wood.diff, stom.diff)
 phen.cent <- rnorm(n = length(site), mean = mm.cent %*% coeff, sd = 1) # This code works but the values are HUGE 
 phen.cent
 
+
 require(rethinking)
 simplehist(phen.cent)
 
 head(mm.cent)
 # phen
 
-fake.cent<- data.frame(phen,mm.cent)
+fake.cent<- data.frame(phen.cent,mm.cent)
 fake.cent
 
-summary(lm(phen ~ (site+site+sla.v+ht.v+cn.v+wood.v+stom.v), data = fake.cent)) # sanity check 
+summary(lm(phen.cent ~ (site+site+sla.v+ht.v+cn.v+wood.v+stom.v), data = fake.cent)) # sanity check 
 
 ####### Uncentered data #############
 coeff <- c(1, site.diff, sla.diff, ht.diff, cn.diff, wood.diff, stom.diff)
@@ -139,14 +135,18 @@ an.temp<- map(
   alist(
     phen~dnorm(mu, sigma),
     mu<-intercept+sla.diff*sla.v+ht.diff*ht.v+cn.diff*cn.v+wood.diff*wood.v+stom.diff*stom.v,
-    intercept~dnorm(20, 5),
-    sla.v~dnorm(30, 5),
+    intercept~dnorm(10, 5),
+    sla.v~dnorm(20, 1),
     ht.v~dnorm(8, 5), #sigma should be really high bc it includes trees and woody shrubs
-    cn.v~dnorm(30, 5),
-    wood.v~dnorm(1.5, 1),
-    stom.v~dnorm(250, 50),
+    cn.v~dnorm(10, 2),
+    wood.v~dnorm(0.5, 0.25),
+    stom.v~dnorm(25, 5),
     sigma~dunif(5,1)
   ),
-  data=fake)
+  data=fake.cent,
+  method="Nelder-Mead" ,
+  control=list(maxit=1e4))
 
+
+        
 precis(an.temp)
