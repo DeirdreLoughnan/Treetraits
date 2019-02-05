@@ -38,21 +38,21 @@ ntot<-nsite*nsp*rep #560
 site=gl(nsite, rep, length=ntot); site
 
 #randomly generating numbers for each trait based on what I think a small tree would be
-site.v=rnorm(ntot,5,2) #Ultimatley I will be pooling across sites, so this might not be necessary
-sla.v= rnorm(ntot, 15, 1)
-ht.v=rnorm(ntot, 10, 3) #sigma should be really high bc it includes trees and woody shrubs
-cn.v=rnorm(ntot, 10, 2)
-wood.v=rnorm(ntot, 0.5, 0.05)
-stom.v=rnorm(ntot, 20, 5)
+sitev=rnorm(ntot,5,2) #Ultimatley I will be pooling across sites, so this might not be necessary
+slav= rnorm(ntot, 15, 1)
+htv=rnorm(ntot, 10, 3) #sigma should be really high bc it includes trees and woody shrubs
+cnv=rnorm(ntot, 10, 2)
+woodv=rnorm(ntot, 0.5, 0.05)
+stomv=rnorm(ntot, 20, 5)
 
 range(comb$cn, na.rm=T)
 #effect sizes
 site.diff=2 # I think site 2 will be delayed by 2 days due to the 5 degree diff in lat
-sla.diff= -1
-ht.diff=0.5
-cn.diff=-0.5
-wood.diff=0.3
-stom.diff=1
+sladiff= -1
+htdiff=0.5
+cndiff=-0.5
+wooddiff=0.3
+stomdiff=1
 
 # #sigmas
 # sla.sd=50
@@ -63,72 +63,92 @@ stom.diff=1
 # 
 
 #now need to calculate the phenology or y
-mm <- model.matrix(~(site+sla.v+ht.v+cn.v+wood.v+stom.v), data.frame(site,sla.v,ht.v,cn.v,wood.v,stom.v))
+mm <- model.matrix(~(site+slav+htv+cnv+woodv+stomv), data.frame(site,slav,htv,cnv,woodv,stomv))
 mm
 
-df<-data.frame(site,sla.v,ht.v,cn.v,wood.v,stom.v)
-range(df$ht.v)
+df<-data.frame(site,slav,htv,cnv,woodv,stomv)
+
 # #stomatal density on its own
 # for (i in 1:ntot){
-#   phen[i]<-int+stom.diff*stom.v[i]+rnorm(1,15, sigma)
+#   phen[i]<-int+stomdiff*stomv[i]+rnorm(1,15, sigma)
 # }
 # phen
+# range(phen)
+# # 
+# #cn on its own
+# for (i in 1:ntot){
+#   phen[i]<-int+wooddiff*woodv[i]+rnorm(1,15, sigma)
+# }
+# range(phen)
 # 
 # #cn on its own
 # for (i in 1:ntot){
-#   phen[i]<-int+wood.diff*wood.v[i]+rnorm(1,15, sigma)
+#   phen[i]<-int+cndiff*cnv[i]+rnorm(1,15, sigma)
 # }
-# phen
-# 
-# #cn on its own
-# for (i in 1:ntot){
-#   phen[i]<-int+cn.diff*cn.v[i]+rnorm(1,15, sigma)
-# }
-# phen
+# range(phen)
 # 
 # #SLA on its own
 # for (i in 1:ntot){
-#   phen[i]<-int+sla.diff*sla.v[i]+rnorm(1,15, sigma)
+#   phen[i]<-int+sladiff*slav[i]+rnorm(1,15, sigma)
 # }
-# phen
+# range(phen)
 # 
 # #ht on its own
 # for (i in 1:ntot){
-#   phen[i]<-int+ht.diff*ht.v[i]+rnorm(1,15, sigma)
+#   phen[i]<-int+htdiff*htv[i]+rnorm(1,15, sigma)
 # }
 # phen
+# range(phen)
 # 
-# #Total model
 # for (i in 1:ntot){
-#   phen[i]<-int+sla.diff*sla.v[i]+ht.diff*ht.v[i]+cn.diff*cn.v[i]+wood.diff*wood.v[i]+stom.diff*stom.v[i]+rnorm(1,15, sigma)
+#   phenfull[i]<-int+sladiff*slav[i]+htdiff*htv[i]+cndiff*cnv[i]+wooddiff*woodv[i]+stomdiff*stomv[i]+rnorm(1,15, sigma)
+#   
 # }
+# phenfull
+# #These values look good, they are all positive (unlike using the method below...)
 
 
+###############################################
 mm.cent<-scale(mm[,3:7]);mm.cent
 mm.cent<-cbind(mm[,1:2], mm.cent)
-head(mm.cent)
-
-coeff <- c(1, site.diff, sla.diff, ht.diff, cn.diff, wood.diff, stom.diff)
-
-phen.cent <- rnorm(n = length(site), mean = mm.cent %*% coeff, sd = 1) # This code works but the values are HUGE 
-phen.cent
-
+# head(mm.cent)
+# 
+# coeff <- c(1, site.diff, sladiff, htdiff, cndiff, wooddiff, stomdiff)
+# 
+# #centered
+# phencent <- rnorm(n = length(site), mean = mm.cent %*% coeff, sd = 1) # This code works but the values are HUGE
+# phencent
+# 
+# #uncentered
+# phen <- rnorm(n = length(site), mean = mm %*% coeff, sd = 1) # This code works but the values are HUGE
+# range(phen) #why are some of these values negative?
+##############################################
 
 require(rethinking)
-simplehist(phen.cent)
+simplehist(phenfull)
 
-head(mm.cent)
-# phen
+#Now to do the same phen calculation, but with centered data
 
-fake.cent<- data.frame(phen.cent,mm.cent)
-fake.cent
 
-summary(lm(phen.cent ~ (site+site+sla.v+ht.v+cn.v+wood.v+stom.v), data = fake.cent)) # sanity check 
+slav<-scale(slav);slav
+htv<-scale(htv);htv
+cnv<-scale(cnv);cnv
+woodv<-scale(woodv);woodv
+stomv<-scale(stomv);stomv
+
+
+for (i in 1:ntot){
+  phencent[i]<-int+sladiff*slav[i]+htdiff*htv[i]+cndiff*cnv[i]+wooddiff*woodv[i]+stomdiff*stomv[i]+rnorm(1,15, sigma)
+}
+phencent
+
+fakecent<- data.frame(phencent,mm.cent)
+fakecent
+
+summary(lm(phencent ~ (slav+htv+cnv+woodv+stomv), data = fakecent)) # sanity check 
 
 ####### Uncentered data #############
-coeff <- c(1, site.diff, sla.diff, ht.diff, cn.diff, wood.diff, stom.diff)
-
-phen <- rnorm(n = length(site), mean = mm %*% coeff, sd = 1) # This code works but the values are HUGE 
+hen <- rnorm(n = length(site), mean = mm %*% coeff, sd = 1) # This code works but the values are HUGE 
 phen
 
 require(rethinking)
@@ -141,16 +161,26 @@ fake
 an.temp<- map(
   alist(
     phen~dnorm(mu, sigma),
-    mu<-intercept+sla.diff*sla.v+ht.diff*ht.v+cn.diff*cn.v+wood.diff*wood.v+stom.diff*stom.v,
+    mu<-intercept+sladiff*slav+htdiff*htv+cndiff*cnv+wooddiff*woodv+stomdiff*stomv,
     intercept~dnorm(10, 5),
-    sla.v~dnorm(20, 1),
-    ht.v~dnorm(8, 5), #sigma should be really high bc it includes trees and woody shrubs
-    cn.v~dnorm(30, 5),
-    wood.v~dnorm(1.5, 1),
-    stom.v~dnorm(250, 50),
+    sladiff~dnorm(20, 1),
+    htdiff~dnorm(8, 5), #sigma should be really high bc it includes trees and woody shrubs
+    cndiff~dnorm(30, 5),
+    wooddiff~dnorm(1.5, 1),
+    stomdiff~dnorm(250, 50),
     sigma~dunif(5,1)
   ),
-  data=fake.cent)
+  data=fakecent)
 
+range(fakecent$slav)
 
+an.temp<- map2stan(
+  alist(
+    phen~dnorm(mu, sigma),
+    mu<-intercept+sladiff*slav,
+    intercept~dnorm(0, 1),
+    sladiff~dnorm(0, 1),
+    sigma~dunif(0,0.5)
+  ),
+  data=fakecent)
 precis(an.temp)

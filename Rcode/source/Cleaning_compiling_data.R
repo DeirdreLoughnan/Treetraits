@@ -1,8 +1,8 @@
 ### Started January 29 2019 ###
 
-## DL writing merging data for phenology and functional traits ##
+## DL writing merging data for phenologyology and functional traits ##
 
-#The aim of this code is to combine the phenology and functional trait data collected by DF in 2015
+#The aim of this code is to combine the phenologyology and functional trait data collected by DF in 2015
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 
@@ -20,14 +20,14 @@ library(png) # readPNG for Fig 1
 
 setwd("~/Documents/github/Treetraits")
 
-#phen<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
+#phenology<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
 (toload <- sort(dir("./input")[grep("Budburst Data", dir('./input'))], T)[1])
 
 load(file.path("input", toload))
 
 if(forlatex) figpath = "../docs/ms/images" else figpath = "graphs"
 
-phen<- dx
+phenology<- dx
 
 trt<-read.csv("input/Tree_Traits_2015.csv",header=T, na.strings=c("","NA"))
 
@@ -54,8 +54,8 @@ str(trt)
 trt$per.C<-as.numeric(as.character(trt$per.C)); unique(trt$per.C)
 trt$per.N<-as.numeric(as.character(trt$per.N)); unique(trt$per.N)
 
-names(phen)
-# head(phen)
+names(phenology)
+# head(phenology)
 
 names(trt)
 #head(trt)
@@ -77,33 +77,34 @@ names(trt)
 # #A bit hacky,but the order appears to be the same, so this shouldn't be an issue. 
 # trt2<-cbind(trt,temp)
 # 
-# #now doing the same for the phenology data
-# tempphen<-colsplit(phen$id, "(?<=\\p{L})(?=[\\d+$])", c("char", "digit"))
+# #now doing the same for the phenologyology data
+# tempphenology<-colsplit(phenology$id, "(?<=\\p{L})(?=[\\d+$])", c("char", "digit"))
 # 
 # 
 # head(trt2)
 # 
-# #Now paste them together to get a species ID that matches the one in the phenology dataset, need to further sep out replicates 
+# #Now paste them together to get a species ID that matches the one in the phenologyology dataset, need to further sep out replicates 
 # trt2$code<-paste(trt2$char, trt2$digit, sep = '_')
 # 
 # head(trt2)
 
-#Subset both for only the two populations both phenology and trait data were collected:
-unique(phen$site)
+#Subset both for only the two populations both phenologyology and trait data were collected:
+unique(phenology$site)
 unique(trt$site)
 
 trtsites<-subset(trt, site==c("SH","HF"))
 
-#Now I want to put together the phenology dataset and the trait data. How inconsistent are these two datasets?
+#Now I want to put together the phenologyology dataset and the trait data. How inconsistent are these two datasets?
 #Very different in length, what about the number of trees and 
 
 #Note id= twig level id
-length(unique(phen$ind)) #274
+length(unique(phenology$ind)) #274
 length(unique(trtsites$ind)) #2196
 
-#I will think on this more, but here I am taking the mean of the phenology for a given combination of 
+#I will think on this more, but here I am taking the mean of the phenologyology for a given combination of 
 require(plyr)
-avg.phen<-ddply(phen, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise, 
+require(dplyr)
+avg.phenology<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise, 
                 Term.flm=mean(Term.fl, na.rm=TRUE),
                 Lat.flm=mean(Lat.fl, na.rm=TRUE),
                 # Term.lfm=mean(Term.lf, na.rm=TRUE),
@@ -112,7 +113,7 @@ avg.phen<-ddply(phen, c("ind", "sp","site","treatcode","warm","photo","chill"), 
                 lleafm=mean(lleaf, na.rm=TRUE))
 
 
-new<-left_join(avg.phen, trtsites, by= c("ind","sp","site"))
+new<-left_join(avg.phenology, trtsites, by= c("ind","sp","site"))
 
 comb<-subset(new, Latitude>0 & Leaf.area>0)
 
