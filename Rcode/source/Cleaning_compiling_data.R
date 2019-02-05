@@ -130,3 +130,4 @@ comb$wood.den<-comb$Stem.volume/comb$Stem.mass
 comb$cn<-(comb$per.C/comb$per.N)
 str(comb)
 #Now I can prune the dataset to just the values I will be working with for this project
+comb<-comb[,c(1:7,10:11,20:21,29,32:34) ]; head(comb)

@@ -13,15 +13,19 @@ options(stringsAsFactors = FALSE)
 
 setwd("~/Documents/github/Treetraits")
 source('Rcode/source/Cleaning_compiling_data.R')
-
+head(comb)
 
 str(comb)
+length(unique(comb$sp))
+
+cor<-comb[,10:15]
+pairs(cor)
 #Starting by looking for high correlations between traits
 
 # Correlation panel
 #there are many ways to do this, but this provides a busy but I think useful visual
 library("PerformanceAnalytics")
-chart.Correlation(comb[,c(20:21, 28:32)], histogram=TRUE, pch=19)
+chart.Correlation(comb[,c(10:15)], histogram=FALSE, pch=19)
 
 
 #To start with the simpler model, I am going to develop a linear model with just the five traits
@@ -47,6 +51,14 @@ cnv=rnorm(ntot, 10, 2)
 woodv=rnorm(ntot, 0.5, 0.05)
 stomv=rnorm(ntot, 20, 5)
 
+
+
+par(mfrow=c(2,3))
+dens(slav)
+dens(htv)
+dens(cnv)
+dens(woodv)
+dens(stomv)
 
 #effect sizes
 site.diff=2 # I think site 2 will be delayed by 2 days due to the 5 degree diff in lat
@@ -110,7 +122,7 @@ for (i in 1:ntot){
   phenfull[i]<-int+sladiff*slav[i]+htdiff*htv[i]+cndiff*cnv[i]+wooddiff*woodv[i]+stomdiff*stomv[i]+rnorm(1, 0, sigma)
 }
 range(phenfull)
-summary(lm(phen~slav+htv+cnv+woodv+stomv))
+summary(lm(phenfull~slav+htv+cnv+woodv+stomv))
 #These values look good, they are all positive (unlike using the method below...)
 
 #SLA isn't beign fit well with the data
@@ -136,9 +148,9 @@ head(mm.cent)
 # phen <- rnorm(n = length(site), mean = mm %*% coeff, sd = 1) # This code works but the values are HUGE
 # range(phen) #why are some of these values negative?
 ##############################################
-
+par(mfrow=c(1,1))
 require(rethinking)
-simplehist(phenfull)
+simplehist(phenfull, xlab="Day of budburst")
 
 #Now to do the same phen calculation, but with centered data
 
@@ -171,9 +183,7 @@ summary(lm(phenfull ~ (slav+htv+cnv+woodv+stomv), data = fake)) # sanity check
 summary(lm(phencent ~ (slav+htv+cnv+woodv+stomv), data = fakecent)) # sanity check 
 temp<-lm(phencent ~ (slav+htv+cnv+woodv+stomv), data = fakecent)
 
-#Residual plots:
-fakecent.pred<-
-resid.fakecent<-slav-
+
 ####### Uncentered data #############
 # phen <- rnorm(n = length(site), mean = mm %*% coeff, sd = 1) # This code works but the values are HUGE 
 # phen
@@ -185,39 +195,37 @@ simplehist(phencent)
 
 
 
-###### MAP MODEL ############
-# an.temp<- map(
-#   alist(
-#     phen~dnorm(mu, sigma),
-#     mu<-intercept+sladiff*slav+htdiff*htv+cndiff*cnv+wooddiff*woodv+stomdiff*stomv,
-#     intercept~dnorm(10, 1),
-#     sladiff~dnorm(20, 1),
-#     htdiff~dnorm(8, 5), #sigma should be really high bc it includes trees and woody shrubs
-#     cndiff~dnorm(30, 5),
-#     wooddiff~dnorm(1.5, 1),
-#     stomdiff~dnorm(250, 50),
-#     sigma~dunif(5,1)
-#   ),
-#   data=fake)
-# 
-# #Now trying a centered model
-# an.temp<- map(
-#   alist(
-#     phen~dnorm(mu, sigma),
-#     mu<-intercept+sladiff*slav+htdiff*htv+cndiff*cnv+wooddiff*woodv+stomdiff*stomv,
-#     intercept~dnorm(0, 1),
-#     sladiff~dnorm(0, 1),
-#     htdiff~dnorm(0, 5), #sigma should be really high bc it includes trees and woody shrubs
-#     cndiff~dnorm(0, 5),
-#     wooddiff~dnorm(0, 1),
-#     stomdiff~dnorm(0, 50),
-#     sigma~dunif(0,1)
-#   ),
-#   data=fakecent)
+###### MAP MODEL ###########
+#Simpiler model with just sla
+sla.m<- map(
+  alist(
+    phen~dnofullrm(mu, sigmahere),
+    mu<-a+bsla*slav,
+    a~dnorm(0, 10),
+    bsla~dnorm(0, 10),
+    sigmahere~dunif(0,10)
+  ),
+  data=fake)
+precis(sla.m)
+vcov(sla.m)
 
-##############################################################
-#Full model wont work, what about a simplified one?
-#Now trying a centered model
+#plot the posterior
+plot( phencent ~ slav , data=fakecent)
+abline( a=coef(sla.m)["a"] , b=-0.41 )
+
+#To get the uncertainty plot many of these lines
+post <- extract.samples( sla.m, n=1000)
+
+# display raw data and sample size
+plot( fake$phenfull , fake$slav ,
+      xlim=range(fake$phenfull) , ylim=range(fake$slav) ,
+      col=rangi2 , xlab="SLA" , ylab="Budburst day" )
+
+# plot the lines, with transparency
+for ( i in 1:20 )
+  abline( a=post$a[i] , b=post$b[i] , col=col.alpha("black",0.3) )
+#######################################################
+#Now trying adding variables
 full.m<- map(
   alist(
     phencent~dnorm(mu, sigmahere),
@@ -232,6 +240,36 @@ full.m<- map(
   ),
   data=fakecent)
 precis(full.m)
+
+#Very small intervals when you plot the MAP values
+plot(precis(full.m))
+
+vcov(full.m)
+diag(vcov(full.m))
+cov2cor(vcov(full.m))
+
+precis( full.m , corr=TRUE )
+
+par(mfrow=c(2,3))
+plot(phencent~slav, data=fakecent)
+plot(phencent~htv, data=fakecent)
+plot(phencent~cnv, data=fakecent)
+plot(phencent~woodv, data=fakecent)
+plot(phencent~stomv, data=fakecent)
+
+#posteriro predictive checks
+temp.seq <- 1:ntot
+length()
+for ( w in -1:1 ) {
+  
+  plot( phencent~slav, data=fakecent)
+  mu <- link( full.m , data=fakecent )
+  mu.mean <- apply( mu , 2 , mean )
+  mu.PI <- apply( mu , 2 , PI , prob=0.97 )
+  lines( temp.seq , mu.mean )
+  lines( temp.seq , mu.PI[1,] , lty=2 )
+  lines( temp.seq , mu.PI[2,] , lty=2 )
+}
 
 #Now using map2stan
 full.stan<- map2stan(
