@@ -13,7 +13,7 @@ options(stringsAsFactors = FALSE)
 #Note: After looking for collinearity in the x varibales, I decided to exclude DBH and just use ht
 
 setwd("~/Documents/github/Treetraits")
-source('Rcode/source/Cleaning_compiling_data.R') #Here I combined the budburst and trait data, averaging over individual trees for a given treatment. 
+source('Rcode/source/Cleaning_compiling_data.R') #Here I combined the budburst and trait data, averaging over individual trees for a given treatment. -->stopped giving me the final dataset, unclear why
 
 str(comb)
 length(unique(comb$sp))
@@ -24,8 +24,8 @@ pairs(cor)
 
 # Correlation panel
 #there are many ways to do this, but this provides a busy but I think useful visual
-library("PerformanceAnalytics")
-chart.Correlation(comb[,c(10:15)], histogram=FALSE, pch=19)
+# library("PerformanceAnalytics")
+# chart.Correlation(comb[,c(10:15)], histogram=FALSE, pch=19)
 
 ###################################################
 # Making test data
@@ -151,6 +151,7 @@ cnv<-scale(cnv)
 woodv<-scale(woodv)
 stomv<-scale(stomv)
 
+#Testing whether the issue is just stomatal density:
 phencent<-vector()
 for (i in 1:ntot){
   phencent[i]<-int+sladiff*slav[i]+htdiff*htv[i]+cndiff*cnv[i]+wooddiff*woodv[i]+stomdiff*stomv[i]+rnorm(1,0, sigma)
@@ -264,7 +265,7 @@ full_stan<- map2stan(
     sigmahere~dunif(0,10)
   ),
   data=fakecent)
-
+plot(full_stan)
 precis(full_stan)
 
 plot(full_stan)
@@ -274,6 +275,61 @@ str(post)
 
 pairs(post)
 pairs(full_stan)
+
+################################################################
+#Testing whether the issue is just stomatal density:
+nstom<-vector()
+for (i in 1:ntot){
+  nstom[i]<-int+sladiff*slav[i]+htdiff*htv[i]+cndiff*cnv[i]+wooddiff*woodv[i]+rnorm(1,0, sigma)
+}
+
+#Now creating the combined datasets of the fake data for use with map
+fake_nstom<- data.frame(nstom,mm.cent)
+head(fake_nstom)
+#Note Stan doesn't like dots so changing X.Intercept name
+colnames(fake_nstom)[colnames(fake_nstom)=="X.Intercept."] <- "Intercept"
+head(fake_nstom)
+
+full_nstom<- map(
+  alist(
+    phencent~dnorm(mu, sigmahere),
+    mu<-a+bsla*slav+bht*htv+bcn*cnv+bwood*woodv,
+    a~dnorm(0, 10),
+    bsla~dnorm(0, 10),
+    bht~dnorm(0, 10),
+    bcn~dnorm(0, 10),
+    bstom~dnorm(0, 10),
+    sigmahere~dunif(0,10)
+  ),
+  data=fake_nstom)
+precis(full_nstom)
+
+#Testing whether the issue is just wood density: 
+nwood<-vector()
+for (i in 1:ntot){
+  nwood[i]<-int+sladiff*slav[i]+htdiff*htv[i]+cndiff*cnv[i]+stomdiff*stomv[i]+rnorm(1,0, sigma)
+}
+
+#Now creating the combined datasets of the fake data for use with map
+fake_nwood<- data.frame(nwood,mm.cent)
+head(fake_nwood)
+#Note Stan doesn't like dots so changing X.Intercept name
+colnames(fake_nwood)[colnames(fake_nwood)=="X.Intercept."] <- "Intercept"
+head(fake_nwood)
+
+full_nwood<- map(
+  alist(
+    phencent~dnorm(mu, sigmahere),
+    mu<-a+bsla*slav+bht*htv+bcn*cnv+bstom*stomv,
+    a~dnorm(0, 10),
+    bsla~dnorm(0, 10),
+    bht~dnorm(0, 10),
+    bcn~dnorm(0, 10),
+    bstom~dnorm(0, 10),
+    sigmahere~dunif(0,10)
+  ),
+  data=fake_nwood)
+precis(full_nwood)
 ##########################################
 # PLOTS
 ##########################################
@@ -354,7 +410,7 @@ A.sim <- sim( full_m , data=fakecent , n=1e4 )
 A.PI <- apply( A.sim , 2 , PI )
 plot( phencent ~ slav , data=fakecent , type="n" )
 
-length(A.seq); length(mu.mean)
+length(R.seq); length(mu.mean)
 lines( R.seq , mu.mean )
 shade( mu.PI , R.seq )
 shade( A.PI , R.seq )
@@ -421,4 +477,42 @@ for ( i in 1:nrow(fakecent) ) {
 }
 
 
+#######################################################
+#######################################################
+# Try it using the real data
+#######################################################
+require(rethinking)
+head(comb)
 
+#Ht has missing values, also need to remove unneeded columns
+
+names(comb_m)
+comb_m<-comb[,c(8,10:15)]
+head(comb_m)
+comb_model <- comb_m[ complete.cases(comb) , ]
+
+full_comb<- map2stan(
+  alist(
+    phencent~dnorm(mu, sigma),
+    mu<-a+bsla*sla+bht*Height+bcn*cn+bstom*stom_d+bwood*wood_den,
+    a~dnorm(0, 10),
+    bsla~dnorm(0, 10),
+    bht~dnorm(0, 10),
+    bcn~dnorm(0, 10),
+    bstom~dnorm(0, 10),
+    bwood~dnorm(0, 10),
+    sigma~dunif(0,10)
+  ),
+  data=comb_model)
+
+pairs(full_comb)
+plot(full_stan)
+precis(full_stan)
+
+plot(full_stan)
+
+post <- extract.samples( full_stan )
+str(post)
+
+pairs(post)
+pairs(full_stan)
