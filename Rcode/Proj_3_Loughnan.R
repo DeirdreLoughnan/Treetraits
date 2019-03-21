@@ -3,7 +3,7 @@
 ## DL writing dummy data for 507 Project ##
 
 #The aim of this code is to build test data for modeling the relationship between phenology and functional traits
-
+#Update: Added partial pooling across species & also changed data to not exclude sites with no phenology data
 
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
@@ -18,8 +18,8 @@ source('Rcode/source/Cleaning_compiling_data.R') #Here I combined the budburst a
 str(comb)
 length(unique(comb$sp))
 
-# cor<-comb[,10:15]
-# pairs(cor)
+cor<-comb[,10:15]
+pairs(cor)
 #Starting by looking for high correlations between traits
 
 # Correlation panel
@@ -41,6 +41,7 @@ nsp = 28 #number of species
 rep = 50 # I think the maximum number is 10, but to increase the size of the dataset I have made it 50
 ntot<-nsite*nsp*rep #2800
 
+int_sp<-rnorm(nsp, mean=int, sd=sigma)
 #Building the required dataframe for all of the replication and traits
 #Assigning a variable to site **This will be returned to later when partially pooling across sites
 site=gl(nsite, rep, length=ntot)
@@ -64,29 +65,22 @@ wooddiff=0.3
 stomdiff=1
 
 #making a matrix of the x dummy variables
-mm <- model.matrix(~(site+slav+htv+cnv+woodv+stomv), data.frame(site,slav,htv,cnv,woodv,stomv))
-mm
+ mm <- model.matrix(~(site+slav+htv+cnv+woodv+stomv), data.frame(site,slav,htv,cnv,woodv,stomv))
+ mm
 
 #making a simple data frame of the x dummy variables
 df<-data.frame(site,slav,htv,cnv,woodv,stomv)
 
 ################################################
 #To resolve initial issues of negative values and unusual predictions, the below code was used to test variables individually
-stomv=rnorm(ntot, 20, 1)
-stomdiff=1
-phen<-vector()
-#stomatal density on its own
-for (i in 1:ntot){
-  phen[i]<-int+stomdiff*stomv[i]+rnorm(1,0, sigma)
-}
-range(phen)
 
-stomtemp<- data.frame(phen,mm)
-#head(stomtemp)
-colnames(fakecent)[colnames(fakecent)=="X.Intercept."] <- "Intercept"
-head(fakecent)
-summary(lm(phenfull ~ (stomv), data = fake)) 
-
+#phen<-vector()
+# #stomatal density on its own
+# for (i in 1:ntot){
+#   phen[i]<-int+stomdiff*stomv[i]+rnorm(1,0, sigma)
+# }
+# phen
+# range(phen)
 # #
 # #cn on its own
 # for (i in 1:ntot){
@@ -129,8 +123,27 @@ par(mfrow=c(1,1))
 require(rethinking)
 simplehist(phenfull, xlab="Day of budburst")
 
+
+#<><><><><><><><><><><><><><><><><><>
+# Now adding separate intercepts for each species
+baseinter=11
+sp_int<-baseinter+c(1:nsp)-mean(1:nsp)
+sp_int
+
+fake_spint<-vector()
+sp_mean <- rnorm(nsp, 11, 3)
+for (j in c(1:length(sp_mean))){
+  phen_spint<- int+sladiff*slav+htdiff*htv+cndiff*cnv+wooddiff*woodv+stomdiff*stomv+rnorm(ntot, sp_mean[j], sigma)
+  temp<-data.frame(phen_spint, sp=c(1:length(sp_mean)))
+  phen_spint<- rbind(fake_spint, temp)
+}
+head(phen_spint)
+range(phen_spint)
+
+range(fake$phenfull)
+range(fake_spint$phen_spint)
 ###############################################
-#Creating centered data:
+# Creating centered trait data:
 # centering the x dummy data
 mm.cent<-scale(mm[,3:7]);head(mm.cent)
 #pairs(mm.cent) # These plots are just clouds of points and not helpful
@@ -168,47 +181,118 @@ head(phencent)
 #hist of sample distribution
 simplehist(phencent, xlab="Budburst daty")
 
+#<><><><><><><><><><><><><><><><><><>
+# Now adding separate intercepts for each species
+# For centered data
+baseinter=11
+sp_int<-baseinter+c(1:nsp)-mean(1:nsp)
+sp_int
 
+fake_spint<-vector()
+sp_mean <- rnorm(nsp, 11, 3)
+for (j in c(1:length(sp_mean))){
+  phen_spint_cent<- int+sladiff*slav+htdiff*htv+cndiff*cnv+wooddiff*woodv+stomdiff*stomv+rnorm(ntot, sp_mean[j], sigma)
+  temp<-data.frame(phen_spint_cent, sp=c(1:length(sp_mean)))
+  phen_spint_cent<- rbind(fake_spint, temp)
+}
+head(phen_spint_cent)
+range(phen_spint_cent)
+
+####################################################################################
 #Now creating the combined datasets of the fake data for use with map
-fake<- data.frame(phenfull,mm.cent)
+fake<- data.frame(phenfull,mm)
 head(fake)
+
+fake_spint<- data.frame(phen_spint,mm)
+head(fake_spint)
 
 fakecent<- data.frame(phencent,mm.cent)
 head(fakecent)
 
+fake_spint_cent<- data.frame(phen_spint_cent,mm.cent)
+head(fake_spint_cent)
+
 #Note Stan doesn't like dots so changing X.Intercept name
+colnames(fake)[colnames(fake)=="X.Intercept."] <- "Intercept"
+colnames(fake_spint)[colnames(fake_spint)=="X.Intercept."] <- "Intercept"
 colnames(fakecent)[colnames(fakecent)=="X.Intercept."] <- "Intercept"
-head(fakecent)
+colnames(fake_spint_cent)[colnames(fake_spint_cent)=="X.Intercept."] <- "Intercept"
 
-summary(lm(phenfull ~ (slav+htv+cnv+woodv+stomv), data = fake)) 
 
-summary(lm(phencent ~ (slav+htv+cnv+woodv+stomv), data = fakecent))
+# summary(lm(phenfull ~ (slav+htv+cnv+woodv+stomv), data = fake)) 
+# 
+# summary(lm(phencent ~ (slav+htv+cnv+woodv+stomv), data = fakecent))
 
 ####### Uncentered data #############
 # phen <- rnorm(n = length(site), mean = mm %*% coeff, sd = 1) # This code works but the values are HUGE 
 # phen
 
-require(rethinking)
-simplehist(phenfull)
+#right now I am not including site in the model, so the df needs to be trimmed
+#what role does the intercept column play?
+#fake_spint_cent<-fake_spint_cent[,c(1:3,5:9)]; head(fake_spint_cent) #includes intercept
+fake_spint_cent<-fake_spint_cent[,c(1:2,5:9)]; head(fake_spint_cent) #does NOT include intercept
 
-simplehist(phencent)
-
-
-
-###### MAP MODEL ###########
+###### MAP2Stan MODEL ###########
 #Simpiler model with just sla
-sla.m<- map(
-  alist(
-    phencent~dnorm(mu, sigmahere),
-    mu<-a+bsla*slav,
-    a~dnorm(0, 10),
-    bsla~dnorm(0, 10),
-    sigmahere~dunif(0,10)
-  ),
-  data=fakecent)
-precis(sla.m)
-vcov(sla.m)
 
+#Starting from the very basics witht his new dataset 
+
+int.m<- map2stan(
+  alist(
+    phencent~dnorm(mu, sigma),
+    mu<-a[sp],
+    a[sp]~dnorm(0, 100),
+    sigma~dunif(0,100)
+  ),
+  data=fake_spint_cent, chains=4)
+
+
+precis(int.m)
+
+plot(int.m)
+#It makes sense that this model has issues, the data was generated with individual intercepts in mind, but I did not expect it to be this bad
+#has 56 divergent transitions among other issues
+
+# <>  <>  <>  <>  <>  <>  <>  <>  <>  <>  <>  <>  <>  <>  <> #
+# Model including individual species intercepts
+int.m<- map2stan(
+   alist(
+    phencent~dnorm(mu, sigma),
+    mu<-a[sp],
+    a[sp]~dnorm(0, 100),
+    sigma~dunif(0,100)
+       ),
+  data=fake_spint_cent)
+
+int.m<- map2stan(
+  alist(
+    phencent~dnorm(mu, sigma),
+    mu<-a+a_sp[sp],
+    a_sp[sp]~dnorm(a,sigma),
+    a~dnorm(0, 100),
+    sigma~dunif(0,100)
+  ),
+  data=fake_spint_cent,
+  control = list(max_treedepth = 15))
+
+precis(int.m, depth=2)
+
+plot(int.m)
+
+head(fake_spint_cent)
+
+slam <- map2stan(
+  alist(
+    phencent~ dnorm( mu , sigma ) ,
+    mu<-a[sp]+bsla*slav,
+    a[sp] ~ dnorm( 0,10) ,
+    bsla~dnorm(0, 10),
+    sigma ~ dunif(0,1)
+  ), data=fake_spint_cent #, iter=4000 , chains=4 
+  )
+
+precis(slam)
+plot(slam)
 #plot the posterior
 plot( phencent ~ slav , data=fakecent)
 abline( a=coef(sla.m)["a"] , b=coef(sla.m)["bsla"] )
@@ -261,7 +345,7 @@ head(fakecent)
 #Now using map2stan
 full_stan<- map2stan(
   alist(
-    phencent~dnorm(mu, sigma),
+    phencent~dnorm(mu, sigmahere),
     mu<-a+bsla*slav+bht*htv+bcn*cnv+bstom*stomv+bwood*woodv,
     a~dnorm(0, 10),
     bsla~dnorm(0, 10),
@@ -269,12 +353,13 @@ full_stan<- map2stan(
     bcn~dnorm(0, 10),
     bstom~dnorm(0, 10),
     bwood~dnorm(0, 10),
-    sigma~dunif(0,3)
+    sigmahere~dunif(0,10)
   ),
-  data=fakecent, chains=4, iter=4000)
+  data=fakecent)
 plot(full_stan)
 precis(full_stan)
 
+plot(full_stan)
 
 post <- extract.samples( full_stan )
 str(post)
@@ -304,7 +389,7 @@ full_nstom<- map(
     bsla~dnorm(0, 10),
     bht~dnorm(0, 10),
     bcn~dnorm(0, 10),
-    bwood~dnorm(0, 10),
+    bstom~dnorm(0, 10),
     sigmahere~dunif(0,10)
   ),
   data=fake_nstom)
@@ -335,34 +420,6 @@ full_nwood<- map(
     sigmahere~dunif(0,10)
   ),
   data=fake_nwood)
-plot(full_nwood)
-precis(full_nwood)
-
-#Testing whether the issue is just cn: 
-ncn<-vector()
-for (i in 1:ntot){
-  ncn[i]<-int+sladiff*slav[i]+htdiff*htv[i]+wooddiff*woodv[i]+stomdiff*stomv[i]+rnorm(1,0, sigma)
-}
-ncn
-#Now creating the combined datasets of the fake data for use with map
-fake_ncn<- data.frame(ncn,mm.cent)
-
-#Note Stan doesn't like dots so changing X.Intercept name
-colnames(fake_ncn)[colnames(fake_ncn)=="X.Intercept."] <- "Intercept"
-
-full_ncn<- map(
-  alist(
-    phencent~dnorm(mu, sigmahere),
-    mu<-a+bsla*slav+bht*htv+bwood*woodv+bstom*stomv,
-    a~dnorm(0, 10),
-    bsla~dnorm(0, 10),
-    bht~dnorm(0, 10),
-    bwood~dnorm(0, 10),
-    bstom~dnorm(0, 10),
-    sigmahere~dunif(0,10)
-  ),
-  data=fake_ncn)
-plot(full_nwood)
 precis(full_nwood)
 ##########################################
 # PLOTS
@@ -440,8 +497,7 @@ plot(phencent~woodv, data=fakecent, ylim=
 mu <- link( full_m , data=fakecent )
 mu.mean <- apply( mu , 2 , mean ); length(mu.mean)
 mu.PI <- apply( mu , 2 , PI )
-A.sim <- sim( full_m
-              , data=fakecent , n=1e4 )
+A.sim <- sim( full_m , data=fakecent , n=1e4 )
 A.PI <- apply( A.sim , 2 , PI )
 plot( phencent ~ slav , data=fakecent , type="n" )
 

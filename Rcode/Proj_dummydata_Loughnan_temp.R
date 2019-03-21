@@ -32,7 +32,6 @@ length(unique(comb$sp))
 ###################################################
 #To start with a simple model, I am going to develop a linear model with just the five traits
 
-
 int<-11 # days into the experiment of bb 
 sigma<-2
 
@@ -53,7 +52,7 @@ slav= rnorm(ntot, 5, 1);
 htv=rnorm(ntot, 11, 3) #sigma should be really high (3m) bc it includes trees and woody shrubs
 cnv=rnorm(ntot, 10, 2)
 woodv=rnorm(ntot, 0.5, 0.05)
-stomv=rnorm(ntot, 20, 5)
+stomv=rnorm(ntot, 50, 5)
 
 #effect sizes
 site.diff=2 # I think site 2 will be delayed by 2 days due to the 5 degree diff in lat
@@ -61,7 +60,7 @@ sladiff= -0.5
 htdiff=0.5
 cndiff=-0.5
 wooddiff=0.3
-stomdiff=1
+stomdiff=10
 
 #making a matrix of the x dummy variables
 mm <- model.matrix(~(site+slav+htv+cnv+woodv+stomv), data.frame(site,slav,htv,cnv,woodv,stomv))
@@ -197,17 +196,17 @@ simplehist(phencent)
 
 ###### MAP MODEL ###########
 #Simpiler model with just sla
-sla.m<- map(
+ht.m<- map(
   alist(
     phencent~dnorm(mu, sigmahere),
-    mu<-a+bsla*slav,
+    mu<-a+bstom*stomv,
     a~dnorm(0, 10),
-    bsla~dnorm(0, 10),
+    bstom~dnorm(0, 10),
     sigmahere~dunif(0,10)
   ),
   data=fakecent)
-precis(sla.m)
-vcov(sla.m)
+precis(ht.m)
+
 
 #plot the posterior
 plot( phencent ~ slav , data=fakecent)
@@ -228,7 +227,7 @@ for ( i in 1:20 )
 #Now trying adding all variables
 full_m<- map(
   alist(
-    phencent~dnorm(mu, sigmahere),
+    phencent~dnorm(mu, sigma),
     mu<-a+bsla*slav+bht*htv+bcn*cnv+bstom*stomv+bwood*woodv,
     a~dnorm(0, 10),
     bsla~dnorm(0, 10),
@@ -236,7 +235,7 @@ full_m<- map(
     bcn~dnorm(0, 10),
     bstom~dnorm(0, 10),
     bwood~dnorm(0, 10),
-    sigmahere~dunif(0,10)
+    sigma~dunif(0,10)
   ),
   data=fakecent)
 precis(full_m)

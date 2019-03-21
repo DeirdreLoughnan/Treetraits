@@ -141,13 +141,13 @@ for (j in c(1:length(sp_mean))){
 }
 
 #Add species 
-species_temp=gl(nsp, rep*nsite, length= ntot); species
+sp=gl(nsp, rep*nsite, length= ntot); species
 
 head(phen_spint)
 range(phen_spint)
 
 #Combine the phenology data with the species identity 
-phen_spint<-cbind(phen_spint,species_temp)
+phen_spint<-cbind(phen_spint,sp)
 head(phen_spint)
 ###############################################
 # Creating centered trait data:
@@ -206,13 +206,13 @@ for (j in c(1:length(sp_mean))){
 }
 
 #Add species 
-species_temp=gl(nsp, rep*nsite, length= ntot); species
+sp=gl(nsp, rep*nsite, length= ntot); species
 
 head(phen_spint_cent)
 range(phen_spint_cent)
 
 #Combine the phenology data with the species identity 
-phen_spint_cent<-cbind(phen_spint_cent,species_temp)
+phen_spint_cent<-cbind(phen_spint_cent,sp)
 head(phen_spint_cent)
 
 ####################################################################################
@@ -259,7 +259,7 @@ int.m<- map2stan(
     phencent~dnorm(mu, sigma),
     mu<-a[sp],
     a[sp]~dnorm(0, 100),
-    sigma~dunif(0,100)
+    sigma~dunif(0,1)
   ),
   data=fake_spint_cent, chains=4)
 
