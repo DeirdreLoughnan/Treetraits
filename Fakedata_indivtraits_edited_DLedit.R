@@ -39,7 +39,7 @@ ntot<-nsite*nsp*rep #2800
 slav=rnorm(ntot, 5, 1)
 htv=rnorm(ntot, 11, 3) 
 cnv=rnorm(ntot, 10, 2)
-woodv=rnorm(ntot, 0.5, 0.05)
+woodv=rnorm(ntot, 0.7, 0.05)
 stomv=rnorm(ntot, 200, 50)
 
 
@@ -48,9 +48,106 @@ site.diff=2
 sladiff= -0.5
 htdiff=0.5
 cndiff=-0.5
-wooddiff=0.3
+wooddiff=1
 stomdiff=1
 
+fake_cent<-vector()
+sp_mean <- rnorm(nsp, mean=int, sd=5);
+sp_mean<-sp_mean[order=T]
+for (j in c(1:length(sp_mean))){
+  phen_stom<- sp_mean[j]+ rnorm(rep*nsite, 0, sigma)+stomdiff*stomv+sladiff*slav+htdiff*htv+cndiff*cnv+wooddiff*woodv
+  temp<-data.frame(phen_stom)
+  fake_cent<- rbind(fake_cent, temp) # changed so not overwriting fake_stom every time ... 
+}
+
+range(fake_cent)
+
+#####################################################################
+# Building up to the full model
+#####################################################################
+
+#NOW working with CENTERED DATA
+#Centering stomatal density
+stomc=scale(rnorm(rep*nsite, 200, 50))
+slac= scale(rnorm(rep*nsite, 5, 1)) 
+htc=scale(rnorm(rep*nsite, 11, 3)) 
+cnc=scale(rnorm(rep*nsite, 10, 2))
+woodc=scale(rnorm(rep*nsite, 0.7, 0.05))
+
+# Here's what I think the loop should be doing.... 
+fake_cent<-vector()
+sp_mean <- rnorm(nsp, mean=int, sd=5);
+sp_mean<-sp_mean[order=T]
+for (j in c(1:length(sp_mean))){
+  phen_c<- sp_mean[j]+ rnorm(rep*nsite, 0, sigma)+stomdiff*stomc+sladiff*slac+htdiff*htc+cndiff*cnc+wooddiff*woodc
+  temp<-data.frame(phen_c)
+  fake_cent<- rbind(fake_cent, temp) # changed so not overwriting fake_stom every time ... 
+}
+
+range(fake_cent)
+
+dim(fake_cent)
+
+
+#Add species - there is probably a better way to do this
+sp=gl(nsp, rep*nsite, length= ntot, order=TRUE)
+
+#sp<-(c(1:28, rep*nsite)); sp
+
+#Combine the phenology data with the species identity 
+phen<-cbind(fake_cent,sp)
+
+hist(phen$phen_c)
+#Based on R.code 5.40: this seems to work and keep the order of the intercepts consistent
+phen$sp_id<-as.integer(phen$sp)
+
+#This line is taking the mean phen_stom for each species
+#checkcode <- aggregate(phen_stom["phen_stom"], phen_stom["sp"], FUN=mean) ; checkcode
+
+###############################################
+# Now combining the phenology and the trait data
+head(phen)
+fake_data<- data.frame(phen,stomc,slac,htc,cnc,woodc)
+head(fake_data)
+
+#fake_stom$sp_id <- coerce_index(fake_stom$sp)
+fake<-fake_data[,c(1,3:8)]
+head(fake)
+
+full_m <- map2stan(
+  alist(
+    phen_c ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
+    mu <- a_sp[sp_id]+bstom*stomc+bsla*slac+bht*htc+bcn*cnc+bwood*woodc, 
+    a_sp[sp_id] ~ dnorm(a, sigma_sp) , # line 65 gives sigma for sp as 5 
+    a~dnorm(0, 10),
+    bstom~dnorm(0, 10),
+    bsla~dnorm(0, 10),
+    bht~dnorm(0,10),
+    bcn~dnorm(0,10),
+    bwood~dnorm(0,10),
+    sigma ~ dnorm(0,1),
+    sigma_sp ~ dnorm(0,5)),
+  data=fake, iter=4000 , chains=4 
+)
+
+plot(full_m)
+
+sp_mean
+stomdiff
+sladiff
+htdiff
+cndiff
+wooddiff
+sigma
+int
+
+#Still not getting hte same output!
+precis(full_m, depth=2)
+
+par(mfrow=c(1,1))
+plot(precis(stom_m, depth=2))
+
+#####################################################################
 #####################################################################
 # Stomatal density alone
 #####################################################################
@@ -77,10 +174,13 @@ fake_cent<-vector()
 sp_mean <- rnorm(nsp, mean=int, sd=5);
 sp_mean<-sp_mean[order=T]
 for (j in c(1:length(sp_mean))){
-  phen_stom<- sp_mean[j]+ rnorm(rep*nsite, 0, sigma) # +stomdiff*stomc # stomc is 2800 rows already so it's too big, should be rep*nsite long ....  
+  phen_stom<- sp_mean[j]+ rnorm(rep*nsite, 0, sigma)+stomdiff*stomc # stomc is 2800 rows already so it's too big, should be rep*nsite long ....  
   temp<-data.frame(phen_stom)
   fake_cent<- rbind(fake_cent, temp) # changed so not overwriting fake_stom every time ... 
 }
+
+range(fake_cent$phen_stom)
+
 fake_cent
 dim(fake_cent)
 fake_stom <- fake_cent
@@ -94,12 +194,11 @@ sp=gl(nsp, rep*nsite, length= ntot, order=TRUE)
 phen_stom<-cbind(fake_stom,sp)
 head(phen_stom)
 
-#Based on R.code 5.40:
+#Based on R.code 5.40: this seems to work and keep the order of the intercepts consistent
 phen_stom$sp_id<-as.integer(phen_stom$sp)
 
 #This line is taking the mean phen_stom for each species
 #checkcode <- aggregate(phen_stom["phen_stom"], phen_stom["sp"], FUN=mean) ; checkcode
-checkcode <- aggregate(phen_stom["phen_stom"], phen_stom["sp_id"], FUN=mean) ; checkcode
 
 ###############################################
 # Now combining the phenology and the trait data
@@ -113,11 +212,11 @@ fake_stom<-fake_stom[,c(1,3:4)]
 stom_m <- map2stan(
   alist(
     phen_stom ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
-    mu <- a_sp[sp_id], # +bstom*stomc # add back in when fixed fake data and model for intercept
+    mu <- a_sp[sp_id]+bstom*stomc, # add back in when fixed fake data and model for intercept
     a_sp[sp_id] ~ dnorm(a, sigma_sp) , # line 65 gives sigma for sp as 5 
-    a~dnorm(0, 30),
-    # bstom~dnorm(0, 10),
-    sigma ~ dnorm(0,10),
+    a~dnorm(0, 10),
+    bstom~dnorm(0, 10),
+    sigma ~ dnorm(0,1),
     sigma_sp ~ dnorm(0,5)),
   data=fake_stom, iter=4000 , chains=2 
 )
@@ -138,6 +237,8 @@ precis(stom_m, depth=2)
 
 plot(precis(stom_m, depth=2))
 
+#####################################################################
+#####################################################################
 #####################################################################
 # SLA alone
 #####################################################################
