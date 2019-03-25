@@ -21,7 +21,7 @@ setwd("~/Documents/github/Treetraits")
 #Now developing a model with all traits and partial pooling across species
 
 int<-10 # days into the experiment of bb 
-sigma<- 0.1
+sigma<- 0.5
 nsite = 2 #number of sites
 nsp = 28 #number of species
 rep = 50 #
@@ -57,7 +57,7 @@ stomdiff=1
 #####################################################################
 
 #NOW working with CENTERED DATA
-#Centering stomatal density
+#Centering trait values
 stomc=scale(rnorm(rep*nsite, 200, 50))
 slac= scale(rnorm(rep*nsite, 5, 1)) 
 htc=scale(rnorm(rep*nsite, 11, 3)) 
@@ -108,14 +108,39 @@ full_m <- map2stan(
     phen_cent ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
     mu <- a_sp[sp_id]+bstom*stomc+bsla*slac+bht*htc+bcn*cnc+bwood*woodc, 
     a_sp[sp_id] ~ dnorm(a, sigma_sp) , # line 65 gives sigma for sp as 5 
-    a~dnorm(0, 10),
-    bstom~dnorm(0, 10),
-    bsla~dnorm(0, 10),
-    bht~dnorm(0,10),
-    bcn~dnorm(0,10),
-    bwood~dnorm(0,10),
-    sigma ~ dnorm(0,1),
+    a~dnorm(0, 100),
+    bstom~dnorm(0, 100),
+    bsla~dnorm(0, 100),
+    bht~dnorm(0,100),
+    bcn~dnorm(0,100),
+    bwood~dnorm(0,100),
+    sigma ~ dnorm(0,10),
     sigma_sp ~ dnorm(0,5)),
+  data=fake_cent, iter=4000 , chains=1 , control = list(max_treedepth = 15)
+)
+
+#playing around with different distributions
+# full_m <- map2stan(
+#   alist(
+#     phen_cent ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
+#     mu <- a_sp[sp_id]+bstom*stomc+bsla*slac+bht*htc+bcn*cnc+bwood*woodc, 
+#     a_sp[sp_id] ~ dgamma2(a, sigma_sp) , # line 65 gives sigma for sp as 5 
+#     a~dgamma(0, 10),
+#     bstom~dgamma(0, 10),
+#     bsla~dgamma(0, 10),
+#     bht~dgamma(0,10),
+#     bcn~dgamma(0,10),
+#     bwood~dgamma(0,10),
+#     sigma ~ dgamma(0,1),
+#     sigma_sp ~ dgamma(0,5)),
+  
+  a[sp] ~ dnorm( 0,20) ,
+      bsla~dnorm(20,10),
+      bht~dnorm(15,3),
+      bcn~dnorm(20,10),
+      bwood~dnorm(2.5,0.6),
+      bstom~dnorm(400, 100),# the intercepts all become uniform when this variable is added
+      sigma ~ dnorm(0,10))
   data=fake_cent, iter=4000 , chains=4 
 )
 
