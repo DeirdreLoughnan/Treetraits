@@ -62,6 +62,7 @@ names(phenology)
 names(trt)
 #head(trt)
 
+
 #what Col should be in the new dataset used for Project 2 in 507?
 # id, sp, rep, site, ind, treatcode, warm, photo, chill, Term.fl, Lat.fl, Term.lf, Lat.lf,tlea,leaf
 

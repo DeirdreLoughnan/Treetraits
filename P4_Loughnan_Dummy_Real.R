@@ -90,7 +90,7 @@ phen<-cbind(fake_cent,sp)
 
 hist(phen$phen_c)
 #Based on R.code 5.40: this seems to work and keep the order of the intercepts consistent
-phen$sp_id<-as.integer(phen$sp)
+phen$sp_in<-as.integer(phen$sp)
 
 #This line is taking the mean phen_stom for each species
 #checkcode <- aggregate(phen_stom["phen_stom"], phen_stom["sp"], FUN=mean) ; checkcode
@@ -104,24 +104,26 @@ head(fake_data)
 #fake_stom$sp_id <- coerce_index(fake_stom$sp)
 fake<-fake_data[,c(1,3:8)]
 head(fake)
+str(fake)
 
-full_m <- map2stan(
+
+full_f <- map2stan(
   alist(
     phen_c ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
-    mu <- a_sp[sp_id]+bstom*stomc+bsla*slac+bht*htc+bcn*cnc+bwood*woodc, 
-    a_sp[sp_id] ~ dnorm(a, sigma_sp) , # line 65 gives sigma for sp as 5 
-    a~dnorm(0, 50),
+    mu <- a[sp_in]+bstom*stomc+bsla*slac+bht*htc+bcn*cnc+bwood*woodc,
+    a[sp_in] ~ dnorm(mu_a, sigma_a) , 
+    mu_a~dnorm(0, 50),
     bstom~dnorm(0, 50),
-    bsla~dnorm(0,50 ),
+    bsla~dnorm(0, 50),
     bht~dnorm(0,50),
     bcn~dnorm(0,50),
     bwood~dnorm(0,50),
     sigma ~ dnorm(0,0.1),
-    sigma_sp ~ dnorm(0,1)),
-  data=fake, iter=4000 , chains=4 
+    sigma_a ~ dnorm(0,5)),
+  data=fake, iter=4000 , chains=4
 )
 
-plot(full_m)
+#plot(full_f)
 
 sp_mean
 stomdiff # 1
@@ -132,136 +134,250 @@ wooddiff #1
 sigma #0.1
 int #11
 
-precis(full_m, depth=2)
-# Mean StdDev lower 0.89 upper 0.89 n_eff Rhat
-# a_sp[1]  11.68   0.01      11.67      11.70 10337    1
-# a_sp[2]  10.86   0.01      10.84      10.87 11137    1
-# a_sp[3]  10.43   0.01      10.41      10.44 10392    1
-# a_sp[4]  12.94   0.01      12.92      12.95 10431    1
-# a_sp[5]   9.75   0.01       9.74       9.77 12011    1
-# a_sp[6]  11.75   0.01      11.73      11.76 11609    1
-# a_sp[7]  11.00   0.01      10.98      11.01  9752    1
-# a_sp[8]   9.85   0.01       9.83       9.86 10920    1
-# a_sp[9]  11.59   0.01      11.57      11.60 10543    1
-# a_sp[10] 11.78   0.01      11.76      11.79 10780    1
-# a_sp[11]  7.98   0.01       7.96       7.99  9775    1
-# a_sp[12] 11.41   0.01      11.39      11.43 10579    1
-# a_sp[13] 10.94   0.01      10.92      10.96 11169    1
-# a_sp[14] 13.14   0.01      13.13      13.16 11915    1
-# a_sp[15] 10.51   0.01      10.49      10.52 10754    1
-# a_sp[16]  9.96   0.01       9.95       9.98 11341    1
-# a_sp[17] 12.96   0.01      12.94      12.97 11817    1
-# a_sp[18]  9.07   0.01       9.06       9.09  9646    1
-# a_sp[19] 11.30   0.01      11.29      11.32 10947    1
-# a_sp[20] 11.07   0.01      11.06      11.09 11036    1
-# a_sp[21] 11.88   0.01      11.87      11.90 10761    1
-# a_sp[22] 11.41   0.01      11.40      11.43 10040    1
-# a_sp[23]  8.90   0.01       8.88       8.91 11691    1
-# a_sp[24] 11.08   0.01      11.06      11.09  9999    1
-# a_sp[25]  9.95   0.01       9.93       9.97  9308    1
-# a_sp[26] 10.28   0.01      10.27      10.30  9664    1
-# a_sp[27] 10.18   0.01      10.16      10.19 11303    1
-# a_sp[28] 10.66   0.01      10.65      10.68 10463    1
-# a        10.86   0.23      10.51      11.25  9907    1
-# bstom     1.00   0.00       1.00       1.00 16984    1
-# bsla     -0.50   0.00      -0.50      -0.50 22187    1
-# bht       0.50   0.00       0.50       0.50 18583    1
-# bcn      -0.50   0.00      -0.51      -0.50 16383    1
-# bwood     1.00   0.00       1.00       1.01 19504    1
-# sigma     0.10   0.00       0.10       0.10 10677    1
-# sigma_sp  1.23   0.17       0.96       1.47  8170    1
+precis(full_f, depth=2)
 
 par(mfrow=c(1,1))
-plot(precis(full_m, depth=2))
+plot(precis(full_f, depth=2))
 
-#<><><><><><><><><><><><><><><><><><><><>
+######################################################################
+######################################################################
 # Posterior Predictive Checks:
 
-pppost <- extract.samples(full_m)
-totaln <- nrow(fake)
-
+pppost <- extract.samples(full_f)
+totalnf <- nrow(fake)
+nsp<-28
+reps=50
 # Make one new dataset from model parameters and means from posterior
-newsp <- rnorm(nsp, mean(pppost$a[1:1000]), mean(pppost$sigma_sp[1:1000]))
-newspdat <- rnorm(totaln, rep(newsp, each=nsite), mean(pppost$sigma[1:1000]))
+newsp <- rnorm(nsp, mean(pppost$mu_a[1:1000]), mean(pppost$sigma_a[1:1000]))
+newspdat <- rnorm(totalnf, rep(newsp, each=rep), mean(pppost$sigma[1:1000]))
 
 par(mfrow=c(1,2))
 hist(fake$phen_c, main="real data")
 hist(newspdat, main="PPC")
 
 # Now do it 10 times (still using means from posterior)
-newspmat <- matrix(nrow=10, ncol=totaln)
+newmat <- matrix(nrow=10, ncol=totalnf)
 for (i in 1:10){
-  newsp <- rnorm(nsp, mean(pppost$a[1:1000]), mean(pppost$sigma_sp[1:1000]))
-  newspdat <- rnorm(totaln, rep(newsp, each=nsite), mean(pppost$sigma[1:1000]))
-  newspmat[i,] <- newspdat
+  newsp <- rnorm(nsp, mean(pppost$mu_a[1:1000]), mean(pppost$sigma_a[1:1000]))
+  newspdat <- rnorm(totalnf, rep(newsp, each=reps), mean(pppost$sigma[1:1000]))
+  newmat[i,] <- newspdat
 }
 
-
-str(pppost)
 par(mfrow=c(2,6))
 hist(fake$phen_c, main="real data")
 for (i in 1:10){
-  hist(newspmat[i,], main="PPC")
+  hist(newmat[1,], main="PPC")
 }
+
 
 # Similarly ...
 library(bayesplot)
 color_scheme_set("brightblue")
-ppc_dens_overlay(fake$phen_c, newspmat[1:5, ])
-newspmat
-dim(newspmat) #10, 2800
+ppc_dens_overlay(fake$phen_c, newmat)
+
+dim(newmat)
+#############################################################
+##############################################################
+
 # Visualize the partial pooling ...
 # See https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/
 ##
-coerce_index(unique(fake$sp)); head(fake)
-d_sort <- fake[order(fake$sp_id),]
-
-post <- extract.samples(full_m) # grab the posterior
+coerce_index(unique(fake$sp)); str(fake)
+#d_sort <- fake[order(fake$sp_id),]
+post <- extract.samples(full_f) # grab the posterior
 str(post)
-unique(d_sort$sp_id)
+
+unique(fake$sp_in)
 nsp=28
 J <- nsp 
 
-com_pool_mod <- lm(phen_c ~ 1, d_sort)
-species <- unique(d_sort$sp_id)
-no_pool <- data.frame(sp_id=unique(d_sort$sp_id),
-                      intercept=rep(NA, J), 
-                      slope=rep(NA, J))
-head(d_sort)
-with_pool <- data.frame(sp_id=unique(d_sort$sp_id),
-                        intercept=rep(NA, J), 
-                        slope=rep(NA, J))
-df.gravity <- no_pool[1:2,2:3]
-with_pool$model <- "partial pooling"
-no_pool$model <- "no pooling"
+com.pool.mod <- lm(phen_c ~ stomc+slac+htc+cnc+woodc, fake)
+spp <- sort(unique(fake$sp_in)); spp
+no.pool <- data.frame(sp_in=rep(NA, length(spp)),
+                      intercept=rep(NA, length(spp)), 
+                      stomc=rep(NA, length(spp)), 
+                      slac=rep(NA, length(spp)), 
+                      htc=rep(NA, length(spp)), 
+                      cnc=rep(NA, length(spp)), 
+                      woodc=rep(NA, length(spp))
+                      )
 
-data<-subset(d_sort, sp_id==unique(d_sort$sp_id)[1])
+with.pool <- no.pool
+dim(no.pool)
+df.gravity <- no.pool[1:2,2:7] #why is it 1:2?
+with.pool$model <- "partial pooling"
+no.pool$model <- "no pooling"
+
+for (sp in c(1:length(spp))){
+  no.pool$sp_in[sp] <- spp[sp]
+  subby <- subset(fake,  sp_in==spp[sp])
+  lmfit <- lm(phen_c ~ stomc+slac+htc+cnc+woodc, data=subby)
+  no.pool$intercept[sp] <- coef(lmfit)["(Intercept)"]
+  no.pool$stomc[sp] <- coef(lmfit)["stomc"]
+  no.pool$slac[sp] <- coef(lmfit)["slac"]
+  no.pool$htc[sp] <- coef(lmfit)["htc"]
+  no.pool$cnc[sp] <- coef(lmfit)["cnc"]
+  no.pool$woodc[sp] <- coef(lmfit)["woodc"]
+}
+
+# sumer.ni <- summary(full_f)$summary
+# sumer.ni[grep("mu_a", rownames(sumer.ni)),]
+# 
+# require(lme4)
+# 
+# modhere <- lmer(phen_c~stomc+slac+htc+cnc+woodc+(1|sp_in),data=fake)
+# 
+# for (sp in c(1:length(spp))){
+#   with.pool$sp_in[sp] <- spp[sp]
+#   with.pool$intercept[sp] <- coef(modhere)["Intercept"]; with.pool$intercept
+#   with.pool$stomc[sp] <- coef(modhere)["stomc"]
+#   with.pool$slac[sp] <- coef(modhere)["slac"]
+#   with.pool$htc[sp] <- coef(modhere)["htc"]
+#   with.pool$cnc[sp] <- coef(modhere)["cnc"]
+#   with.pool$woodc[sp] <- coef(modhere)["woodc"]
+# }
 
 
+# for (sp in c(1:length(spp))){
+#   with.pool$sp_in[sp] <- spp[sp]
+#   subby <- subset(fake,  sp_in==spp[sp])
+#   lmfit <- lmer(phen_c ~ stomc+slac+htc+cnc+woodc+(1|sp_in), data=fake)
+#   with.pool$intercept[sp] <- fixef(lmfit)["(Intercept)"]
+#   with.pool$stomc[sp] <- fixef(lmfit)["stomc"]
+#   with.pool$slac[sp] <- fixef(lmfit)["slac"]
+#   with.pool$htc[sp] <- fixef(lmfit)["htc"]
+#   with.pool$cnc[sp] <- fixef(lmfit)["cnc"]
+#   with.pool$woodc[sp] <- fixef(lmfit)["woodc"]
+# }
+
+#What should these values be, the coefficients or the fixed eff?
+# modhere<-full_f
+# coef(modhere)[1:28]
+# for (sp in c(1:length(spp))){
+#   with.pool$sp_in[sp] <- spp[sp]
+#   with.pool$intercept[spp] <- coef(modhere)[1:28]
+#   with.pool$stomc[spp] <- coef(modhere)["bstom"]
+#   with.pool$slac[spp] <- coef(modhere)["bsla"]
+#   with.pool$htc[spp] <-  coef(modhere)["bht"]
+#   with.pool$cnc[spp] <- coef(modhere)["bcn"]
+#   with.pool$woodc[spp] <- coef(modhere)["bwood"]
+# }
+
+no.pool$sp_no <- sort(unique(fake$sp_in))
+with.pool$sp_no <- sort(unique(fake$sp_in))
+df.pulled <- rbind(no.pool, with.pool)
+#df.pulled <- bind_rows(no.pool, with.pool)
+
+df.gravity$model <- NA
+df.gravity$intercept[1] <-coef(com.pool.mod)["(Intercept)"]
+df.gravity$stomc[1] <-coef(com.pool.mod)["stomc"]
+df.gravity$slac[1] <-coef(com.pool.mod)["slac"]
+df.gravity$htc[1] <-coef(com.pool.mod)["htc"]
+df.gravity$cnc[1] <-coef(com.pool.mod)["cnc"]
+df.gravity$woodc[1] <-coef(com.pool.mod)["woodc"]
+df.gravity$model[1] <- "complete pooling"
+
+# df.gravity$intercept[2] <- fixef(lmfit)["(Intercept)"]
+# df.gravity$stomc[2] <- fixef(lmfit)["stomc"]
+# df.gravity$slac[2] <- fixef(lmfit)["slac"]
+# df.gravity$htc[2] <- fixef(lmfit)["htc"]
+# df.gravity$cnc[2] <- fixef(lmfit)["ccc"]
+# df.gravity$woodc[2] <- fixef(lmfit)["woodc"]
+# df.gravity$model[2] <- "partial pooling (mu)"
+
+df.gravity$intercept[2] <- coef(modhere)["mu_a"]
+df.gravity$stomc[2] <- coef(modhere)["bstom"]
+df.gravity$slac[2] <- coef(modhere)["bsla"]
+df.gravity$htc[2] <- coef(modhere)["bht"]
+df.gravity$cnc[2] <- coef(modhere)["bcn"]
+df.gravity$woodc[2] <- coef(modhere)["bwood"]
+df.gravity$model[2] <- "partial pooling (mu)"
+
+# ggplot(df.pulled) + 
+#   aes(x = intercept, y = slope, color = model) + 
+#   geom_point(size = 2) + 
+#   geom_point(data = df.gravity, size = 5) + 
+#   # Draw an arrow connecting the observations between models
+#   geom_path(aes(group = as.character(sp_in), color = NULL), 
+#             arrow = arrow(length = unit(.02, "npc"))) + 
+#   # Use ggrepel to jitter the labels away from the points
+#   ggrepel::geom_text_repel(
+#     aes(label = sp_in, color = NULL), 
+#     data = no_pool, size=2) + 
+#   theme(legend.position = "bottom") + 
+#   ggtitle("Pooling of regression parameters") + 
+#   xlab("Intercept estimate") + 
+#   ylab("") + 
+#   scale_color_brewer(palette = "Dark2") 
+
+ggplot(df.pulled) + 
+  aes(x = intercept, y = slac, color = model)+ 
+  geom_point(size = 2) + 
+  geom_point(data = df.gravity, size = 5) + 
+  # Draw an arrow connecting the observations between models
+  geom_path(aes(group = as.character(sp_no), color = NULL), 
+            arrow = arrow(length = unit(.02, "npc"))) + 
+  # Use ggrepel to jitter the labels away from the points
+  ggrepel::geom_text_repel(
+    aes(label = sp_no, color = NULL), 
+    data = no.pool, size=2) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("Pooling of regression parameters: Int and forcing") + 
+  xlab("Intercept estimate") + 
+  ylab("Slope estimate") + 
+  scale_color_brewer(palette = "Dark2") 
+
+
+pdf(file.path(figpath, "modelscompare_pp_photo.pdf"), width = 9, height = 6)
+ggplot(df.pulled) + 
+  aes(x = intercept, y = photo, color = model) + 
+  geom_point(size = 2) + 
+  geom_point(data = df.gravity, size = 5) + 
+  # Draw an arrow connecting the observations between models
+  geom_path(aes(group = as.character(complex), color = NULL), 
+            arrow = arrow(length = unit(.02, "npc"))) + 
+  # Use ggrepel to jitter the labels away from the points
+  ggrepel::geom_text_repel(
+    aes(label = complex.wname, color = NULL), 
+    data = no.pool, size=2) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("Pooling of regression parameters: Int and photo") + 
+  xlab("Intercept estimate") + 
+  ylab("Slope estimate") + 
+  scale_color_brewer(palette = "Dark2") 
+
+#data<-subset(fake, sp_in==unique(fake$sp_in)[1])
 #data=subset(vino.formodel.alt.sort, judge==unique(vino.formodel.alt.sort$judge)[j]))
 for (j in 1:J){
-  modhere <- lm(phen_c~1,data=subset(d_sort, sp_id==unique(d_sort$sp_id)[j]))
-  no_pool$intercept[j] <- coef(modhere)[1]
-  no_pool$slope[j] <- j # cheat for no-slope model
+  #no_pool$sp_in[sp]<-species[sp]
+  modhere <- lm(phen_c~stomc+slac+htc+cnc+woodc,data=subset(fake, sp_in==unique(fake$sp_in)[j]))
+  no_pool$intercept[j] <- coef(modhere)["Intercept"]
+  no_pool$slope[j] <- coef(modhere)["slope"]
 }
 
 for (j in 1:J){
   with_pool$intercept[j] <- mean(post$a_sp[1:1000, j])
-  with_pool$slope[j] <- j # cheat for no-slope model
+  with_pool$slope[j] <- coef(modhere)["slope"] 
 }
 
 # head(no_pool)
 # head(with_pool)
 
 df.pulled <- rbind(no_pool, with_pool)
-str(post)
+
 df.gravity$model <- NA
 df.gravity$intercept[1] <- coef(com_pool_mod)["(Intercept)"]
 df.gravity$slope[1] <- 4.5 # cheat for no-slope model: middle of plot
 df.gravity$model[1] <- "complete pooling"
 df.gravity$intercept[2] <- mean(post$a[1:1000])
-df.gravity$slope[2] <- 4.5 # cheat for no-slope model: middle of plot
+df.gravity$slope[2] <-mean(post$mu_a[1:1000])
 df.gravity$model[2] <- "partial pooling (mu)"
+
+# require(lme4)
+# df_fixef <- data_frame(
+#   Model = "Partial pooling (average)",
+#   Intercept = fixef()[1],
+#   Slope_Days = fixef(full_f)[2])
 
 library(ggplot2)
 #pdf("modelscompare_pp.pdf", width = 9, height = 6)
@@ -415,41 +531,7 @@ full_in <- map2stan(
   data=d_in, iter=4000 , chains=4
 )
 precis(full_in, depth=2)
-# Mean StdDev lower 0.89 upper 0.89 n_eff Rhat
-# a[1]     8.12   5.45      -0.39      17.01   756 1.01
-# a[2]    16.99   5.18       8.88      25.25   747 1.01
-# a[3]    28.77   5.13      20.78      37.09   751 1.01
-# a[4]    23.17   4.72      15.76      30.67   821 1.01
-# a[5]     8.78   5.21       0.34      16.81  1112 1.01
-# a[6]    16.89   4.79       9.04      24.17   836 1.01
-# a[7]    24.50   5.69      15.48      33.64   890 1.01
-# a[8]    11.22   4.35       4.33      18.09   663 1.01
-# a[9]    15.78   5.25       7.42      24.15   755 1.01
-# a[10]   34.63   5.05      26.37      42.38   797 1.01
-# a[11]   29.61   4.90      21.96      37.40   838 1.01
-# a[12]   36.15   5.54      26.72      44.36   813 1.01
-# a[13]    4.42   5.23      -3.92      12.54   742 1.01
-# a[14]   20.92   5.79      11.51      30.05  1009 1.01
-# a[15]    6.05   6.59      -4.29      16.63   875 1.01
-# a[16]   22.68   5.83      12.93      31.51   879 1.01
-# a[17]   24.41   4.60      16.86      31.47   726 1.01
-# a[18]    8.33   4.95       0.20      15.93   828 1.01
-# a[19]   28.38   6.88      16.96      38.78  1229 1.01
-# a[20]   23.98   4.80      16.47      31.58   809 1.01
-# a[21]   23.60   5.63      14.55      32.48   927 1.01
-# a[22]   20.01   5.39      10.99      28.09   855 1.01
-# a[23]   10.13   5.94       0.73      19.46   924 1.01
-# a[24]    8.84   5.27       0.68      17.37   839 1.01
-# a[25]    9.73   4.91       2.07      17.52   724 1.01
-# a[26]   22.12   5.05      13.93      29.96   724 1.01
-# mu_a    18.17   4.94      10.16      25.86   672 1.01
-# bstom    0.01   0.00       0.00       0.02  3734 1.00
-# bsla    -0.02   0.06      -0.12       0.07  1613 1.00
-# bht     -0.13   0.13      -0.34       0.06  5085 1.00
-# bcn      0.17   0.11      -0.01       0.35  1453 1.00
-# bwood    1.79   1.54      -0.70       4.16  1477 1.00
-# sigma   10.21   0.23       9.85      10.56  5425 1.00
-# sigma_a  9.17   1.28       7.13      11.09  4793 1.00
+
 plot(full_in)
 
 par(mfrow=c(1,1))
