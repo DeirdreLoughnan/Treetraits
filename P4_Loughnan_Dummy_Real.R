@@ -251,7 +251,7 @@ for (sp in c(1:length(spp))){
 # }
 
 #What should these values be, the coefficients or the fixed eff?
-# modhere<-full_f
+ modhere<-full_f
 # coef(modhere)[1:28]
 # for (sp in c(1:length(spp))){
 #   with.pool$sp_in[sp] <- spp[sp]
@@ -284,7 +284,7 @@ df.gravity$model[1] <- "complete pooling"
 # df.gravity$cnc[2] <- fixef(lmfit)["ccc"]
 # df.gravity$woodc[2] <- fixef(lmfit)["woodc"]
 # df.gravity$model[2] <- "partial pooling (mu)"
-
+modhere<-full_f
 df.gravity$intercept[2] <- coef(modhere)["mu_a"]
 df.gravity$stomc[2] <- coef(modhere)["bstom"]
 df.gravity$slac[2] <- coef(modhere)["bsla"]
@@ -322,7 +322,7 @@ ggplot(df.pulled) +
     aes(label = sp_no, color = NULL), 
     data = no.pool, size=2) + 
   theme(legend.position = "bottom") + 
-  ggtitle("Pooling of regression parameters: Int and forcing") + 
+  ggtitle("Pooling of regression parameters: Int and SLA") + 
   xlab("Intercept estimate") + 
   ylab("Slope estimate") + 
   scale_color_brewer(palette = "Dark2") 
@@ -498,26 +498,10 @@ length(unique(d_in$sp_in))
 
 unique(d_in$sp_in) 
 
-# full_m <- map2stan(
-#   alist(
-#     bday ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
-#     mu <- a_sp[sp]+bstom*stom_d+bsla*sla+bht*Height+bcn*cn+bwood*wood_den, 
-#     a_sp[sp] ~ dnorm(a, sigma_sp) , # line 65 gives sigma for sp as 5 
-#     a~dnorm(0, 10),
-#     bstom~dnorm(0, 10),
-#     bsla~dnorm(0, 10),
-#     bht~dnorm(0,10),
-#     bcn~dnorm(0,10),
-#     bwood~dnorm(0,10),
-#     sigma ~ dnorm(0,1),
-#     sigma_sp ~ dnorm(0,5)),
-#   data=d, iter=4000 , chains=4 
-# )
-
-#issue had something to do with making the index (w/ 28) and then removing the ones with no heights, left only 26st
+#issue had something to do with making the index (w/ 28) and then removing the ones with no heights, left only 26sp
 full_in <- map2stan(
   alist(
-    bday ~ dnorm(mu, sigma) , # you have two sigmas in your fake data, should have two here, but coded only one (so I changed)
+    bday ~ dnorm(mu, sigma) , 
     mu <- a[sp_in]+bstom*stom_d+bsla*sla+bht*Height+bcn*cn+bwood*wood_den,
     a[sp_in] ~ dnorm(mu_a, sigma_a) , # line 65 gives sigma for sp as 5
     mu_a~dnorm(0, 50),
@@ -537,27 +521,6 @@ plot(full_in)
 par(mfrow=c(1,1))
 plot(precis(full_in,depth=2))
 
-#<><><><><><><><><><><><><><><><><>
-# # the estimates are mucg better EXCEPT for wood density and the intercepts are almost all the same! 
-# infprior<- map2stan(
-#   alist(
-#     phen_spint~ dnorm( mu , sigma ) ,
-#     mu<-a[sp]+bsla*slav+bht*htv+bcn*cnv+bwood*woodv
-#     +bstom*stomv
-#     , 
-#     a[sp] ~ dnorm( 0,20) ,
-#     bsla~dnorm(20,10),
-#     bht~dnorm(15,3),
-#     bcn~dnorm(20,10),
-#     bwood~dnorm(2.5,0.6),
-#     bstom~dnorm(400, 100),# the intercepts all become uniform when this variable is added
-#     sigma ~ dnorm(0,10)),
-#   data=fake_spint, iter=4000 , chains=4 
-# )
-# 
-# precis(infprior, depth=2)
-# plot(precis(infprior, depth=2))
-# 
 
 #########################
 # Plots: based on code from CH 5 box 5.11, 5.12
@@ -706,3 +669,151 @@ color_scheme_set("brightblue")
 ppc_dens_overlay(d_sort$bday, newspmat[1:5, ])
 
 
+#########################################################################
+# Visualize the partial pooling ...
+# See https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/
+##
+coerce_index(unique(d$sp))
+#d_sort <- fake[order(fake$sp_id),]
+post <- extract.samples(full_in) # grab the posterior
+str(post)
+
+unique(d$sp)
+nsp=26
+J <- nsp 
+
+com.pool.mod <- lm(bday ~ stom_d+sla+Height+cn+wood_den, d_in)
+spp <- sort(unique(d$sp_in)); spp
+no.pool <- data.frame(sp_in=rep(NA, length(spp)),
+                      intercept=rep(NA, length(spp)), 
+                      stom=rep(NA, length(spp)), 
+                      sla=rep(NA, length(spp)), 
+                      ht=rep(NA, length(spp)), 
+                      cn=rep(NA, length(spp)), 
+                      wood=rep(NA, length(spp))
+)
+no.pool
+with.pool <- no.pool
+dim(no.pool)
+df.gravity <- no.pool[1:2,2:7] #why is it 1:2?
+with.pool$model <- "partial pooling"
+no.pool$model <- "no pooling"
+
+for (sp in c(1:length(spp))){
+  no.pool$sp_in[sp] <- spp[sp]
+  subby <- subset(d_in,  sp_in==spp[sp])
+  lmfit <- lm(bday~ stom_d+sla+Height+cn+wood_den, data=subby)
+  no.pool$intercept[sp] <- coef(lmfit)["(Intercept)"]
+  no.pool$stom[sp] <- coef(lmfit)["stom_d"]
+  no.pool$sla[sp] <- coef(lmfit)["sla"]
+  no.pool$ht[sp] <- coef(lmfit)["Height"]
+  no.pool$cn[sp] <- coef(lmfit)["cn"]
+  no.pool$wood[sp] <- coef(lmfit)["wood_den"]
+}
+no.pool
+# sumer.ni <- summary(full_f)$summary
+# sumer.ni[grep("mu_a", rownames(sumer.ni)),]
+# 
+# require(lme4)
+# 
+# modhere <- lmer(phen_c~stomc+slac+htc+cnc+woodc+(1|sp_in),data=fake)
+# 
+# for (sp in c(1:length(spp))){
+#   with.pool$sp_in[sp] <- spp[sp]
+#   with.pool$intercept[sp] <- coef(modhere)["Intercept"]; with.pool$intercept
+#   with.pool$stomc[sp] <- coef(modhere)["stomc"]
+#   with.pool$slac[sp] <- coef(modhere)["slac"]
+#   with.pool$htc[sp] <- coef(modhere)["htc"]
+#   with.pool$cnc[sp] <- coef(modhere)["cnc"]
+#   with.pool$woodc[sp] <- coef(modhere)["woodc"]
+# }
+
+
+# for (sp in c(1:length(spp))){
+#   with.pool$sp_in[sp] <- spp[sp]
+#   subby <- subset(fake,  sp_in==spp[sp])
+#   lmfit <- lmer(phen_c ~ stomc+slac+htc+cnc+woodc+(1|sp_in), data=fake)
+#   with.pool$intercept[sp] <- fixef(lmfit)["(Intercept)"]
+#   with.pool$stomc[sp] <- fixef(lmfit)["stomc"]
+#   with.pool$slac[sp] <- fixef(lmfit)["slac"]
+#   with.pool$htc[sp] <- fixef(lmfit)["htc"]
+#   with.pool$cnc[sp] <- fixef(lmfit)["cnc"]
+#   with.pool$woodc[sp] <- fixef(lmfit)["woodc"]
+# }
+
+#What should these values be, the coefficients or the fixed eff?
+modhere<-full_f
+coef(modhere)[1:28]
+for (sp in c(1:length(spp))){
+  with.pool$sp_in[sp] <- spp[sp]
+  with.pool$intercept[spp] <- coef(modhere)[1:28]
+  with.pool$stomc[spp] <- coef(modhere)["bstom"]
+  with.pool$slac[spp] <- coef(modhere)["bsla"]
+  with.pool$htc[spp] <-  coef(modhere)["bht"]
+  with.pool$cnc[spp] <- coef(modhere)["bcn"]
+  with.pool$woodc[spp] <- coef(modhere)["bwood"]
+}
+
+no.pool$sp_no <- sort(unique(d$sp_in))
+with.pool$sp_no <- sort(unique(d$sp_in))
+df.pulled <- rbind(no.pool, with.pool)
+#df.pulled <- bind_rows(no.pool, with.pool)
+
+df.gravity$model <- NA
+df.gravity$intercept[1] <-coef(com.pool.mod)["(Intercept)"]
+df.gravity$stom[1] <-coef(com.pool.mod)["stom_d"]
+df.gravity$sla[1] <-coef(com.pool.mod)["sla"]
+df.gravity$ht[1] <-coef(com.pool.mod)["Height"]
+df.gravity$cn[1] <-coef(com.pool.mod)["cn"]
+df.gravity$wood[1] <-coef(com.pool.mod)["wood_den"]
+df.gravity$model[1] <- "complete pooling"
+
+# df.gravity$intercept[2] <- fixef(lmfit)["(Intercept)"]
+# df.gravity$stomc[2] <- fixef(lmfit)["stomc"]
+# df.gravity$slac[2] <- fixef(lmfit)["slac"]
+# df.gravity$htc[2] <- fixef(lmfit)["htc"]
+# df.gravity$cnc[2] <- fixef(lmfit)["ccc"]
+# df.gravity$woodc[2] <- fixef(lmfit)["woodc"]
+# df.gravity$model[2] <- "partial pooling (mu)"
+modhere<-full_in
+df.gravity$intercept[2] <- coef(modhere)["mu_a"]
+df.gravity$stomc[2] <- coef(modhere)["bstom"]
+df.gravity$slac[2] <- coef(modhere)["bsla"]
+df.gravity$htc[2] <- coef(modhere)["bht"]
+df.gravity$cnc[2] <- coef(modhere)["bcn"]
+df.gravity$woodc[2] <- coef(modhere)["bwood"]
+df.gravity$model[2] <- "partial pooling (mu)"
+
+# ggplot(df.pulled) + 
+#   aes(x = intercept, y = slope, color = model) + 
+#   geom_point(size = 2) + 
+#   geom_point(data = df.gravity, size = 5) + 
+#   # Draw an arrow connecting the observations between models
+#   geom_path(aes(group = as.character(sp_in), color = NULL), 
+#             arrow = arrow(length = unit(.02, "npc"))) + 
+#   # Use ggrepel to jitter the labels away from the points
+#   ggrepel::geom_text_repel(
+#     aes(label = sp_in, color = NULL), 
+#     data = no_pool, size=2) + 
+#   theme(legend.position = "bottom") + 
+#   ggtitle("Pooling of regression parameters") + 
+#   xlab("Intercept estimate") + 
+#   ylab("") + 
+#   scale_color_brewer(palette = "Dark2") 
+
+ggplot(df.pulled) + 
+  aes(x = intercept, y = sla, color = model)+ 
+  geom_point(size = 2) + 
+  geom_point(data = df.gravity, size = 5) + 
+  # Draw an arrow connecting the observations between models
+  geom_path(aes(group = as.character(sp_in), color = NULL), 
+            arrow = arrow(length = unit(.02, "npc"))) + 
+  # Use ggrepel to jitter the labels away from the points
+  ggrepel::geom_text_repel(
+    aes(label = sp_in, color = NULL), 
+    data = no.pool, size=2) + 
+  theme(legend.position = "bottom") + 
+  ggtitle("Pooling of regression parameters: Int and forcing") + 
+  xlab("Intercept estimate") + 
+  ylab("Slope estimate") + 
+  scale_color_brewer(palette = "Dark2") 
