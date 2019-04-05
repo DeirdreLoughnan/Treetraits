@@ -107,20 +107,20 @@ length(unique(phenology$ind)) #274
 length(unique(trtsites$ind)) #196
 
 #I will think on this more, but here I am taking the mean of the phenology for a given treatmetn combination of 
-require(plyr)
-#require(dplyr)
+# require(plyr)
+ require(dplyr)
 unique(phenology$sp)
 #Averaged phenology data for a given sp, got rid of individual level
-avg.phenology<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
-                     mbday=mean(bday, na.rm=TRUE),
-                     mlday=mean(lday, na.rm=TRUE))
+ avg.phenology<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
+                      mbday=mean(bday, na.rm=TRUE),
+                      mlday=mean(lday, na.rm=TRUE))
 dim(avg.phenology)
 unique(avg.phenology$sp)
 
 #Averaged trait data for a given indiv & sp per treatment
 avg.trt<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
-               mbday=mean(bday, na.rm=TRUE),
-               mlday=mean(lday, na.rm=TRUE))
+                     mbday=mean(bday, na.rm=TRUE),
+                     mlday=mean(lday, na.rm=TRUE))
 dim(avg.phenology)
 unique(avg.phenology$ind)
 unique(trt$ind)
@@ -132,6 +132,7 @@ setdiff(phenology$ind, trtsites$ind)
 
 #combining the two, 
 comb<-left_join(phenology, trtsites, by= c("ind","sp","site"))
+head(new)
 
 #Now calculating the required traits: sla, wood density, 
 
