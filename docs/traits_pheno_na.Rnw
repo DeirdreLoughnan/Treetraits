@@ -51,7 +51,7 @@
 \SweaveOpts{concordance=FALSE}
 %\SweaveOpts{concordance=TRUE}
  \bibliographystyle{..//..//refs/bibstyles/amnat.bst}
-\title{How do functional traits relate to phenology in temperate woody plant species} % traits chapter
+\title{Functional traits or phenology: understanding the drivers of temperate woody plant species response to cliamte change} % traits chapter
 
 \author{D. Loughnan}
 %\date{\today}
@@ -71,10 +71,29 @@
 Changes in phenology provides evidence for climate change
 -huge impact on communities = trophic mismatches, changes in C cycle etc.
 Understanding what factors are driving these changes and being able to predict how speices will respond = critical for effective management
-Functional traits= well studied measures of plant morphology that have been associated with differences in growth and allocation of resources. 
+phenology is, however, one of several functional traits that define a species growth strategy and resource use.
+
+important bc it defines a species temporal niche and species coexistence - 2
+
+Do plant traits related to performance co-vary with phenology
+-better understanding the causal mechanism of species performance under climate change
+
+Existing gap in literature is the realtive role of phenology or other traits, such as leaf or wood traits, in shaping plant performance. - 9, 31,32
+
+phenology= trait shaped by the environment = 36, 37
+- plants can alter their phenologies to reduce abiotic stress and limit competition. -5,8,31
+
+Species that leaf out earlier = fast growth strategy, lower leaf mass per area, shorter life span, ring porous? 32, 38-41
+-early species are able to use more abundant resources early in the season but poor competitors, vs later species that grow more slowly and are better competitors when resources are more limited. 
+
+Temperate system: early species experience more risk in their enviornt with early season frost risk being greater. Can recover from lost tissue. 43
+
+Future directions: 
+Relating this back to performance - what is driving what?
 
 Xylem traits associated with frost tolerance \cite{Lechowicz1984}
 
+Do early leafing species exhibit traits assoicated with lower investment in tissue and lower competitive ability - larger? SLA, shorter height, lower wood density 
 
 \section*{Introduction}
 \par Shifts in the timing of spring events --- including flowering, bird arrival, egg hatching and a myriad of other biological activities --- are some of the most widely documented signals of climate change. Across taxa from plants and insects to mollusks and mammals, spring phenology is occurring earlier as temperatures warm, with average sthifts of 1.2 to 5.1 days earlier per decade \citep{bradley1999,parmesan2003, root2003} or 1.3 to 5.6 days earlier per \degree C of warming \citep{Wolkovich:2012n,polgar2013}. Indeed, early spring phenology is shifting more rapidly than later season phenology in many cases \citep{bradley1999,menzel2006}, suggesting strong temperature sensitivity of spring phenophases.
