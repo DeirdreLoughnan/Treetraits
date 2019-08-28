@@ -8,9 +8,9 @@ I couldn't open style file ..//..//refs/bibstyles/amnat.bst.bst
 I'm skipping whatever remains of this command
 I found no \bibdata command---while reading file traits_pheno_na.aux
 I found no style file---while reading file traits_pheno_na.aux
-You've used 1 entry,
+You've used 72 entries,
             0 wiz_defined-function locations,
-            86 strings with 562 characters,
+            176 strings with 1583 characters,
 and the built_in function-call counts, 0 in all, are:
 = -- 0
 > -- 0
