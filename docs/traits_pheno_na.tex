@@ -99,9 +99,9 @@
 %Start of the document
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
-\SweaveOpts{concordance=FALSE}
+%\SweaveOpts{concordance=FALSE}
 %\SweaveOpts{concordance=TRUE}
- \bibliographystyle{..//..//refs/bibstyles/amnat.bst}
+
 \title{Traits or phenology: understanding the functional response of temperate woody plant species to cliamte change} % traits chapter
 
 \author{D. Loughnan}
@@ -120,8 +120,14 @@
 
 \section*{Summary}
 
+\par In recent decades, notable shifts in the timing of important spring phenological events, such as budburst and flowering, have been noted for many temperate species. These changes are thought to reflect concurrent changes in climate, such as increasing temperatures and earlier snowmelt dates ( Primack, 2008; Inouye? CITATION). Changes in phenology can alter trophic interactions and carbon sequestration, and may impact the species assemblage, structure and ecosystem services of a community (Kharouba et al, 2018, Cleland et al, 2007). Individual species, however, vary in the magnitude and direction of their phenological changes (Plant example, CITATION), suggesting that other factors in addition to climate may be contributing to species-specific performance.
 
-Changes in phenology provides evidence for climate change
+\par Functional ecology has made considerable strides In recent years, identifying associates between vegetative and reproductive traits and plant performance (McGill et al, 2006).  The role of phenology in shaping these responses has gone largely unaddressed, despite classic studies illustrating its relationship to functional traits (Lechowicz, 1984). Phenology has been shown to be selected for by environmental conditions, such as periods of abiotic stress and high competition (5, 8, 31). Recent research has supported this trend, with variation in grassland phenology correlating being partially explained by traits associated with resources use and competitive abilities, such as specific leaf area and height respectively (Konig et al, 2017; Sun & Frelich, 2011 ). This evidence suggest that early leafing species should exhibit traits associated with faster growth, but lower competitive abilities, and lower investment in plant tissue. This growth strategy would enable these species to recover from extreme climate events, such as spring frost, at a lower cost. Later flowering species, however, are hypothesized to possess traits associated with competitive ability, growing taller and having greater wood density in order to compete for light. 
+
+\par This trade-off between resource allocation and competitive ability also reflects plant species responses to varying environmental factors. For many temperate woody plant species, phenological events in the spring in particular are determined by the interactive effects of winter chilling, spring forcing, and photoperiod. Species active early in the spring are at a greater risk of being damaged by frost, but may incur this cost if they are able to replace lost tissue more quickly. If this is the case, we predict these species to require less chilling and be less photoperiod sensitive, while producing leaves with lower leaf mass areas, higher C:N, and lower wood densities. Species that exhibit a more conservative growth strategy should have a greater chilling and photoperiod requirement, while exhibiting traits associated with greater competitive ability and investment in tissue, such as greater height, wood density, lower LMA, and smaller C:N.
+
+
+\par Changes in phenology provides evidence for climate change
 -huge impact on communities = trophic mismatches, changes in C cycle etc.
 Understanding what factors are driving these changes and being able to predict how speices will respond = critical for effective management
 phenology is, however, one of several functional traits that define a species growth strategy and resource use.
@@ -146,7 +152,6 @@ Relating this back to performance - what is driving what?
 
 Xylem traits associated with frost tolerance \cite{Lechowicz1984}
 
-Do early leafing species exhibit traits assoicated with lower investment in tissue and lower competitive ability - larger? SLA, shorter height, lower wood density 
 
 \section*{Methods}
 \par To identify functional traits that covary with phenology, traits of dominant woody species were measured across four sites in British Columbia. These sites were equally spaced across approximately 5.7 latitude and consist of five to seven stands, as was required to meet our sample size per species.  At each site, we sampled ten healthy, adult individuals from 20-22 species from a pool of 26 native, temperate woody species. For each individual we measured height and stem diameter in the field and collected leaf and wood tissue to quantify leaf mass area (LMA), the ratio of carbon and nitrogen (C:N), and branchwood density. 
@@ -156,9 +161,9 @@ Do early leafing species exhibit traits assoicated with lower investment in tiss
 
 \par In this chapter, I will test the following questions:
 \begin{enumerate}
-\item Do wood plants express specific suites of traits that vary consistently with phenology? 
+\item Do woody plants species express specific suites of traits that vary consistently with phenology? 
 \item How do these suites of traits vary across latitude, particularly in response to differences in photoperiod and winter chilling?
-\item Are there differences between these trends in eastern and western temperate forests, or are the observed trends are consistent for species of the same genus and dependent on phylogentic distance?
+\item Are there differences between these trends in eastern and western temperate forests, or are the observed trends consistent for species of the same genus and dependent on phylogentic distance?
 
 \end{enumerate}
 \par %Thes
@@ -171,23 +176,30 @@ Do early leafing species exhibit traits assoicated with lower investment in tiss
 
 \section*{Milestones}
 
+\textbf{September to mid October}
 \par Finish trait quantification:
-\begin{enumerate}
+\begin{itemize}
 \item ImageJ
 \item Weighing wood tissue
 \item Grind leaves
 \item Encapsulate ground tissue
 \item Get data on xylem strucutre 
-\end{enumerate}
+\end{itemize}
+Build better test data
 
-\par Do growth chamber study for phenology data
-\par Build better test data
-\begin{enumerate}
+\textbf{Mid October to March}
+\par Growth chamber study for phenology data
+\begin{itemize}
 \item use eastern dataset to combine phenology and trait data
 \item explore use of joint model
-\end{enumerate}
+\end{itemize}
 
-\par Write manuscript
+\textbf{April}
+\par Have results & figures for manuscript
+
+\bibliographystyle{plain}% 
+\bibliography{refs/testbib.bib}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
