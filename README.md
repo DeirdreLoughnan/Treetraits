@@ -1,9 +1,9 @@
-# Chapter 3:
-# **Climate or traits: understanding the drivers of spring phenology in temperate woody species**
+## Chapter 3:
+## **Climate or traits: understanding the drivers of spring phenology in temperate woody species**
 
 By: Deirdre Loughnan
 
-##_Where to find things_
+## _Where to find things_
 
 ### Google drive
 
