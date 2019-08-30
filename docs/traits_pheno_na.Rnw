@@ -51,7 +51,7 @@
 %\SweaveOpts{concordance=FALSE}
 %\SweaveOpts{concordance=TRUE}
 
-\title{Traits or phenology: understanding the functional response of temperate woody plant species to cliamte change} % traits chapter
+\title{Traits and phenology: understanding the functional response of temperate woody plant species to cliamte change} % traits chapter
 
 \author{D. Loughnan}
 %\date{\today}
@@ -69,35 +69,31 @@
 
 \section*{Summary}
 
-\par In recent decades, notable shifts in the timing of important spring phenological events, such as budburst and flowering, have been noted for many temperate species. These changes are thought to reflect concurrent changes in climate, such as increasing temperatures and earlier snowmelt dates ( Anderson et al, 2012, Primack, 2008). Changes in phenology can alter trophic interactions and carbon sequestration, and may impact the species assemblage and structure of a community and its ecosystem services (Kharouba et al, 2018, Cleland et al, 2007). Individual species, however, vary in the magnitude and direction of their phenological changes (Fitter & Fitter 2002, Dunnell et al. 2011), suggesting that other factors in addition to climate may be contributing to species-specific performance.
+\par In recent decades, notable shifts in the timing of spring phenological events, such as budburst and flowering, have been observed for many temperate species. These changes are thought to reflect concurrent changes in climate, such as increasing temperatures and earlier snowmelt dates \cite{ Anderson2012}. Changes in phenology can alter trophic interactions and carbon sequestration, and may impact the species assemblage and structure of a community and its ecosystem services \cite{Kharouba2018, Cleland:2007}. Individual species, however, vary in the magnitude and direction of their phenological changes \cite{Fitter2002,Dunnell2011, Konig2018}, suggesting that other factors in addition to climate may be contributing to species-specific performance.
 
-\par Functional ecology has made considerable strides in recent years, identifying associates between vegetative and reproductive traits and plant performance (McGill et al, 2006).  The role of phenology in shaping these responses has gone largely unaddressed, despite classic studies illustrating its relationship to functional traits (Lechowicz, 1984). Phenology has been shown to be related to environmental conditions, with functional traits of grass species being associated with resources use and competitive abilities (Konig et al, 2017; Sun & Frelich, 2011 ). This evidence suggests that early leafing species should exhibit traits associated with faster growth, but lower competitive abilities, and investment in plant tissue. This strategy enables these species to recover from extreme climate events, such as spring frost, at a lower cost. Later flowering species, however, are hypothesized to possess traits associated with greater competitive abilities, such as growing taller and having greater wood density in order to compete for light. 
+\par In recent years functional ecology has made considerable strides towards understanding associates between vegetative and reproductive traits and plant performance \cite{McGill2006}.  The role of phenology in shaping these responses has gone largely unaddressed, despite classic studies illustrating its relationship to functional traits \cite{Lechowich1984}. Phenology has been shown to be related to environmental conditions, with functional traits of grass species being associated with traits linked to resource use and competitive abilities \cite{Konig2018; SunFrelich2011}. This evidence suggests that early leafing species should exhibit traits associated with faster growth, but lower competitive abilities, and investment in plant tissue. This strategy enables these species to recover from extreme climate events, such as spring frost, at a lower cost. Later flowering species, however, are hypothesized to possess traits associated with greater competitive abilities, such as growing taller and having greater wood density in order to compete for light. 
 
-\par In woody plant species, spring phenological events have been found to realate to three primary climate conditions: winter chilling, spring forcing, and photoperiod (CITATION). The realtive importance of each of these factors defines when a species will initiate activity in the spring and the abiotic and biotic community it experiences. Species active early in the spring are at a greater risk of being damaged by frost, but may incur this cost if they are able to replace lost tissue more quickly. If this is the case, we predict these species to require less chilling and be less photoperiod sensitive, while producing leaves with lower leaf mass areas, higher C:N, and lower wood densities. Species that exhibit a more conservative growth strategy should have a greater chilling and photoperiod requirement, while exhibiting traits associated with greater competitive ability and investment in tissue, such as greater height, wood density, lower LMA, and smaller C:N. By drawing these associations between functional traits and phenological responses under variable climate conditions, this contribute to a more mechanistic understanding of how species phenology, and temporal niche, is likely to change with climate change. 
+\par In temperate woody plant species, spring phenological events relate to three primary climate conditions: winter chilling, spring forcing, and photoperiod \cite{Chuine2016}. The realtive importance of each of these factors defines when a species will initiate activity in the spring and the abiotic and biotic community it experiences. Species active early in the spring are at a greater risk of being damaged by frost, but may incur this cost if they are able to replace lost tissue more quickly. If this is the case, we predict these species to respond to high forcing temperatures, while requiring less chilling and be less photoperiod sensitive, producing leaves with lower leaf mass areas, higher C:N, and lower wood densities. Species that exhibit a more conservative growth strategy should have a greater chilling and photoperiod requirement, while exhibiting traits associated with greater competitive ability and investment in tissue, such as greater height, wood density, lower LMA, and smaller C:N.
 
+By drawing these associations between functional traits and phenological responses under variable climate conditions, we can further develop a mechanistic understanding of how species phenology, and temporal niche, is likely to change with climate change. 
 
-Temperate system: early species experience more risk in their enviornt with early season frost risk being greater. Can recover from lost tissue. Augspuger 2012
 
 \section*{Methods}
-\par To identify functional traits that covary with phenology, traits of dominant woody species were measured across four sites in British Columbia. These sites were equally spaced across approximately 5.7 latitude and consist of five to seven stands, as was required to meet our sample size per species.  At each site, we sampled ten healthy, adult individuals from 20-22 species from a pool of 26 native, temperate woody species. For each individual we measured height and stem diameter in the field and collected leaf and wood tissue to quantify leaf mass area (LMA), the ratio of carbon and nitrogen (C:N), and branchwood density. 
+\par To identify functional traits that covary with phenology, traits of dominant woody species were measured across four sites in British Columbia and from Quebec to Massachusett, spanning latitudinal gradients of approximatley 5 degrees. Each site could consist of multiple forest stands, depending on the area needed to meet our sample size per species.  At each site, we sampled up to ten healthy, adult individuals from a pool of 26 temperate woody species on the west coast and 28 specis on the east coast. For each individual we measured height and stem diameter in the field and collected leaf and wood tissue to quantify leaf mass area (LMA), the ratio of carbon and nitrogen (C:N), and branchwood specific density. 
 
-\par Individuals for each of our focal species were haphazardly selected, depending on their abundance and accessibility in the field. Height was defined as the distance from the ground to the top of the main photosynthetic tissue, or tree crown. The distance from the observer to the tree and the treetop was measured using a laser range finder and used to calculate height using Pythagorean theorem. At the same time, stem diameter was measured either at breast height (1.37 m) for trees, or using digital calipers, we measured the stem base for woody shrubs not tall enough to measure at breast height.  We also removed a portion of a terminal branch from each individual and immediately placed in sealed plastic bags in a cooler. On the same day as collection, five fully expanded and hardened leaves were later selected and scanned in colour, at 600dpi. To preserved leaves during transport back to the lab, we stored them in plant presses and immediately upon returning to the lab placed the leaves in a drying oven. All leaves were dried for 72h at 70°C. The software ImageJ was used to calculate the area of the leaves and LMA calculated as the ratio of the leaf mass over its area when fresh (Citation). Finally, to quantify branchwood density, we collected a 10cm long segment stem from the same branch used for the leaf collection. A consistent and representative anterior section of the terminal was cut for each individual, thereby allowing the natural variation in stem diameter across species to be accommodated. Within 24 hours of sample collection we quantified the volume of each stem using the water displacement method (CITATION). Upon returning to the lab, stems were dried at 101°C for 72h and weighted. Wood density was calculated as the dry mass of the stem over its fresh volume.  
+\par Individuals for each of our focal species were haphazardly selected, depending on their abundance and accessibility in the field. Height was defined as the distance from the ground to the top of the main photosynthetic tissue, or tree crown. The distance from the observer to the tree and the treetop was measured using a laser range finder and used to calculate height using Pythagorean theorem. At the same time, stem diameter was measured either at breast height (1.37 m) for trees, or using digital calipers, we measured the stem base for woody shrubs not tall enough to measure at breast height.  We also removed a portion of a terminal branch from each individual and immediately placed in sealed plastic bags in a cooler. On the same day as collection, five fully expanded and hardened leaves were later selected and scanned in colour, at 300-600dpi. To preserved leaves during transport back to the lab, we stored them in plant presses and immediately upon returning to the lab placed the leaves in a drying oven. All leaves were dried for 72h at 70°C. The software ImageJ was used to calculate the area of the leaves and LMA calculated as the ratio of the leaf mass over its area when fresh \cite{Perez-Harguindeguy2013}. Finally, to quantify branchwood density, we collected a 10cm long segment stem from the same branch used for the leaf collection. A consistent and representative anterior section of the terminal was cut for each individual, thereby allowing the natural variation in stem diameter across species to be accommodated. Within 24 hours of sample collection we quantified the volume of each stem using the water displacement method \cite{Perez-Harguindeguy2013}. Upon returning to the lab, stems were dried at 101°C for 72h and weighted. Wood density was calculated as the dry mass of the stem over its fresh volume.  
 
 
-\par In this chapter, I will test the following questions:
+
+\section*{In this chapter, I will test the following questions:}
 \begin{enumerate}
 \item Do woody plants species express specific suites of traits that vary consistently with phenology? 
 \item How do these suites of traits vary across latitude, particularly in response to differences in photoperiod and winter chilling?
-\item Are there differences between these trends in eastern and western temperate forests, or are the observed trends consistent for species of the same genus and dependent on phylogentic distance?
+\item Are there differences between these trends in eastern and western temperate forests, or are the observed trends consistent for species of the same genus and dependent on phylogenetic distance?
 
 \end{enumerate}
 \par %Thes
 
-\section*{How do these suites of traits vary across latitude, particularly in response to differences in photoperiod and winter chilling?}
-\par %Summary of reading supporting this question
-
-\section*{Are there differences between these trends in eastern and western temperate forests, or are the observed trends are consistent for species of the same genus and dependent on phylogentic distance?}
-\par %Summary of reading supporting this question
 
 \section*{Milestones}
 
@@ -108,22 +104,28 @@ Temperate system: early species experience more risk in their enviornt with earl
 \item Weighing wood tissue
 \item Grind leaves
 \item Encapsulate ground tissue
-\item Get data on xylem strucutre 
+\item Get data on xylem structure 
 \end{itemize}
-Build better test data
+\par Build better test data
 
 \textbf{Mid October to March}
 \par Growth chamber study for phenology data
-\begin{itemize}
-\item use eastern dataset to combine phenology and trait data
-\item explore use of joint model
-\end{itemize}
+\par Learn about joint models
+
+\textbf{December}
+\par Have good testdata
+
+\textbf{January}
+\par Test model using eastern dataset
 
 \textbf{April}
+\par Test model using total dataset
+
+\testbf{May}
 \par Have results & figures for manuscript
 
 \bibliographystyle{plain}% 
-\bibliography{refs/testbib.bib}
+\bibliography{refs/outline_ref.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
