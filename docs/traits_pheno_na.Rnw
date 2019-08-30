@@ -53,6 +53,8 @@
 
 \title{Traits and phenology: understanding the functional response of temperate woody plant species to cliamte change} % traits chapter
 
+\title{Climate or traits: understanding the drivers of spring phenology in temperate woody species}
+
 \author{D. Loughnan}
 %\date{\today}
 \maketitle  %put the fancy title on
