@@ -1,4 +1,4 @@
-% This code is taken from OSPREE/photoperiod 
+% This code is taken from OSPREE/photoperiod doc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%START PREAMBLE THAT IS THE SAME FOR ALL EXAMPLES
 \documentclass{article}
 
@@ -51,9 +51,10 @@
 %\SweaveOpts{concordance=FALSE}
 %\SweaveOpts{concordance=TRUE}
 
-\title{Traits and phenology: understanding the functional response of temperate woody plant species to cliamte change} % traits chapter
-
 \title{Climate or traits: understanding the drivers of spring phenology in temperate woody species}
+
+% other title ideas:
+% Traits and phenology: understanding the functional response of temperate woody plant species to cliamte change
 
 \author{D. Loughnan}
 %\date{\today}
