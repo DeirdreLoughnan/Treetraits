@@ -17,5 +17,5 @@
 *.log
 *.log
 *.bbl
-
+*.out
 docs/traits_pheno_na-concordance.tex
