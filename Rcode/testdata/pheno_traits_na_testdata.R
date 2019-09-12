@@ -103,3 +103,7 @@ coeff <- c(1, sitediff2,sitediff3,sitediff4, warmdiff, photodiff, sladiff,
 bb <- rnorm(n = length(warm), mean = mm %*% coeff, sd = 1) # should be able to do sd = mm %*% sd.coeff as well, with a different sd for each parameter.
 
 # I think it worked! 
+
+fake<-data_frame(bb, mm)
+head(fake)
+str(fake)
