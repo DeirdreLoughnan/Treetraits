@@ -10,6 +10,8 @@
 \usepackage{lineno}
 \usepackage{todonotes}
 \usepackage{hyperref}
+\usepackage{siunitx}
+
 
 %Potential titles:
 \title{Traits and phenology: understanding the functional response of temperate woody plant species to climate} % traits chapter
@@ -34,7 +36,7 @@ By drawing these associations between functional traits and phenological respons
 \section*{Methods}
 \par To identify functional traits that covary with phenology, traits of dominant woody species were measured across an eastern transect consisting of four sites from Quebec, Canada to Massachusetts, USA and a western transect of four sites in British Columbia, Canada, both of which span a latitudinal gradient of approximately 5 degrees. Each site consisted of multiple forest stands, the size of which depended on the area needed to meet our desired sample size.  Trait data was collected during the 2015 growing season for the eastern transect, sampling up to ten healthy, adult individuals from a pool of 28 temperate woody species. The western transect was sampled during the 2019 growing season, with trait data collected for 26 species. 
 
-\par For each individual we measured height and stem diameter in the field and collected leaf and wood tissue to quantify leaf mass area (LMA), the ratio of carbon and nitrogen (C:N), and branchwood specific density. Individuals for each of our focal species were haphazardly selected, depending on their abundance and accessibility in the field. Height was defined as the distance from the ground to the top of the main photosynthetic tissue, or tree crown. The distance from the observer to the tree and the treetop was measured using a laser range finder and used to calculate height using Pythagorean theorem. At the same time, stem diameter was measured either at breast height (1.37 m) for trees, or using digital callipers, we measured the stem base for woody shrubs not tall enough to measure at breast height.  We also removed a portion of a terminal branch from each individual and immediately placed both leaf and wood samples in sealed plastic bags in a cooler. On the same day as collection, five fully expanded and hardened leaves were selected and scanned in colour, at 300-600dpi. To preserved leaves during transport back to the lab, we stored them in plant presses and immediately upon returning to the lab placed the leaves in a drying oven. All leaves were dried for 72h at 70C. The software ImageJ was used to calculate the area of the leaves and LMA calculated as the ratio of the leaf mass over its area when fresh \cite{Perez-Harguindeguy2013}. Finally, to quantify branchwood density, we collected a 10cm long segment stem from the same branch used for the leaf collection. A consistent and representative anterior section of the terminal end was cut for each individual, thereby allowing the natural variation in stem diameter across species to be accommodated. Within 24 hours of sample collection we quantified the volume of each stem using the water displacement method \cite{Perez-Harguindeguy2013}. Upon returning to the lab, stems were dried at 101C for 72h and weighted. Wood density was calculated as the dry mass of the stem over its fresh volume.  
+\par For each individual we measured height and stem diameter in the field and collected leaf and wood tissue to quantify leaf mass area (LMA), the ratio of carbon and nitrogen (C:N), and branchwood specific density. Individuals for each of our focal species were haphazardly selected, depending on their abundance and accessibility in the field. Height was defined as the distance from the ground to the top of the main photosynthetic tissue, or tree crown. The distance from the observer to the tree and the treetop was measured using a laser range finder and used to calculate height using Pythagorean theorem. At the same time, stem diameter was measured either at breast height (1.37 m) for trees, or using digital callipers, we measured the stem base for woody shrubs not tall enough to measure at breast height.  We also removed a portion of a terminal branch from each individual and immediately placed both leaf and wood samples in sealed plastic bags in a cooler. On the same day as collection, five fully expanded and hardened leaves were selected and scanned in colour, at 300-600dpi. To preserved leaves during transport back to the lab, we stored them in plant presses and immediately upon returning to the lab placed the leaves in a drying oven. All leaves were dried for 72h at 70$^\circ$C. The software ImageJ was used to calculate the area of the leaves and LMA calculated as the ratio of the leaf mass over its area when fresh \cite{Perez-Harguindeguy2013}. Finally, to quantify branchwood density, we collected a 10cm long segment stem from the same branch used for the leaf collection. A consistent and representative anterior section of the terminal end was cut for each individual, thereby allowing the natural variation in stem diameter across species to be accommodated. Within 24 hours of sample collection we quantified the volume of each stem using the water displacement method \cite{Perez-Harguindeguy2013}. Upon returning to the lab, stems were dried at 101$^\circ$C for 72h and weighted. Wood density was calculated as the dry mass of the stem over its fresh volume.  
 
 
 \section*{In this chapter, I will test the following questions:}
@@ -45,6 +47,26 @@ By drawing these associations between functional traits and phenological respons
 
 \end{enumerate}
 \par %Thes
+
+\section*{Model}
+
+I am starting with a relatively simple model, including only one trait and no interactions. 
+\begin{align*}
+y_i \thicksim N(\alpha_{sp[i]} +& \beta_{site_{sp[i]}} + \beta_{SLA}+ \beta_{forcing_{sp[i]}} + \beta_{photoperiod_{sp[i]}} + \beta_{chilling_{sp[i]}})
+\end{align*}
+\begin{align*}
+& \; \beta_{site_{sp}} \thicksim N(\mu_{site}, \sigma{^2}_{site}) \\
+& \; \beta_{warm_{sp}} \thicksim N(\mu_{warm}, \sigma{^2}_{warm}) \\
+& \; \beta_{photo_{sp}} \thicksim N(\mu_{photo}, \sigma{^2}_{photo}) \\
+& \; \beta_{chilling_{sp}} \thicksim N(\mu_{chilling}, \sigma{^2}_{chilling}) \\
+& \; \beta_{SLA_{sp}} \thicksim N(\mu_{SLA}, \sigma{^2}_{SLA}) \\
+%& \; \beta_{site \times warming_{sp}} \thicksim N(\mu_{site \times warming}, \sigma{^2}_{site \times warming}) \\
+%& \; \beta_{site \times photo_{sp}} \thicksim N(\mu_{site \times photo}, \sigma{^2}_{site \times photo}) \\
+%& \; \beta_{site \times chilling_{sp}} \thicksim N(\mu_{site \times chilling}, \sigma{^2}_{site \times chilling}) \\
+%& \; \beta_{site \times SLA_{sp}} \thicksim N(\mu_{site \times SLA}, \sigma{^2}_{site \times SLA}) \\
+& \; \alpha_{site} \thicksim Normal (0,\alpha_{site})\\
+& \; \alpha \thicksim Normal (0,1)\\
+\end{align*}
 
 \section*{Milestones}
 
