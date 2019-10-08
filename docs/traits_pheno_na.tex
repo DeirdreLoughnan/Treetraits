@@ -147,6 +147,27 @@ By drawing these associations between functional traits and phenological respons
 \end{enumerate}
 \par %Thes
 
+\section*{Model}
+
+I am starting with a relatively simple model, including only one trait and no interactions. 
+\begin{align*}
+y_i \thicksim N(\alpha_{sp[i]} +& \beta_{site_{sp[i]}} + \beta_{SLA}+ \beta_{forcing_{sp[i]}} + \beta_{photoperiod_{sp[i]}} + \beta_{chilling_{sp[i]}})
+\end{align*}
+\begin{align*}
+& \; \beta_{site_{sp}} \thicksim N(\mu_{site}, \sigma{^2}_{site}) \\
+& \; \beta_{warm_{sp}} \thicksim N(\mu_{warm}, \sigma{^2}_{warm}) \\
+& \; \beta_{photo_{sp}} \thicksim N(\mu_{photo}, \sigma{^2}_{photo}) \\
+& \; \beta_{chilling_{sp}} \thicksim N(\mu_{chilling}, \sigma{^2}_{chilling}) \\
+& \; \beta_{SLA_{sp}} \thicksim N(\mu_{SLA}, \sigma{^2}_{SLA}) \\
+%& \; \beta_{site \times warming_{sp}} \thicksim N(\mu_{site \times warming}, \sigma{^2}_{site \times warming}) \\
+%& \; \beta_{site \times photo_{sp}} \thicksim N(\mu_{site \times photo}, \sigma{^2}_{site \times photo}) \\
+%& \; \beta_{site \times chilling_{sp}} \thicksim N(\mu_{site \times chilling}, \sigma{^2}_{site \times chilling}) \\
+%& \; \beta_{site \times SLA_{sp}} \thicksim N(\mu_{site \times SLA}, \sigma{^2}_{site \times SLA}) \\
+& \; \alpha_{site} \thicksim Normal (0,\alpha_{site})\\
+& \; \alpha \thicksim Normal (0,1)\\
+\end{align*}
+
+
 
 \section*{Milestones}
 
