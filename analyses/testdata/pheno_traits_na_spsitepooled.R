@@ -57,15 +57,11 @@ d <- data.frame(treatcombo, site, warm, photo, slav)
 #### To start, keeping it simiple and ignoring interacitons between climate factors
 #### Set up differences for each level
 
-# site2diff = 1 #creating a gradient, similar to what we might see with latitude 
-# site3diff = 2 
-# site4diff = 4  
-
 #GC climate differences
 warmdiff = -20 # days earlier from 1 to 2
 photodiff = -14
-chilldiff2 = -20 # need to think more about this number and what would be reasonable
-chilldiff3 = -10
+chill2diff = -20 # need to think more about this number and what would be reasonable
+chill3diff = -10
 
 #trait differences
 sladiff = -0.5
@@ -73,29 +69,7 @@ sladiff = -0.5
 # cndiff=-0.5
 # wooddiff=1
 
-# effects of site with warming
-# site2warm = 0
-# site3warm = 1
-# site4warm = 2
-# 
-# site2chill2 = 0
-# site3chill2 = 1
-# site4chill2 = 2
-# 
-# site2chill3 = 1
-# site3chill3 = 2
-# site4chill3 = 10
-# 
-# 
-# site2photo = 0
-# site3photo =1
-# site4photo = 5
-
 ####### SD for each variable
-
-# site2diff.sd = 1.5 
-# site3diff.sd = 3 
-# site4diff.sd = 6
 
 warmdiff.sd = 1 
 photodiff.sd = 1
@@ -103,21 +77,6 @@ chill2diff.sd =1
 chill3diff.sd =3
 
 sladiff.sd = 1
-
-# site2warm.sd = 1
-# site3warm.sd = 2
-# site4warm.sd = 6
-
-# site2photo.sd = 1
-# site3photo.sd = 1
-# site4photo.sd = 1
-# 
-# site2chill2.sd = 1
-# site3chill2.sd = 1
-# site4chill2.sd = 1
-# site2chill3.sd = 1
-# site3chill3.sd = 1
-# site4chill3.sd = 1
 
 warmphoto.sd = 1
 warmchill2.sd = 1
@@ -127,63 +86,57 @@ chill2photo.sd = 1
 chill3photo.sd = 1
 
 
-
-mm<-model.matrix(~(site+warm+photo+chill)+slav, data.frame(site, warm, photo,chill,slav))
+mm<-model.matrix(~(warm+photo+chill)+slav, data.frame( warm, photo,chill,slav))
 head(mm)
 colnames(mm)
 
 fake<- vector()
 for (i in 1:nsp){
-  coeff <- c(1, site2diff,site3diff,site4diff, warmdiff, photodiff,chill2diff,chill3diff, sladiff)
+  coeff <- c(1, warmdiff, photodiff,chill2diff,chill3diff, sladiff)
   bb <- rnorm(n = length(warm), mean = mm %*% coeff, sd = 1)
   faket<-merge(bb,mm)
   #faket<-data.frame(bb,mm)
-  fakex<-data.frame(faket, sp=i)
-  fake<-rbind(fake, fakex)
+  fakesp<-data.frame(faket, sp=i)
+  fake<-rbind(fake, faksp)
 }
 str(fake)
+unique(fake$sp)
 #I think it worked! I need to think more about incorporating the trait data, right now every site has a different trait value but all GC treatments have the same value. This makes sense to me, since we might see differnces across the 4 pops, but I don't have the data to know how the traits would change with warming, chilling & photo periods.
 names(fake)
 length(fake$x);length(fake$site2)
-summary(lm(x ~ (site2+site3+site4+warm2+photo2+chill2+chill3+slav), data = fake))
+summary(lm(x ~ (warm2+photo2+chill2+chill3+slav), data = fake))
 
 #########################################################################################################################
-# Adding species differences:
+# Adding site and species differences:
 baseint = 35
 spint<-baseint +c(1:nsp)-mean(1:nsp) #chaning the intercept for each indiv sp
+sitint<-baseint +c(1:nsite)-mean(1:nsite)
 
+
+for(j in 1:nsite){
+  for (i in 1:nsp) {
+    indivint<-sitint[j]+spint[i] +1:nind-mean(1:nind)
+    
+    
 fake<-vector()
-
-for(i in 1:nsp){
-  indivint<-spint[i] +1:nind-mean(1:nind)
+length(nsite)
+for(j in 1:nsite){
+  for (i in 1:nsp) {
+  indivint[j]<-spint[1] +1:nind-mean(1:nind)
   
-  coeff <- c(spint[i], 
-             rnorm(1, site2diff, site2diff.sd),
-             rnorm(1, site3diff, site3diff.sd),
-             rnorm(1, site4diff, site4diff.sd),
+  coeff <- c(spint[1], 
              rnorm(1, warmdiff, warmdiff.sd),
              rnorm(1, photodiff, photodiff.sd), 
-             # rnorm(1, site2warm, site2warm.sd), 
-             # rnorm(1, site2photo, site2photo.sd),
-             # rnorm(1, site3warm, site3warm.sd), 
-             # rnorm(1, site3photo, site3photo.sd),
-             # rnorm(1, site4warm, site4warm.sd), 
-             # rnorm(1, site4photo, site4photo.sd),
-             # rnorm(1, site2chill2, site2chill2.sd), 
-             # rnorm(1, site3chill2, site3chill2.sd),
-             # rnorm(1, site4chill2, site4chill2.sd),
-             # rnorm(1, site2chill3, site2chill3.sd), 
-             # rnorm(1, site3chill3, site3chill3.sd),
-             # rnorm(1, site4chill3, site4chill3.sd)
              rnorm(1, chilldiff2, chill2diff.sd),
              rnorm(1, chilldiff3, chill3diff.sd),
              rnorm(1, sladiff, sladiff.sd)
   )
   bb <- rnorm(n = length(warm), mean = mm %*% coeff, sd = 0.1)
   
-  fakex <- data.frame(bb, sp = i, mm)
+  fakex <- data.frame(bb, sp = 1, mm)
   
   fake <- rbind(fake, fakex)  
+  }
 }
 
 
