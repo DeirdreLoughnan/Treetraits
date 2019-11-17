@@ -112,18 +112,14 @@ baseint = 35
 spint<-baseint +c(1:nsp)-mean(1:nsp) #chaning the intercept for each indiv sp
 sitint<-baseint +c(1:nsite)-mean(1:nsite)
 
+indivint<-sitint[1]+spint[1] +1:nind-mean(1:nind)
+indivint
 
-for(j in 1:nsite){
-  for (i in 1:nsp) {
-    indivint<-sitint[j]+spint[i] +1:nind-mean(1:nind)
-    
-    
+for(j in 1:nsp){
+  for (i in sitint) {
+    indivint<-sitint[1]+spint[1] # this might be for indiviudal tree id, +1:nind-mean(1:nind)
 fake<-vector()
 length(nsite)
-for(j in 1:nsite){
-  for (i in 1:nsp) {
-  indivint[j]<-spint[1] +1:nind-mean(1:nind)
-  
   coeff <- c(spint[1], 
              rnorm(1, warmdiff, warmdiff.sd),
              rnorm(1, photodiff, photodiff.sd), 
@@ -133,12 +129,16 @@ for(j in 1:nsite){
   )
   bb <- rnorm(n = length(warm), mean = mm %*% coeff, sd = 0.1)
   
-  fakex <- data.frame(bb, sp = 1, mm)
+  fakex <- data.frame(bb, sp = 1:j, mm)
+  fakex2<-data.frame(fakex, site =1:nsite)
   
-  fake <- rbind(fake, fakex)  
+  fake <- rbind(fake, fakex2)  
   }
 }
 
+#240
+12*5*4
+View(fake)
 
 #########################################################################################################################
 # Trying to make things a bit more complicated, accounting for differences in responses across sites...this might not be the direction to actually head given I only have data for 10 individuals for each population
