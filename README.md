@@ -15,7 +15,9 @@ Currently analyses performed as part of FRST 507
 
 ### data
 
-Raw data files 
+Raw data files for:
+- leaf mass & area
+- height, DBH, stem volume, stem weight
 
 ### docs
 
