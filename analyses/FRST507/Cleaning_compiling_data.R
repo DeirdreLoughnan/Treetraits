@@ -21,13 +21,15 @@ library(dplyr)
 setwd("~/Documents/github/Treetraits")
 
 #phenology<-read.csv("input/Budburst.csv", header=T, na.strings=c("","NA"))
-(toload <- sort(dir("./input")[grep("Budburst Data", dir('./input'))], T)[1])
+(toload <- sort(dir("./input/eastern")[grep("Budburst Data", dir('./input/eastern'))], T)[3])
 
-load(file.path("input", toload))
+load(file.path("input/eastern", toload))
 
 if(forlatex) figpath = "../docs/ms/images" else figpath = "graphs"
 
 phenology<- dx
+
+write.csv(phenology, "testing.csv")
 head(phenology)
 trt<-read.csv("input/Tree_Traits_2015.csv",header=T, na.strings=c("","NA"))
 head(trt)
