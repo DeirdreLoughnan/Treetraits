@@ -52,24 +52,23 @@ By drawing these associations between functional traits and phenological respons
 
 \section*{Model}
 
-I am starting with a relatively simple model, including only one trait and no interactions. 
+
+\section{Trait Phenology model}
 \begin{align*}
-y_i \thicksim N(\alpha_{site_{sp[i]}} +\alpha_{sp[i]} + \beta_{trait}+ \beta_{forcing_{sp[i]}} + \beta_{photoperiod_{sp[i]}} + \beta_{chilling_{sp[i]}})
+\hat{trait_i} &= \alpha_{grand} + \alpha SLA_{sp_i}  + \alpha ht_{sp_i}  +  \alpha LNC_{sp_i}  + \alpha LCC_{sp_i}  + \alpha SDD_{sp_i}  + \alpha site2 + \alpha site3 + \alpha site3 \\
+\alpha trait & \sim N(0, \sigma_{trait}) \\
+\alpha site & \sim N(0, \sigma_{site}) \\
+trait_i & \sim N(\hat{trait}_i, \sigma_{trait}) \\
+\vspace{1ex}\\
+\hat{pheno}_i  &= \alpha pheno_{sp_i} + \beta force_{sp_i} * Forcing_{i} + \beta photo_{sp_i}  * Photo_{i} + \beta chill_{sp_i} * Chill_{i} \\
+\beta force_{sp} &= \alpha force_{sp} + \beta SLA.force * \alpha sp_{sp} + \beta ht.force * \alpha sp_{sp} + \beta LNCforce * \alpha sp_{sp} +  \beta LCC.force * \alpha sp_{sp} + \beta SDD.force * \alpha sp_{sp}\\
+\alpha pheno & \sim N(\mu_{pheno}, \sigma_{pheno}) \\
+\alpha force& \sim N(\mu_{force}, \sigma_{force}) \\
+\alpha chill & \sim N(\mu_{chill}, \sigma_{chill}) \\
+\alpha photo & \sim N(\mu_{photo}, \sigma_{photo}) \\
+pheno_{i} & \sim N(\hat{pheno_i}, \sigma_{pheno}) \\
 \end{align*}
-\begin{align*}
-& \; \beta_{site_{sp}} \thicksim N(\mu_{site}, \sigma{^2}_{site}) \\
-& \; \beta_{warm_{sp}} \thicksim N(\mu_{warm}, \sigma{^2}_{warm}) \\
-& \; \beta_{photo_{sp}} \thicksim N(\mu_{photo}, \sigma{^2}_{photo}) \\
-& \; \beta_{chilling_{sp}} \thicksim N(\mu_{chilling}, \sigma{^2}_{chilling}) \\
-& \; \beta_{trait_{sp}} \thicksim N(\mu_{trait}, \sigma{^2}_{trait}) \\
-%& \; \beta_{site \times warming_{sp}} \thicksim N(\mu_{site \times warming}, \sigma{^2}_{site \times warming}) \\
-%& \; \beta_{site \times photo_{sp}} \thicksim N(\mu_{site \times photo}, \sigma{^2}_{site \times photo}) \\
-%& \; \beta_{site \times chilling_{sp}} \thicksim N(\mu_{site \times chilling}, \sigma{^2}_{site \times chilling}) \\
-%& \; \beta_{site \times SLA_{sp}} \thicksim N(\mu_{site \times SLA}, \sigma{^2}_{site \times SLA}) \\
-& \; \alpha_{site} \thicksim Normal (0,\alpha_{site})\\
-& \; \alpha_{sp} \thicksim Normal (0,\alpha_{sp})\\
-& \; \alpha \thicksim Normal (0,1)\\
-\end{align*}
+
 
 \section*{Milestones}
 
