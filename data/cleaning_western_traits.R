@@ -72,12 +72,15 @@ head(ht.dbh)
 
 length(unique(ht.dbh$sample))
 
-ht.dbh$count <- 1
+# ht.dbh$count <- 1
+# 
+# trt <- ht.dbh %>%
+#   group_by(site, species,) %>%
+#   summarise(no_rows = sum(count), .groups = 'drop')
 
-trt <- ht.dbh %>%
-  group_by(site, species,) %>%
-  summarise(no_rows = sum(count), .groups = 'drop')
-
+head(ht.dbh)
+# remove date column
+ht.dbh <- ht.dbh[, c("sample","species","site","no","type","ht","dbh","dbh2","dbh3")]
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
 
 #LCC/LNN 
@@ -92,6 +95,8 @@ cn.spp <- cn %>% separate(temp, c("site", "species","no"))
 
 sort(unique(cn.spp$species))
 
+# remove date column:
+cn.spp <- cn.spp[, c("sample","species","site","no","Weight..mg.","per.N","per.C","C.N")]
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
 # Stem specific density
 
@@ -109,16 +114,15 @@ wt.spp$sample <- paste(wt.spp$site,wt.spp$species, wt.spp$no, sep = "_")
 ssd <- merge(vol.spp, wt.spp, by = c("species","no","site","sample"), all = TRUE)
 
 ssd$ssd <- ssd$stem.weight/ssd$vol
-temp <- ssd
-temp$count <- 1
+ssd.temp <- ssd
+ssd.temp$count <- 1
 
-trt <- temp %>%
-  group_by(sample) %>%
-  summarise(no_rows = sum(count), .groups = 'drop')
+sdd.tempy <-  aggregate(ssd.temp["count"], ssd.temp[c("sample")], FUN = sum)
 
+ssd <- ssd[, c("sample","species","site","no","vol","stem.weight","ssd")]
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
 
-lma <- read.csv("western/uncleaned/mergedareamass_no_na.csv")
+lma <- read.csv("western/uncleaned/mergedareamass_final.csv")
 lma$species[lma$species == "symalb "] <- "symalb"
 
 # Smithers had some miss identified Rhoalb 
@@ -127,23 +131,45 @@ lma.spp <- lma[lma$species %in% species, ]; sort(unique(lma.spp$species))
 lma.spp$sample <- paste(lma.spp$site,lma.spp$species, lma.spp$indiv.no, sep = "_")
 
 lma.spp$lma <- lma.spp$leaf.mass/lma.spp$leaf.area
+
+lma.temp <-  aggregate(lma.spp["lma"], lma.spp[c("species", "site","indiv.no","sample")], FUN = mean)
+colnames(lma.temp)[colnames(lma.temp) == "indiv.no"] <- "no"
+
+#remove collected by:
+lma.spp <- lma.spp[, c("sample","species","site","indiv.no","leaf.area","leaf.mass","lma")]
 #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
+incom.smpl <- c("mp_acegla10_02","mp_loninv_4","mp_menfer_8","mp_rubpar_21","mp_rubpar_22", "mp_rubpar_7_2","sm_symalb_9_02","sm_alnvir_7", "sm_alnvir_1_June3","sm_alnvir_1", "sm_alnvir_16", "sm_betpap_7_2", "sm_poptre_10","sm_poptre_14","sm_riblac_8", "af_betpap_1","af_poptre_11","af_poptre12_02","af_rubpar_19","af_rubpar9","af_vibedu_3_02","kl_betpap_9_02") #24
 
 length(unique(ssd$sample))
 length(unique(cn.spp$sample))
 length(unique(ht.dbh$sample))
 length(unique(lma.spp$sample)) # 769
+length(unique(lma.temp$sample)) # 769
 
-smp <- unique(ssd$sample)
+# Let's get a list of the samples I have complete data for:
 
-t <- lma.spp[!lma.spp$sample %in% smp, ]
-sort(unique(t$sample))
+temp <- merge(ssd,cn.spp, by = c("sample", "site", "no", "species"), all =T)
+temp2 <- merge(temp, ht.dbh, by = c("sample", "site", "no", "species"), all =T)
+temp3 <- merge(temp2, lma.temp, by = c("sample", "site", "no", "species"), all =T)
 
-lma.spp$count <- 1
-lma.spp$site <- as.factor(lma.spp$site)
-lma.spp$species <- as.factor(lma.spp$species)
+ht.temp <- temp3[complete.cases(temp3$ht),]
 
-aggregate(lma.spp$count, lma.spp[c("species", "site")], FUN = sum)
+ht.temp2 <- ht.temp[!ht.temp$sample %in% incom.smpl, ]
+
+ht.temp2$count <- 1
+tempy <- aggregate(ht.temp2$count, ht.temp2[c("species","site")], FUN = sum)
+
+write.csv(ht.temp, "temp_traitdata.csv", row.names = F)
+# smp <- unique(ssd$sample)
+# 
+# t <- lma.spp[!lma.spp$sample %in% smp, ]
+# sort(unique(t$sample))
+# 
+# lma.spp$count <- 1
+# lma.spp$site <- as.factor(lma.spp$site)
+# lma.spp$species <- as.factor(lma.spp$species)
+# 
+# aggregate(lma.spp$count, lma.spp[c("species", "site")], FUN = sum)
 
 ###########################################
 # subset the other traits to match the cleaned leaf data:
