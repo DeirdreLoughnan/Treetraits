@@ -130,7 +130,7 @@ wt.spp$sample <- paste(wt.spp$site,wt.spp$species, wt.spp$no, sep = "_")
 
 ssd <- merge(vol.spp, wt.spp, by = c("species","no","site","sample"), all = TRUE)
 
-ssd$ssd <- ssd$stem.weight/ssd$vol
+ssd$ssd <- (ssd$stem.weight/1000)/ssd$vol
 
 length(unique(ssd$sample))
 ssd <- ssd[!ssd$sample %in% incom.smpl, ]
@@ -158,7 +158,7 @@ lma.spp$sample[lma.spp$sample == "kl_symalb_02_02"] <- "kl_symalb_2_02"
 lma.spp$sample[lma.spp$sample == "mp_corsto_10_2"] <- "mp_corsto_10_02"
 lma.spp$sample[lma.spp$sample == "mp_menfer_10_2"] <- "mp_menfer_10_02"
 
-lma.spp$lma <- lma.spp$leaf.mass/lma.spp$leaf.area
+lma.spp$lma <- lma.spp$leaf.mass/(lma.spp$leaf.area*100)
 
 length(unique(lma.spp$sample))
 lma.spp <- lma.spp[!lma.spp$sample %in% incom.smpl, ]

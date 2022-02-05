@@ -37,8 +37,8 @@ str(trt)
 #remove columns of logistics (23-25)
 trt<-trt[,c("Individual","Site","Species","Leaf.area","Fresh.mass","Dry.mass","Stem.volume","Stem.mass","Height","DBH","DBH.2","DBH.3","DBH.4","DBH.5","X.N","X.C","Stomatal.Length","Stomatal.Density")]
 
-trt$lma <- trt$Dry.mass/trt$Leaf.area
-trt$ssd <- trt$Stem.mass/trt$Stem.volume
+trt$lma <- (trt$Dry.mass*1000)/(trt$Leaf.area*100) # convert from g/cm2 to mg/mm2
+trt$ssd <- trt$Stem.mass/trt$Stem.volume 
 # head(phenology)
 
 names(trt)
@@ -83,63 +83,63 @@ trt$X.N<-as.numeric(as.character(trt$X.N)); unique(trt$X.N)
 # head(trt2)
 
 #Subset both for only the two populations both phenologyology and trait data were collected:
-unique(phenology$site)
-unique(trt$site)
-
-#Bayesian models should be able to deal with the lack of symmetry, but for now not including site
-trtsites<-subset(trt, site==c("SH","HF"))
-trtsites<-trt
-#Now I want to put together the phenology dataset and the trait data. How inconsistent are these two datasets?
-#Very different in length, what about the number of trees and 
-
-#Note id= twig level id
-length(unique(phenology$ind)) #274
-length(unique(trtsites$ind)) #196
-
-#I will think on this more, but here I am taking the mean of the phenology for a given treatmetn combination of 
-require(plyr)
-#require(dplyr)
-unique(phenology$sp)
-#Averaged phenology data for a given sp, got rid of individual level
-avg.phenology<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
-                     mbday=mean(bday, na.rm=TRUE),
-                     mlday=mean(lday, na.rm=TRUE))
-dim(avg.phenology)
-unique(avg.phenology$sp)
-
-#Averaged trait data for a given indiv & sp per treatment
-avg.trt<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
-               mbday=mean(bday, na.rm=TRUE),
-               mlday=mean(lday, na.rm=TRUE))
-dim(avg.phenology)
-unique(avg.phenology$ind)
-unique(trt$ind)
-#new<-left_join(avg.phenology, trtsites, by= c("ind","sp","site"))
-
-#There is a lot less trait data than phenology data
-setdiff(phenology$ind, trtsites$ind)
-
-
-#combining the two, 
-comb<-left_join(phenology, trtsites, by= c("ind","sp","site"))
-
-#Now calculating the required traits: sla, wood density, 
-
-#want sla to be in mm^2/g
-comb$Leaf.area.sq<-comb$Leaf.area*100
-comb$Dry.mass.g<-comb$Dry.mass*1000
-names(comb)
-comb$sla<-comb$Leaf.area.sq/comb$Dry.mass.g
-comb$wood_den<-comb$Stem.volume/comb$Stem.mass
-#comb$m.dbh<-colMeans(comb[,26:30], na.rm=TRUE) #this doesn't do what it should            
-comb$cn<-(comb$per.C/comb$per.N)
-str(comb)
-#Now I can prune the dataset to just the values I will be working with for this project
-comb<-comb[,c(1:10,22,24,34:35,43,46:48) ]; head(comb)
-
-## Let's write a csv that just has the raw data with all sites and the desired traits:
-trt$lma<-trt$Dry.mass/trt$Leaf.area
-trt$wood.den<-trt$Stem.volume/trt$Stem.mass
-trt$cn<-trt$per.C/trt$per.N
-
-#write.csv(trt, "raw.indiv.values.wtrait.csv")
+# unique(phenology$site)
+# unique(trt$site)
+# 
+# #Bayesian models should be able to deal with the lack of symmetry, but for now not including site
+# trtsites<-subset(trt, site==c("SH","HF"))
+# trtsites<-trt
+# #Now I want to put together the phenology dataset and the trait data. How inconsistent are these two datasets?
+# #Very different in length, what about the number of trees and 
+# 
+# #Note id= twig level id
+# length(unique(phenology$ind)) #274
+# length(unique(trtsites$ind)) #196
+# 
+# #I will think on this more, but here I am taking the mean of the phenology for a given treatmetn combination of 
+# require(plyr)
+# #require(dplyr)
+# unique(phenology$sp)
+# #Averaged phenology data for a given sp, got rid of individual level
+# avg.phenology<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
+#                      mbday=mean(bday, na.rm=TRUE),
+#                      mlday=mean(lday, na.rm=TRUE))
+# dim(avg.phenology)
+# unique(avg.phenology$sp)
+# 
+# #Averaged trait data for a given indiv & sp per treatment
+# avg.trt<-ddply(phenology, c("ind", "sp","site","treatcode","warm","photo","chill"), summarise,
+#                mbday=mean(bday, na.rm=TRUE),
+#                mlday=mean(lday, na.rm=TRUE))
+# dim(avg.phenology)
+# unique(avg.phenology$ind)
+# unique(trt$ind)
+# #new<-left_join(avg.phenology, trtsites, by= c("ind","sp","site"))
+# 
+# #There is a lot less trait data than phenology data
+# setdiff(phenology$ind, trtsites$ind)
+# 
+# 
+# #combining the two, 
+# comb<-left_join(phenology, trtsites, by= c("ind","sp","site"))
+# 
+# #Now calculating the required traits: sla, wood density, 
+# 
+# #want sla to be in mm^2/g
+# comb$Leaf.area.sq<-comb$Leaf.area*100
+# comb$Dry.mass.g<-comb$Dry.mass*1000
+# names(comb)
+# comb$sla<-comb$Leaf.area.sq/comb$Dry.mass.g
+# comb$wood_den<-comb$Stem.volume/comb$Stem.mass
+# #comb$m.dbh<-colMeans(comb[,26:30], na.rm=TRUE) #this doesn't do what it should            
+# comb$cn<-(comb$per.C/comb$per.N)
+# str(comb)
+# #Now I can prune the dataset to just the values I will be working with for this project
+# comb<-comb[,c(1:10,22,24,34:35,43,46:48) ]; head(comb)
+# 
+# ## Let's write a csv that just has the raw data with all sites and the desired traits:
+# trt$lma<-trt$Dry.mass/trt$Leaf.area
+# trt$wood.den<-trt$Stem.volume/trt$Stem.mass
+# trt$cn<-trt$per.C/trt$per.N
+# 
+# #write.csv(trt, "raw.indiv.values.wtrait.csv")
