@@ -23,7 +23,7 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
 }
 
 
-load("output/realDummSite.Rda")
+load("output/tbb_ncp_chillportions_zsc_dl.Rda")
 
 setwd("..//Treetraits")
 trtData <- read.csv("data/allTrt.csv")
@@ -33,22 +33,20 @@ head(trtData)
 spp <- c("acegla", "acepen", "acerub", "acesac", "alninc","alnvir", "amealn", "aromel", "betall", "betlen", "betpap",
          "corcor", "corsto", "faggra","franig", "hamvir", "ilemuc", "kalang", "loncan", "loninv", "lyolig", "menfer", "nyssyl", "popbal","popgra", "poptre", "prupen", "quealb", "querub", "quevel", "rhafra", "rhoalb", "rhopri", "riblac", "rubpar", "samrac", "shecan","sorsco", "spialb", "spibet", "spipyr", "symalb", "vacmem", "vacmyr", "vibcas", "vibedu", "viblan")
 
-trtDataSpp <- trtData[trtData$species %in% spp,]
+dlspp <- c("acegla", "alninc","alnvir", "amealn", "betpap",
+          "corsto", "loninv", "popbal", "poptre", 
+          "riblac", "rubpar", "samrac", "shecan",
+          "sorsco", "spibet", "spipyr", "symalb",
+          "vacmem", "vibedu")
+
+trtDataSpp <- trtData[trtData$species %in% dlspp,]
 trtDataSpp$species.fact <- as.numeric(as.factor(trtDataSpp$species))
 
-head(trtData)
-
-sumt <- summary(mdl)$summary
+sumt <- summary(mdl.t)$summary
 bforce <- sumt[grep("b_force", rownames(sumt)), "mean"]; bforce
-# bchill <- sumt[grep("b_chill", rownames(sumt)), "mean"]; bchill
-# bphoto <- sumt[grep("b_photo", rownames(sumt)), "mean"]; bphoto
+bchill <- sumt[grep("b_chill", rownames(sumt)), "mean"]; bchill
+bphoto <- sumt[grep("b_photo", rownames(sumt)), "mean"]; bphoto <- bphoto[20:38]
 
-for (i in c(1:length(spp.fact))){
-  trt.dataset$force[i] <- sumt[grep("b_force", rownames(sumt)),1][spp.fact[i]]
-  trt.dataset$chill[i] <- sumt[grep("b_chill\\[", rownames(sumt)),1][spp.fact[i]]
-  trt.dataset$photo[i] <- sumt[grep("b_photo\\[", rownames(sumt)),1][spp.fact[i]]
-
-}
 ##################################################
 # now run simple trait model to get trait effects for each species:
 
@@ -74,11 +72,12 @@ mdl.lma <- stan('stan/bc_trait_only_2.stan',
                   warmup = 4000,
                   chains = 4,
                   include = FALSE,
-                  pars = "mu_y")
+                  pars = c("mu_y","y_hat"))
 save(mdl.lma, file = "output_lma_traitonly.Rda")
 
 sum.lma <- summary(mdl.lma)$summary
 
+lmaTrt <- sum.lma[grep("muSp", rownames(sum.lma)), "mean"]; lmaTrt
 ########################################################
 ht_data  <- trtDataSpp[complete.cases(trtDataSpp$ht),]
 ht_datalist <- list(yTraiti = ht_data$ht, 
@@ -104,6 +103,7 @@ save(mdl.ht, file = "output_ht_traitonly.Rda")
 
 sum.ht <- summary(mdl.ht)$summary
 
+htTrt <- sum.ht[grep("muSp", rownames(sum.ht)), "mean"]; htTrt
 ######################################################
 dbh_data  <- trtDataSpp[complete.cases(trtDataSpp$dbh),]
 dbh_data$species.fact <- as.numeric(as.factor(dbh_data$species))
@@ -132,6 +132,7 @@ save(mdl.dbh, file = "output_dbh_traitonly.Rda")
 
 sum.dbh <- summary(mdl.dbh)$summary
 
+dbhTrt <- sum.dbh[grep("muSp", rownames(sum.dbh)), "mean"]; dbhTrt
 ########################################################
 ssd_data  <- trtDataSpp[complete.cases(trtDataSpp$ssd),]
 ssd_data$species.fact <- as.numeric(as.factor(ssd_data$species))
@@ -160,11 +161,12 @@ save(mdl.ssd, file = "output_ssd_traitonly.Rda")
 
 sum.ssd <- summary(mdl.ssd)$summary
 
+ssdTrt <- sum.ssd[grep("muSp", rownames(sum.ssd)), "mean"]; ssdTrt
 ########################################################
-perN_data  <- trtDataSpp[complete.cases(trtDataSpp$perN),]
+perN_data  <- trtDataSpp[complete.cases(trtDataSpp$per.N),]
 perN_data$species.fact <- as.numeric(as.factor(perN_data$species))
 
-perN_datalist <- list(yTraiti = perN_data$perN, 
+perN_datalist <- list(yTraiti = perN_data$per.N, 
                      N = nrow(perN_data), 
                      n_spec = length(unique(perN_data$species)), 
                      species = perN_data$species.fact, 
@@ -187,12 +189,12 @@ mdl.perN <- stan('stan/bc_trait_only_2.stan',
 save(mdl.perN, file = "output_perN_traitonly.Rda")
 
 sum.perN <- summary(mdl.perN)$summary
-
+perNTrt <- sum.perN[grep("muSp", rownames(sum.perN)), "mean"]; perNTrt
 ########################################################
-perC_data  <- trtDataSpp[complete.cases(trtDataSpp$perC),]
+perC_data  <- trtDataSpp[complete.cases(trtDataSpp$per.C),]
 perC_data$species.fact <- as.numeric(as.factor(perC_data$species))
 
-perC_datalist <- list(yTraiti = perC_data$perC, 
+perC_datalist <- list(yTraiti = perC_data$per.C, 
                      N = nrow(perC_data), 
                      n_spec = length(unique(perC_data$species)), 
                      species = perC_data$species.fact, 
@@ -216,30 +218,35 @@ save(mdl.perC, file = "output_perC_traitonly.Rda")
 
 sum.perC <- summary(mdl.perC)$summary
 
+perCTrt <- sum.perC[grep("muSp", rownames(sum.perC)), "mean"]; perCTrt
+
 ########################################################
-plot(force ~ ssd , data = trt.dataset)
-plot(chill ~ ssd , data = trt.dataset)
-plot(photo ~ ssd , data = trt.dataset)
 
 
-plot(force ~ per.C , data = trt.dataset)
-plot(chill ~ per.C , data = trt.dataset)
-plot(photo ~ per.C , data = trt.dataset)
+pdf("figures/muSpvscue.pdf", width = 15, height = 25)
+par(mfrow = c(6, 3))
+plot(bforce ~ ssdTrt)
+plot(bchill ~ ssdTrt)
+plot(bphoto ~ ssdTrt)
 
-plot(force ~ per.N , data = trt.dataset)
-plot(chill ~ per.N , data = trt.dataset)
-plot(photo ~ per.N , data = trt.dataset)
+plot(bforce ~ perCTrt)
+plot(bchill ~ perCTrt)
+plot(bphoto ~ perCTrt)
 
-plot(force ~ ht , data = trt.dataset)
-plot(chill ~ ht , data = trt.dataset)
-plot(photo ~ ht , data = trt.dataset)
+plot(bforce ~ perNTrt)
+plot(bchill ~ perNTrt)
+plot(bphoto ~ perNTrt)
 
-plot(force ~ lma , data = trt.dataset)
-plot(chill ~ lma , data = trt.dataset)
-plot(photo ~ lma , data = trt.dataset)
+plot(bforce ~ htTrt)
+plot(bchill ~ htTrt)
+plot(bphoto ~ htTrt)
 
-plot(force ~ dbh , data = trt.dataset)
-plot(chill ~ dbh , data = trt.dataset)
-plot(photo ~ dbh , data = trt.dataset)
+plot(bforce ~ lmaTrt)
+plot(bchill ~ lmaTrt)
+plot(bphoto ~ lmaTrt)
 
+plot(bforce ~ dbhTrt)
+plot(bchill ~ dbhTrt)
+plot(bphoto ~ dbhTrt)
+dev.off()
 
