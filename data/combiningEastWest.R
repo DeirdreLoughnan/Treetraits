@@ -25,10 +25,15 @@ colnames(trt)[colnames(trt)=="DBH.2"] <- "dbh2"
 colnames(trt)[colnames(trt)=="DBH.3"] <- "dbh3"
 colnames(trt)[colnames(trt)=="Stomatal.Density"] <- "stomatal.density"
 
+trt$species <- tolower(trt$species)
+# fix the names of species on the 
 #Many of the columns are character, but should be numeric with NA
-trt.sub <- trt[,c("sample","site","species","ssd","per.N","per.C","ht","dbh","dbh2","dbh3","lma")]
+trt.sub <- trt[,c("sample","site","species","ssd","per.N","per.C","ht","dbh","dbh2","dbh3","lma","C.N")]
 
 west.sub <- west[, c("sample","site","species","type","ssd","per.N","per.C","C.N","ht","dbh","dbh2","dbh3","lma")]
 
 allTrt <- rbind.fill(trt.sub, west.sub)
-#write.csv(allTrt, "allTrt.csv", row.names = F)
+write.csv(allTrt, "allTrt.csv", row.names = F)
+
+hist(west$lma)
+hist(trt$lma)

@@ -37,8 +37,12 @@ str(trt)
 #remove columns of logistics (23-25)
 trt<-trt[,c("Individual","Site","Species","Leaf.area","Fresh.mass","Dry.mass","Stem.volume","Stem.mass","Height","DBH","DBH.2","DBH.3","DBH.4","DBH.5","X.N","X.C","Stomatal.Length","Stomatal.Density")]
 
+trt$X.C <- as.numeric(trt$X.C)
+trt$X.N <- as.numeric(trt$X.N)
 trt$lma <- (trt$Dry.mass*1000)/(trt$Leaf.area*100) # convert from g/cm2 to mg/mm2
 trt$ssd <- trt$Stem.mass/trt$Stem.volume 
+trt$C.N <- round(trt$X.C/trt$X.N, digits = 1)
+
 # head(phenology)
 
 names(trt)

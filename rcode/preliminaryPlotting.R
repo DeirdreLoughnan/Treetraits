@@ -22,32 +22,50 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
   setwd("/home/deirdre/pheno_bc") # for midge
 }
 
-
+# get the output from my data
 load("output/tbb_ncp_chillportions_zsc_dl.Rda")
 
+sumt <- summary(mdl.t)$summary
+bforce_dl <- sumt[grep("b_force", rownames(sumt)), "mean"]; bforce_dl
+bchill_dl <- sumt[grep("b_chill", rownames(sumt)), "mean"]; bchill_dl
+bphoto_dl <- sumt[grep("b_photo", rownames(sumt)), "mean"]; bphoto_dl <- bphoto_dl[20:38]
+
+# get the output from my data
+load("output/termMdlEstiContChillStndDFlynn.Rda")
+
+sumdf <- summary(mdl.std)$summary
+bforce_df <- sumdf[grep("b_force", rownames(sumdf)), "mean"]; bforce_df
+bchill_df <- sumdf[grep("b_chill", rownames(sumdf)), "mean"]; bchill_df
+bphoto_df <- sumdf[grep("b_photo", rownames(sumdf)), "mean"]; bphoto_df <- bphoto_df[29:56]
+
+
+##################################################
 setwd("..//Treetraits")
 trtData <- read.csv("data/allTrt.csv")
 head(trtData)
 
+unique(trtData$C.N)
 
 spp <- c("acegla", "acepen", "acerub", "acesac", "alninc","alnvir", "amealn", "aromel", "betall", "betlen", "betpap",
          "corcor", "corsto", "faggra","franig", "hamvir", "ilemuc", "kalang", "loncan", "loninv", "lyolig", "menfer", "nyssyl", "popbal","popgra", "poptre", "prupen", "quealb", "querub", "quevel", "rhafra", "rhoalb", "rhopri", "riblac", "rubpar", "samrac", "shecan","sorsco", "spialb", "spibet", "spipyr", "symalb", "vacmem", "vacmyr", "vibcas", "vibedu", "viblan")
 
 dlspp <- c("acegla", "alninc","alnvir", "amealn", "betpap",
-          "corsto", "loninv", "popbal", "poptre", 
-          "riblac", "rubpar", "samrac", "shecan",
-          "sorsco", "spibet", "spipyr", "symalb",
-          "vacmem", "vibedu")
+           "corsto", "loninv", "popbal", "poptre", 
+           "riblac", "rubpar", "samrac", "shecan",
+           "sorsco", "spibet", "spipyr", "symalb",
+           "vacmem", "vibedu")
 
-trtDataSpp <- trtData[trtData$species %in% dlspp,]
+dfspp <- c("acepen", "acerub", "acesac", "alninc","aromel", "betall", "betlen", "betpap",
+           "corcor","faggra","franig", "hamvir", "ilemuc", "kalang", "loncan", "lyolig",  
+           "nyssyl", "popgra",  "prupen", "quealb", "querub", "quevel", "rhafra", "rhopri",
+           "spialb", "vacmyr", "vibcas", "viblan")
+
+
+
+#trtDataSpp <- trtData[trtData$species %in% dfspp,]
+trtDataSpp <- trtData
 trtDataSpp$species.fact <- as.numeric(as.factor(trtDataSpp$species))
 
-sumt <- summary(mdl.t)$summary
-bforce <- sumt[grep("b_force", rownames(sumt)), "mean"]; bforce
-bchill <- sumt[grep("b_chill", rownames(sumt)), "mean"]; bchill
-bphoto <- sumt[grep("b_photo", rownames(sumt)), "mean"]; bphoto <- bphoto[20:38]
-
-##################################################
 # now run simple trait model to get trait effects for each species:
 
 lma_data  <- trtDataSpp[complete.cases(trtDataSpp$lma),]
@@ -77,7 +95,7 @@ save(mdl.lma, file = "output_lma_traitonly.Rda")
 
 sum.lma <- summary(mdl.lma)$summary
 
-lmaTrt <- sum.lma[grep("muSp", rownames(sum.lma)), "mean"]; lmaTrt
+lmaTrt_df <- sum.lma[grep("muSp", rownames(sum.lma)), "mean"]; lmaTrt_df
 ########################################################
 ht_data  <- trtDataSpp[complete.cases(trtDataSpp$ht),]
 ht_datalist <- list(yTraiti = ht_data$ht, 
@@ -99,11 +117,11 @@ mdl.ht <- stan('stan/bc_trait_only_2.stan',
                 chains = 4,
                 include = FALSE,
                 pars = "mu_y")
-save(mdl.ht, file = "output_ht_traitonly.Rda")
+save(mdl.ht, file = "output_ht_traitonly_df.Rda")
 
 sum.ht <- summary(mdl.ht)$summary
 
-htTrt <- sum.ht[grep("muSp", rownames(sum.ht)), "mean"]; htTrt
+htTrt_df <- sum.ht[grep("muSp", rownames(sum.ht)), "mean"]; htTrt_df
 ######################################################
 dbh_data  <- trtDataSpp[complete.cases(trtDataSpp$dbh),]
 dbh_data$species.fact <- as.numeric(as.factor(dbh_data$species))
@@ -128,11 +146,11 @@ mdl.dbh <- stan('stan/bc_trait_only_2.stan',
                 chains = 4,
                 include = FALSE,
                 pars = "mu_y")
-save(mdl.dbh, file = "output_dbh_traitonly.Rda")
+save(mdl.dbh, file = "output_dbh_traitonly_df.Rda")
 
 sum.dbh <- summary(mdl.dbh)$summary
 
-dbhTrt <- sum.dbh[grep("muSp", rownames(sum.dbh)), "mean"]; dbhTrt
+dbhTrt_df <- sum.dbh[grep("muSp", rownames(sum.dbh)), "mean"]; dbhTrt_df
 ########################################################
 ssd_data  <- trtDataSpp[complete.cases(trtDataSpp$ssd),]
 ssd_data$species.fact <- as.numeric(as.factor(ssd_data$species))
@@ -157,19 +175,19 @@ mdl.ssd <- stan('stan/bc_trait_only_2.stan',
                 chains = 4,
                 include = FALSE,
                 pars = "mu_y")
-save(mdl.ssd, file = "output_ssd_traitonly.Rda")
+save(mdl.ssd, file = "output_ssd_traitonly_df.Rda")
 
 sum.ssd <- summary(mdl.ssd)$summary
 
-ssdTrt <- sum.ssd[grep("muSp", rownames(sum.ssd)), "mean"]; ssdTrt
+ssdTrt_df <- sum.ssd[grep("muSp", rownames(sum.ssd)), "mean"]; ssdTrt_df
 ########################################################
-perN_data  <- trtDataSpp[complete.cases(trtDataSpp$per.N),]
-perN_data$species.fact <- as.numeric(as.factor(perN_data$species))
+perCN_data  <- trtDataSpp[complete.cases(trtDataSpp$C.N),]
+perCN_data$species.fact <- as.numeric(as.factor(perCN_data$species))
 
-perN_datalist <- list(yTraiti = perN_data$per.N, 
-                     N = nrow(perN_data), 
-                     n_spec = length(unique(perN_data$species)), 
-                     species = perN_data$species.fact, 
+perCN_datalist <- list(yTraiti = perCN_data$C.N, 
+                     N = nrow(perCN_data), 
+                     n_spec = length(unique(perCN_data$species)), 
+                     species = perCN_data$species.fact, 
                      prior_mu_grand_mu = 0.5,
                      prior_mu_grand_sigma = 1,
                      prior_sigma_sp_mu = 1,
@@ -179,74 +197,158 @@ perN_datalist <- list(yTraiti = perN_data$per.N,
 ) 
 
 
-mdl.perN <- stan('stan/bc_trait_only_2.stan',
-                data = perN_datalist,
+mdl.perCN <- stan('stan/bc_trait_only_2.stan',
+                data = perCN_datalist,
                 iter = 6000,
                 warmup = 4000,
                 chains = 4,
                 include = FALSE,
                 pars = "mu_y")
-save(mdl.perN, file = "output_perN_traitonly.Rda")
+save(mdl.perCN, file = "output_perCN_traitonly_df.Rda")
 
-sum.perN <- summary(mdl.perN)$summary
-perNTrt <- sum.perN[grep("muSp", rownames(sum.perN)), "mean"]; perNTrt
-########################################################
-perC_data  <- trtDataSpp[complete.cases(trtDataSpp$per.C),]
-perC_data$species.fact <- as.numeric(as.factor(perC_data$species))
-
-perC_datalist <- list(yTraiti = perC_data$per.C, 
-                     N = nrow(perC_data), 
-                     n_spec = length(unique(perC_data$species)), 
-                     species = perC_data$species.fact, 
-                     prior_mu_grand_mu = 0.5,
-                     prior_mu_grand_sigma = 1,
-                     prior_sigma_sp_mu = 1,
-                     prior_sigma_sp_sigma = 1,
-                     prior_sigma_traity_mu = 1,
-                     prior_sigma_traity_sigma = 1
-) 
-
-
-mdl.perC <- stan('stan/bc_trait_only_2.stan',
-                data = perC_datalist,
-                iter = 6000,
-                warmup = 4000,
-                chains = 4,
-                include = FALSE,
-                pars = "mu_y")
-save(mdl.perC, file = "output_perC_traitonly.Rda")
-
-sum.perC <- summary(mdl.perC)$summary
-
-perCTrt <- sum.perC[grep("muSp", rownames(sum.perC)), "mean"]; perCTrt
-
+sum.perCN <- summary(mdl.perCN)$summary
+perCNTrt_df <- sum.perCN[grep("muSp", rownames(sum.perCN)), "mean"]; perCNTrt_df
 ########################################################
 
+# get the phylogeny data:
+load("output/dl_df_allbb_4sites.Rda")
+
+sum.pheno <- summary(mdl.t)$summary
+
+spp <- sort(unique(trtData$species))
+
+sppPheno <- tolower(sppPheno)
+bforce <- data.frame(sum.pheno[grep("^b_warm", rownames(sum.pheno)), "mean"])
+bforce$spp <- sppPheno
+colnames(bforce) <- c("muSp","species")
+
+bchill <- data.frame(sum.pheno[grep("^b_chill", rownames(sum.pheno)), "mean"])
+bchill$spp <- sppPheno
+colnames(bchill) <- c("muSp","species")
+
+bphoto <- data.frame(sum.pheno[grep("^b_photo", rownames(sum.pheno)), "mean"])
+bphoto$spp <- sppPheno
+colnames(bphoto) <- c("muSp","species")
+bphoto<- bphoto[50:98,]
+
+perCNTrt_df <- data.frame(sum.perCN[grep("muSp", rownames(sum.perCN)), "mean"])
+perCNTrt_df$spp <- dfspp
+colnames(perCNTrt_df) <- c("muSp","species")
+
+perCNTrt_dl <- data.frame(sum.perCN.dl[grep("muSp", rownames(sum.perCN.dl)), "mean"])
+perCNTrt_dl$spp <- dlspp
+colnames(perCNTrt_dl) <- c("muSp","species")
+
+trtOut <- rbind(perCNTrt_df, perCNTrt_dl)
+trtOut <- aggregate(trtOut["muSp"], trtOut[c("species")], FUN = mean)
+
+head(trtOut)
+head(bphoto)
+
+bforce <- subset(bforce, species != "menfer")
+bforce <- subset(bforce, species != "rhoalb")
+
+plot(bforce$muSp ~ trtOut$muSp, col = "maroon", pch =19)
+dfPt <- bforce[bforce$species %in% dfspp, ]
+dftrt <- trtOut[trtOut$species %in% dfspp, ]
+points(dfPt$muSp ~ dftrt$muSp, col = "darkslategray4", pch =19)
+
+bchill <- subset(bchill, species != "menfer")
+bchill <- subset(bchill, species != "rhoalb")
+
+plot(bchill$muSp ~ trtOut$muSp, col = "maroon", pch =19)
+dfPt <- bchill[bchill$species %in% dfspp, ]
+dftrt <- trtOut[trtOut$species %in% dfspp, ]
+points(dfPt$muSp ~ dftrt$muSp, col = "darkslategray4", pch =19)
+
+bphoto <- subset(bphoto, species != "menfer")
+bphoto <- subset(bphoto, species != "rhoalb")
+
+plot(bphoto$muSp ~ trtOut$muSp, col = "maroon", pch =19)
+dfPt <- bphoto[bphoto$species %in% dfspp, ]
+dftrt <- trtOut[trtOut$species %in% dfspp, ]
+points(dfPt$muSp ~ dftrt$muSp, col = "darkslategray4", pch =19)
+
+########################################################
+# get dl mdl output
+load("output/output_lma_traitonly.Rda")
+sum.lma <- summary(mdl.lma)$summary
+lmaTrt <- sum.lma[grep("muSp", rownames(sum.lma)), "mean"]; 
+
+load("output/output_ht_traitonly.Rda")
+sum.ht <- summary(mdl.ht)$summary
+htTrt <- sum.ht[grep("muSp", rownames(sum.ht)), "mean"];
+
+load("output/output_ssd_traitonly.Rda")
+sum.ssd <- summary(mdl.ssd)$summary
+ssdTrt <- sum.ssd[grep("muSp", rownames(sum.ssd)), "mean"];
+
+load("output/output_dbh_traitonly.Rda")
+sum.dbh <- summary(mdl.dbh)$summary
+dbhTrt <- sum.dbh[grep("muSp", rownames(sum.dbh)), "mean"]
+
+load("output/output_perCN_traitonly_dl.Rda")
+sum.perCN.dl<- summary(mdl.perCN)$summary
+perCNTrt_dl <- sum.perCN.dl[grep("muSp", rownames(sum.perCN.dl)), "mean"]; 
+
+perCNTrt_df
 
 pdf("figures/muSpvscue.pdf", width = 15, height = 25)
 par(mfrow = c(6, 3))
-plot(bforce ~ ssdTrt)
-plot(bchill ~ ssdTrt)
-plot(bphoto ~ ssdTrt)
+plot(bforce_dl ~ ssdTrt, col = "maroon", pch =19, ylim = c(-15, 5), xlim = c(-0.3,0.3))
+points(bforce_df ~ssdTrt_df, col = "darkslategray4", pch =19)
 
-plot(bforce ~ perCTrt)
-plot(bchill ~ perCTrt)
-plot(bphoto ~ perCTrt)
+plot(bchill_dl ~ ssdTrt, col = "maroon", pch =19, ylim = c(-10, 30), xlim = c(-0.1, 0.2))
+points(bchill_df ~ ssdTrt_df, col = "darkslategray4", pch =19)
 
-plot(bforce ~ perNTrt)
-plot(bchill ~ perNTrt)
-plot(bphoto ~ perNTrt)
+plot(bphoto_dl ~ ssdTrt, col = "maroon", pch =19, ylim = c(-15, 0), xlim = c(-0.25, 0.2))
+points(bphoto_df ~ ssdTrt_df, col = "darkslategray4", pch =19)
 
-plot(bforce ~ htTrt)
-plot(bchill ~ htTrt)
-plot(bphoto ~ htTrt)
+plot(bforce_dl ~ perCNTrt, col = "maroon", pch =19, ylim = c(-15, 4), xlim = c(37,47))
+points(bforce_df ~ perCTrt_df, col = "darkslategray4", pch =19)
 
-plot(bforce ~ lmaTrt)
-plot(bchill ~ lmaTrt)
-plot(bphoto ~ lmaTrt)
+plot(bchill_dl ~ perCTrt, col = "maroon", pch =19, ylim = c(-15, 30), xlim = c(38, 53))
+points(bchill_df ~ perCTrt_df, col = "darkslategray4", pch =19)
 
-plot(bforce ~ dbhTrt)
-plot(bchill ~ dbhTrt)
-plot(bphoto ~ dbhTrt)
+plot(bphoto_dl ~ perCTrt, col = "maroon", pch =19, ylim = c(-15, 0), xlim = c(38, 53))
+points(bphoto_df ~ perCTrt_df, col = "darkslategray4", pch =19)
+
+plot(bforce_dl ~ perNTrt, col = "maroon", pch =19, ylim = c(-15, 0), xlim = c(4,-1))
+points(bforce_df ~ perNTrt_df, col = "darkslategray4", pch =19)
+
+plot(bchill_dl ~ perNTrt, col = "maroon", pch =19, ylim = c(-15, 30), xlim = c(4,-1))
+points(bchill_df ~ perNTrt_df, col = "darkslategray4", pch =19)
+
+plot(bphoto_dl ~ perNTrt, col = "maroon", pch =19, ylim = c(-15, 1), xlim = c(4,-1))
+points(bphoto_df ~ perNTrt_df, col = "darkslategray4", pch =19)
+
+plot(bforce_dl ~ htTrt, col = "maroon", pch =19, ylim = c(-15, 5), xlim = c(-5,15))
+points(bforce_df ~ htTrt_df, col = "darkslategray4", pch =19)
+
+plot(bchill_dl ~ htTrt, col = "maroon", pch =19, ylim = c(-15, 35), xlim = c(-5,15))
+points(bchill_df ~ htTrt_df, col = "darkslategray4", pch =19)
+
+plot(bphoto_dl ~ htTrt, col = "maroon", pch =19, ylim = c(-15, 1), xlim = c(-5,15))
+points(bphoto_df ~ htTrt_df, col = "darkslategray4", pch =19)
+
+plot(bforce_dl ~ lmaTrt, col = "maroon", pch =19, ylim = c(-15, 5), xlim = c(-0.05,0.05))
+points(bforce_df ~ lmaTrt_df, col = "darkslategray4", pch =19)
+
+plot(bchill_dl ~ lmaTrt, col = "maroon", pch =19, ylim = c(-15, 30), xlim = c(-0.05,0.05))
+points(bchill_df ~ lmaTrt_df, col = "darkslategray4", pch =19)
+
+plot(bphoto_dl ~ lmaTrt, col = "maroon", pch =19)
+plot(bphoto_df ~ lmaTrt_df, col = "darkslategray4", pch =19)
+
+
+plot(bforce_dl ~ dbhTrt, col = "maroon", pch =19)
+plot(bforce_df ~ dbhTrt_df, col = "darkslategray4", pch =19)
+
+plot(bchill_dl ~ dbhTrt, col = "maroon", pch =19)
+plot(bchill_df ~ dbhTrt_df, col = "darkslategray4", pch =19)
+
+plot(bphoto_dl ~ dbhTrt, col = "maroon", pch =19)
+plot(bphoto_df ~ dbhTrt_df, col = "darkslategray4", pch =19)
+
 dev.off()
 
