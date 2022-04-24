@@ -12,6 +12,15 @@ require(stringr)
 library(dplyr)
 library(plyr)
 
+library(ggplot2)
+library(reshape2)
+library(viridis)
+library(bayesplot)
+library(tidybayes)
+library(gridExtra) # for arranging plots 
+library(patchwork) # another way of arranging plots 
+library(rethinking)
+
 ## Set number of cores
 options(mc.cores = 4)
 
@@ -566,3 +575,104 @@ plot(mdl.cn, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", 
 dev.off()
 
 saveRDS(object = mdl.cn, file = "cn_stanfit.RDS")
+
+
+# Plot model fit:
+filePathData <- "output/"
+traitModelNames <- grep("_stanfit.RDS", list.files(filePathData), value = TRUE) 
+
+#Make a dataframe for saving traiit estimates for results section
+traits <- c("Height","CN", "DBH", "SSD")
+traitsDF <- data.frame(matrix(NA, 4,18))
+names(traitsDF) <- c("Trait", "GrandMean", "GrandMean_upper", "GrandMean_lower", 
+                     "SpeciesSigma",  "SpeciesSigma_upper", "SpeciesSigma_lower", 
+                     "StudySigma",  "StudySigma_upper", "StudySigma_lower", 
+                     "MaxValue",  "MaxValue_upper", "MaxValue_lower", "MaxValueSp", 
+                     "MinValue", "MinValueSp", "MinValue_upper", "MinValue_lower")
+traitsDF$Trait <- traits
+
+traitPlotList <- list()
+
+#for(traiti in 1:length(traitModelNames)){
+  
+  
+  # 	traiti <- 3
+  
+  #Load SLA model fit
+  traiti <- 1
+  cnModel <- readRDS(paste(filePathData,traitModelNames[traiti], sep = "/"))
+  traitName <- gsub("_stanfit.RDS", "", traitModelNames[traiti])
+  cnModelFit <- rstan::extract(cnModel)
+  
+  #sensible cue values
+  #-------------------------------------
+  forcingValue <- 0.85 # 20 degrees C
+  chillinValue <- 50 #coudl go up to 2 or 3 
+  photoValue <- -0.25 # about 12 Or 0.5(about 16)
+  
+  #Extracting  postreior values 
+  #----------------------------------
+  
+  #meanInterceptValues
+  alphaPhenoSpdf <- data.frame(cnModelFit$alphaPhenoSp)
+  alphaPhenoSpMean <- colMeans(alphaPhenoSpdf)
+  
+  #Forcing slope values 
+  betaForceSpdf <- data.frame(cnModelFit$betaForceSp)
+  betaForceSpMean <- colMeans(betaForceSpdf)
+  
+  #Chilling slope values 
+  betaChillSpdf <- data.frame(cnModelFit$betaChillSp)
+  betaChillSpMean <- colMeans(betaChillSpdf)
+  
+  
+  #Photoperiod slope values 
+  betaPhotoSpdf <- data.frame(cnModelFit$betaPhotoSp)
+  betaPhotoSpMean <- colMeans(betaPhotoSpdf)
+  
+  #Overall model 
+  sigmapheno_yMean <- mean(cnModelFit$sigmapheno_y)
+  
+  #Predict DOY based on model estimated parameters, One DOY value per species
+  yPhenoi <- vector()
+  
+  for(ip in 1:length(betaPhotoSpMean)){
+    yPhenoi[ip] <- alphaPhenoSpMean[ip] + betaForceSpMean[ip] * forcingValue + betaPhotoSpMean[ip] * photoValue + betaChillSpMean[ip]* chillinValue
+  }
+  
+#  plot(yPhenoi ~ alphaPhenoSpMean)
+  betaCombined <- betaPhotoSpMean+betaChillSpMean+betaForceSpMean
+  
+  mu_grandDf <- data.frame(cnModelFit$mu_grand_sp)
+  colnames(mu_grandDf) <- specieslist
+  longMeans <- melt(mu_grandDf)
+  colnames(longMeans) <- c("species", "traitMean")
+  
+  mu_grand_mean <- colMeans(mu_grandDf)
+  
+  meanRealTrait <- aggregate(trtPheno$C.N, by = list(trtPheno$species), FUN = mean, na.rm =T)
+  names(meanRealTrait) <- c("species","meanTrait")
+  
+  color_scheme_set("viridis")
+  
+  mcmc_intervals(mu_grandDf)+
+    theme_classic() + 
+    theme(text = element_text(size=20))+
+    geom_point(data = trtPheno, aes(y = species, x = C.N), alpha = 0.5)
+  
+  traitFit <- ggplot(data = trtPheno, aes(y = species, x = C.N, colour = "black"))+
+    stat_eye(data = longMeans, aes(y = species, x = traitMean))+
+    geom_point( alpha = 0.5, size = 1.2, aes(colour = "red"))+
+    theme_classic() +  
+    theme(text = element_text(size=16))+
+    geom_point(data = meanRealTrait, aes(x = meanTrait,y = species, colour = "purple"), shape = 8, size = 3)+
+    labs(title = traitName, y = "Species", x ="Trait Value")+ 
+    scale_color_identity(name = "Model fit",
+                         breaks = c("black", "red", "purple"),
+                         labels = c("Model Posterior", "Raw Data", "Data Mean"),
+                         guide = guide_legend(override.aes = list(
+                           linetype = c(NA, NA, NA),
+                           shape = c(19, 20, 8)))) + 
+    theme(legend.title = element_blank())
+  
+  
