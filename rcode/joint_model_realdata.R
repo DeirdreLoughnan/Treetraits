@@ -15,11 +15,11 @@ library(plyr)
 library(ggplot2)
 library(reshape2)
 library(viridis)
-library(bayesplot)
-library(tidybayes)
+#library(bayesplot)
+#library(tidybayes)
 library(gridExtra) # for arranging plots 
-library(patchwork) # another way of arranging plots 
-library(rethinking)
+#library(patchwork) # another way of arranging plots 
+#library(rethinking)
 
 ## Set number of cores
 options(mc.cores = 4)
@@ -106,99 +106,99 @@ trtPheno <- trtData[trtData$species %in% phenoSp, ]
 length(unique(trtPheno$species))
 
 ##########################################################
-# Height 
-
-specieslist <- sort(unique(trtPheno$species))
-sitelist <- sort(unique(trtPheno$site))
-height <- trtPheno[complete.cases(trtPheno$ht),]
-
-ht.data <- list(yTraiti = height$ht,
-                 N = nrow(height),
-                 n_spec = length(specieslist),
-                 trait_species = as.numeric(as.factor(height$species)),
-                 n_site = length(sitelist),
-                 site = as.numeric(as.factor(height$site)),
-                prior_mu_grand_mu = 20,
-                prior_mu_grand_sigma = 10,
-                prior_sigma_sp_mu = 4,
-                prior_sigma_sp_sigma = 5,
-                prior_sigma_site_mu = 2,
-                prior_sigma_site_sigma = 5,
-                prior_sigma_traity_mu = 3,
-                prior_sigma_traity_sigma = 5,
-                 ## Phenology
-                 Nph = nrow(pheno.t),
-                 phenology_species = as.numeric(as.factor(pheno.t$species)),
-                 yPhenoi = pheno.t$bb,
-                 forcei = pheno.t$force.z2,
-                 chilli = pheno.t$chillport.z2,
-                 photoi = pheno.t$photo.z2,
-                prior_muForceSp_mu = -15,
-                prior_muForceSp_sigma = 10, #wider
-                prior_muChillSp_mu = -15,
-                prior_muChillSp_sigma = 10,#wider
-                prior_muPhotoSp_mu = -15,
-                prior_muPhotoSp_sigma = 10,#wider
-                prior_muPhenoSp_mu = 40,
-                prior_muPhenoSp_sigma = 10,#wider
-                prior_sigmaForceSp_mu = 5,
-                prior_sigmaForceSp_sigma = 5,
-                prior_sigmaChillSp_mu = 5,#wider
-                prior_sigmaChillSp_sigma = 5, #wider
-                prior_sigmaPhotoSp_mu = 5,
-                prior_sigmaPhotoSp_sigma = 5,
-                prior_sigmaPhenoSp_mu = 5, #wider
-                prior_sigmaPhenoSp_sigma = 5, #wider
-                prior_betaTraitxForce_mu = 0,
-                prior_betaTraitxForce_sigma = 1,
-                prior_betaTraitxChill_mu = 0,
-                prior_betaTraitxChill_sigma = 1,
-                prior_betaTraitxPhoto_mu = 0,
-                prior_betaTraitxPhoto_sigma = 1,
-                prior_sigmaphenoy_mu = 10,
-                prior_sigmaphenoy_sigma = 5 #wider
-) 
-
-
-mdl.ht <- stan("stan/jointMdl.stan",
-                      data = ht.data,
-                      iter = 2000,
-                      warmup = 1000,
-                      chains = 4,
-                      include = FALSE, pars = c("y_hat"))
-
-save(mdl.ht, file = "output/ht_raw.Rda")
-## N effective?
-summary(mdl.ht)$summary[, "n_eff"] # 394.271, 13592.123
-
-### Add species and study names to Stan object
-names(mdl.ht)[grep(pattern = "^muSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^musite", x = names(mdl.ht))] <- paste(sitelist, sep = "")
-##
-names(mdl.ht)[grep(pattern = "^alphaForceSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^alphaChillSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^alphaPhotoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^alphaPhenoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^betaForceSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^betaChillSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^betaPhotoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-names(mdl.ht)[grep(pattern = "^betaPhenoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
-
-pdf(file = "SLA_estimates_37spp.pdf", onefile = TRUE)
-plot(mdl.ht, pars = c("mu_grand", "muSp"))
-plot(mdl.ht, pars = c("musite"))
-plot(mdl.ht, pars = c("muPhenoSp", "alphaPhenoSp"))
-plot(mdl.ht, pars = c("muForceSp", "alphaForceSp"))
-plot(mdl.ht, pars = c("muChillSp", "alphaChillSp"))
-plot(mdl.ht, pars = c("muPhotoSp", "alphaPhotoSp"))
-plot(mdl.ht, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
-plot(mdl.ht, pars = c("betaTraitxForce","betaForceSp"))
-plot(mdl.ht, pars = c("betaTraitxChill","betaChillSp"))
-plot(mdl.ht, pars = c("betaTraitxPhoto","betaPhotoSp"))
-plot(mdl.ht, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
-dev.off()
-
-saveRDS(object = mdl.ht, file = "height_stanfit.RDS")
+# # Height 
+# 
+# specieslist <- sort(unique(trtPheno$species))
+# sitelist <- sort(unique(trtPheno$site))
+# height <- trtPheno[complete.cases(trtPheno$ht),]
+# 
+# ht.data <- list(yTraiti = height$ht,
+#                  N = nrow(height),
+#                  n_spec = length(specieslist),
+#                  trait_species = as.numeric(as.factor(height$species)),
+#                  n_site = length(sitelist),
+#                  site = as.numeric(as.factor(height$site)),
+#                 prior_mu_grand_mu = 20,
+#                 prior_mu_grand_sigma = 10,
+#                 prior_sigma_sp_mu = 4,
+#                 prior_sigma_sp_sigma = 5,
+#                 prior_sigma_site_mu = 2,
+#                 prior_sigma_site_sigma = 5,
+#                 prior_sigma_traity_mu = 3,
+#                 prior_sigma_traity_sigma = 5,
+#                  ## Phenology
+#                  Nph = nrow(pheno.t),
+#                  phenology_species = as.numeric(as.factor(pheno.t$species)),
+#                  yPhenoi = pheno.t$bb,
+#                  forcei = pheno.t$force.z2,
+#                  chilli = pheno.t$chillport.z2,
+#                  photoi = pheno.t$photo.z2,
+#                 prior_muForceSp_mu = -15,
+#                 prior_muForceSp_sigma = 10, #wider
+#                 prior_muChillSp_mu = -15,
+#                 prior_muChillSp_sigma = 10,#wider
+#                 prior_muPhotoSp_mu = -15,
+#                 prior_muPhotoSp_sigma = 10,#wider
+#                 prior_muPhenoSp_mu = 40,
+#                 prior_muPhenoSp_sigma = 10,#wider
+#                 prior_sigmaForceSp_mu = 5,
+#                 prior_sigmaForceSp_sigma = 5,
+#                 prior_sigmaChillSp_mu = 5,#wider
+#                 prior_sigmaChillSp_sigma = 5, #wider
+#                 prior_sigmaPhotoSp_mu = 5,
+#                 prior_sigmaPhotoSp_sigma = 5,
+#                 prior_sigmaPhenoSp_mu = 5, #wider
+#                 prior_sigmaPhenoSp_sigma = 5, #wider
+#                 prior_betaTraitxForce_mu = 0,
+#                 prior_betaTraitxForce_sigma = 1,
+#                 prior_betaTraitxChill_mu = 0,
+#                 prior_betaTraitxChill_sigma = 1,
+#                 prior_betaTraitxPhoto_mu = 0,
+#                 prior_betaTraitxPhoto_sigma = 1,
+#                 prior_sigmaphenoy_mu = 10,
+#                 prior_sigmaphenoy_sigma = 5 #wider
+# ) 
+# 
+# 
+# mdl.ht <- stan("stan/jointMdl.stan",
+#                       data = ht.data,
+#                       iter = 2000,
+#                       warmup = 1000,
+#                       chains = 4,
+#                       include = FALSE, pars = c("y_hat"))
+# 
+# save(mdl.ht, file = "output/ht_raw.Rda")
+# ## N effective?
+# summary(mdl.ht)$summary[, "n_eff"] # 394.271, 13592.123
+# 
+# ### Add species and study names to Stan object
+# names(mdl.ht)[grep(pattern = "^muSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^musite", x = names(mdl.ht))] <- paste(sitelist, sep = "")
+# ##
+# names(mdl.ht)[grep(pattern = "^alphaForceSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^alphaChillSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^alphaPhotoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^alphaPhenoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^betaForceSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^betaChillSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^betaPhotoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# names(mdl.ht)[grep(pattern = "^betaPhenoSp", x = names(mdl.ht))] <- paste(specieslist, sep = "")
+# 
+# pdf(file = "SLA_estimates_37spp.pdf", onefile = TRUE)
+# plot(mdl.ht, pars = c("mu_grand", "muSp"))
+# plot(mdl.ht, pars = c("musite"))
+# plot(mdl.ht, pars = c("muPhenoSp", "alphaPhenoSp"))
+# plot(mdl.ht, pars = c("muForceSp", "alphaForceSp"))
+# plot(mdl.ht, pars = c("muChillSp", "alphaChillSp"))
+# plot(mdl.ht, pars = c("muPhotoSp", "alphaPhotoSp"))
+# plot(mdl.ht, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
+# plot(mdl.ht, pars = c("betaTraitxForce","betaForceSp"))
+# plot(mdl.ht, pars = c("betaTraitxChill","betaChillSp"))
+# plot(mdl.ht, pars = c("betaTraitxPhoto","betaPhotoSp"))
+# plot(mdl.ht, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
+# dev.off()
+# 
+# saveRDS(object = mdl.ht, file = "height_stanfit.RDS")
 
 ##########################################################
 # LMA
@@ -257,14 +257,15 @@ lma.data <- list(yTraiti = leafMass$lma,
 
 mdl.lma <- stan("stan/jointMdl.stan",
                data = lma.data,
-               iter = 2000,
-               warmup = 1000,
+               iter = 4000,
+               warmup = 3000,
                chains = 4,
-               include = FALSE, pars = c("y_hat"))
+               include = FALSE, pars = c("y_hat"), 
+               control = list(max_treedepth = 11))
 
 save(mdl.lma, file = "output/lma_raw.Rda")
 ## N effective?
-summary(mdl.lma)$summary[, "n_eff"] # 394.271, 13592.123
+range(summary(mdl.lma)$summary[, "n_eff"] )# 394.271, 13592.123
 
 ### Add species and study names to Stan object
 names(mdl.lma)[grep(pattern = "^muSp", x = names(mdl.lma))] <- paste(specieslist, sep = "")
@@ -297,382 +298,383 @@ saveRDS(object = mdl.lma, file = "lma_stanfit.RDS")
 
 ##########################################################
 # ssd
-hist(trtPheno$ssd)
-stemDen <- trtPheno[complete.cases(trtPheno$ssd),]
-
-ssd.data <- list(yTraiti = stemDen$ssd,
-                 N = nrow(stemDen),
-                 n_spec = length(specieslist),
-                 trait_species = as.numeric(as.factor(stemDen$species)),
-                 n_site = length(sitelist),
-                 site = as.numeric(as.factor(stemDen$site)),
-                 prior_mu_grand_mu = 1,
-                 prior_mu_grand_sigma = 5, #widened
-                 prior_sigma_sp_mu = 10,
-                 prior_sigma_sp_sigma = 5,
-                 prior_sigma_site_mu = 5,
-                 prior_sigma_site_sigma = 2,
-                 prior_sigma_traity_mu = 5,
-                 prior_sigma_traity_sigma = 2,
-                 ## Phenology
-                 Nph = nrow(pheno.t),
-                 phenology_species = as.numeric(as.factor(pheno.t$species)),
-                 yPhenoi = pheno.t$bb,
-                 forcei = pheno.t$force.z2,
-                 chilli = pheno.t$chillport.z2,
-                 photoi = pheno.t$photo.z2,
-                 prior_muForceSp_mu = -15,
-                 prior_muForceSp_sigma = 10, #wider
-                 prior_muChillSp_mu = -15,
-                 prior_muChillSp_sigma = 10,#wider
-                 prior_muPhotoSp_mu = -15,
-                 prior_muPhotoSp_sigma = 10,#wider
-                 prior_muPhenoSp_mu = 40,
-                 prior_muPhenoSp_sigma = 10,#wider
-                 prior_sigmaForceSp_mu = 5,
-                 prior_sigmaForceSp_sigma = 5,
-                 prior_sigmaChillSp_mu = 5,#wider
-                 prior_sigmaChillSp_sigma = 5, #wider
-                 prior_sigmaPhotoSp_mu = 5,
-                 prior_sigmaPhotoSp_sigma = 5,
-                 prior_sigmaPhenoSp_mu = 5, #wider
-                 prior_sigmaPhenoSp_sigma = 5, #wider
-                 prior_betaTraitxForce_mu = 0,
-                 prior_betaTraitxForce_sigma = 1,
-                 prior_betaTraitxChill_mu = 0,
-                 prior_betaTraitxChill_sigma = 1,
-                 prior_betaTraitxPhoto_mu = 0,
-                 prior_betaTraitxPhoto_sigma = 1,
-                 prior_sigmaphenoy_mu = 10,
-                 prior_sigmaphenoy_sigma = 5 #wider
-) 
-
-
-mdl.ssd <- stan("stan/jointMdl.stan",
-                data = ssd.data,
-                iter = 2000,
-                warmup = 1000,
-                chains = 4,
-                include = FALSE, pars = c("y_hat"))
-
-save(mdl.ssd, file = "output/ssd_raw.Rda")
-## N effective?
-summary(mdl.ssd)$summary[, "n_eff"] # 394.271, 13592.123
-
-### Add species and study names to Stan object
-names(mdl.ssd)[grep(pattern = "^muSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^musite", x = names(mdl.ssd))] <- paste(sitelist, sep = "")
-##
-names(mdl.ssd)[grep(pattern = "^alphaForceSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^alphaChillSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^alphaPhotoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^alphaPhenoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^betaForceSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^betaChillSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^betaPhotoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-names(mdl.ssd)[grep(pattern = "^betaPhenoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
-
-pdf(file = "SSD_estimates.pdf", onefile = TRUE)
-plot(mdl.ssd, pars = c("mu_grand", "muSp"))
-plot(mdl.ssd, pars = c("musite"))
-plot(mdl.ssd, pars = c("muPhenoSp", "alphaPhenoSp"))
-plot(mdl.ssd, pars = c("muForceSp", "alphaForceSp"))
-plot(mdl.ssd, pars = c("muChillSp", "alphaChillSp"))
-plot(mdl.ssd, pars = c("muPhotoSp", "alphaPhotoSp"))
-plot(mdl.ssd, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
-plot(mdl.ssd, pars = c("betaTraitxForce","betaForceSp"))
-plot(mdl.ssd, pars = c("betaTraitxChill","betaChillSp"))
-plot(mdl.ssd, pars = c("betaTraitxPhoto","betaPhotoSp"))
-plot(mdl.ssd, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
-dev.off()
-
-saveRDS(object = mdl.ssd, file = "SSD_stanfit.RDS")
-
-##########################################################
-# dbh
-
-diam <- trtPheno[complete.cases(trtPheno$dbh),]
-
-dbh.data <- list(yTraiti = diam$dbh,
-                 N = nrow(diam),
-                 n_spec = length(specieslist),
-                 trait_species = as.numeric(as.factor(diam$species)),
-                 n_site = length(sitelist),
-                 site = as.numeric(as.factor(diam$site)),
-                 prior_mu_grand_mu = 15,
-                 prior_mu_grand_sigma = 5, #widened
-                 prior_sigma_sp_mu = 10,
-                 prior_sigma_sp_sigma = 5,
-                 prior_sigma_site_mu = 5,
-                 prior_sigma_site_sigma = 2,
-                 prior_sigma_traity_mu = 5,
-                 prior_sigma_traity_sigma = 2,
-                 ## Phenology
-                 Nph = nrow(pheno.t),
-                 phenology_species = as.numeric(as.factor(pheno.t$species)),
-                 yPhenoi = pheno.t$bb,
-                 forcei = pheno.t$force.z2,
-                 chilli = pheno.t$chillport.z2,
-                 photoi = pheno.t$photo.z2,
-                 prior_muForceSp_mu = -15,
-                 prior_muForceSp_sigma = 10, #wider
-                 prior_muChillSp_mu = -15,
-                 prior_muChillSp_sigma = 10,#wider
-                 prior_muPhotoSp_mu = -15,
-                 prior_muPhotoSp_sigma = 10,#wider
-                 prior_muPhenoSp_mu = 40,
-                 prior_muPhenoSp_sigma = 10,#wider
-                 prior_sigmaForceSp_mu = 5,
-                 prior_sigmaForceSp_sigma = 5,
-                 prior_sigmaChillSp_mu = 5,#wider
-                 prior_sigmaChillSp_sigma = 5, #wider
-                 prior_sigmaPhotoSp_mu = 5,
-                 prior_sigmaPhotoSp_sigma = 5,
-                 prior_sigmaPhenoSp_mu = 5, #wider
-                 prior_sigmaPhenoSp_sigma = 5, #wider
-                 prior_betaTraitxForce_mu = 0,
-                 prior_betaTraitxForce_sigma = 1,
-                 prior_betaTraitxChill_mu = 0,
-                 prior_betaTraitxChill_sigma = 1,
-                 prior_betaTraitxPhoto_mu = 0,
-                 prior_betaTraitxPhoto_sigma = 1,
-                 prior_sigmaphenoy_mu = 10,
-                 prior_sigmaphenoy_sigma = 5 #wider
-) 
-
-
-mdl.dbh <- stan("stan/jointMdl.stan",
-                data = dbh.data,
-                iter = 2000,
-                warmup = 1000,
-                chains = 4,
-                include = FALSE, pars = c("y_hat"))
-# run for more iterations
-
-save(mdl.diam, file = "output/dbh_raw.Rda")
-## N effective?
-summary(mdl.dbh)$summary[, "n_eff"] # 394.271, 13592.123
-
-### Add species and study names to Stan object
-names(mdl.dbh)[grep(pattern = "^muSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^musite", x = names(mdl.dbh))] <- paste(sitelist, sep = "")
-##
-names(mdl.dbh)[grep(pattern = "^alphaForceSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^alphaChillSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^alphaPhotoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^alphaPhenoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^betaForceSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^betaChillSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^betaPhotoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-names(mdl.dbh)[grep(pattern = "^betaPhenoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
-
-pdf(file = "DBH_estimates.pdf", onefile = TRUE)
-plot(mdl.dbh, pars = c("mu_grand", "muSp"))
-plot(mdl.dbh, pars = c("musite"))
-plot(mdl.dbh, pars = c("muPhenoSp", "alphaPhenoSp"))
-plot(mdl.dbh, pars = c("muForceSp", "alphaForceSp"))
-plot(mdl.dbh, pars = c("muChillSp", "alphaChillSp"))
-plot(mdl.dbh, pars = c("muPhotoSp", "alphaPhotoSp"))
-plot(mdl.dbh, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
-plot(mdl.dbh, pars = c("betaTraitxForce","betaForceSp"))
-plot(mdl.dbh, pars = c("betaTraitxChill","betaChillSp"))
-plot(mdl.dbh, pars = c("betaTraitxPhoto","betaPhotoSp"))
-plot(mdl.dbh, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
-dev.off()
-
-saveRDS(object = mdl.dbh, file = "dbh_stanfit.RDS")
-
-##########################################################
-# C:N
-
-carbNit <- trtPheno[complete.cases(trtPheno$C.N),]
-
-cn.data <- list(yTraiti = carbNit$C.N,
-                 N = nrow(carbNit),
-                 n_spec = length(specieslist),
-                 trait_species = as.numeric(as.factor(carbNit$species)),
-                 n_site = length(sitelist),
-                 site = as.numeric(as.factor(carbNit$site)),
-                 prior_mu_grand_mu = 20,
-                 prior_mu_grand_sigma = 5, #widened
-                 prior_sigma_sp_mu = 10,
-                 prior_sigma_sp_sigma = 5,
-                 prior_sigma_site_mu = 5,
-                 prior_sigma_site_sigma = 2,
-                 prior_sigma_traity_mu = 5,
-                 prior_sigma_traity_sigma = 2,
-                 ## Phenology
-                 Nph = nrow(pheno.t),
-                 phenology_species = as.numeric(as.factor(pheno.t$species)),
-                 yPhenoi = pheno.t$bb,
-                 forcei = pheno.t$force.z2,
-                 chilli = pheno.t$chillport.z2,
-                 photoi = pheno.t$photo.z2,
-                 prior_muForceSp_mu = -15,
-                 prior_muForceSp_sigma = 10, #wider
-                 prior_muChillSp_mu = -15,
-                 prior_muChillSp_sigma = 10,#wider
-                 prior_muPhotoSp_mu = -15,
-                 prior_muPhotoSp_sigma = 10,#wider
-                 prior_muPhenoSp_mu = 40,
-                 prior_muPhenoSp_sigma = 10,#wider
-                 prior_sigmaForceSp_mu = 5,
-                 prior_sigmaForceSp_sigma = 5,
-                 prior_sigmaChillSp_mu = 5,#wider
-                 prior_sigmaChillSp_sigma = 5, #wider
-                 prior_sigmaPhotoSp_mu = 5,
-                 prior_sigmaPhotoSp_sigma = 5,
-                 prior_sigmaPhenoSp_mu = 5, #wider
-                 prior_sigmaPhenoSp_sigma = 5, #wider
-                 prior_betaTraitxForce_mu = 0,
-                 prior_betaTraitxForce_sigma = 1,
-                 prior_betaTraitxChill_mu = 0,
-                 prior_betaTraitxChill_sigma = 1,
-                 prior_betaTraitxPhoto_mu = 0,
-                 prior_betaTraitxPhoto_sigma = 1,
-                 prior_sigmaphenoy_mu = 10,
-                 prior_sigmaphenoy_sigma = 5 #wider
-) 
-
-
-mdl.cn <- stan("stan/jointMdl.stan",
-                data = cn.data,
-                iter = 2000,
-                warmup = 1000,
-                chains = 4,
-                include = FALSE, pars = c("y_hat"))
-# bluk ESS is low - run for more iterations
-
-save(mdl.cn, file = "output/cn_raw.Rda")
-## N effective?
-summary(mdl.cn)$summary[, "n_eff"] # 394.271, 13592.123
-
-### Add species and study names to Stan object
-names(mdl.cn)[grep(pattern = "^muSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^musite", x = names(mdl.cn))] <- paste(sitelist, sep = "")
-##
-names(mdl.cn)[grep(pattern = "^alphaForceSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^alphaChillSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^alphaPhotoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^alphaPhenoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^betaForceSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^betaChillSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^betaPhotoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-names(mdl.cn)[grep(pattern = "^betaPhenoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
-
-pdf(file = "CN_estimates.pdf", onefile = TRUE)
-plot(mdl.cn, pars = c("mu_grand", "muSp"))
-plot(mdl.cn, pars = c("musite"))
-plot(mdl.cn, pars = c("muPhenoSp", "alphaPhenoSp"))
-plot(mdl.cn, pars = c("muForceSp", "alphaForceSp"))
-plot(mdl.cn, pars = c("muChillSp", "alphaChillSp"))
-plot(mdl.cn, pars = c("muPhotoSp", "alphaPhotoSp"))
-plot(mdl.cn, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
-plot(mdl.cn, pars = c("betaTraitxForce","betaForceSp"))
-plot(mdl.cn, pars = c("betaTraitxChill","betaChillSp"))
-plot(mdl.cn, pars = c("betaTraitxPhoto","betaPhotoSp"))
-plot(mdl.cn, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
-dev.off()
-
-saveRDS(object = mdl.cn, file = "cn_stanfit.RDS")
-
-
-# Plot model fit:
-filePathData <- "output/"
-traitModelNames <- grep("_stanfit.RDS", list.files(filePathData), value = TRUE) 
-
-#Make a dataframe for saving traiit estimates for results section
-traits <- c("Height","CN", "DBH", "SSD")
-traitsDF <- data.frame(matrix(NA, 4,18))
-names(traitsDF) <- c("Trait", "GrandMean", "GrandMean_upper", "GrandMean_lower", 
-                     "SpeciesSigma",  "SpeciesSigma_upper", "SpeciesSigma_lower", 
-                     "StudySigma",  "StudySigma_upper", "StudySigma_lower", 
-                     "MaxValue",  "MaxValue_upper", "MaxValue_lower", "MaxValueSp", 
-                     "MinValue", "MinValueSp", "MinValue_upper", "MinValue_lower")
-traitsDF$Trait <- traits
-
-traitPlotList <- list()
-
-#for(traiti in 1:length(traitModelNames)){
-  
-  
-  # 	traiti <- 3
-  
-  #Load SLA model fit
-  traiti <- 1
-  cnModel <- readRDS(paste(filePathData,traitModelNames[traiti], sep = "/"))
-  traitName <- gsub("_stanfit.RDS", "", traitModelNames[traiti])
-  cnModelFit <- rstan::extract(cnModel)
-  
-  #sensible cue values
-  #-------------------------------------
-  forcingValue <- 0.85 # 20 degrees C
-  chillinValue <- 50 #coudl go up to 2 or 3 
-  photoValue <- -0.25 # about 12 Or 0.5(about 16)
-  
-  #Extracting  postreior values 
-  #----------------------------------
-  
-  #meanInterceptValues
-  alphaPhenoSpdf <- data.frame(cnModelFit$alphaPhenoSp)
-  alphaPhenoSpMean <- colMeans(alphaPhenoSpdf)
-  
-  #Forcing slope values 
-  betaForceSpdf <- data.frame(cnModelFit$betaForceSp)
-  betaForceSpMean <- colMeans(betaForceSpdf)
-  
-  #Chilling slope values 
-  betaChillSpdf <- data.frame(cnModelFit$betaChillSp)
-  betaChillSpMean <- colMeans(betaChillSpdf)
-  
-  
-  #Photoperiod slope values 
-  betaPhotoSpdf <- data.frame(cnModelFit$betaPhotoSp)
-  betaPhotoSpMean <- colMeans(betaPhotoSpdf)
-  
-  #Overall model 
-  sigmapheno_yMean <- mean(cnModelFit$sigmapheno_y)
-  
-  #Predict DOY based on model estimated parameters, One DOY value per species
-  yPhenoi <- vector()
-  
-  for(ip in 1:length(betaPhotoSpMean)){
-    yPhenoi[ip] <- alphaPhenoSpMean[ip] + betaForceSpMean[ip] * forcingValue + betaPhotoSpMean[ip] * photoValue + betaChillSpMean[ip]* chillinValue
-  }
-  
-#  plot(yPhenoi ~ alphaPhenoSpMean)
-  betaCombined <- betaPhotoSpMean+betaChillSpMean+betaForceSpMean
-  
-  mu_grandDf <- data.frame(cnModelFit$mu_grand_sp)
-  colnames(mu_grandDf) <- specieslist
-  longMeans <- melt(mu_grandDf)
-  colnames(longMeans) <- c("species", "traitMean")
-  
-  mu_grand_mean <- colMeans(mu_grandDf)
-  
-  meanRealTrait <- aggregate(trtPheno$C.N, by = list(trtPheno$species), FUN = mean, na.rm =T)
-  names(meanRealTrait) <- c("species","meanTrait")
-  
-  color_scheme_set("viridis")
-  
-  mcmc_intervals(mu_grandDf)+
-    theme_classic() + 
-    theme(text = element_text(size=20))+
-    geom_point(data = trtPheno, aes(y = species, x = C.N), alpha = 0.5)
-  
-  traitFit <- ggplot(data = trtPheno, aes(y = species, x = C.N, colour = "black"))+
-    stat_eye(data = longMeans, aes(y = species, x = traitMean))+
-    geom_point( alpha = 0.5, size = 1.2, aes(colour = "red"))+
-    theme_classic() +  
-    theme(text = element_text(size=16))+
-    geom_point(data = meanRealTrait, aes(x = meanTrait,y = species, colour = "purple"), shape = 8, size = 3)+
-    labs(title = traitName, y = "Species", x ="Trait Value")+ 
-    scale_color_identity(name = "Model fit",
-                         breaks = c("black", "red", "purple"),
-                         labels = c("Model Posterior", "Raw Data", "Data Mean"),
-                         guide = guide_legend(override.aes = list(
-                           linetype = c(NA, NA, NA),
-                           shape = c(19, 20, 8)))) + 
-    theme(legend.title = element_blank())
-  
-  
+# hist(trtPheno$ssd)
+# stemDen <- trtPheno[complete.cases(trtPheno$ssd),]
+# 
+# ssd.data <- list(yTraiti = stemDen$ssd,
+#                  N = nrow(stemDen),
+#                  n_spec = length(specieslist),
+#                  trait_species = as.numeric(as.factor(stemDen$species)),
+#                  n_site = length(sitelist),
+#                  site = as.numeric(as.factor(stemDen$site)),
+#                  prior_mu_grand_mu = 1,
+#                  prior_mu_grand_sigma = 5, #widened
+#                  prior_sigma_sp_mu = 4, #10
+#                  prior_sigma_sp_sigma = 5,
+#                  prior_sigma_site_mu = 2, #5
+#                  prior_sigma_site_sigma = 5, #2
+#                  prior_sigma_traity_mu = 2, #5
+#                  prior_sigma_traity_sigma = 5,
+#                  ## Phenology
+#                  Nph = nrow(pheno.t),
+#                  phenology_species = as.numeric(as.factor(pheno.t$species)),
+#                  yPhenoi = pheno.t$bb,
+#                  forcei = pheno.t$force.z2,
+#                  chilli = pheno.t$chillport.z2,
+#                  photoi = pheno.t$photo.z2,
+#                  prior_muForceSp_mu = -15,
+#                  prior_muForceSp_sigma = 10, #wider
+#                  prior_muChillSp_mu = -15,
+#                  prior_muChillSp_sigma = 10,#wider
+#                  prior_muPhotoSp_mu = -15,
+#                  prior_muPhotoSp_sigma = 10,#wider
+#                  prior_muPhenoSp_mu = 40,
+#                  prior_muPhenoSp_sigma = 10,#wider
+#                  prior_sigmaForceSp_mu = 5,
+#                  prior_sigmaForceSp_sigma = 5,
+#                  prior_sigmaChillSp_mu = 5,#wider
+#                  prior_sigmaChillSp_sigma = 5, #wider
+#                  prior_sigmaPhotoSp_mu = 5,
+#                  prior_sigmaPhotoSp_sigma = 5,
+#                  prior_sigmaPhenoSp_mu = 5, #wider
+#                  prior_sigmaPhenoSp_sigma = 5, #wider
+#                  prior_betaTraitxForce_mu = 0,
+#                  prior_betaTraitxForce_sigma = 1,
+#                  prior_betaTraitxChill_mu = 0,
+#                  prior_betaTraitxChill_sigma = 1,
+#                  prior_betaTraitxPhoto_mu = 0,
+#                  prior_betaTraitxPhoto_sigma = 1,
+#                  prior_sigmaphenoy_mu = 10,
+#                  prior_sigmaphenoy_sigma = 5 #wider
+# ) 
+# 
+# 
+# mdl.ssd <- stan("stan/jointMdl.stan",
+#                 data = ssd.data,
+#                 iter = 2000,
+#                 warmup = 1000,
+#                 chains = 4,
+#                 include = FALSE, pars = c("y_hat"))
+# 
+# save(mdl.ssd, file = "output/ssd_raw_np.Rda")
+# ## N effective?
+# summary(mdl.ssd)$summary[, "n_eff"] # 1013.934 8423.027
+# 
+# ### Add species and study names to Stan object
+# names(mdl.ssd)[grep(pattern = "^muSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^musite", x = names(mdl.ssd))] <- paste(sitelist, sep = "")
+# ##
+# names(mdl.ssd)[grep(pattern = "^alphaForceSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^alphaChillSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^alphaPhotoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^alphaPhenoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^betaForceSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^betaChillSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^betaPhotoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# names(mdl.ssd)[grep(pattern = "^betaPhenoSp", x = names(mdl.ssd))] <- paste(specieslist, sep = "")
+# 
+# pdf(file = "SSD_estimates.pdf", onefile = TRUE)
+# plot(mdl.ssd, pars = c("mu_grand", "muSp"))
+# plot(mdl.ssd, pars = c("musite"))
+# plot(mdl.ssd, pars = c("muPhenoSp", "alphaPhenoSp"))
+# plot(mdl.ssd, pars = c("muForceSp", "alphaForceSp"))
+# plot(mdl.ssd, pars = c("muChillSp", "alphaChillSp"))
+# plot(mdl.ssd, pars = c("muPhotoSp", "alphaPhotoSp"))
+# plot(mdl.ssd, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
+# plot(mdl.ssd, pars = c("betaTraitxForce","betaForceSp"))
+# plot(mdl.ssd, pars = c("betaTraitxChill","betaChillSp"))
+# plot(mdl.ssd, pars = c("betaTraitxPhoto","betaPhotoSp"))
+# plot(mdl.ssd, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
+# dev.off()
+# 
+# saveRDS(object = mdl.ssd, file = "SSD_stanfit_np.RDS")
+# 
+# ##########################################################
+# # dbh
+# 
+# diam <- trtPheno[complete.cases(trtPheno$dbh),]
+# 
+# dbh.data <- list(yTraiti = diam$dbh,
+#                  N = nrow(diam),
+#                  n_spec = length(specieslist),
+#                  trait_species = as.numeric(as.factor(diam$species)),
+#                  n_site = length(sitelist),
+#                  site = as.numeric(as.factor(diam$site)),
+#                  prior_mu_grand_mu = 15,
+#                  prior_mu_grand_sigma = 5, #widened
+#                  prior_sigma_sp_mu = 10,
+#                  prior_sigma_sp_sigma = 5,
+#                  prior_sigma_site_mu = 5,
+#                  prior_sigma_site_sigma = 2,
+#                  prior_sigma_traity_mu = 5,
+#                  prior_sigma_traity_sigma = 2,
+#                  ## Phenology
+#                  Nph = nrow(pheno.t),
+#                  phenology_species = as.numeric(as.factor(pheno.t$species)),
+#                  yPhenoi = pheno.t$bb,
+#                  forcei = pheno.t$force.z2,
+#                  chilli = pheno.t$chillport.z2,
+#                  photoi = pheno.t$photo.z2,
+#                  prior_muForceSp_mu = -15,
+#                  prior_muForceSp_sigma = 10, #wider
+#                  prior_muChillSp_mu = -15,
+#                  prior_muChillSp_sigma = 10,#wider
+#                  prior_muPhotoSp_mu = -15,
+#                  prior_muPhotoSp_sigma = 10,#wider
+#                  prior_muPhenoSp_mu = 40,
+#                  prior_muPhenoSp_sigma = 10,#wider
+#                  prior_sigmaForceSp_mu = 5,
+#                  prior_sigmaForceSp_sigma = 5,
+#                  prior_sigmaChillSp_mu = 5,#wider
+#                  prior_sigmaChillSp_sigma = 5, #wider
+#                  prior_sigmaPhotoSp_mu = 5,
+#                  prior_sigmaPhotoSp_sigma = 5,
+#                  prior_sigmaPhenoSp_mu = 5, #wider
+#                  prior_sigmaPhenoSp_sigma = 5, #wider
+#                  prior_betaTraitxForce_mu = 0,
+#                  prior_betaTraitxForce_sigma = 1,
+#                  prior_betaTraitxChill_mu = 0,
+#                  prior_betaTraitxChill_sigma = 1,
+#                  prior_betaTraitxPhoto_mu = 0,
+#                  prior_betaTraitxPhoto_sigma = 1,
+#                  prior_sigmaphenoy_mu = 10,
+#                  prior_sigmaphenoy_sigma = 5 #wider
+# ) 
+# 
+# 
+# mdl.dbh <- stan("stan/jointMdl.stan",
+#                 data = dbh.data,
+#                 iter = 2000,
+#                 warmup = 1000,
+#                 chains = 4,
+#                 include = FALSE, pars = c("y_hat"))
+# # run for more iterations
+# 
+# save(mdl.diam, file = "output/dbh_raw.Rda")
+# ## N effective?
+# summary(mdl.dbh)$summary[, "n_eff"] # 394.271, 13592.123
+# 
+# ### Add species and study names to Stan object
+# names(mdl.dbh)[grep(pattern = "^muSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^musite", x = names(mdl.dbh))] <- paste(sitelist, sep = "")
+# ##
+# names(mdl.dbh)[grep(pattern = "^alphaForceSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^alphaChillSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^alphaPhotoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^alphaPhenoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^betaForceSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^betaChillSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^betaPhotoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# names(mdl.dbh)[grep(pattern = "^betaPhenoSp", x = names(mdl.dbh))] <- paste(specieslist, sep = "")
+# 
+# pdf(file = "DBH_estimates.pdf", onefile = TRUE)
+# plot(mdl.dbh, pars = c("mu_grand", "muSp"))
+# plot(mdl.dbh, pars = c("musite"))
+# plot(mdl.dbh, pars = c("muPhenoSp", "alphaPhenoSp"))
+# plot(mdl.dbh, pars = c("muForceSp", "alphaForceSp"))
+# plot(mdl.dbh, pars = c("muChillSp", "alphaChillSp"))
+# plot(mdl.dbh, pars = c("muPhotoSp", "alphaPhotoSp"))
+# plot(mdl.dbh, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
+# plot(mdl.dbh, pars = c("betaTraitxForce","betaForceSp"))
+# plot(mdl.dbh, pars = c("betaTraitxChill","betaChillSp"))
+# plot(mdl.dbh, pars = c("betaTraitxPhoto","betaPhotoSp"))
+# plot(mdl.dbh, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
+# dev.off()
+# 
+# saveRDS(object = mdl.dbh, file = "dbh_stanfit.RDS")
+# 
+# ##########################################################
+# # C:N
+# 
+# carbNit <- trtPheno[complete.cases(trtPheno$C.N),]
+# 
+# cn.data <- list(yTraiti = carbNit$C.N,
+#                  N = nrow(carbNit),
+#                  n_spec = length(specieslist),
+#                  trait_species = as.numeric(as.factor(carbNit$species)),
+#                  n_site = length(sitelist),
+#                  site = as.numeric(as.factor(carbNit$site)),
+#                  prior_mu_grand_mu = 20,
+#                  prior_mu_grand_sigma = 5, #widened
+#                  prior_sigma_sp_mu = 10,
+#                  prior_sigma_sp_sigma = 5,
+#                  prior_sigma_site_mu = 5,
+#                  prior_sigma_site_sigma = 2,
+#                  prior_sigma_traity_mu = 5,
+#                  prior_sigma_traity_sigma = 2,
+#                  ## Phenology
+#                  Nph = nrow(pheno.t),
+#                  phenology_species = as.numeric(as.factor(pheno.t$species)),
+#                  yPhenoi = pheno.t$bb,
+#                  forcei = pheno.t$force.z2,
+#                  chilli = pheno.t$chillport.z2,
+#                  photoi = pheno.t$photo.z2,
+#                  prior_muForceSp_mu = -15,
+#                  prior_muForceSp_sigma = 15, #10 #wider
+#                  prior_muChillSp_mu = -15,
+#                  prior_muChillSp_sigma = 15, #10 #wider
+#                  prior_muPhotoSp_mu = -15,
+#                  prior_muPhotoSp_sigma = 10,#wider
+#                  prior_muPhenoSp_mu = 40,
+#                  prior_muPhenoSp_sigma = 10,#wider
+#                  prior_sigmaForceSp_mu = 5,
+#                  prior_sigmaForceSp_sigma = 5,
+#                  prior_sigmaChillSp_mu = 5,#wider
+#                  prior_sigmaChillSp_sigma = 5, #wider
+#                  prior_sigmaPhotoSp_mu = 5,
+#                  prior_sigmaPhotoSp_sigma = 5,
+#                  prior_sigmaPhenoSp_mu = 5, #wider
+#                  prior_sigmaPhenoSp_sigma = 5, #wider
+#                  prior_betaTraitxForce_mu = 0,
+#                  prior_betaTraitxForce_sigma = 1,
+#                  prior_betaTraitxChill_mu = 0,
+#                  prior_betaTraitxChill_sigma = 1,
+#                  prior_betaTraitxPhoto_mu = 0,
+#                  prior_betaTraitxPhoto_sigma = 1,
+#                  prior_sigmaphenoy_mu = 10,
+#                  prior_sigmaphenoy_sigma = 5 #wider
+# ) 
+# 
+# 
+# mdl.cn <- stan("stan/jointMdl.stan",
+#                 data = cn.data,
+#                 iter = 4000,
+#                 warmup = 3000,
+#                 chains = 4,
+#                 include = FALSE, pars = c("y_hat")
+#             )
+# # bluk ESS is low - run for more iterations
+# 
+# save(mdl.cn, file = "output/cn_raw_np.Rda")
+# ## N effective?
+# range(summary(mdl.cn)$summary[, "n_eff"]) # 
+# 
+# ### Add species and study names to Stan object
+# names(mdl.cn)[grep(pattern = "^muSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^musite", x = names(mdl.cn))] <- paste(sitelist, sep = "")
+# ##
+# names(mdl.cn)[grep(pattern = "^alphaForceSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^alphaChillSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^alphaPhotoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^alphaPhenoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^betaForceSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^betaChillSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^betaPhotoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# names(mdl.cn)[grep(pattern = "^betaPhenoSp", x = names(mdl.cn))] <- paste(specieslist, sep = "")
+# 
+# pdf(file = "CN_estimates.pdf", onefile = TRUE)
+# plot(mdl.cn, pars = c("mu_grand", "muSp"))
+# plot(mdl.cn, pars = c("musite"))
+# plot(mdl.cn, pars = c("muPhenoSp", "alphaPhenoSp"))
+# plot(mdl.cn, pars = c("muForceSp", "alphaForceSp"))
+# plot(mdl.cn, pars = c("muChillSp", "alphaChillSp"))
+# plot(mdl.cn, pars = c("muPhotoSp", "alphaPhotoSp"))
+# plot(mdl.cn, pars = c("betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto"))
+# plot(mdl.cn, pars = c("betaTraitxForce","betaForceSp"))
+# plot(mdl.cn, pars = c("betaTraitxChill","betaChillSp"))
+# plot(mdl.cn, pars = c("betaTraitxPhoto","betaPhotoSp"))
+# plot(mdl.cn, pars = c("sigma_traity", "sigma_site", "sigma_sp", "sigmaPhenoSp", "sigmapheno_y"))
+# dev.off()
+# 
+# saveRDS(object = mdl.cn, file = "cn_stanfit_np.RDS")
+# 
+# 
+# # Plot model fit:
+# filePathData <- "output/"
+# traitModelNames <- grep("_stanfit.RDS", list.files(filePathData), value = TRUE) 
+# 
+# #Make a dataframe for saving traiit estimates for results section
+# traits <- c("Height","CN", "DBH", "SSD")
+# traitsDF <- data.frame(matrix(NA, 4,18))
+# names(traitsDF) <- c("Trait", "GrandMean", "GrandMean_upper", "GrandMean_lower", 
+#                      "SpeciesSigma",  "SpeciesSigma_upper", "SpeciesSigma_lower", 
+#                      "StudySigma",  "StudySigma_upper", "StudySigma_lower", 
+#                      "MaxValue",  "MaxValue_upper", "MaxValue_lower", "MaxValueSp", 
+#                      "MinValue", "MinValueSp", "MinValue_upper", "MinValue_lower")
+# traitsDF$Trait <- traits
+# 
+# traitPlotList <- list()
+# 
+# #for(traiti in 1:length(traitModelNames)){
+#   
+#   
+#   # 	traiti <- 3
+#   
+#   #Load SLA model fit
+#   traiti <- 1
+#   cnModel <- readRDS(paste(filePathData,traitModelNames[traiti], sep = "/"))
+#   traitName <- gsub("_stanfit.RDS", "", traitModelNames[traiti])
+#   cnModelFit <- rstan::extract(cnModel)
+#   
+#   #sensible cue values
+#   #-------------------------------------
+#   forcingValue <- 0.85 # 20 degrees C
+#   chillinValue <- 50 #coudl go up to 2 or 3 
+#   photoValue <- -0.25 # about 12 Or 0.5(about 16)
+#   
+#   #Extracting  postreior values 
+#   #----------------------------------
+#   
+#   #meanInterceptValues
+#   alphaPhenoSpdf <- data.frame(cnModelFit$alphaPhenoSp)
+#   alphaPhenoSpMean <- colMeans(alphaPhenoSpdf)
+#   
+#   #Forcing slope values 
+#   betaForceSpdf <- data.frame(cnModelFit$betaForceSp)
+#   betaForceSpMean <- colMeans(betaForceSpdf)
+#   
+#   #Chilling slope values 
+#   betaChillSpdf <- data.frame(cnModelFit$betaChillSp)
+#   betaChillSpMean <- colMeans(betaChillSpdf)
+#   
+#   
+#   #Photoperiod slope values 
+#   betaPhotoSpdf <- data.frame(cnModelFit$betaPhotoSp)
+#   betaPhotoSpMean <- colMeans(betaPhotoSpdf)
+#   
+#   #Overall model 
+#   sigmapheno_yMean <- mean(cnModelFit$sigmapheno_y)
+#   
+#   #Predict DOY based on model estimated parameters, One DOY value per species
+#   yPhenoi <- vector()
+#   
+#   for(ip in 1:length(betaPhotoSpMean)){
+#     yPhenoi[ip] <- alphaPhenoSpMean[ip] + betaForceSpMean[ip] * forcingValue + betaPhotoSpMean[ip] * photoValue + betaChillSpMean[ip]* chillinValue
+#   }
+#   
+# #  plot(yPhenoi ~ alphaPhenoSpMean)
+#   betaCombined <- betaPhotoSpMean+betaChillSpMean+betaForceSpMean
+#   
+#   mu_grandDf <- data.frame(cnModelFit$mu_grand_sp)
+#   colnames(mu_grandDf) <- specieslist
+#   longMeans <- melt(mu_grandDf)
+#   colnames(longMeans) <- c("species", "traitMean")
+#   
+#   mu_grand_mean <- colMeans(mu_grandDf)
+#   
+#   meanRealTrait <- aggregate(trtPheno$C.N, by = list(trtPheno$species), FUN = mean, na.rm =T)
+#   names(meanRealTrait) <- c("species","meanTrait")
+#   
+#   color_scheme_set("viridis")
+#   
+#   mcmc_intervals(mu_grandDf)+
+#     theme_classic() + 
+#     theme(text = element_text(size=20))+
+#     geom_point(data = trtPheno, aes(y = species, x = C.N), alpha = 0.5)
+#   
+#   traitFit <- ggplot(data = trtPheno, aes(y = species, x = C.N, colour = "black"))+
+#     stat_eye(data = longMeans, aes(y = species, x = traitMean))+
+#     geom_point( alpha = 0.5, size = 1.2, aes(colour = "red"))+
+#     theme_classic() +  
+#     theme(text = element_text(size=16))+
+#     geom_point(data = meanRealTrait, aes(x = meanTrait,y = species, colour = "purple"), shape = 8, size = 3)+
+#     labs(title = traitName, y = "Species", x ="Trait Value")+ 
+#     scale_color_identity(name = "Model fit",
+#                          breaks = c("black", "red", "purple"),
+#                          labels = c("Model Posterior", "Raw Data", "Data Mean"),
+#                          guide = guide_legend(override.aes = list(
+#                            linetype = c(NA, NA, NA),
+#                            shape = c(19, 20, 8)))) + 
+#     theme(legend.title = element_blank())
+#   
+#   
