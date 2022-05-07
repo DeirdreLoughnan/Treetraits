@@ -4,8 +4,9 @@ data {
   // Traits
   int<lower = 1> N; // Sample size for trait data 
   int<lower = 1, upper = n_spec> trait_species[N]; // id of random effect (species)
-  int<lower = 1> n_site; // number of random effect levels (site) 
-  int<lower = 1, upper = n_site> site[N]; // id of random effect (site)
+  //int<lower = 1> n_site; // number of random effect levels (site) 
+  //int<lower = 1, upper = n_site> site[N]; // id of random effect (site)
+  vector[N] site;
   vector[N] yTraiti; // Observed trait
   //Priors
   real prior_mu_grand_mu; 
@@ -53,7 +54,10 @@ parameters{
   // Traits
   real mu_grand; // grand mean for trait value 
   vector[n_spec] muSp; // species offsets
-  vector[n_site] musite; // site offsets
+  //vector[n_site] musite; // site offsets
+  
+  real b_site;
+  
   real<lower = 0> sigma_traity; // sd general
   real<lower = 0> sigma_sp; // sd species
   real<lower = 0> sigma_site; // sd site
@@ -89,7 +93,7 @@ transformed parameters{
     mu_grand_sp[i] = mu_grand + muSp[i];
   }
   for (i in 1:N){
-    y_hat[i] = mu_grand + muSp[trait_species[i]] + musite[site[i]];
+    y_hat[i] = mu_grand + muSp[trait_species[i]] + b_site*site[i];
   }
   // Phenology
   for (isp in 1:n_spec){
@@ -108,7 +112,7 @@ model{
   //// likelihood
   yTraiti ~ normal(y_hat, sigma_traity);
   muSp ~ normal(0, sigma_sp);
-  musite ~ normal(0, sigma_site);
+  b_site ~ normal(0, 5);
   //// priors
   mu_grand ~ normal(prior_mu_grand_mu, prior_mu_grand_sigma);
   sigma_sp ~ normal(prior_sigma_sp_mu, prior_sigma_sp_sigma);
