@@ -354,6 +354,12 @@ head(pheno.dat)
 plot(pheno.dat$betaForceSp ~ pheno.dat$alphaTraitSp)
 plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
 
+plot(pheno.dat$betaChillSp ~ pheno.dat$alphaTraitSp)
+plot(pheno.dat$alphaChillSp ~ pheno.dat$alphaTraitSp)
+
+plot(pheno.dat$betaPhotoSp ~ pheno.dat$alphaTraitSp)
+plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
+
 #######################################################
 
 # png("figures/simPosteriorHist.png")
@@ -471,9 +477,9 @@ pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce",
     # Parameter Values
     ir <- 1
     
-    muGrand <- rnorm(1,  mean = cn.data$prior_mu_grand_mu, sd = cn.data$prior_mu_grand_sigma)
-    sigmaSp <- rnorm(1,  mean = cn.data$prior_sigma_sp_mu, sd = cn.data$prior_sigma_sp_sigma)
-    sigmatransect <- rnorm(1, mean = cn.data$prior_sigma_site_mu, sd = cn.data$prior_sigma_site_sigma)
+    muGrand <- rtruncnorm(1, a = 0, mean = cn.data$prior_mu_grand_mu, sd = cn.data$prior_mu_grand_sigma)
+    sigmaSp <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigma_sp_mu, sd = cn.data$prior_sigma_sp_sigma)
+    sigmatransect <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigma_site_mu, sd = cn.data$prior_sigma_site_sigma)
     
     alphaTraitSp <- rnorm(Nspp, 0, sigma.species)
     priorCheckTrait$alphaTraitSp[priorCheckTrait$simRep == ir] <- rep(alphaTraitSp, each = nRep)
@@ -541,7 +547,7 @@ pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce",
     #ir <- 1
     
     #Species means
-    sigmaPhenoSp <- rnorm(1,  mean = cn.data$prior_sigmaPhenoSp_mu, sd = cn.data$prior_sigmaPhenoSp_sigma)
+    sigmaPhenoSp <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigmaPhenoSp_mu, sd = cn.data$prior_sigmaPhenoSp_sigma)
     muPhenoSp <- rnorm(1, cn.data$prior_muPhenoSp_mu, cn.data$prior_muPhenoSp_sigma)
     alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
     priorCheckPheno$alphaPhenoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhenoSp, each = nRep)
@@ -553,23 +559,23 @@ pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce",
     
     #Species level slopes sans trait data
     muForceSp <- rnorm(1,cn.data$prior_muForceSp_mu,  cn.data$prior_muForceSp_sigma)
-    sigmaForceSp <- rnorm(1, mean = cn.data$prior_sigmaForceSp_mu,sd = cn.data$prior_sigmaForceSp_sigma)
+    sigmaForceSp <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigmaForceSp_mu,sd = cn.data$prior_sigmaForceSp_sigma)
     alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
     priorCheckPheno$alphaForceSp[priorCheckPheno$simRep == ir] <- rep(alphaForceSp, each = nRep)
     
     muPhotoSp <- rnorm(1, cn.data$prior_muPhotoSp_mu, cn.data$prior_muPhotoSp_sigma)
-    sigmaPhotoSp <- rnorm(1,mean = cn.data$prior_sigmaPhotoSp_mu, sd = cn.data$prior_sigmaPhotoSp_sigma )
+    sigmaPhotoSp <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigmaPhotoSp_mu, sd = cn.data$prior_sigmaPhotoSp_sigma )
     alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
     priorCheckPheno$alphaPhotoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhotoSp, each = nRep)
     
     muChillSp <-  rnorm(1,cn.data$prior_sigmaChillSp_mu,cn.data$prior_sigmaChillSp_sigma)
-    sigmaChillSp <- rnorm(1, mean = cn.data$prior_sigmaChillSp_mu,sd = cn.data$prior_sigmaChillSp_sigma)
+    sigmaChillSp <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigmaChillSp_mu,sd = cn.data$prior_sigmaChillSp_sigma)
     alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
     priorCheckPheno$alphaChillSp[priorCheckPheno$simRep == ir] <- rep(alphaChillSp, each = nRep)
     
     
     #general varience
-    priorCheckPheno$sigmapheno_y[priorCheckPheno$simRep == ir] <- rnorm(cn.data$prior_sigmaphenoy_mu,   cn.data$prior_sigmaphenoy_sigma)
+    priorCheckPheno$sigmapheno_y[priorCheckPheno$simRep == ir] <- rtruncnorm(cn.data$prior_sigma_traity_mu,  a = 0, cn.data$prior_sigma_traity_sigma)
     priorCheckPheno$e[priorCheckPheno$simRep == ir] <- rnorm(Nph, 0, sigmapheno_y)
     
   }# end simulating new priors, from here vectorize code
@@ -609,7 +615,7 @@ pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce",
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chillina", ylab = "Phenological Date")
   dev.off()
   
-}
+
 
 if(BayesSweave == TRUE){
   #For the BayesClass sweave documents 

@@ -189,10 +189,10 @@ Nspp <- 40 # number of species
 Ntrt <- Nspp * Ntransect * Nrep # total number of traits observations
 Ntrt
 
-mu.grand <- 30 # the grand mean of the height model
-sigma.species <- 10 # we want to keep the variaiton across spp. high
-sigma.transect <- 4
-sigmaTrait_y <- 4
+mu.grand <- 20 # the grand mean of the height model
+sigma.species <- 4 # we want to keep the variaiton across spp. high
+sigma.transect <- 2
+sigmaTrait_y <- 3
 
 #make a dataframe for height
 trt.dat <- data.frame(matrix(NA, Ntrt, 1))
@@ -211,7 +211,7 @@ mutransect <- rnorm(Ntransect, 0, sigma.transect) #intercept for each transect
 trt.dat$mutransect <- rep(mutransect, each = Nspp) # generate data for ea transect
 
 # general variance
-trt.var <- 5 #sigmaTrait_y in the stan code
+trt.var <- 3 #sigmaTrait_y in the stan code
 trt.dat$trt.er <- rnorm(Ntrt, 0, trt.var)
 
 # generate yhat - heights -  for this first trt model
@@ -272,23 +272,23 @@ betaTraitxPhoto <- -0.2
 betaTraitxChill <- -0.4
 
 #Species level slopes sans trait data
-muForceSp <- -0.4
-sigmaForceSp <- 4
+muForceSp <- -15
+sigmaForceSp <- 10
 alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
 pheno.dat$alphaForceSp <- rep(alphaForceSp, each = nRep)
 
-muPhotoSp <- -0.05
-sigmaPhotoSp <- 4
+muPhotoSp <- -15
+sigmaPhotoSp <- 10
 alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
 pheno.dat$alphaPhotoSp <- rep(alphaPhotoSp, each = nRep)
 
-muChillSp <- -0.6
-sigmaChillSp <- 4
+muChillSp <- -15
+sigmaChillSp <- 10
 alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
 pheno.dat$alphaChillSp <- rep(alphaChillSp, each = nRep)
 
 #general varience
-sigmapheno_y <- 5
+sigmapheno_y <- 10
 pheno.dat$e <- rnorm(Nph, 0, sigmapheno_y)
 
 #slopes for each cue, combining trait and non-trait aspect of the slope.
@@ -334,6 +334,13 @@ head(pheno.dat)
 
 plot(pheno.dat$betaForceSp ~ pheno.dat$alphaTraitSp)
 plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
+
+plot(pheno.dat$betaChillSp ~ pheno.dat$alphaTraitSp)
+plot(pheno.dat$alphaChillSp ~ pheno.dat$alphaTraitSp)
+
+plot(pheno.dat$betaPhotoSp ~ pheno.dat$alphaTraitSp)
+plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
+
 
 #######################################################
 
@@ -451,9 +458,9 @@ plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
     # Parameter Values
     #ir <- 1
     
-    muGrand <- rnorm(1,  mean = ht.data$prior_mu_grand_mu, sd = ht.data$prior_mu_grand_sigma)
-    sigmaSp <- rnorm(1,  mean = ht.data$prior_sigma_sp_mu, sd = ht.data$prior_sigma_sp_sigma)
-    sigmatransect <- rnorm(1, mean = ht.data$prior_sigma_site_mu, sd = ht.data$prior_sigma_site_sigma)
+    muGrand <- rtruncnorm(1, a = 0, mean = ht.data$prior_mu_grand_mu, sd = ht.data$prior_mu_grand_sigma)
+    sigmaSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigma_sp_mu, sd = ht.data$prior_sigma_sp_sigma)
+    sigmatransect <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigma_site_mu, sd = ht.data$prior_sigma_site_sigma)
     
     alphaTraitSp <- rnorm(Nspp, 0, sigma.species)
     priorCheckTrait$alphaTraitSp[priorCheckTrait$simRep == ir] <- rep(alphaTraitSp, each = nRep)
@@ -507,19 +514,17 @@ plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
   #Make this the name of the full vector of sla per species values - alphaTraitSp 
   priorCheckPheno$alphaTraitSp <-  rep(rep(muGrandSp, times = nRepPrior)) # use the mean mu_grand_sp, grand mean + transect, not transect
   
-  
   #Simulate cues (z scored)
   priorCheckPheno$forcei <- rnorm(Nph, 1, 1)
   priorCheckPheno$photoi <- rnorm(Nph, 1, 1) # less photoperiod 
   priorCheckPheno$chilli <- rnorm(Nph, 1, 1) #more chilling
   
-  
   for (ir in 1:nRepPrior){
     # Parameter Values
-    ir <- 1
+   # ir <- 1
     
     #Species means
-    sigmaPhenoSp <- rnorm(1,  mean = ht.data$prior_sigmaPhenoSp_mu, sd = ht.data$prior_sigmaPhenoSp_sigma)
+    sigmaPhenoSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaPhenoSp_mu, sd = ht.data$prior_sigmaPhenoSp_sigma)
     muPhenoSp <- rnorm(1, ht.data$prior_muPhenoSp_mu, ht.data$prior_muPhenoSp_sigma)
     alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
     priorCheckPheno$alphaPhenoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhenoSp, each = nRep)
@@ -531,23 +536,23 @@ plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
     
     #Species level slopes sans trait data
     muForceSp <- rnorm(1,ht.data$prior_muForceSp_mu,  ht.data$prior_muForceSp_sigma)
-    sigmaForceSp <- rnorm(1, mean = ht.data$prior_sigmaForceSp_mu,sd = ht.data$prior_sigmaForceSp_sigma)
+    sigmaForceSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaForceSp_mu,sd = ht.data$prior_sigmaForceSp_sigma)
     alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
     priorCheckPheno$alphaForceSp[priorCheckPheno$simRep == ir] <- rep(alphaForceSp, each = nRep)
     
     muPhotoSp <- rnorm(1, ht.data$prior_muPhotoSp_mu, ht.data$prior_muPhotoSp_sigma)
-    sigmaPhotoSp <- rnorm(1,mean = ht.data$prior_sigmaPhotoSp_mu, sd = ht.data$prior_sigmaPhotoSp_sigma )
+    sigmaPhotoSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaPhotoSp_mu, sd = ht.data$prior_sigmaPhotoSp_sigma )
     alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
     priorCheckPheno$alphaPhotoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhotoSp, each = nRep)
     
     muChillSp <-  rnorm(1,ht.data$prior_sigmaChillSp_mu,ht.data$prior_sigmaChillSp_sigma)
-    sigmaChillSp <- rnorm(1,mean = ht.data$prior_sigmaChillSp_mu,sd = ht.data$prior_sigmaChillSp_sigma)
+    sigmaChillSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaChillSp_mu,sd = ht.data$prior_sigmaChillSp_sigma)
     alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
     priorCheckPheno$alphaChillSp[priorCheckPheno$simRep == ir] <- rep(alphaChillSp, each = nRep)
     
     
     #general varience
-    priorCheckPheno$sigmapheno_y[priorCheckPheno$simRep == ir] <- rnorm(ht.data$prior_sigmaphenoy_mu,  ht.data$prior_sigmaphenoy_sigma)
+    priorCheckPheno$sigmapheno_y[priorCheckPheno$simRep == ir] <- rtruncnorm(ht.data$prior_sigma_traity_mu,  a = 0, ht.data$prior_sigma_traity_sigma)
     priorCheckPheno$e[priorCheckPheno$simRep == ir] <- rnorm(Nph, 0, sigmapheno_y)
     
   }# end simulating new priors, from here vectorize code
