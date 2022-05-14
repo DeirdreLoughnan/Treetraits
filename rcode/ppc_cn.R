@@ -208,10 +208,10 @@ Nspp <- 40 # number of species
 Ntrt <- Nspp * Ntransect * Nrep # total number of traits observations
 Ntrt
 
-mu.grand <- 30 # the grand mean of the height model
+mu.grand <- 20 # the grand mean of the height model
 sigma.species <- 10 # we want to keep the variaiton across spp. high
-sigma.transect <- 4
-sigmaTrait_y <- 4
+sigma.transect <- 5
+sigmaTrait_y <- 5
 
 #make a dataframe for height
 trt.dat <- data.frame(matrix(NA, Ntrt, 1))
@@ -399,7 +399,7 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
 # abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
 
 # png("figures/simulatedPairs.png")
-pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto", "lp__")) 
+#pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto", "lp__")) 
 # dev.off()
 
   #Prior Predictive Check (Run 1000 times and plot results)
@@ -475,7 +475,7 @@ pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce",
   
   for (ir in 1:nRepPrior){
     # Parameter Values
-    ir <- 1
+    #ir <- 1
     
     muGrand <- rtruncnorm(1, a = 0, mean = cn.data$prior_mu_grand_mu, sd = cn.data$prior_mu_grand_sigma)
     sigmaSp <- rtruncnorm(1, a = 0, mean = cn.data$prior_sigma_sp_mu, sd = cn.data$prior_sigma_sp_sigma)
@@ -599,19 +599,19 @@ pairs(mdl.cn, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce",
   priorCheckPheno_posF <- priorCheckPheno[priorCheckPheno$betaForceSp > 0,]
   plot(priorCheckPheno_posF$betaForceSp ~ priorCheckPheno_posF$alphaTraitSp )
   
-  png("figures/densityYPrior_joint.png")
+  png("figures/densityYPrior_joint_cn.png")
   plot(density(priorCheckPheno$yPhenoi))
   dev.off()
   
-  png("figures/photoPlotPrior_joint.png")
+  png("figures/photoPlotPrior_joint_cn.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$photoi, xlab = "Photoperiod", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/forcingPlotPrior_joint.png")
+  png("figures/forcingPlotPrior_joint_cn.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$forcei, xlab = "Forcing", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/chillingPlotPrior_joint.png")
+  png("figures/chillingPlotPrior_joint_cn.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chillina", ylab = "Phenological Date")
   dev.off()
   

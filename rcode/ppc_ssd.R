@@ -365,38 +365,38 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
 # png("figures/simPosteriorHist.png")
 # par(mfrow=c(3,4))
 #Compare results to simulated values
-# hist(postssd$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
-# abline(v = muPhenoSp, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
-# abline(v = muForceSp, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
-# abline(v = muChillSp, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
-# abline(v = muPhotoSp, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
-# abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
-# 
-# plot(density(postssd$betaTraitxForce), main = paste("betaTraitxForce is " , signif(betaTraitxForcePos,3), sep = ""))
-# abline(v = betaTraitxForcePos, col="red", lwd=3, lty=2)
-# # 
-# hist(postssd$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
-# abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
-# # 
-# hist(postssd$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
-# abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""))
-# abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
-# abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
-# 
-# hist(postssd$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""))
-# abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
+hist(postssd$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
+abline(v = muPhenoSp, col="red", lwd=3, lty=2)
+
+hist(postssd$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
+abline(v = muForceSp, col="red", lwd=3, lty=2)
+
+hist(postssd$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
+abline(v = muChillSp, col="red", lwd=3, lty=2)
+
+hist(postssd$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
+abline(v = muPhotoSp, col="red", lwd=3, lty=2)
+
+hist(postssd$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
+abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
+
+hist(postssd$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
+abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
+#
+hist(postssd$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
+abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
+#
+hist(postssd$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
+abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
+
+hist(postssd$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""))
+abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
+
+hist(postssd$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
+abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
+
+hist(postssd$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""))
+abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
 
 # png("figures/simulatedPairs.png")
 #pairs(mdl.ssd, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto", "lp__")) 
@@ -420,11 +420,11 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
   
   #Make this the name of the full vector of sla per species values - alphaTraitSp 
   #priorCheckTrait$alphaTraitSp <-  rep(rep(trt.dat$mu_grand_sp, times = nRepPrior))
-  carbNit <- trtPheno[complete.cases(trtPheno$C.N),]
+  stemDen <- trtPheno[complete.cases(trtPheno$ssd),]
   
   specieslist <- sort(unique(trtPheno$species))
   sitelist <- sort(unique(trtPheno$transect))
-  leafMass <- trtPheno[complete.cases(trtPheno$lma),]
+  leafMass <- trtPheno[complete.cases(trtPheno$ssd),]
   
   ssd.data <- list(yTraiti = stemDen$ssd,
                    N = nrow(stemDen),

@@ -422,7 +422,7 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
   
   specieslist <- sort(unique(trtPheno$species))
   sitelist <- sort(unique(trtPheno$transect))
-  leafMass <- trtPheno[complete.cases(trtPheno$lma),]
+  diam <- trtPheno[complete.cases(trtPheno$dbh),]
   
   dbh.data <- list(yTraiti = diam$dbh,
                    N = nrow(diam),
@@ -598,19 +598,19 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
   priorCheckPheno_posF <- priorCheckPheno[priorCheckPheno$betaForceSp > 0,]
   plot(priorCheckPheno_posF$betaForceSp ~ priorCheckPheno_posF$alphaTraitSp )
   
-  png("figures/densityYPrior_joint.png")
+  png("figures/densityYPrior_joint_dbh.png")
   plot(density(priorCheckPheno$yPhenoi))
   dev.off()
   
-  png("figures/photoPlotPrior_joint.png")
+  png("figures/photoPlotPrior_joint_dbh.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$photoi, xlab = "Photoperiod", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/forcingPlotPrior_joint.png")
+  png("figures/forcingPlotPrior_joint_dbh.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$forcei, xlab = "Forcing", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/chillingPlotPrior_joint.png")
+  png("figures/chillingPlotPrior_joint_dbh.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chillina", ylab = "Phenological Date")
   dev.off()
   

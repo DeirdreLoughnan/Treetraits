@@ -14,6 +14,7 @@ library(rstan)
 library(bayesplot)# nice posterior check plots 
 library(shinystan)
 library(stringr)
+library(truncnorm)
 
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/pheno_bc") 
@@ -261,8 +262,8 @@ pheno.dat$chilli <- rnorm(Nph, 1, 1) #more chilling
 
 # Parameter Values
 #Species means
-sigmaPhenoSp <- 10
-muPhenoSp <- 40
+sigmaPhenoSp <- 5
+muPhenoSp <- 25
 alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
 pheno.dat$alphaPhenoSp <- rep(alphaPhenoSp, each = nRep)
 
@@ -272,23 +273,23 @@ betaTraitxPhoto <- -0.2
 betaTraitxChill <- -0.4
 
 #Species level slopes sans trait data
-muForceSp <- -15
-sigmaForceSp <- 10
+muForceSp <- -10
+sigmaForceSp <- 5
 alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
 pheno.dat$alphaForceSp <- rep(alphaForceSp, each = nRep)
 
-muPhotoSp <- -15
-sigmaPhotoSp <- 10
+muPhotoSp <- -2
+sigmaPhotoSp <- 2
 alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
 pheno.dat$alphaPhotoSp <- rep(alphaPhotoSp, each = nRep)
 
 muChillSp <- -15
-sigmaChillSp <- 10
+sigmaChillSp <- 5
 alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
 pheno.dat$alphaChillSp <- rep(alphaChillSp, each = nRep)
 
 #general varience
-sigmapheno_y <- 10
+sigmapheno_y <- 5
 pheno.dat$e <- rnorm(Nph, 0, sigmapheno_y)
 
 #slopes for each cue, combining trait and non-trait aspect of the slope.
@@ -344,41 +345,41 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
 
 #######################################################
 
-# png("figures/simPosteriorHist.png")
-# par(mfrow=c(3,4))
+ png("figures/simPosteriorHist_ht.png")
+par(mfrow=c(3,4))
 #Compare results to simulated values
-# hist(postHt$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
-# abline(v = muPhenoSp, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
-# abline(v = muForceSp, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
-# abline(v = muChillSp, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
-# abline(v = muPhotoSp, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
-# abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
-# 
-# plot(density(postHt$betaTraitxForce), main = paste("betaTraitxForce is " , signif(betaTraitxForcePos,3), sep = ""))
-# abline(v = betaTraitxForcePos, col="red", lwd=3, lty=2)
-# # 
-# hist(postHt$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
-# abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
-# # 
-# hist(postHt$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
-# abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""))
-# abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
-# abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
-# 
-# hist(postHt$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""))
-# abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
+hist(postHt$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
+abline(v = muPhenoSp, col="red", lwd=3, lty=2)
+
+hist(postHt$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
+abline(v = muForceSp, col="red", lwd=3, lty=2)
+
+hist(postHt$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
+abline(v = muChillSp, col="red", lwd=3, lty=2)
+
+hist(postHt$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
+abline(v = muPhotoSp, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
+abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
+
+hist(postHt$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
+abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
+#
+hist(postHt$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
+abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
+#
+hist(postHt$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
+abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""), xlim = c(0,17))
+abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
+abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""), xlim = c(0,6))
+abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
 
 # png("figures/simulatedPairs.png")
 #pairs(mdl.ht, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto", "lp__")) 
@@ -577,19 +578,19 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
   priorCheckPheno_posF <- priorCheckPheno[priorCheckPheno$betaForceSp > 0,]
   plot(priorCheckPheno_posF$betaForceSp ~ priorCheckPheno_posF$alphaTraitSp )
   
-  png("figures/densityYPrior_joint.png")
+  png("figures/densityYPrior_joint_ht.png")
   plot(density(priorCheckPheno$yPhenoi))
   dev.off()
   
-  png("figures/photoPlotPrior_joint.png")
+  png("figures/photoPlotPrior_joint_ht.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$photoi, xlab = "Photoperiod", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/forcingPlotPrior_joint.png")
+  png("figures/forcingPlotPrior_joint_ht.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$forcei, xlab = "Forcing", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/chillingPlotPrior_joint.png")
+  png("figures/chillingPlotPrior_joint_ht.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chillina", ylab = "Phenological Date")
   dev.off()
   

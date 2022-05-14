@@ -355,7 +355,7 @@ abline(v = muPhotoSp, col="red", lwd=3, lty=2)
 hist(postLMA$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
 abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
 
-plot(density(postLMA$betaTraitxForce), main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
+hist(postLMA$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
 abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
 #
 hist(postLMA$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
@@ -395,7 +395,7 @@ abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
   
   #Make this the name of the full vector of sla per species values - alphaTraitSp 
   #priorCheckTrait$alphaTraitSp <-  rep(rep(trt.dat$mu_grand_sp, times = nRepPrior))
-  lma <- trtPheno[complete.cases(trtPheno$lma),]
+  leafMass <- trtPheno[complete.cases(trtPheno$lma),]
   
   specieslist <- sort(unique(trtPheno$species))
   sitelist <- sort(unique(trtPheno$transect))
@@ -572,19 +572,19 @@ lma.data <- list(yTraiti = leafMass$lma,
   priorCheckPheno_posF <- priorCheckPheno[priorCheckPheno$betaForceSp > 0,]
   plot(priorCheckPheno_posF$betaForceSp ~ priorCheckPheno_posF$alphaTraitSp )
   
-  png("figures/densityYPrior_joint.png")
+  png("figures/densityYPrior_joint_lma.png")
   plot(density(priorCheckPheno$yPhenoi))
   dev.off()
   
-  png("figures/photoPlotPrior_joint.png")
+  png("figures/photoPlotPrior_joint_lma.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$photoi, xlab = "Photoperiod", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/forcingPlotPrior_joint.png")
+  png("figures/forcingPlotPrior_joint_lma.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$forcei, xlab = "Forcing", ylab = "Phenological Date")
   dev.off()
   
-  png("figures/chillingPlotPrior_joint.png")
+  png("figures/chillingPlotPrior_joint_lma.png")
   plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chillina", ylab = "Phenological Date")
   dev.off()
   
