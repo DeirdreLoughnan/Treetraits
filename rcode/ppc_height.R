@@ -5,6 +5,8 @@
 
 rm(list=ls())
 options(stringsAsFactors = FALSE)
+## Set number of cores
+options(mc.cores = 4)
 
 library(tidyr)
 library(plyr)
@@ -15,6 +17,285 @@ library(bayesplot)# nice posterior check plots
 library(shinystan)
 library(stringr)
 library(truncnorm)
+
+if(length(grep("deirdreloughnan", getwd()) > 0)) { 
+  setwd("~/Documents/github/Treetraits") 
+}  else{
+  setwd("/home/deirdre/Treetraits") # for midge
+}
+
+## Posterior predictive check 1: does the model give us back values from simulated data:
+# 1. Simulate some data:
+# 2. Does the model give us good estimates of the data - pairs plots, mu plots, histograms with red bars for the given data values
+
+Nrep <- 15 # rep per trait
+Ntransect <- 2
+Nspp <- 40 # number of species 
+
+# First making a data frame for the test trait data
+Ntrt <- Nspp * Ntransect * Nrep # total number of traits observations
+Ntrt
+
+mu.grand <- 20 # the grand mean of the height model
+sigma.species <- 4 # we want to keep the variaiton across spp. high
+sigma.transect <- 2
+sigmaTrait_y <- 3
+
+#make a dataframe for height
+trt.dat <- data.frame(matrix(NA, Ntrt, 1))
+names(trt.dat) <- c("rep")
+trt.dat$rep <- c(1:Nrep)
+trt.dat$transect <- rep(c(1:Ntransect), each = Nspp)
+trt.dat$species <- rep(1:Nspp, Ntransect)
+
+# now generating the species trait data, here it is for height
+#the alphaTraitSp in Faiths original code:
+alphaTraitSp <- rnorm(Nspp, 0, sigma.species)
+trt.dat$alphaTraitSp <- rep(alphaTraitSp, Ntransect) #adding ht data for ea. sp
+
+#now generating the effects of transect
+mutransect <- rnorm(Ntransect, 0, sigma.transect) #intercept for each transect
+trt.dat$mutransect <- rep(mutransect, each = Nspp) # generate data for ea transect
+
+# general variance
+trt.var <- 5 #sigmaTrait_y in the stan code
+trt.dat$trt.er <- rnorm(Ntrt, 0, trt.var)
+
+# generate yhat - heights -  for this first trt model
+#trt.dat$yTraiti <- mu.grand + trt.dat$alphaTraitSp + trt.dat$mutransect + trt.dat$trt.er
+
+for (i in 1:Ntrt){
+  trt.dat$mu_grand_sp[i] <-  trt.dat$alphaTraitSp[i] +  mu.grand
+}
+
+for (i in 1:Ntrt){
+  trt.dat$yTraiti[i] <-  trt.dat$alphaTraitSp[i] + trt.dat$mutransect[i] +  mu.grand
+}
+
+#Add grand mean to trait values 
+alphaTraitspFull <-  alphaTraitSp + mu.grand
+trt.dat$alphaTraitspFull <-trt.dat$alphaTraitSp + mu.grand
+
+hist( trt.dat$yTraiti)
+hist(alphaTraitspFull)
+
+
+#### Pheno data generation ##############################
+#All Negative betatraitX Values 
+#--------------------------------------
+n_spec <-Nspp # same number of species as teh traits section fo the model 
+#Number of repeat observations per species
+nRep <- 15
+#Overall number of pbservations (rows)
+Nph <- n_spec * nRep # for phenology model
+
+#Make a data frame for input phenology simulation data
+pheno.dat <- data.frame(matrix(NA, Nph, 2))
+names(pheno.dat) <- c("rep","species")
+pheno.dat$rep <- c(1:Nph)
+pheno.dat$species <- rep(c(1:n_spec), each = nRep)
+
+#Simulate mean SLA offset data per species (not mean value)
+#meanSLA <- rnorm(n_spec, 0, 5)
+#Make this the name of the full vector of sla per species values - alphaTraitSp 
+pheno.dat$alphaTraitSp <- rep(alphaTraitSp + mu.grand, each = nRep)
+
+#Simulate cues (z scored)
+pheno.dat$forcei <- rnorm(Nph, 1, 1)
+
+pheno.dat$photoi <- rnorm(Nph, 1, 0.5) # less photoperiod 
+pheno.dat$chilli <- rnorm(Nph, 1, 1) #more chilling
+
+# Parameter Values
+#Species means
+sigmaPhenoSp <- 10
+muPhenoSp <- 30
+alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
+pheno.dat$alphaPhenoSp <- rep(alphaPhenoSp, each = nRep)
+
+#Cue effects
+betaTraitxForce <- -0.5 
+betaTraitxPhoto <- -0.2
+betaTraitxChill <- -0.4
+
+#Species level slopes sans trait data
+muForceSp <- -15
+sigmaForceSp <- 5
+alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
+pheno.dat$alphaForceSp <- rep(alphaForceSp, each = nRep)
+
+muPhotoSp <- -15
+sigmaPhotoSp <- 5
+alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
+pheno.dat$alphaPhotoSp <- rep(alphaPhotoSp, each = nRep)
+
+muChillSp <- -15
+sigmaChillSp <- 5
+alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
+pheno.dat$alphaChillSp <- rep(alphaChillSp, each = nRep)
+
+#general varience
+sigmapheno_y <- 5
+pheno.dat$e <- rnorm(Nph, 0, sigmapheno_y)
+
+#slopes for each cue, combining trait and non-trait aspect of the slope.
+#Make columns to put data 
+pheno.dat$betaForceSp <- NA
+pheno.dat$betaPhotoSp <- NA
+pheno.dat$betaChillSp <- NA
+
+for (iSp in 1:n_spec){
+  
+  #iSp <- 1
+  #Select species data of interest 
+  
+  #Forcing
+  betaForceSp <- alphaForceSp[iSp] + betaTraitxForce * alphaTraitspFull[iSp]
+  pheno.dat$betaForceSp[pheno.dat$species == iSp] <- betaForceSp
+  
+  #chilling
+  betaChillSp <- alphaChillSp[iSp] + betaTraitxChill * alphaTraitspFull[iSp]
+  pheno.dat$betaChillSp[pheno.dat$species == iSp] <- betaChillSp
+  
+  #photoperiod
+  betaPhotoSp <- alphaPhotoSp[iSp] + betaTraitxPhoto * alphaTraitspFull[iSp]
+  pheno.dat$betaPhotoSp[pheno.dat$species == iSp] <- betaPhotoSp
+  
+  
+}
+
+#Run full model to get mean simulated y values
+for (i in 1:Nph){
+  pheno.dat$yMu[i] <-  pheno.dat$alphaPhenoSp[i] +  pheno.dat$betaForceSp[i] * pheno.dat$forcei[i] +  pheno.dat$betaPhotoSp[i] * pheno.dat$photoi[i] + pheno.dat$betaChillSp[i] * pheno.dat$chilli[i]
+}
+
+#Final values
+pheno.dat$yPhenoi <- pheno.dat$yMu + pheno.dat$e
+
+#What does the data look like?
+plot(density(pheno.dat$yPhenoi))
+
+#Plot trait values againt forcing slopes
+specieslist <- sort(unique(trt.dat$species))
+sitelist <- sort(unique(trt.dat$transect))
+
+ht.data <- list(yTraiti = trt.dat$yTraiti, 
+                N = nrow(trt.dat),
+                n_spec = length(specieslist),
+                trait_species = as.numeric(as.factor(trt.dat$species)),
+                n_site = length(sitelist),
+                site = as.numeric(as.factor(trt.dat$transect)),
+                prior_mu_grand_mu = 20,
+                prior_mu_grand_sigma = 10,
+                prior_sigma_sp_mu = 4,
+                prior_sigma_sp_sigma = 5,
+                prior_sigma_site_mu = 2,
+                prior_sigma_site_sigma = 5,
+                prior_sigma_traity_mu = 3,
+                prior_sigma_traity_sigma = 5,
+                ## Phenology
+                Nph = nrow(pheno.dat),
+                phenology_species = as.numeric(as.factor(pheno.dat$species)),
+                yPhenoi = pheno.dat$yPhenoi,
+                forcei = pheno.dat$forcei,
+                chilli = pheno.dat$chilli,
+                photoi = pheno.dat$photoi,
+                prior_muForceSp_mu = -15,
+                prior_muForceSp_sigma = 10, #wider
+                prior_muChillSp_mu = -15,
+                prior_muChillSp_sigma = 10,#wider
+                prior_muPhotoSp_mu = -15,
+                prior_muPhotoSp_sigma = 10,#wider
+                prior_muPhenoSp_mu = 40,
+                prior_muPhenoSp_sigma = 10,#wider
+                prior_sigmaForceSp_mu = 5,
+                prior_sigmaForceSp_sigma = 5,
+                prior_sigmaChillSp_mu = 5,#wider
+                prior_sigmaChillSp_sigma = 5, #wider
+                prior_sigmaPhotoSp_mu = 5,
+                prior_sigmaPhotoSp_sigma = 5,
+                prior_sigmaPhenoSp_mu = 5, #wider
+                prior_sigmaPhenoSp_sigma = 5, #wider
+                prior_betaTraitxForce_mu = 0,
+                prior_betaTraitxForce_sigma = 1,
+                prior_betaTraitxChill_mu = 0,
+                prior_betaTraitxChill_sigma = 1,
+                prior_betaTraitxPhoto_mu = 0,
+                prior_betaTraitxPhoto_sigma = 1,
+                prior_sigmaphenoy_mu = 10,
+                prior_sigmaphenoy_sigma = 5 #wider
+)
+
+#ht.data$site
+mdlSimHt <- stan("stan/jointMdl.stan",
+               data = ht.data,
+               iter = 6000,
+               warmup = 3000,
+               chains = 4)
+# include = FALSE, pars = c("y_hat"))
+save(mdlSimHt, file = "output/htSimPPC.Rda")
+
+
+# plot(pheno.dat$betaForceSp ~ pheno.dat$alphaTraitSp)
+# plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
+# 
+# plot(pheno.dat$betaChillSp ~ pheno.dat$alphaTraitSp)
+# plot(pheno.dat$alphaChillSp ~ pheno.dat$alphaTraitSp)
+# 
+# plot(pheno.dat$betaPhotoSp ~ pheno.dat$alphaTraitSp)
+# plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
+
+
+#######################################################
+postHt <- extract(mdlSimHt)
+png("simPosteriorHist_ht.png")
+par(mfrow=c(3,4))
+#Compare results to simulated values
+hist(postHt$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
+abline(v = muPhenoSp, col="red", lwd=3, lty=2)
+
+hist(postHt$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
+abline(v = muForceSp, col="red", lwd=3, lty=2)
+
+hist(postHt$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
+abline(v = muChillSp, col="red", lwd=3, lty=2)
+
+hist(postHt$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
+abline(v = muPhotoSp, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
+abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
+
+hist(postHt$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
+abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
+#
+hist(postHt$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
+abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
+#
+hist(postHt$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
+abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""), xlim = c(0,17))
+abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
+abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
+
+hist(postHt$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""), xlim = c(0,6))
+abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
+
+dev.off()
+
+png("figures/simulatedPairs.png")
+pairs(mdlSimHt, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto","sigmapheno_y", "lp__"))
+dev.off()
+
+
+
+
+
+
+####################################################################################
 
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/pheno_bc") 
@@ -103,6 +384,10 @@ trtPheno$transect[trtPheno$transect == "WM"] <- "1"
 
 fit <- readRDS("output/height_stanfit.RDS")
 
+png("figures/realPairs.png")
+pairs(fit, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto","sigmapheno_y", "lp__"))
+dev.off()
+
 post<- rstan::extract(fit)
 
 postHt <- data.frame(post)
@@ -174,429 +459,67 @@ mcmc_intervals(postHt_betaTraitx) +
   theme_classic() + 
   labs(title = "effect's of traits on cue slopes")
 
-# require(bayesplot)
-# y <- pheno$bb 
-# yrep <-  postHt[,colnames(postHt) %in% grep( "y_hat", colnames(postHt), value = TRUE)]
-# yrepM <- colMeans(yrep)
-# 
-# ppc_dens_overlay(y, yrepM[1:50,])
-
-#################################################################################
-Nrep <- 15 # rep per trait
-Ntransect <- 2
-Nspp <- 40 # number of species 
-
-# First making a data frame for the test trait data
-Ntrt <- Nspp * Ntransect * Nrep # total number of traits observations
-Ntrt
-
-mu.grand <- 20 # the grand mean of the height model
-sigma.species <- 4 # we want to keep the variaiton across spp. high
-sigma.transect <- 2
-sigmaTrait_y <- 3
-
-#make a dataframe for height
-trt.dat <- data.frame(matrix(NA, Ntrt, 1))
-names(trt.dat) <- c("rep")
-trt.dat$rep <- c(1:Nrep)
-trt.dat$transect <- rep(c(1:Ntransect), each = Nspp)
-trt.dat$species <- rep(1:Nspp, Ntransect)
-
-# now generating the species trait data, here it is for height
-#the alphaTraitSp in Faiths original code:
-alphaTraitSp <- rnorm(Nspp, 0, sigma.species)
-trt.dat$alphaTraitSp <- rep(alphaTraitSp, Ntransect) #adding ht data for ea. sp
-
-#now generating the effects of transect
-mutransect <- rnorm(Ntransect, 0, sigma.transect) #intercept for each transect
-trt.dat$mutransect <- rep(mutransect, each = Nspp) # generate data for ea transect
-
-# general variance
-trt.var <- 3 #sigmaTrait_y in the stan code
-trt.dat$trt.er <- rnorm(Ntrt, 0, trt.var)
-
-# generate yhat - heights -  for this first trt model
-#trt.dat$yTraiti <- mu.grand + trt.dat$alphaTraitSp + trt.dat$mutransect + trt.dat$trt.er
-
-for (i in 1:Ntrt){
-  trt.dat$mu_grand_sp[i] <-  trt.dat$alphaTraitSp[i] +  mu.grand
-}
-
-for (i in 1:Ntrt){
-  trt.dat$yTraiti[i] <-  trt.dat$alphaTraitSp[i] + trt.dat$mutransect[i] +  mu.grand
-}
-
-#Add grand mean to trait values 
-alphaTraitspFull <-  alphaTraitSp + mu.grand
-trt.dat$alphaTraitspFull <-trt.dat$alphaTraitSp + mu.grand
-
-hist( trt.dat$yTraiti)
-hist(alphaTraitspFull)
 
 
-#### Pheno data generation ##############################
-#All Negative betatraitX Values 
-#--------------------------------------
-n_spec <-Nspp # same number of species as teh traits section fo the model 
-#Number of repeat observations per species
-nRep <- 15
-#Overall number of pbservations (rows)
-Nph <- n_spec * nRep # for phenology model
+##################################################################################
+ # Plot the y vs the ypred
+mdlOut <- load("output/ht_raw.Rda")
 
-#Make a data frame for input phenology simulation data
-pheno.dat <- data.frame(matrix(NA, Nph, 2))
-names(pheno.dat) <- c("rep","species")
-pheno.dat$rep <- c(1:Nph)
-pheno.dat$species <- rep(c(1:n_spec), each = nRep)
+sumer <- summary(mdl.ht)$summary
+post <- rstan::extract(mdl.ht)
 
-#Simulate mean SLA offset data per species (not mean value)
-#meanSLA <- rnorm(n_spec, 0, 5)
-#Make this the name of the full vector of sla per species values - alphaTraitSp 
-pheno.dat$alphaTraitSp <- rep(alphaTraitSp + mu.grand, each = nRep)
+require(bayesplot)
+htData <- trtPheno[complete.cases(trtPheno$ht),]
+y <- htData$ht
+yrep <-  post$y_hat
 
-#Simulate cues (z scored)
-pheno.dat$forcei <- rnorm(Nph, 1, 1)
+ppc_dens_overlay(y, yrep[1:50,])
 
-pheno.dat$photoi <- rnorm(Nph, 1, 0.5) # less photoperiod 
-pheno.dat$chilli <- rnorm(Nph, 1, 1) #more chilling
+pheno.term$species <- tolower(pheno.term$species)
 
-# Parameter Values
-#Species means
-sigmaPhenoSp <- 5
-muPhenoSp <- 25
-alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
-pheno.dat$alphaPhenoSp <- rep(alphaPhenoSp, each = nRep)
+htTrtSplvl <- aggregate( htData["ht"],
+                         htData[c("species")],
+                         FUN = mean)
 
-#Cue effects
-betaTraitxForce <- -0.5 
-betaTraitxPhoto <- -0.2
-betaTraitxChill <- -0.4
+htPhenoSplvl <- aggregate( pheno.term["bb"],
+                           pheno.term[c("species")],
+                           FUN = mean)
 
-#Species level slopes sans trait data
-muForceSp <- -10
-sigmaForceSp <- 5
-alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
-pheno.dat$alphaForceSp <- rep(alphaForceSp, each = nRep)
+muSp <- sumer[grep("muSp\\[", rownames(sumer))]
+alphaForceSp <- sumer[grep("alphaForceSp\\[", rownames(sumer))]
+alphaChillSp <- sumer[grep("alphaChillSp\\[", rownames(sumer))]
+alphaPhotoSp <- sumer[grep("alphaPhotoSp\\[", rownames(sumer))]
+alphaPhenoSp <- sumer[grep("alphaPhenoSp\\[", rownames(sumer))]
 
-muPhotoSp <- -2
-sigmaPhotoSp <- 2
-alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
-pheno.dat$alphaPhotoSp <- rep(alphaPhotoSp, each = nRep)
+muGrandSp <- sumer[grep("mu_grand_sp\\[", rownames(sumer))]
+betaForceSp <- sumer[grep("betaForceSp\\[", rownames(sumer))]
+betaChillSp <- sumer[grep("betaChillSp\\[", rownames(sumer))]
+betaPhotoSp <- sumer[grep("betaPhotoSp\\[", rownames(sumer))]
 
-muChillSp <- -15
-sigmaChillSp <- 5
-alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
-pheno.dat$alphaChillSp <- rep(alphaChillSp, each = nRep)
+plot(muSp ~ muGrandSp)
+plot(alphaForceSp ~ betaForceSp)
+plot(alphaChillSp ~ betaChillSp)
+plot(alphaPhotoSp ~ betaPhotoSp)
 
-#general varience
-sigmapheno_y <- 5
-pheno.dat$e <- rnorm(Nph, 0, sigmapheno_y)
+plot(alphaForceSp ~ alphaChillSp)
+plot(alphaChillSp ~ alphaPhotoSp)
+plot(alphaPhotoSp ~ alphaForceSp)
 
-#slopes for each cue, combining trait and non-trait aspect of the slope.
-#Make columns to put data 
-pheno.dat$betaForceSp <- NA
-pheno.dat$betaPhotoSp <- NA
-pheno.dat$betaChillSp <- NA
+plot(betaForceSp ~ betaChillSp)
+plot(betaChillSp ~ betaPhotoSp)
+plot(betaPhotoSp ~ betaForceSp)
 
-for (iSp in 1:n_spec){
-  
-  #iSp <- 1
-  #Select species data of interest 
-  
-  #Forcing
-  betaForceSp <- alphaForceSp[iSp] + betaTraitxForce * alphaTraitspFull[iSp]
-  pheno.dat$betaForceSp[pheno.dat$species == iSp] <- betaForceSp
-  
-  #chilling
-  betaChillSp <- alphaChillSp[iSp] + betaTraitxChill * alphaTraitspFull[iSp]
-  pheno.dat$betaChillSp[pheno.dat$species == iSp] <- betaChillSp
-  
-  #photoperiod
-  betaPhotoSp <- alphaPhotoSp[iSp] + betaTraitxPhoto * alphaTraitspFull[iSp]
-  pheno.dat$betaPhotoSp[pheno.dat$species == iSp] <- betaPhotoSp
-  
-  
-}
+plot(alphaPhenoSp ~ alphaForceSp)
+plot(alphaPhenoSp ~ alphaChillSp)
+plot(alphaPhenoSp ~ alphaPhotoSp)
 
-#Run full model to get mean simulated y values
-for (i in 1:Nph){
-  pheno.dat$yMu[i] <-  pheno.dat$alphaPhenoSp[i] +  pheno.dat$betaForceSp[i] * pheno.dat$forcei[i] +  pheno.dat$betaPhotoSp[i] * pheno.dat$photoi[i] + pheno.dat$betaChillSp[i] * pheno.dat$chilli[i]
-}
+plot(htTrtSplvl$ht ~ muGrandSp)
+plot(htTrtSplvl$ht ~ muSp)
 
-#Final values
-pheno.dat$yPhenoi <- pheno.dat$yMu + pheno.dat$e
+plot(htSplvl$bb ~ betaForceSp)
+plot(htSplvl$bb ~ betaChillSp)
+plot(htSplvl$bb ~ betaPhotoSp)
 
-#What does the data look like?
-plot(density(pheno.dat$yPhenoi))
+plot(htSplvl$bb ~ alphaPhenoSp)
+plot(htSplvl$bb ~ muGrandSp)
 
-#Plot trait values againt forcing slopes
-
-head(pheno.dat)
-
-plot(pheno.dat$betaForceSp ~ pheno.dat$alphaTraitSp)
-plot(pheno.dat$alphaForceSp ~ pheno.dat$alphaTraitSp)
-
-plot(pheno.dat$betaChillSp ~ pheno.dat$alphaTraitSp)
-plot(pheno.dat$alphaChillSp ~ pheno.dat$alphaTraitSp)
-
-plot(pheno.dat$betaPhotoSp ~ pheno.dat$alphaTraitSp)
-plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
-
-
-#######################################################
-
- png("figures/simPosteriorHist_ht.png")
-par(mfrow=c(3,4))
-#Compare results to simulated values
-hist(postHt$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
-abline(v = muPhenoSp, col="red", lwd=3, lty=2)
-
-hist(postHt$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
-abline(v = muForceSp, col="red", lwd=3, lty=2)
-
-hist(postHt$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
-abline(v = muChillSp, col="red", lwd=3, lty=2)
-
-hist(postHt$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
-abline(v = muPhotoSp, col="red", lwd=3, lty=2)
-
-hist(postHt$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
-abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
-
-hist(postHt$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
-abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
-#
-hist(postHt$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
-abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
-#
-hist(postHt$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
-abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
-
-hist(postHt$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""), xlim = c(0,17))
-abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
-
-hist(postHt$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
-abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
-
-hist(postHt$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""), xlim = c(0,6))
-abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
-
-# png("figures/simulatedPairs.png")
-#pairs(mdl.ht, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto", "lp__")) 
-# dev.off()
-
-  #Prior Predictive Check (Run 1000 times and plot results)
-  #------------------------------------------------------------
-  
-  #Number fo prior check itterations 
-  nRepPrior <- 300
-  
-  # ppc for traits portion
-  priorCheckTrait <- data.frame(matrix(NA, Ntrt*nRepPrior, 3))
-  names(priorCheckTrait) <- c("simRep", "rep", "species")
-  priorCheckTrait$simRep <- rep(1:nRepPrior, each = Ntrt)
-  priorCheckTrait$rep <- rep(1:Ntrt, times = nRepPrior)
-  priorCheckTrait$species <- rep(1:Nspp, each = nRep)
-  priorCheckTrait$transect <- rep(1:Ntransect, each = nRep)
-  
-  #traitSLA <- rnorm(Ntrt, 20, 5)
-  
-  #Make this the name of the full vector of sla per species values - alphaTraitSp 
-  #priorCheckTrait$alphaTraitSp <-  rep(rep(trt.dat$mu_grand_sp, times = nRepPrior))
-  height <- trtPheno[complete.cases(trtPheno$ht),]
-  
-  specieslist <- sort(unique(trtPheno$species))
-  sitelist <- sort(unique(trtPheno$transect))
-
-  ht.data <- list(yTraiti = height$ht, 
-                  N = nrow(height),
-                  n_spec = length(specieslist),
-                  trait_species = as.numeric(as.factor(height$species)),
-                  n_site = length(sitelist),
-                  site = as.numeric(as.factor(height$site)),
-                  prior_mu_grand_mu = 20,
-                  prior_mu_grand_sigma = 10,
-                  prior_sigma_sp_mu = 4,
-                  prior_sigma_sp_sigma = 5,
-                  prior_sigma_site_mu = 2,
-                  prior_sigma_site_sigma = 5,
-                  prior_sigma_traity_mu = 3,
-                  prior_sigma_traity_sigma = 5,
-                  ## Phenology
-                  Nph = nrow(pheno.t),
-                  phenology_species = as.numeric(as.factor(pheno.t$species)),
-                  yPhenoi = pheno.t$bb,
-                  forcei = pheno.t$force.z2,
-                  chilli = pheno.t$chillport.z2,
-                  photoi = pheno.t$photo.z2,
-                  prior_muForceSp_mu = -15,
-                  prior_muForceSp_sigma = 10, #wider
-                  prior_muChillSp_mu = -15,
-                  prior_muChillSp_sigma = 10,#wider
-                  prior_muPhotoSp_mu = -15,
-                  prior_muPhotoSp_sigma = 10,#wider
-                  prior_muPhenoSp_mu = 40,
-                  prior_muPhenoSp_sigma = 10,#wider
-                  prior_sigmaForceSp_mu = 5,
-                  prior_sigmaForceSp_sigma = 5,
-                  prior_sigmaChillSp_mu = 5,#wider
-                  prior_sigmaChillSp_sigma = 5, #wider
-                  prior_sigmaPhotoSp_mu = 5,
-                  prior_sigmaPhotoSp_sigma = 5,
-                  prior_sigmaPhenoSp_mu = 5, #wider
-                  prior_sigmaPhenoSp_sigma = 5, #wider
-                  prior_betaTraitxForce_mu = 0,
-                  prior_betaTraitxForce_sigma = 1,
-                  prior_betaTraitxChill_mu = 0,
-                  prior_betaTraitxChill_sigma = 1,
-                  prior_betaTraitxPhoto_mu = 0,
-                  prior_betaTraitxPhoto_sigma = 1,
-                  prior_sigmaphenoy_mu = 10,
-                  prior_sigmaphenoy_sigma = 5 #wider
-  )
-  
-  for (ir in 1:nRepPrior){
-    # Parameter Values
-    #ir <- 1
-    
-    muGrand <- rtruncnorm(1, a = 0, mean = ht.data$prior_mu_grand_mu, sd = ht.data$prior_mu_grand_sigma)
-    sigmaSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigma_sp_mu, sd = ht.data$prior_sigma_sp_sigma)
-    sigmatransect <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigma_site_mu, sd = ht.data$prior_sigma_site_sigma)
-    
-    alphaTraitSp <- rnorm(Nspp, 0, sigma.species)
-    priorCheckTrait$alphaTraitSp[priorCheckTrait$simRep == ir] <- rep(alphaTraitSp, each = nRep)
-    
-    muSp <- rnorm(Nspp, 0, sigma.species)
-    priorCheckTrait$muSp[priorCheckTrait$simRep == ir] <- rep(muSp, each = nRep)
-    
-    mutransect <- rnorm(Ntransect, 0, sigmatransect)
-    priorCheckTrait$mutransect[priorCheckTrait$simRep == ir] <- rep(mutransect, each = nRep)
-    
-    #general varience
-    priorCheckTrait$sigmaTrait_y[priorCheckTrait$simRep == ir] <- rnorm(ht.data$prior_sigma_traity_mu, ht.data$prior_sigma_traity_sigma)
-    priorCheckTrait$e[priorCheckTrait$simRep == ir] <- rnorm(Ntrt, 0, sigmaTrait_y)
-    
-    priorCheckTrait$yTraiti <- muGrand + priorCheckTrait$muSp + priorCheckTrait$mutransect + priorCheckTrait$e
-  }# end simulating new priors, from here vectorize code
-  
-  #Final values
-  priorCheckTrait$muGrandSp <- muGrand + priorCheckTrait$muSp
-  
-  priorCheckTraityTraiti <- priorCheckTrait[complete.cases(priorCheckTrait$yTraiti),]
-  
-  png("figures/density_Trait_Prior_joint_ht.png")
-  plot(density(priorCheckTraityTraiti$yTraiti))
-  dev.off()
-  
-  png("figures/GrandSp_PlotPrior_joint_ht.png")
-  plot(priorCheckTrait$yTraiti ~ priorCheckTrait$muGrandSp, xlab = "muGrandSp", ylab = "Trait")
-  dev.off()
-  
-  png("figures/MuSp_PlotPrior_joint_ht.png")
-  plot(priorCheckTrait$yTraiti ~ priorCheckTrait$muSp, xlab = "MuSp", ylab = "Trait")
-  dev.off()
-  
-  png("figures/Mutransect_PlotPrior_joint_ht.png")
-  plot(priorCheckTrait$yTraiti ~ priorCheckTrait$mutransect, xlab = "Mutransect", ylab = "Trait")
-  dev.off()
-  #####################################################################################
-  
-  #Make a data frame for input simulation data
-  priorCheckPheno <- data.frame(matrix(NA, Nph*nRepPrior, 3))
-  names(priorCheckPheno) <- c("simRep","rep","species")
-  
-  priorCheckPheno$simRep <- rep(1:nRepPrior, each = Nph)
-  
-  priorCheckPheno$rep <- rep(c(1:Nph), times = nRepPrior)
-  priorCheckPheno$species <- rep(rep(c(1:n_spec), each = nRep), times = nRepPrior)
-  
-  #Simulate SLA data per species
-  muGrandSp <- muGrand + muSp
-  #Make this the name of the full vector of sla per species values - alphaTraitSp 
-  priorCheckPheno$alphaTraitSp <-  rep(rep(muGrandSp, times = nRepPrior)) # use the mean mu_grand_sp, grand mean + transect, not transect
-  
-  #Simulate cues (z scored)
-  priorCheckPheno$forcei <- rnorm(Nph, 1, 1)
-  priorCheckPheno$photoi <- rnorm(Nph, 1, 1) # less photoperiod 
-  priorCheckPheno$chilli <- rnorm(Nph, 1, 1) #more chilling
-  
-  for (ir in 1:nRepPrior){
-    # Parameter Values
-   # ir <- 1
-    
-    #Species means
-    sigmaPhenoSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaPhenoSp_mu, sd = ht.data$prior_sigmaPhenoSp_sigma)
-    muPhenoSp <- rnorm(1, ht.data$prior_muPhenoSp_mu, ht.data$prior_muPhenoSp_sigma)
-    alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
-    priorCheckPheno$alphaPhenoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhenoSp, each = nRep)
-    
-    #Cue effects
-    priorCheckPheno$betaTraitxForce[priorCheckPheno$simRep == ir] <- rnorm(1,ht.data$prior_betaTraitxForce_mu,ht.data$prior_betaTraitxForce_sigma)
-    priorCheckPheno$betaTraitxPhoto[priorCheckPheno$simRep == ir] <- rnorm(1,ht.data$prior_betaTraitxPhoto_mu,ht.data$prior_betaTraitxPhoto_sigma)
-    priorCheckPheno$betaTraitxChill[priorCheckPheno$simRep == ir] <- rnorm(1,ht.data$prior_betaTraitxChill_mu,ht.data$prior_betaTraitxChill_sigma)
-    
-    #Species level slopes sans trait data
-    muForceSp <- rnorm(1,ht.data$prior_muForceSp_mu,  ht.data$prior_muForceSp_sigma)
-    sigmaForceSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaForceSp_mu,sd = ht.data$prior_sigmaForceSp_sigma)
-    alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
-    priorCheckPheno$alphaForceSp[priorCheckPheno$simRep == ir] <- rep(alphaForceSp, each = nRep)
-    
-    muPhotoSp <- rnorm(1, ht.data$prior_muPhotoSp_mu, ht.data$prior_muPhotoSp_sigma)
-    sigmaPhotoSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaPhotoSp_mu, sd = ht.data$prior_sigmaPhotoSp_sigma )
-    alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
-    priorCheckPheno$alphaPhotoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhotoSp, each = nRep)
-    
-    muChillSp <-  rnorm(1,ht.data$prior_sigmaChillSp_mu,ht.data$prior_sigmaChillSp_sigma)
-    sigmaChillSp <- rtruncnorm(1, a = 0, mean = ht.data$prior_sigmaChillSp_mu,sd = ht.data$prior_sigmaChillSp_sigma)
-    alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
-    priorCheckPheno$alphaChillSp[priorCheckPheno$simRep == ir] <- rep(alphaChillSp, each = nRep)
-    
-    
-    #general varience
-    priorCheckPheno$sigmapheno_y[priorCheckPheno$simRep == ir] <- rtruncnorm(ht.data$prior_sigma_traity_mu,  a = 0, ht.data$prior_sigma_traity_sigma)
-    priorCheckPheno$e[priorCheckPheno$simRep == ir] <- rnorm(Nph, 0, sigmapheno_y)
-    
-  }# end simulating new priors, from here vectorize code
-  #slopes for each cue, combining trait and non-trait aspect of the slope.
-  
-  
-  priorCheckPheno$betaForceSp <- priorCheckPheno$alphaForceSp + priorCheckPheno$betaTraitxForce *  priorCheckPheno$alphaTraitSp
-  
-  priorCheckPheno$betaPhotoSp <-  priorCheckPheno$alphaPhotoSp + priorCheckPheno$betaTraitxPhoto * priorCheckPheno$alphaTraitSp
-  
-  priorCheckPheno$betaChillSp <-  priorCheckPheno$alphaChillSp + priorCheckPheno$betaTraitxChill * priorCheckPheno$alphaTraitSp
-  
-  #Run full model to get mean simulated y values
-  priorCheckPheno$yMu <-  priorCheckPheno$alphaPhenoSp +  priorCheckPheno$betaForceSp * priorCheckPheno$forcei +  priorCheckPheno$betaPhotoSp* priorCheckPheno$photoi + priorCheckPheno$betaChillSp * priorCheckPheno$chilli
-  
-  #Final values
-  priorCheckPheno$yPhenoi <- priorCheckPheno$yMu + priorCheckPheno$e
-  
-  head(priorCheckPheno)
-  
-  plot(priorCheckPheno$betaForceSp ~ priorCheckPheno$alphaTraitSp )
-  priorCheckPheno_posF <- priorCheckPheno[priorCheckPheno$betaForceSp > 0,]
-  plot(priorCheckPheno_posF$betaForceSp ~ priorCheckPheno_posF$alphaTraitSp )
-  
-  png("figures/densityYPrior_joint_ht.png")
-  plot(density(priorCheckPheno$yPhenoi))
-  dev.off()
-  
-  png("figures/photoPlotPrior_joint_ht.png")
-  plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$photoi, xlab = "Photoperiod", ylab = "Phenological Date")
-  dev.off()
-  
-  png("figures/forcingPlotPrior_joint_ht.png")
-  plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$forcei, xlab = "Forcing", ylab = "Phenological Date")
-  dev.off()
-  
-  png("figures/chillingPlotPrior_joint_ht.png")
-  plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chillina", ylab = "Phenological Date")
-  dev.off()
-  
-
-
-if(BayesSweave == TRUE){
-  #For the BayesClass sweave documents 
-  setwd("/home/faith/Documents/github/bayes2020/Projects/Faith/traitorsModel")
-}
