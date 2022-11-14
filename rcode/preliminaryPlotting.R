@@ -120,88 +120,126 @@ v_colors =  viridis(q_colors)
 temp <- bbTrt[order(bbTrt$bb),]
 temp$color <- v_colors
 
-pdf("figures/exploratory/bb_vs_trait.pdf", width = 18, height = 5)
+pdf("..//figures/exploratory/bb_vs_trait.pdf", width = 18, height = 5)
 par(mfrow = c(1,4))
-plot(bb ~ meanLMA, data =temp, bg = color, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean LMA")
+plot(bb ~ meanLMA, data = temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA")
 abline(lm(bb~meanLMA, data= temp), lwd = 2)
 
-plot(bb ~ meanSSD, data =temp, bg = color, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean SSD")
+arrows( # x mean
+  temp[,"meanLMA"] + temp[,"seLMA"] , # y 25
+  temp[,"bb"],
+  temp[,"meanLMA"] -temp[,"seLMA"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+
+plot(bb ~ meanSSD, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD")
 abline(lm(bb~meanSSD, data= temp), lwd = 2)
 
-plot(bb ~ meanCN, data =temp, bg = color, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean C:N")
+arrows( # x mean
+  temp[,"meanSSD"] + temp[,"seSSD"] , # y 25
+  temp[,"bb"],
+  temp[,"meanSSD"] -temp[,"seSSD"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+plot(bb ~ meanCN, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N")
 abline(lm(bb~meanCN, data= temp), lwd = 2)
 
-plot(bb ~ meanht, data =temp, bg = color, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean Height")
+arrows( # x mean
+  temp[,"meanCN"] + temp[,"seCN"] , # y 25
+  temp[,"bb"],
+  temp[,"meanCN"] -temp[,"seCN"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+plot(bb ~ meanht, data =temp, bg = color, pch = 21, cex = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 abline(lm(bb~meanht, data= temp), lwd = 2)
+
+arrows( # x mean
+  temp[,"meanht"] + temp[,"seht"] , # y 25
+  temp[,"bb"],
+  temp[,"meanht"] -temp[,"seht"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
 dev.off()
 
 # plot bb vs trait, but with colours by cue responses:
 chill <- bbTrt[order(bbTrt$bchill),]
 chill$color <- v_colors
 
-pdf("figures/exploratory/bb_vs_trait_chillColor.pdf", width = 18, height = 15)
+pdf("..//figures/exploratory/bb_vs_trait_chillColor.pdf", width = 18, height = 15)
 par(mfrow = c(3,4))
-plot(bb ~ meanLMA, data = chill, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Chilling", cex.main = 2)
+plot(bb ~ meanLMA, data = chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Chilling", cex.main = 2)
 
-plot(bb ~ meanSSD, data = chill, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD")
+plot(bb ~ meanSSD, data = chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
-plot(bb ~ meanCN, data =chill, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N")
+plot(bb ~ meanCN, data =chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
 
-plot(bb ~ meanht, data = chill, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height")
+plot(bb ~ meanht, data = chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 
 #<><><><><><>
 forcing <- bbTrt[order(bbTrt$bforce),]
 forcing$color <- v_colors
 
-plot(bb ~ meanLMA, data = forcing, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Forcing", cex.main = 2)
+plot(bb ~ meanLMA, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Forcing", cex.main = 2)
 
-plot(bb ~ meanSSD, data = forcing, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD")
+plot(bb ~ meanSSD, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
-plot(bb ~ meanCN, data = forcing, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N")
+plot(bb ~ meanCN, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
 
-plot(bb ~ meanht, data = forcing, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height")
+plot(bb ~ meanht, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 
 #<><><><><><>
 photo <- bbTrt[order(bbTrt$bphoto),]
 photo$color <- v_colors
 
-plot(bb ~ meanLMA, data = photo, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Photoperiod", cex.main = 2)
+plot(bb ~ meanLMA, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Photoperiod", cex.main = 2)
 
-plot(bb ~ meanSSD, data = photo, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD")
+plot(bb ~ meanSSD, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
-plot(bb ~ meanCN, data = photo, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N")
+plot(bb ~ meanCN, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
 
-plot(bb ~ meanht, data = photo, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height")
+plot(bb ~ meanht, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 dev.off()
 
 # plot with cue responses on y axis, colour by species 
-pdf("figures/exploratory/cues_vs_trait_spColor.pdf", width = 18, height = 15)
+pdf("..//figures/exploratory/cues_vs_trait_spColor.pdf", width = 18, height = 15)
 par(mfrow = c(3,4))
-plot(bchill ~ meanLMA, data = temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean LMA")
+plot(bchill ~ meanLMA, data = temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean LMA")
 
-plot(bchill ~ meanSSD, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean SSD")
+plot(bchill ~ meanSSD, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean SSD")
 
-plot(bchill ~ meanCN, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean C:N")
+plot(bchill ~ meanCN, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean C:N")
 
-plot(bchill ~ meanht, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean Height")
+plot(bchill ~ meanht, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean Height")
 
 ## Forcing
-plot(bforce ~ meanLMA, data = temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean LMA")
+plot(bforce ~ meanLMA, data = temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean LMA")
 
-plot(bforce ~ meanSSD, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean SSD")
+plot(bforce ~ meanSSD, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean SSD")
 
-plot(bforce ~ meanCN, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean C:N")
+plot(bforce ~ meanCN, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean C:N")
 
-plot(bforce ~ meanht, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean Height")
+plot(bforce ~ meanht, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean Height")
 
 ## Photoperiod
-plot(bphoto ~ meanLMA, data = temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean LMA")
+plot(bphoto ~ meanLMA, data = temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean LMA")
 
-plot(bphoto ~ meanSSD, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean SSD")
+plot(bphoto ~ meanSSD, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean SSD")
 
-plot(bphoto ~ meanCN, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean C:N")
+plot(bphoto ~ meanCN, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean C:N")
 
-plot(bphoto ~ meanht, data =temp, bg = color, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean Height")
+plot(bphoto ~ meanht, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean Height")
 dev.off()
 
 ################################################
@@ -213,15 +251,15 @@ temp$ewcolor[temp$ewcolor == "west"] <- "maroon"
 temp$ewcolor[temp$ewcolor == "east/west"] <- "#FDE725FF"
 
 
-pdf("figures/exploratory/bb_vs_trait_eastwest.pdf", width = 18, height = 5)
+pdf("..//figures/exploratory/bb_vs_trait_eastwest.pdf", width = 18, height = 5)
 par(mfrow = c(1,4))
-plot(bb ~ meanLMA, data =temp, bg = ewcolor, pch = 21, cex = 2.25, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA")
+plot(bb ~ meanLMA, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA")
 
-plot(bb ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 2.25, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD")
+plot(bb ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
-plot(bb ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 2.25, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N")
+plot(bb ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
 
-plot(bb ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 2.25, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height")
+plot(bb ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 dev.off()
 
 # plot bb vs trait, but with colours by cue responses:
@@ -229,33 +267,33 @@ chill <- bbTrt[order(bbTrt$bchill),]
 chill$color <- v_colors
 
 # plot with cue responses on y axis, colour by species 
-pdf("figures/exploratory/cues_vs_trait_eastwestColor.pdf", width = 18, height = 15)
+pdf("..//figures/exploratory/cues_vs_trait_eastwestColor.pdf", width = 18, height = 15)
 par(mfrow = c(3,4))
-plot(bchill ~ meanLMA, data = temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean LMA")
+plot(bchill ~ meanLMA, data = temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean LMA")
 
-plot(bchill ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean SSD")
+plot(bchill ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean SSD")
 
-plot(bchill ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean C:N")
+plot(bchill ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean C:N")
 
-plot(bchill ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean Height")
+plot(bchill ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean Height")
 
 ## Forcing
-plot(bforce ~ meanLMA, data = temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean LMA")
+plot(bforce ~ meanLMA, data = temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean LMA")
 
-plot(bforce ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean SSD")
+plot(bforce ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean SSD")
 
-plot(bforce ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean C:N")
+plot(bforce ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean C:N")
 
-plot(bforce ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean Height")
+plot(bforce ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean Height")
 
 ## Photoperiod
-plot(bphoto ~ meanLMA, data = temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean LMA")
+plot(bphoto ~ meanLMA, data = temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean LMA")
 
-plot(bphoto ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean SSD")
+plot(bphoto ~ meanSSD, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean SSD")
 
-plot(bphoto ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean C:N")
+plot(bphoto ~ meanCN, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean C:N")
 
-plot(bphoto ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean Height")
+plot(bphoto ~ meanht, data =temp, bg = ewcolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean Height")
 dev.off()
 
 
@@ -267,15 +305,15 @@ temp$tscolor[temp$tscolor == "shrub"] <- "cyan4"
 temp$tscolor[temp$tscolor == "tree"] <- "maroon"
 
 
-pdf("figures/exploratory/bb_vs_trait_treeShrub.pdf", width = 18, height = 5)
+pdf("..//figures/exploratory/bb_vs_trait_treeShrub.pdf", width = 18, height = 5)
 par(mfrow = c(1,4))
-plot(bb ~ meanLMA, data =temp, bg = tscolor, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean LMA")
+plot(bb ~ meanLMA, data =temp, bg = tscolor, pch = 21, cex = 3, ylab = "Mean budburst day", xlab = "Mean LMA")
 
-plot(bb ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean SSD")
+plot(bb ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
-plot(bb ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean C:N")
+plot(bb ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
 
-plot(bb ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 1.5, ylab = "Mean budburst day", xlab = "Mean Height")
+plot(bb ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 dev.off()
 
 # plot bb vs trait, but with colours by cue responses:
@@ -283,33 +321,33 @@ chill <- bbTrt[order(bbTrt$bchill),]
 chill$color <- v_colors
 
 # plot with cue responses on y axis, colour by species 
-pdf("figures/exploratory/cues_vs_trait_treeShrubColor.pdf", width = 18, height = 15)
+pdf("..//figures/exploratory/cues_vs_trait_treeShrubColor.pdf", width = 18, height = 15)
 par(mfrow = c(3,4))
-plot(bchill ~ meanLMA, data = temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean LMA")
+plot(bchill ~ meanLMA, data = temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean LMA")
 
-plot(bchill ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean SSD")
+plot(bchill ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean SSD")
 
-plot(bchill ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean C:N")
+plot(bchill ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean C:N")
 
-plot(bchill ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Chilling response", xlab = "Mean Height")
+plot(bchill ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Chilling response", xlab = "Mean Height")
 
 ## Forcing
-plot(bforce ~ meanLMA, data = temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean LMA")
+plot(bforce ~ meanLMA, data = temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean LMA")
 
-plot(bforce ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean SSD")
+plot(bforce ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean SSD")
 
-plot(bforce ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean C:N")
+plot(bforce ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean C:N")
 
-plot(bforce ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Forcing response", xlab = "Mean Height")
+plot(bforce ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Forcing response", xlab = "Mean Height")
 
 ## Photoperiod
-plot(bphoto ~ meanLMA, data = temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean LMA")
+plot(bphoto ~ meanLMA, data = temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean LMA")
 
-plot(bphoto ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean SSD")
+plot(bphoto ~ meanSSD, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean SSD")
 
-plot(bphoto ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean C:N")
+plot(bphoto ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean C:N")
 
-plot(bphoto ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 2, cex.lab = 2, ylab = "Photoperiod response", xlab = "Mean Height")
+plot(bphoto ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean Height")
 dev.off()
 
 # now run simple trait model to get trait effects for each species:

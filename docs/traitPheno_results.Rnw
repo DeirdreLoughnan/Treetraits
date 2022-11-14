@@ -1,0 +1,128 @@
+%%% start preambling . . .  %%%
+\documentclass{article}
+
+% required 
+\usepackage[hyphens]{url} % this wraps my URL versus letting it spill across the page, a bad habit LaTeX has
+
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{textcomp}%amoung other things, it allows degrees C to be added
+\usepackage{float}
+\usepackage[utf8]{inputenc} % allow funny letters in citaions 
+\usepackage[nottoc]{tocbibind} %should add Refences to the table of contents?
+\usepackage{amsmath} % making nice equations 
+\usepackage{listings} % add in stan code
+\usepackage{xcolor}
+\usepackage{capt-of}%alows me to set a caption for code in appendix 
+\usepackage[export]{adjustbox} % adding a box around a map
+\usepackage{lineno}
+\linenumbers
+% recommended! Uncomment the below line and change the path for your computer!
+% \SweaveOpts{prefix.string=/Users/Lizzie/Documents/git/teaching/demoSweave/Fig.s/demoFig, eps=FALSE} 
+%put your Fig.s in one place! Also, note that here 'Fig.s' is the folder and 'demoFig' is what each 
+% Fig. produced will be titled plus its number or label (e.g., demoFig-nqpbetter.pdf')
+% make your captioning look better
+\usepackage[small]{caption}
+
+\usepackage{xr-hyper} %refer to Fig.s in another document
+\usepackage{hyperref}
+
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+
+% optional: muck with spacing
+\topmargin -1.5cm        
+\oddsidemargin 0.5cm   
+\evensidemargin 0.5cm  % same as oddsidemargin but for left-hand pages
+\textwidth 15.59cm
+\textheight 21.94cm 
+% \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
+\parindent 0pt		  % sets leading space for paragraphs
+% optional: cute, fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LO]{Draft early 2022}
+\fancyhead[RO]{Temporal Ecology Lab}
+% more optionals! %
+
+%\graphicspath{ {./DoseResponse_WriteupImages/} }% tell latex where to find photos 
+\externaldocument[supp-]{Traitors_Manuscript_supp}
+
+%%% end preambling. %%%
+
+\begin{document}
+
+%\renewcommand{\refname}{\CHead{}}%not sure what this was supposed to do 
+\renewcommand{\bibname}{References}%names reference list 
+
+\SweaveOpts{concordance=TRUE} % For RStudio hiccups
+
+
+\title{Phenological cue use varies with functional traits in North American woody plan communities}
+\date{\today}
+\author{Deirdre Loughnan$^1$, Faith A M Jones$^1$, and E M Wolkovich$^1$}
+\maketitle 
+
+$^1$ Department of Forest and Conservation, Faculty of Forestry, University of British Columbia, 2424 Main Mall
+Vancouver, BC Canada V6T 1Z4. \\
+
+
+Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
+
+%Full word count: \\
+%Summary word count: \\
+%Introduction word count: \\
+%Materials and Methods word count: \\
+%Results and figure legends word count: \\
+%Discussion word count: \\
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait.pdf} 
+\caption{Relationship between mean species traits and mean bb day, with species bb day reflected in the colour gradient. Trendlines based on simple linear models comparing day of bb and trait values.}
+\label{fig:tempslopes}
+\end{figure}\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_chillColor.pdf} 
+\caption{Relationship between mean species trait value and mean budburst day, with point colours representing chilling cues (a-c), forcing cues = (d-f), and photoperiod cues (g-hi). All cue responses were negative. Purple points are more negative, with a strong trait response, while yellow points are weaker. }
+\label{fig:tempslopes}
+\end{figure}\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_eastwest.pdf} 
+\caption{Relationship between mean species trait value and species mean budburst days. Point colours representing different transects, with the eastern transect shown in teal and the western transect shown in maroon, with species growing in both regions shown in yellow.}
+\label{fig:tempslopes}
+\end{figure}\newpage
+\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/cues_vs_trait_eastwestColor.pdf} 
+\caption{Relationship between mean species trait value and mean budburst day, with point colours representing chilling cues (a-c), forcing cues = (d-f), and photoperiod cues (g-hi). All cue responses were negative. Point colours representing different transects, with the eastern transect shown in teal and the western transect shown in maroon, with species growing in both regions shown in yellow.}
+\label{fig:tempslopes}
+\end{figure}\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_treeShrub.pdf} 
+\caption{Relationship between mean species trait value and mean budburst, with chilling (a-c), forcing (d-f), and photoperiod cues (g-i). Point colours representing different species groups, tree species are depicted in maroon and shrub species in teal.}
+\label{fig:tempslopes}
+\end{figure}\newpage
+\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/cues_vs_trait_treeShrubColor.pdf} 
+\caption{Relationship between mean species trait value and cue responses, with chilling (a-c), forcing (d-f), and photoperiod cues (g-i). Point colours representing different species groups, tree species are depicted in maroon and shrub species in teal.}
+\label{fig:tempslopes}
+\end{figure}\newpage
+\newpage
+
+
+\end{document}
