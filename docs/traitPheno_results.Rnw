@@ -122,8 +122,22 @@ These plots are made using the species means and standard error of the trait dat
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_chillColor.pdf} 
-\caption{Relationship between mean species trait value and mean budburst day, with point colours representing chilling cues (a-c), forcing cues = (d-f), and photoperiod cues (g-hi). All cue responses were negative. Purple points are more negative, with a strong trait response, while yellow points are weaker. }
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_chillColor_EW.pdf} 
+\caption{Relationship between mean species trait value and mean budburst day, with point colours representing chilling cues across both transect (a-c), the eastern transect = (d-f), and western transect (g-hi). All cue responses were negative. Purple points are more negative, with a strong trait response, while yellow points are weaker. }
+\label{fig:bbtraitCue}
+\end{figure}\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_forceColor_EW.pdf} 
+\caption{Relationship between mean species trait value and mean budburst day, with point colours representing forcing cues across both transect (a-c), the eastern transect = (d-f), and western transect. All cue responses were negative. Purple points are more negative, with a strong trait response, while yellow points are weaker. }
+\label{fig:bbtraitCue}
+\end{figure}\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/exploratory/bb_vs_trait_photoColor_EW.pdf} 
+\caption{Relationship between mean species trait value and mean budburst day, with point colours representing photoperiod cues across both transect (a-c), the eastern transect = (d-f), and western transect. All cue responses were negative. Purple points are more negative, with a strong trait response, while yellow points are weaker. }
 \label{fig:bbtraitCue}
 \end{figure}\newpage
 

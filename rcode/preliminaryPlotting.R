@@ -47,9 +47,9 @@ pheno <- rbind.fill(dl.wchill, df.wchill)
 head(pheno)
 
 # get the model output from my data
-load("output/final/bb_4sites_phylo.Rda")
+load("output/final/bb_4sites_phylo_mini.Rda")
 
-sumt <- summary(mdl.4phylo)$summary
+sumt <- summary(mdl.4phyloMini)$summary
 bforce <- sumt[grep("b_warm", rownames(sumt)), "mean"]; bforce <- bforce[2:48]
 bchill <- sumt[grep("b_chill", rownames(sumt)), "mean"]; bchill <- bchill[2:48]
 bphoto <- sumt[grep("b_photo", rownames(sumt)), "mean"]; bphoto <- bphoto[50:96]
@@ -76,6 +76,7 @@ dfspp <- subset(spList, transect != "west")
 
 trtDataSpp$spFact <- as.numeric(as.factor(trtDataSpp$species))
 
+trtDataSpp <- merge(trtDataSpp, spList, by = "species")
 # Make a ton of exploratory plots!
 
 # 1. Get species means for traits and for day bb and cues:
@@ -106,7 +107,7 @@ meanBB <- aggregate(pheno["bb"], pheno[c("species")], FUN = mean, na.rm = T)
 
 bbTrt <- merge(meanBB, trtMean, by = "species")
 bbTrt <- merge(bbTrt, spList, by = "species")
-bbTrt$color <- v_colors
+
 ## LOTS AND LOTS OF PLOTS!!!
 
 # species by trait:
@@ -116,11 +117,12 @@ library(scales)
 library(viridis)
 q_colors = 47 # for no particular reason
 v_colors =  viridis(q_colors)
+bbTrt$color <- v_colors
 
 temp <- bbTrt[order(bbTrt$bb),]
 temp$color <- v_colors
 
-pdf("..//figures/exploratory/bb_vs_trait.pdf", width = 18, height = 5)
+pdf("figures/exploratory/bb_vs_trait.pdf", width = 18, height = 5)
 par(mfrow = c(1,4))
 plot(bb ~ meanLMA, data = temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA")
 abline(lm(bb~meanLMA, data= temp), lwd = 2)
@@ -173,11 +175,167 @@ arrows( # x mean
 
 dev.off()
 
+# now separating the total from e vs w data:
+pdf("figures/exploratory/bb_vs_trait_EW.pdf", width = 20, height = 20)
+par(mfrow = c(3,4))
+plot(bb ~ meanLMA, data = temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Both transects", cex.main = 3, xlim = c(0,0.08), ylim = c(0,60))
+abline(lm(bb~meanLMA, data= temp), lwd = 2)
+
+arrows( # x mean
+  temp[,"meanLMA"] + temp[,"seLMA"] , # y 25
+  temp[,"bb"],
+  temp[,"meanLMA"] -temp[,"seLMA"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+
+plot(bb ~ meanSSD, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD", xlim = c(0.1,0.8), ylim = c(0,60))
+abline(lm(bb~meanSSD, data= temp), lwd = 2)
+
+arrows( # x mean
+  temp[,"meanSSD"] + temp[,"seSSD"] , # y 25
+  temp[,"bb"],
+  temp[,"meanSSD"] -temp[,"seSSD"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+plot(bb ~ meanCN, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N", xlim = c(5,40), ylim = c(0,60))
+abline(lm(bb~meanCN, data= temp), lwd = 2)
+
+arrows( # x mean
+  temp[,"meanCN"] + temp[,"seCN"] , # y 25
+  temp[,"bb"],
+  temp[,"meanCN"] -temp[,"seCN"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+plot(bb ~ meanht, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height", xlim = c(0,20), ylim = c(0,60))
+abline(lm(bb~meanht, data= temp), lwd = 2)
+
+arrows( # x mean
+  temp[,"meanht"] + temp[,"seht"] , # y 25
+  temp[,"bb"],
+  temp[,"meanht"] -temp[,"seht"],
+  temp[,"bb"],
+  length = 0, 
+  col = temp$color
+)
+
+## Eastern sites only:
+tempE <- subset(temp, transect != "west")
+plot(bb ~ meanLMA, data = tempE, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Eastern Transect", cex.main = 3, xlim = c(0,0.08), ylim = c(0,60))
+abline(lm(bb~meanLMA, data= tempE), lwd = 2)
+
+arrows( # x mean
+  tempE[,"meanLMA"] + tempE[,"seLMA"] , # y 25
+  tempE[,"bb"],
+  tempE[,"meanLMA"] -tempE[,"seLMA"],
+  tempE[,"bb"],
+  length = 0, 
+  col = tempE$color
+)
+
+
+plot(bb ~ meanSSD, data =tempE, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD", xlim = c(0.1,0.8), ylim = c(0,60))
+abline(lm(bb~meanSSD, data= tempE), lwd = 2)
+
+arrows( # x mean
+  tempE[,"meanSSD"] + tempE[,"seSSD"] , # y 25
+  tempE[,"bb"],
+  tempE[,"meanSSD"] -tempE[,"seSSD"],
+  tempE[,"bb"],
+  length = 0, 
+  col = tempE$color
+)
+
+plot(bb ~ meanCN, data =tempE, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N", xlim = c(5,40), ylim = c(0,60))
+abline(lm(bb~meanCN, data= tempE), lwd = 2)
+
+arrows( # x mean
+  tempE[,"meanCN"] + tempE[,"seCN"] , # y 25
+  tempE[,"bb"],
+  tempE[,"meanCN"] -tempE[,"seCN"],
+  tempE[,"bb"],
+  length = 0, 
+  col = tempE$color
+)
+
+plot(bb ~ meanht, data =tempE, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height", xlim = c(0,20), ylim = c(0,60))
+abline(lm(bb~meanht, data= tempE), lwd = 2)
+
+arrows( # x mean
+  tempE[,"meanht"] + tempE[,"seht"] , # y 25
+  tempE[,"bb"],
+  tempE[,"meanht"] -tempE[,"seht"],
+  tempE[,"bb"],
+  length = 0, 
+  col = tempE$color
+)
+
+## Western sites only:
+tempW <- subset(temp, transect != "east")
+plot(bb ~ meanLMA, data = tempW, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Western Transect", cex.main = 3, xlim = c(0,0.08), ylim = c(0,60))
+abline(lm(bb~meanLMA, data= tempW), lwd = 2)
+
+arrows( # x mean
+  tempW[,"meanLMA"] + tempW[,"seLMA"] , # y 25
+  tempW[,"bb"],
+  tempW[,"meanLMA"] -tempW[,"seLMA"],
+  tempW[,"bb"],
+  length = 0, 
+  col = tempW$color
+)
+
+
+plot(bb ~ meanSSD, data =tempW, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean SSD", xlim = c(0.1,0.8), ylim = c(0,60))
+abline(lm(bb~meanSSD, data= tempW), lwd = 2)
+
+arrows( # x mean
+  tempW[,"meanSSD"] + tempW[,"seSSD"] , # y 25
+  tempW[,"bb"],
+  tempW[,"meanSSD"] -tempW[,"seSSD"],
+  tempW[,"bb"],
+  length = 0, 
+  col = tempW$color
+)
+
+plot(bb ~ meanCN, data =tempW, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean C:N", xlim = c(5,40), ylim = c(0,60))
+abline(lm(bb~meanCN, data= tempW), lwd = 2)
+
+arrows( # x mean
+  tempW[,"meanCN"] + tempW[,"seCN"] , # y 25
+  tempW[,"bb"],
+  tempW[,"meanCN"] -tempW[,"seCN"],
+  tempW[,"bb"],
+  length = 0, 
+  col = tempW$color
+)
+
+plot(bb ~ meanht, data =tempW, bg = color, pch = 21, cex = 3, cex.lab = 2, ylab = "Mean budburst day", xlab = "Mean Height", xlim = c(0,20), ylim = c(0,60))
+abline(lm(bb~meanht, data= tempW), lwd = 2)
+
+arrows( # x mean
+  tempW[,"meanht"] + tempW[,"seht"] , # y 25
+  tempW[,"bb"],
+  tempW[,"meanht"] -tempW[,"seht"],
+  tempW[,"bb"],
+  length = 0, 
+  col = tempW$color
+)
+
+dev.off()
+
 # plot bb vs trait, but with colours by cue responses:
 chill <- bbTrt[order(bbTrt$bchill),]
 chill$color <- v_colors
 
-pdf("..//figures/exploratory/bb_vs_trait_chillColor.pdf", width = 18, height = 15)
+pdf("figures/exploratory/bb_vs_trait_chillColor_EW.pdf", width = 18, height = 15)
 par(mfrow = c(3,4))
 plot(bb ~ meanLMA, data = chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Chilling", cex.main = 2)
 
@@ -187,11 +345,34 @@ plot(bb ~ meanCN, data =chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab 
 
 plot(bb ~ meanht, data = chill, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 
+# Eastern transect
+chillE <- subset(chill, transect != "west")
+plot(bb ~ meanLMA, data = chillE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Chilling Eastern transects", cex.main = 2)
+
+plot(bb ~ meanSSD, data = chillE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
+
+plot(bb ~ meanCN, data =chillE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
+
+plot(bb ~ meanht, data = chillE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
+
+# Western transect
+chillW <- subset(chill, transect != "east")
+plot(bb ~ meanLMA, data = chillW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Western transects", cex.main = 2)
+
+plot(bb ~ meanSSD, data = chillW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
+
+plot(bb ~ meanCN, data =chillW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
+
+plot(bb ~ meanht, data = chillW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
+dev.off()
+
 #<><><><><><>
 forcing <- bbTrt[order(bbTrt$bforce),]
 forcing$color <- v_colors
 
-plot(bb ~ meanLMA, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Forcing", cex.main = 2)
+pdf("figures/exploratory/bb_vs_trait_forceColor_EW.pdf", width = 18, height = 15)
+par(mfrow = c(3,4))
+plot(bb ~ meanLMA, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Forcing both transects", cex.main = 2)
 
 plot(bb ~ meanSSD, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
@@ -199,17 +380,61 @@ plot(bb ~ meanCN, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, yl
 
 plot(bb ~ meanht, data = forcing, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 
+# Eastern
+forcingE <- subset(forcing, transect != "west")
+plot(bb ~ meanLMA, data = forcingE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Eastern transect", cex.main = 2)
+
+plot(bb ~ meanSSD, data = forcingE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
+
+plot(bb ~ meanCN, data = forcingE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
+
+plot(bb ~ meanht, data = forcingE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
+
+# western
+forcingW <- subset(forcing, transect != "east")
+
+plot(bb ~ meanLMA, data = forcingW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Western transect", cex.main = 2)
+
+plot(bb ~ meanSSD, data = forcingW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
+
+plot(bb ~ meanCN, data = forcingW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
+
+plot(bb ~ meanht, data = forcingW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
+
+dev.off()
 #<><><><><><>
 photo <- bbTrt[order(bbTrt$bphoto),]
 photo$color <- v_colors
 
-plot(bb ~ meanLMA, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Photoperiod", cex.main = 2)
+pdf("figures/exploratory/bb_vs_trait_photoColor_EW.pdf", width = 18, height = 15)
+par(mfrow = c(3,4))
+plot(bb ~ meanLMA, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Photoperiod both transects", cex.main = 2)
 
 plot(bb ~ meanSSD, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
 
 plot(bb ~ meanCN, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
 
 plot(bb ~ meanht, data = photo, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
+
+# eastern transect
+photoE <- subset(photo, transect != "west")
+plot(bb ~ meanLMA, data = photoE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Eastern transect", cex.main = 2)
+
+plot(bb ~ meanSSD, data = photoE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
+
+plot(bb ~ meanCN, data = photoE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
+
+plot(bb ~ meanht, data = photoE, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
+
+# western 
+photoW <- subset(photo, transect != "east")
+plot(bb ~ meanLMA, data = photoW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean LMA", main = "Western transect", cex.main = 2)
+
+plot(bb ~ meanSSD, data = photoW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean SSD")
+
+plot(bb ~ meanCN, data = photoW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean C:N")
+
+plot(bb ~ meanht, data = photoW, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Mean budburst day", xlab = "Mean Height")
 dev.off()
 
 # plot with cue responses on y axis, colour by species 
@@ -241,6 +466,7 @@ plot(bphoto ~ meanCN, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, yl
 
 plot(bphoto ~ meanht, data =temp, bg = color, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean Height")
 dev.off()
+
 
 ################################################
 # repeat the above plots but colour by east vs west:
@@ -349,6 +575,47 @@ plot(bphoto ~ meanCN, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, 
 
 plot(bphoto ~ meanht, data =temp, bg = tscolor, pch = 21, cex = 3, cex.lab = 3, ylab = "Photoperiod response", xlab = "Mean Height")
 dev.off()
+
+### Plot just the shrubs and trees
+shrub <- subset(bbTrt, type == "shrub")
+tree <- subset(bbTrt, type == "tree")
+
+shrub$transNum <- as.numeric(as.factor(shrub$transect))
+
+pdf("figures/exploratory/bb_shrubs_transects.pdf", width = 18, height = 5)
+par(mfrow = c(1, 4))
+plot(bb ~ meanLMA, data = shrub, col = "maroon", cex =4, cex.lab =2 ,pch = c(16, 17, 21)[shrub$transNum], xlab = "Mean LMA", ylab = "Mean budburst day")
+plot(bb ~ meanSSD, data = shrub, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[shrub$transNum], xlab = "Mean SSD", ylab = "Mean budburst day")
+plot(bb ~ meanCN, data = shrub, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[shrub$transNum], xlab = "Mean C:N", ylab = "Mean budburst day")
+plot(bb ~ meanht, data = shrub, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[shrub$transNum], xlab = "Mean height", ylab = "Mean budburst day")
+
+legend("topright", legend = c(expression("Western"),
+                           expression("Eastern"),
+                             expression("Both")),
+        col = c("maroon", "maroon", "maroon"),
+        #pt.bg = c("maroon", "maroon", "maroon"),
+        inset = 0.02, pch = c(21,16,17 ), cex = 2.5, bty = "n")
+dev.off()
+
+tree$transNum <- as.numeric(as.factor(tree$transect))
+
+
+pdf("figures/exploratory/bb_trees_transects.pdf", width = 18, height = 5)
+par(mfrow = c(1, 4))
+plot(bb ~ meanLMA, data = tree, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[tree$transNum], xlab = "Mean LMA", ylab = "Mean budburst day")
+plot(bb ~ meanSSD, data = tree, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[tree$transNum], xlab = "Mean SSD", ylab = "Mean budburst day")
+plot(bb ~ meanCN, data = tree, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[tree$transNum], xlab = "Mean C:N", ylab = "Mean budburst day")
+plot(bb ~ meanht, data = tree, col = "maroon", cex =4, cex.lab =2, pch = c(16, 17, 21)[tree$transNum], xlab = "Mean height", ylab = "Mean budburst day")
+
+legend("topright", legend = c(expression("Western"),
+                              expression("Eastern"),
+                              expression("Both")),
+       col = c("maroon", "maroon", "maroon"),
+       #pt.bg = c("maroon", "maroon", "maroon"),
+       inset = 0.02, pch = c(21,16,17 ), cex = 2.5, bty = "n")
+dev.off()
+# Plots of the raw trait data look 
+
 
 # now run simple trait model to get trait effects for each species:
 
