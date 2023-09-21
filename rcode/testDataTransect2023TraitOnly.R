@@ -16,17 +16,19 @@ library(rstan)
 #require(rstanarm)
 require(shinystan)
 #require(bayesplot)
+#packageVersion("rstan")
 
 rm(list=ls()) 
 options(stringsAsFactors = FALSE)
 options(mc.cores = parallel::detectCores())
 
 Nrep <- 20 # rep per trait
-Npop <- 4 
+Npop <- 8 
+Ntran <- 2
 Nspp <- 40 # number of species with traits (making this 20 just for speed for now)
 
 # First making a data frame for the test trait data
-Ntrt <- Nspp * Npop * Nrep # total number of traits observations
+Ntrt <- Nspp * Npop * Nrep# total number of traits observations
 Ntrt
 
 #make a dataframe for height
@@ -35,23 +37,30 @@ names(trt.dat) <- c("rep")
 trt.dat$rep <- c(1:Nrep)
 trt.dat$species <- rep(1:Nspp, each = Nrep)
 trt.dat$pop <- rep(1:Npop, each = Nspp*Nrep)
-  
-trt.dat$pop2 <- trt.dat$pop
-trt.dat$pop3 <- trt.dat$pop
-trt.dat$pop4 <- trt.dat$pop
+trt.dat$tran <- rep(1:Ntran, each = Npop*Nrep*Ntran)
 
-trt.dat$pop2 <- ifelse(trt.dat$pop == "2", 1,0)
-trt.dat$pop3 <- ifelse(trt.dat$pop == "3", 1,0)
-trt.dat$pop4 <- ifelse(trt.dat$pop == "4", 1,0)
+lati <- rnorm(8, 50, 5)
+trt.dat$lat <- rep(lati, each = Nrep*Nspp)
+trt.dat$lat <- as.numeric(trt.dat$lat)
+# trt.dat$pop2 <- trt.dat$pop
+# trt.dat$pop3 <- trt.dat$pop
+# trt.dat$pop4 <- trt.dat$pop
+# 
+# trt.dat$pop2 <- ifelse(trt.dat$pop == "2", 1,0)
+# trt.dat$pop3 <- ifelse(trt.dat$pop == "3", 1,0)
+# trt.dat$pop4 <- ifelse(trt.dat$pop == "4", 1,0)
 
-mu.pop2 <- 2
-mu.pop3 <- 3
-mu.pop4 <- 4
+# mu.pop2 <- 2
+# mu.pop3 <- 3
+# mu.pop4 <- 4
 
-trt.dat$mu.pop2 <- mu.pop2*trt.dat$pop2 
-trt.dat$mu.pop3 <-  mu.pop3*trt.dat$pop3 
-trt.dat$mu.pop4 <-  mu.pop4*trt.dat$pop4 
-
+# trt.dat$mu.pop2 <- mu.pop2*trt.dat$pop2 
+# trt.dat$mu.pop3 <-  mu.pop3*trt.dat$pop3 
+# trt.dat$mu.pop4 <-  mu.pop4*trt.dat$pop4 
+mu.tran <- 2
+sigma.tran = 1
+mu.tran.sp <- rnorm(Ntran, mu.tran, sigma.tran)
+trt.dat$bTran <- rep(mu.tran.sp, each = Npop*Nrep*Ntran)
 
 # trt.dat$species <- rep(1:Nspp, Nstudy)
 
@@ -69,152 +78,58 @@ trt.dat$trt.er <- rnorm(Ntrt, 0, trt.var)
 
 # generate yhat - heights -  for this first trt model
 for (i in 1:Ntrt){
-  trt.dat$yTraiti[i] <-  mu.grand + trt.dat$mu.trtsp[i] + trt.dat$mu.pop2[i] + trt.dat$mu.pop3[i] + trt.dat$mu.pop4[i] + trt.dat$trt.er[i]
+  trt.dat$yTraiti[i] <-  mu.grand + trt.dat$mu.trtsp[i] + trt.dat$trt.er[i] + trt.dat$bTran[i] * trt.dat$lat[i] 
 }
 
 for (i in 1:Ntrt){
   trt.dat$muGrandSp[i] <-  trt.dat$mu.trtsp[i] +  mu.grand
 }
 
-##### Phenology test data ###########################
-
-Nchill <- 2 # sm high low, mp high low
-Nphoto <- 2 # high low
-Nforce <- 2 # high amd low
-
-Nrep <- 20
-Nspp <- 40
-Npop <- 2
-Nph <- Nchill*Nphoto*Nforce*Nrep*Npop*Nspp #*Nforce - bc N force and N chill are completely confounded
-
-pheno.dat <- data.frame(matrix(NA, Nph, 2))
-names(pheno.dat) <- c("rep","species")
-pheno.dat$rep <- c(1:Nrep)
-pheno.dat$species <- rep(c(1:Nspp), each = Nrep)
-pheno.dat$pop <- rep(1:Npop, each = Nspp*Nrep)
-
-forceTrt <- c("LF", "HF")
-forcei <- rnorm(Nforce, 1, 2)
-pheno.dat$force <- rep(forceTrt, each = Nchill*Nphoto*Npop*Nrep*Nspp)
-pheno.dat$forcei <- rep(forcei, each = Nchill*Nphoto*Npop*Nrep*Nspp)
-
-chillTrt <- c("LC", "HC")
-chilli <- rnorm(Nchill, 1, 5)
-pheno.dat$chill <- rep(rep(chillTrt, each = Nphoto*Npop*Nrep*Nspp), times = Nforce)
-pheno.dat$chilli <- rep(rep(chilli, each = Nphoto*Npop*Nrep*Nspp), times = Nforce)
-
-photoTrt <- c("LP", "HP")
-photoi <- rnorm(Nphoto, 1, 2)
-pheno.dat$photo <- rep(rep(photoTrt, each = Npop*Nrep*Nspp), times = Nforce*Nchill)
-pheno.dat$photoi <- rep(rep(photoi, each = Npop*Nrep*Nspp), times = Nforce*Nchill)
-
-# sanity check that all treatments are the same
-pheno.dat$label <- paste(pheno.dat$chill, pheno.dat$force, pheno.dat$photo, sep ="_")
-pheno.dat$label <- paste(pheno.dat$chilli, pheno.dat$forcei, pheno.dat$photoi, sep ="_")
-temp <- subset(pheno.dat, label == "HC_HF_HP"); dim(temp)
-
-mu.force = -10 
-sigma.force = 1
-alpha.force.sp <- rnorm(Nspp, mu.force, sigma.force)
-pheno.dat$alphaForceSp <- rep(alpha.force.sp, each = Nrep)
-
-mu.photo = -15
-sigma.photo = 1
-alpha.photo.sp <- rnorm(Nspp, mu.photo, sigma.photo)
-pheno.dat$alphaPhotoSp <- rep(alpha.photo.sp, each = Nrep)
-
-mu.chill = -14
-sigma.chill = 1
-alpha.chill.sp <- rnorm(Nspp, mu.chill, sigma.chill)
-pheno.dat$alphaChillSp <- rep(alpha.chill.sp, each = Nrep)
-
-mu.pheno.sp = 80
-sigma.pheno.sp = 30
-alphaPhenoSp <- rnorm(Nspp, mu.pheno.sp, sigma.pheno.sp)
-pheno.dat$alphaPhenoSp <- rep(alphaPhenoSp, each = Nrep)
-
-sigma.pheno.y = 3
-pheno.dat$ePhen <- rnorm(Nph, 0, sigma.pheno.y)
-
-betaTraitxForce <- 0.3 
-betaTraitxPhoto <- -0.2
-betaTraitxChill <- -0.4
-
-pheno.datTrait <- merge(pheno.dat, unique(trt.dat[,c("species","muGrandSp")]), by = "species")
-#head(pheno.datTrait,50)
-
-for (i in 1:Nph){
-  pheno.datTrait$betaForceSp[i] <-  pheno.datTrait$alphaForceSp[i] + (betaTraitxForce *  pheno.datTrait$muGrandSp[i])
-  
-  pheno.datTrait$betaPhotoSp[i]<- pheno.datTrait$alphaPhotoSp[i] + (betaTraitxPhoto*  pheno.datTrait$muGrandSp[i])
-  
-  pheno.datTrait$betaChillSp[i] <-pheno.datTrait$alphaChillSp[i] + (betaTraitxChill* pheno.datTrait$muGrandSp[i])
-}
-
-for (i in 1:Nph){
-  pheno.datTrait$yMu[i] <-  pheno.datTrait$alphaPhenoSp[i] +  pheno.datTrait$betaForceSp[i] * pheno.datTrait$forcei[i] +  pheno.datTrait$betaPhotoSp[i] * pheno.datTrait$photoi[i] + pheno.datTrait$betaChillSp[i] * pheno.datTrait$chilli[i]
-}
-
-pheno.datTrait$yPhenoi <- pheno.datTrait$yMu + pheno.datTrait$ePhen
-dim(pheno.dat)
-
 all.data <- list(yTraiti = trt.dat$yTraiti,
                  N = Ntrt,
                  n_spec = Nspp,
                  trait_species = as.numeric(as.factor(trt.dat$species)),
-                 species = as.numeric(as.factor(trt.dat$species)),
-                 n_pop = Npop,
-                 pop2 = trt.dat$pop2,
-                 pop3 = trt.dat$pop3,
-                 pop4 = trt.dat$pop4,
-                 Nph = nrow(pheno.datTrait),
-                 phenology_species = as.numeric(as.factor(pheno.datTrait$species)),
-                 species2 = as.numeric(as.factor(pheno.datTrait$species)),
-                 yPhenoi = pheno.datTrait$yPhenoi,
-                 forcei = pheno.datTrait$forcei,
-                 chilli = pheno.datTrait$chilli,
-                 photoi = pheno.datTrait$photoi)
-
-pheno.data <- list(yTraiti = trt.dat$yTraiti,
-                 N = Ntrt,
-                 n_sp = Nspp,
-                 trait_species = as.numeric(as.factor(trt.dat$species)),
-                 sp1 = as.numeric(as.factor(trt.dat$species)),
-                 n_pop = Npop,
-                 site2 = trt.dat$pop2,
-                 site3 = trt.dat$pop3,
-                 site4 = trt.dat$pop4,
-                 Nph = nrow(pheno.datTrait),
-                 phenology_species = as.numeric(as.factor(pheno.datTrait$species)),
-                 sp2 = as.numeric(as.factor(pheno.datTrait$species)),
-                 lday = pheno.datTrait$yPhenoi,
-                 warm = pheno.datTrait$forcei,
-                 chill1 = pheno.datTrait$chilli,
-                 photo = pheno.datTrait$photoi)
+                 n_tran = Ntran,
+                 lati = trt.dat$lat,
+                 trait_transect = as.numeric(as.factor(trt.dat$tran)))
                  
-mdl <- stan("stan/phenoBc_mdl_simp.stan",
-               data = pheno.data,
+
+mdl <- stan("stan/testTraitPhenoLatitudeTraitOnly.stan",
+               data = all.data,
                iter = 4000, warmup = 3000, chains=4,
             include = FALSE, pars = c("y_hat")
 )
-save(mdl, file="output/testTraitPheno_Nrep5Nspp20Npop4.Rdata")
+save(mdl, file="output/testTraitLatitude.Rdata")
 sumer <- summary(mdl)$summary
 
-muForce <- sumer[grep("mu_b_warm", rownames(sumer)), c("mean","2.5%","97.5%")]
-muChill <- sumer[grep("mu_b_chill1", rownames(sumer)), c("mean","2.5%","97.5%")]
-muPhoto <- sumer[grep("mu_b_photo", rownames(sumer)), c("mean","2.5%","97.5%")]
+muTran <- sumer[grep("mu_tran", rownames(sumer)), c("mean","2.5%","97.5%")]
+muGrand <- sumer[grep("mu_grand", rownames(sumer)), c("mean","2.5%","97.5%")]
 
-sigma_force <- sumer[grep("sigma_b_warm", rownames(sumer)), c("mean","2.5%","97.5%")]
-sigma_chill <- sumer[grep("sigma_b_chill1", rownames(sumer)), c("mean","2.5%","97.5%")]
-sigma_photo <- sumer[grep("sigma_b_photo", rownames(sumer)), c("mean","2.5%","97.5%")]
+# muForce <- sumer[grep("mu_b_warm", rownames(sumer)), c("mean","2.5%","97.5%")]
+# muChill <- sumer[grep("mu_b_chill1", rownames(sumer)), c("mean","2.5%","97.5%")]
+# muPhoto <- sumer[grep("mu_b_photo", rownames(sumer)), c("mean","2.5%","97.5%")]
 
-sigma_phenoy <- sumer[grep("sigma_y", rownames(sumer)), c("mean","2.5%","97.5%")]
+sigma_tran <- sumer[grep("sigma_tran", rownames(sumer)), c("mean","2.5%","97.5%")]
+sigma_sp <- sumer[grep("sigma_sp", rownames(sumer)), c("mean","2.5%","97.5%")]
+sigma_traity <- sumer[grep("sigma_traity", rownames(sumer)), c("mean","2.5%","97.5%")]
 
-mdl.out <- data.frame( "Parameter" = c("mu_forcesp","mu_chillsp","mu_photosp","sigma_forcesp","sigma_chillsp","sigma_photosp", "sigma_phenoy"),  
-                       "Test.data.values" = c( mu.force, mu.chill, mu.photo, sigma.force, sigma.chill, sigma.photo,sigma.pheno.y) ,
-                       "Estiamte"= c( muForce[1], muChill[1], muPhoto[1],sigma_force[1], sigma_chill[1], sigma_photo[1], sigma_phenoy[1]),
-                       "2.5"= c(muForce[2], muChill[2], muPhoto[2], sigma_force[2], sigma_chill[2], sigma_photo[2], sigma_phenoy[2]),
-                       "97.5"= c( muForce[3], muChill[3], muPhoto[3], sigma_force[3], sigma_chill[3], sigma_photo[3],  sigma_phenoy[3]) )
+# sigma_force <- sumer[grep("sigma_b_warm", rownames(sumer)), c("mean","2.5%","97.5%")]
+# sigma_chill <- sumer[grep("sigma_b_chill1", rownames(sumer)), c("mean","2.5%","97.5%")]
+# sigma_photo <- sumer[grep("sigma_b_photo", rownames(sumer)), c("mean","2.5%","97.5%")]
+# 
+# sigma_phenoy <- sumer[grep("sigma_y", rownames(sumer)), c("mean","2.5%","97.5%")]
+
+mdl.out <- data.frame( "Parameter" = c("mu.tran","mu.grand","sigma.tran","sigma.species","trt.var"),  
+                       "Test.data.values" = c( mu.tran, mu.grand,sigma.tran, sigma.species, trt.var) ,
+                       "Estiamte"= c(muTran[1], muGrand[1,1],sigma_tran[1], sigma_sp[1], sigma_traity[1]),
+                       "2.5"= c(muTran[2], muGrand[1,2],sigma_tran[2], sigma_sp[1], sigma_traity[1]),
+                       "97.5"= c( muTran[3], muGrand[1,3],sigma_tran[3], sigma_sp[3], sigma_traity[3]) )
+mdl.out
+mdl.out <- data.frame( "Parameter" = c("mutran","mu_forcesp","mu_chillsp","mu_photosp","sigma_tran","sigma_forcesp","sigma_chillsp","sigma_photosp", "sigma_phenoy"),  
+                       "Test.data.values" = c( mu.tran, mu.force, mu.chill, mu.photo,sigma.tran, sigma.force, sigma.chill, sigma.photo,sigma.pheno.y) ,
+                       "Estiamte"= c(muTran[1], muForce[1], muChill[1], muPhoto[1],sigma_tran[1], sigma_force[1], sigma_chill[1], sigma_photo[1], sigma_phenoy[1]),
+                       "2.5"= c(muTran[2],muForce[2], muChill[2], muPhoto[2], sigma_tran[2],sigma_force[2], sigma_chill[2], sigma_photo[2], sigma_phenoy[2]),
+                       "97.5"= c( muTran[3],muForce[3], muChill[3], muPhoto[3],sigma_tran[3], sigma_force[3], sigma_chill[3], sigma_photo[3],  sigma_phenoy[3]) )
 
 mdl.out
 
