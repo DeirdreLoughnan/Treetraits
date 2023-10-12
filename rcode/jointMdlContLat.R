@@ -261,8 +261,14 @@ cn.data <- list(yTraiti = carbNit$C.N,
 
 mdl <- stan("stan/cnDummyInt.stan",
   data = cn.data,
-  iter = 6000, warmup = 5000, chains=4,
-  include = FALSE, pars = c("y_hat")
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat"),
+  control = list(adapt_delta = 0.99, max_treedepth =12)
 )
 
 save(mdl, file="output/cnDummyInt.Rdata")
+
+ssm <- as.shinystan(mdl)
+launch_shinystan(ssm)
+
+sumer <- summary(mdl)$summary
