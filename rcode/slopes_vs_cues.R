@@ -130,10 +130,10 @@ trtPheno$transect[trtPheno$transect == "mp"] <- "west"
 shrubs = c("VIBLAN","RHAFRA","RHOPRI","SPIALB","VACMYR","VIBCAS", "AROMEL","ILEMUC", "KALANG", "LONCAN", "LYOLIG", "alninc","alnvir","amelan", "corsto","loninv", "menfer","rhoalb", "riblac","rubpar","samrac","shecan","sorsco","spibet","spipyr","symalb","vacmem","vibedu")
 trees = tolower(c("ACEPEN", "ACERUB", "ACESAC", "ALNINC", "BETALL", "BETLEN", "BETPAP", "CORCOR", "FAGGRA", "FRANIG", "HAMVIR", "NYSSYL", "POPGRA", "PRUPEN", "QUEALB" , "QUERUB", "QUEVEL", "acegla","betpap", "poptre", "popbal"))
 
-east <- subset(trtPheno, transect == "east")
+east <- subset(trtPheno, transect == 1)
 eastSp <- unique(east$species)
 
-west <- subset(trtPheno, transect == "west")
+west <- subset(trtPheno, transect == 0)
 westSp <- unique(west$species)
 #####################################################################
 
@@ -152,13 +152,13 @@ files <- list.files(path = "output", pattern ="_stanfit.RDS" )
 files
 
 ################################
-# C:N
-Model <- readRDS(paste("output/", files[1], sep = ""))
+# Height
+load("output/heightDummyInt.Rdata")
 
-ModelFit <- rstan::extract(Model)
+ModelFit <- rstan::extract(mdl)
 
-muGrandSp <- data.frame(ModelFit$mu_grand_sp)
-muGrandSpMean <- colMeans(muGrandSp)
+muSp <- data.frame(ModelFit$b_muSp)
+muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
 betaForceSpMean <- colMeans(betaForceSp)
@@ -169,7 +169,7 @@ quantile2575 <- function(x){
 }
 
 bf_quan <- apply(betaForceSp, 2, quantile2575) 
-mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+muSp_quan <- apply(muSp, 2, quantile2575)
 
 bfs <- rbind(betaForceSpMean, bf_quan)
 bfs_t <- t(bfs)
@@ -178,7 +178,7 @@ colnames(bfs_df)[colnames(bfs_df) == "X25."] <- "force25"
 colnames(bfs_df)[colnames(bfs_df) == "X75."] <- "force75"
 bfs_df$species <- specieslist
 
-mg<- rbind(muGrandSpMean, mugrand_quan)
+mg<- rbind(muSpMean, muSp_quan)
 mg_t <- t(mg)
 mg_df <- data.frame(mg_t)
 colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
@@ -203,15 +203,15 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 # col2.sp <- c( rgb(149 / 255, 216 / 255, 64 / 255, alpha = 0.5), rgb(72 / 255, 38 / 255, 119 / 255, alpha = 0.4))
 
 #pdf(paste("figures/force", files[i], ".pdf", sep = ""))
-pdf(paste("figures/cue", "trait_wtrend", ".pdf", sep = ""), height = 16, width = 12)
+pdf("figures/cuetraitLatiMdl.pdf", height = 16, width = 12)
 par(mar = c(5, 5, 2, 2), mfrow = c(5,3))
-plot( x= mg_df$muGrandSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bfs_df_east[,"force25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -225,9 +225,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bfs_df_west[,"force25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bfs_df_west[,"force75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -240,7 +240,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "CN, Forcing", adj = 0, cex = 1.25)
+mtext(side = 3, text = "Height, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
 }
@@ -275,14 +275,14 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
 #pdf(paste("figures/chill", files[i], ".pdf", sep = ""))
 #pdf(paste("figures/chill", "lnc", ".pdf", sep = ""), height = 5, width = 5)
-plot( x= mg_df$muGrandSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bcs_df_east[,"chill25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -296,9 +296,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bcs_df_west[,"chill25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bcs_df_west[,"chill75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -311,7 +311,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "C:N, Chilling", adj = 0, cex = 1.25)
+mtext(side = 3, text = "Height, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
 }
@@ -343,13 +343,13 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
 #pdf(paste("figures/photo", files[i], ".pdf", sep = ""))
 #pdf(paste("figures/photo", "height", ".pdf", sep = ""), height = 5, width = 5)
-plot( x= mg_df$muGrandSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bps_df_east[,"photo25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -363,9 +363,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bps_df_west[,"photo25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bps_df_west[,"photo75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -378,7 +378,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "CN, Photoperiod", adj = 0, cex = 1.25)
+mtext(side = 3, text = "Height, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
 }
@@ -387,14 +387,14 @@ abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
 my.label <- paste("c", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
-###############################################
-# DBH
-Model <- readRDS(paste("output/", files[2], sep = ""))
+##########################################
+# LMA
+load("output/lmaDummyInt.Rdata")
 
-ModelFit <- rstan::extract(Model)
+ModelFit <- rstan::extract(mdl)
 
-muGrandSp <- data.frame(ModelFit$mu_grand_sp)
-muGrandSpMean <- colMeans(muGrandSp)
+muSp <- data.frame(ModelFit$b_muSp)
+muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
 betaForceSpMean <- colMeans(betaForceSp)
@@ -405,7 +405,7 @@ quantile2575 <- function(x){
 }
 
 bf_quan <- apply(betaForceSp, 2, quantile2575) 
-mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+mu_quan <- apply(muSp, 2, quantile2575)
 
 bfs <- rbind(betaForceSpMean, bf_quan)
 bfs_t <- t(bfs)
@@ -414,7 +414,7 @@ colnames(bfs_df)[colnames(bfs_df) == "X25."] <- "force25"
 colnames(bfs_df)[colnames(bfs_df) == "X75."] <- "force75"
 bfs_df$species <- specieslist
 
-mg<- rbind(muGrandSpMean, mugrand_quan)
+mg<- rbind(muSpMean, mu_quan)
 mg_t <- t(mg)
 mg_df <- data.frame(mg_t)
 colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
@@ -433,13 +433,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bfs_df_east[,"force25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -453,9 +453,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bfs_df_west[,"force25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bfs_df_west[,"force75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -468,7 +468,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "DBH, Forcing", adj = 0, cex = 1.25)
+mtext(side = 3, text = "LMA, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
 }
@@ -502,13 +502,13 @@ bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
 
-plot( x= mg_df$muGrandSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bcs_df_east[,"chill25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -522,9 +522,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bcs_df_west[,"chill25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bcs_df_west[,"chill75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -537,7 +537,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "DBH, Chilling", adj = 0, cex = 1.25)
+mtext(side = 3, text = "LMA, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
 }
@@ -569,13 +569,13 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value",cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value",cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bps_df_east[,"photo25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -589,9 +589,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bps_df_west[,"photo25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bps_df_west[,"photo75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -604,7 +604,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "DBH, Photoperiod", adj = 0, cex = 1.25)
+mtext(side = 3, text = "LMA, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
 }
@@ -614,15 +614,13 @@ my.label <- paste("f", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 #dev.off()
 ####################
-# height
-#pdf(paste("figures/cue", "trait_wtrend_supp", ".pdf", sep = ""), height = 8, width = 12)
+# DBH
+load("output/dbhDummyInt.Rdata")
 
-Model <- readRDS(paste("output/", files[3], sep = ""))
+ModelFit <- rstan::extract(mdl)
 
-ModelFit <- rstan::extract(Model)
-
-muGrandSp <- data.frame(ModelFit$mu_grand_sp)
-muGrandSpMean <- colMeans(muGrandSp)
+muSp <- data.frame(ModelFit$b_muSp)
+muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
 betaForceSpMean <- colMeans(betaForceSp)
@@ -633,7 +631,7 @@ quantile2575 <- function(x){
 }
 
 bf_quan <- apply(betaForceSp, 2, quantile2575) 
-mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+mu_quan <- apply(muSp, 2, quantile2575)
 
 bfs <- rbind(betaForceSpMean, bf_quan)
 bfs_t <- t(bfs)
@@ -642,7 +640,7 @@ colnames(bfs_df)[colnames(bfs_df) == "X25."] <- "force25"
 colnames(bfs_df)[colnames(bfs_df) == "X75."] <- "force75"
 bfs_df$species <- specieslist
 
-mg<- rbind(muGrandSpMean, mugrand_quan)
+mg<- rbind(muSpMean, mu_quan)
 mg_t <- t(mg)
 mg_df <- data.frame(mg_t)
 colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
@@ -662,13 +660,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value",  cex.lab =1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value",  cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bfs_df_east[,"force25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -682,9 +680,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bfs_df_west[,"force25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bfs_df_west[,"force75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -697,7 +695,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "Height, Forcing", adj = 0, cex = 1.25)
+mtext(side = 3, text = "DBH, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
 }
@@ -706,7 +704,7 @@ abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 my.label <- paste("a", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 ###############################################################
-betaChillSp <- data.frame(ModelFit$betaChillSp)
+betaChillSp <- data.frame(ModelFit$betaChillSp) 
 betaChillSpMean <- colMeans(betaChillSp)
 bc_quan <- apply(betaChillSp, 2, quantile2575)
 
@@ -729,13 +727,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bcs_df_east[,"chill25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -749,9 +747,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bcs_df_west[,"chill25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bcs_df_west[,"chill75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -763,7 +761,7 @@ arrows(
   bcs_df_west[,"betaChillSpMean"],
   length = 0, col = "darkslategray4", lwd = 2
 )
-mtext(side = 3, text = "Height, Chilling", adj = 0, cex = 1.25)
+mtext(side = 3, text = "DBH, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
 }
@@ -796,13 +794,13 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab =1.5 ) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab =1.5 ) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bps_df_east[,"photo25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -816,9 +814,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bps_df_west[,"photo25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bps_df_west[,"photo75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -831,7 +829,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "Height, Photoperiod", adj = 0, cex = 1.25)  
+mtext(side = 3, text = "DBH, Photoperiod", adj = 0, cex = 1.25)  
 for(j in 1:length(muPhotoSp[,1])){
   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
 }
@@ -842,12 +840,12 @@ put.fig.letter(label=my.label, location= "topleft", font=2)
 ###############################################################
 ####################
 # SSD
-Model <- readRDS(paste("output/", files[5], sep = ""))
+load("output/ssdDummyInt.Rdata")
 
-ModelFit <- rstan::extract(Model)
+ModelFit <- rstan::extract(mdl)
 
-muGrandSp <- data.frame(ModelFit$mu_grand_sp)
-muGrandSpMean <- colMeans(muGrandSp)
+muSp <- data.frame(ModelFit$b_muSp)
+muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
 betaForceSpMean <- colMeans(betaForceSp)
@@ -858,7 +856,7 @@ quantile2575 <- function(x){
 }
 
 bf_quan <- apply(betaForceSp, 2, quantile2575) 
-mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+mu_quan <- apply(muSp, 2, quantile2575)
 
 bfs <- rbind(betaForceSpMean, bf_quan)
 bfs_t <- t(bfs)
@@ -867,7 +865,7 @@ colnames(bfs_df)[colnames(bfs_df) == "X25."] <- "force25"
 colnames(bfs_df)[colnames(bfs_df) == "X75."] <- "force75"
 bfs_df$species <- specieslist
 
-mg<- rbind(muGrandSpMean, mugrand_quan)
+mg<- rbind(muSpMean, mu_quan)
 mg_t <- t(mg)
 mg_df <- data.frame(mg_t)
 colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
@@ -886,13 +884,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bfs_df_east[,"force25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -906,9 +904,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bfs_df_west[,"force25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bfs_df_west[,"force75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -954,13 +952,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bcs_df_east[,"chill25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -974,9 +972,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bcs_df_west[,"chill25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bcs_df_west[,"chill75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -1020,13 +1018,13 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bps_df_east[,"photo25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -1040,9 +1038,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bps_df_west[,"photo25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bps_df_west[,"photo75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -1064,15 +1062,14 @@ abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
 my.label <- paste("f", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
-##############################################################################################################################
-####################
-# LMA
-Model <- readRDS(paste("output/", files[4], sep = ""))
+#########################################################################################################################
+# C:N
+load("output/cnDummyInt.Rdata")
 
-ModelFit <- rstan::extract(Model)
+ModelFit <- rstan::extract(mdl)
 
-muGrandSp <- data.frame(ModelFit$mu_grand_sp)
-muGrandSpMean <- colMeans(muGrandSp)
+muSp <- data.frame(ModelFit$b_muSp)
+muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
 betaForceSpMean <- colMeans(betaForceSp)
@@ -1083,7 +1080,7 @@ quantile2575 <- function(x){
 }
 
 bf_quan <- apply(betaForceSp, 2, quantile2575) 
-mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+mu_quan <- apply(muSp, 2, quantile2575)
 
 bfs <- rbind(betaForceSpMean, bf_quan)
 bfs_t <- t(bfs)
@@ -1092,7 +1089,7 @@ colnames(bfs_df)[colnames(bfs_df) == "X25."] <- "force25"
 colnames(bfs_df)[colnames(bfs_df) == "X75."] <- "force75"
 bfs_df$species <- specieslist
 
-mg<- rbind(muGrandSpMean, mugrand_quan)
+mg<- rbind(muSpMean, mu_quan)
 mg_t <- t(mg)
 mg_df <- data.frame(mg_t)
 colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
@@ -1111,13 +1108,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bfs_df_east[,"force25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -1131,9 +1128,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bfs_df_west[,"force25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bfs_df_west[,"force75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -1146,7 +1143,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "LMA, Forcing", adj = 0, cex = 1.25)
+mtext(side = 3, text = "C:N, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
 }
@@ -1179,13 +1176,13 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bcs_df_east[,"chill25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -1199,9 +1196,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bcs_df_west[,"chill25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bcs_df_west[,"chill75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -1213,7 +1210,7 @@ arrows(
   bcs_df_west[,"betaChillSpMean"],
   length = 0, col = "darkslategray4", lwd = 2
 )
-mtext(side = 3, text = "LMA, Chilling", adj = 0, cex = 1.25)
+mtext(side = 3, text = "C:N, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
 }
@@ -1245,13 +1242,13 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-plot( x= mg_df$muGrandSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 arrows(
-  mg_df_east[,"muGrandSpMean"], # x mean
+  mg_df_east[,"muSpMean"], # x mean
   bps_df_east[,"photo25"], # y 25
-  mg_df_east[,"muGrandSpMean"],
+  mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
   length = 0, col= "maroon", lwd = 2
 )
@@ -1265,9 +1262,9 @@ arrows(
 )
 
 arrows(
-  mg_df_west[,"muGrandSpMean"], # x mean
+  mg_df_west[,"muSpMean"], # x mean
   bps_df_west[,"photo25"], # y 25
-  mg_df_west[,"muGrandSpMean"],
+  mg_df_west[,"muSpMean"],
   bps_df_west[,"photo75"],
   length = 0, col= "darkslategray4", lwd = 2
 )
@@ -1280,7 +1277,7 @@ arrows(
   length = 0, col = "darkslategray4", lwd = 2
 )
 
-mtext(side = 3, text = "LMA, Photoperiod", adj = 0, cex = 1.25)
+mtext(side = 3, text = "C:N, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
 }
