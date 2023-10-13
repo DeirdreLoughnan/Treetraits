@@ -124,16 +124,21 @@ trtPheno$transect[trtPheno$transect == "kl"] <- "west"
 trtPheno$transect[trtPheno$transect == "sm"] <- "west"
 trtPheno$transect[trtPheno$transect == "mp"] <- "west"
 
-
+# trtPheno$species.fact <- as.numeric(as.factor(trtPheno$species))
+# trtE <- susbet(trtPheno, transect == 1)
+# eSpFact <- unique(trtE$species.fact)
+# 
+# trtW <- susbet(trtPheno, transect == 1)
+# wSpFact <- unique(trtW$species.fact)
 #####################################################################
 # # Comparisons of trees vs shrubs:
 shrubs = c("VIBLAN","RHAFRA","RHOPRI","SPIALB","VACMYR","VIBCAS", "AROMEL","ILEMUC", "KALANG", "LONCAN", "LYOLIG", "alninc","alnvir","amelan", "corsto","loninv", "menfer","rhoalb", "riblac","rubpar","samrac","shecan","sorsco","spibet","spipyr","symalb","vacmem","vibedu")
 trees = tolower(c("ACEPEN", "ACERUB", "ACESAC", "ALNINC", "BETALL", "BETLEN", "BETPAP", "CORCOR", "FAGGRA", "FRANIG", "HAMVIR", "NYSSYL", "POPGRA", "PRUPEN", "QUEALB" , "QUERUB", "QUEVEL", "acegla","betpap", "poptre", "popbal"))
 
-east <- subset(trtPheno, transect == 1)
+east <- subset(trtPheno, transect == "east")
 eastSp <- unique(east$species)
 
-west <- subset(trtPheno, transect == 0)
+west <- subset(trtPheno, transect == "west")
 westSp <- unique(west$species)
 #####################################################################
 
@@ -213,7 +218,7 @@ arrows(
   bfs_df_east[,"force25"], # y 25
   mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -221,7 +226,7 @@ arrows(
   bfs_df_east[,"betaForceSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bfs_df_east[,"betaForceSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -229,7 +234,7 @@ arrows(
   bfs_df_west[,"force25"], # y 25
   mg_df_west[,"muSpMean"],
   bfs_df_west[,"force75"],
-  length = 0, col= "darkslategray4", lwd = 2
+  length = 0, col= "#8f2d56", lwd = 2
 )
 
 arrows(
@@ -237,12 +242,12 @@ arrows(
   bfs_df_west[,"betaForceSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bfs_df_west[,"betaForceSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col ="#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "Height, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
-  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -284,7 +289,7 @@ arrows(
   bcs_df_east[,"chill25"], # y 25
   mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -292,7 +297,7 @@ arrows(
   bcs_df_east[,"betaChillSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bcs_df_east[,"betaChillSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -308,12 +313,12 @@ arrows(
   bcs_df_west[,"betaChillSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bcs_df_west[,"betaChillSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "Height, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
-  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
@@ -351,7 +356,7 @@ arrows(
   bps_df_east[,"photo25"], # y 25
   mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -359,7 +364,7 @@ arrows(
   bps_df_east[,"betaPhotoSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bps_df_east[,"betaPhotoSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -375,12 +380,12 @@ arrows(
   bps_df_west[,"betaPhotoSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bps_df_west[,"betaPhotoSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "Height, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
-  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
@@ -441,7 +446,7 @@ arrows(
   bfs_df_east[,"force25"], # y 25
   mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -449,7 +454,7 @@ arrows(
   bfs_df_east[,"betaForceSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bfs_df_east[,"betaForceSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -465,12 +470,12 @@ arrows(
   bfs_df_west[,"betaForceSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bfs_df_west[,"betaForceSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "LMA, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
-  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -510,7 +515,7 @@ arrows(
   bcs_df_east[,"chill25"], # y 25
   mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -518,7 +523,7 @@ arrows(
   bcs_df_east[,"betaChillSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bcs_df_east[,"betaChillSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -534,12 +539,12 @@ arrows(
   bcs_df_west[,"betaChillSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bcs_df_west[,"betaChillSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "LMA, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
-  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
@@ -577,7 +582,7 @@ arrows(
   bps_df_east[,"photo25"], # y 25
   mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -585,7 +590,7 @@ arrows(
   bps_df_east[,"betaPhotoSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bps_df_east[,"betaPhotoSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -601,12 +606,12 @@ arrows(
   bps_df_west[,"betaPhotoSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bps_df_west[,"betaPhotoSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "LMA, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
-  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
@@ -668,7 +673,7 @@ arrows(
   bfs_df_east[,"force25"], # y 25
   mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -676,7 +681,7 @@ arrows(
   bfs_df_east[,"betaForceSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bfs_df_east[,"betaForceSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -692,12 +697,12 @@ arrows(
   bfs_df_west[,"betaForceSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bfs_df_west[,"betaForceSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "DBH, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
-  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -735,7 +740,7 @@ arrows(
   bcs_df_east[,"chill25"], # y 25
   mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -743,7 +748,7 @@ arrows(
   bcs_df_east[,"betaChillSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bcs_df_east[,"betaChillSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -759,11 +764,11 @@ arrows(
   bcs_df_west[,"betaChillSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bcs_df_west[,"betaChillSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 mtext(side = 3, text = "DBH, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
-  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
@@ -802,7 +807,7 @@ arrows(
   bps_df_east[,"photo25"], # y 25
   mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -810,7 +815,7 @@ arrows(
   bps_df_east[,"betaPhotoSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bps_df_east[,"betaPhotoSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -826,12 +831,12 @@ arrows(
   bps_df_west[,"betaPhotoSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bps_df_west[,"betaPhotoSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "DBH, Photoperiod", adj = 0, cex = 1.25)  
 for(j in 1:length(muPhotoSp[,1])){
-  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
@@ -892,7 +897,7 @@ arrows(
   bfs_df_east[,"force25"], # y 25
   mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -900,7 +905,7 @@ arrows(
   bfs_df_east[,"betaForceSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bfs_df_east[,"betaForceSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -916,12 +921,12 @@ arrows(
   bfs_df_west[,"betaForceSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bfs_df_west[,"betaForceSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "SSD, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
-  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -960,7 +965,7 @@ arrows(
   bcs_df_east[,"chill25"], # y 25
   mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -968,7 +973,7 @@ arrows(
   bcs_df_east[,"betaChillSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bcs_df_east[,"betaChillSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -984,11 +989,11 @@ arrows(
   bcs_df_west[,"betaChillSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bcs_df_west[,"betaChillSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 mtext(side = 3, text = "SSD, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
-  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
@@ -1026,7 +1031,7 @@ arrows(
   bps_df_east[,"photo25"], # y 25
   mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -1034,7 +1039,7 @@ arrows(
   bps_df_east[,"betaPhotoSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bps_df_east[,"betaPhotoSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -1050,12 +1055,12 @@ arrows(
   bps_df_west[,"betaPhotoSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bps_df_west[,"betaPhotoSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "SSD, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
-  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
@@ -1116,7 +1121,7 @@ arrows(
   bfs_df_east[,"force25"], # y 25
   mg_df_east[,"muSpMean"],
   bfs_df_east[,"force75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -1124,7 +1129,7 @@ arrows(
   bfs_df_east[,"betaForceSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bfs_df_east[,"betaForceSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -1140,12 +1145,12 @@ arrows(
   bfs_df_west[,"betaForceSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bfs_df_west[,"betaForceSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "C:N, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(muForceSp[,1])){
-  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -1184,7 +1189,7 @@ arrows(
   bcs_df_east[,"chill25"], # y 25
   mg_df_east[,"muSpMean"],
   bcs_df_east[,"chill75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -1192,7 +1197,7 @@ arrows(
   bcs_df_east[,"betaChillSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bcs_df_east[,"betaChillSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -1208,11 +1213,11 @@ arrows(
   bcs_df_west[,"betaChillSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bcs_df_west[,"betaChillSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 mtext(side = 3, text = "C:N, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(muChillSp[,1])){
-  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
@@ -1250,7 +1255,7 @@ arrows(
   bps_df_east[,"photo25"], # y 25
   mg_df_east[,"muSpMean"],
   bps_df_east[,"photo75"],
-  length = 0, col= "maroon", lwd = 2
+  length = 0, col= "#218380", lwd = 2
 )
 
 arrows(
@@ -1258,7 +1263,7 @@ arrows(
   bps_df_east[,"betaPhotoSpMean"], # y 25
   mg_df_east[,"trait75"], # x mean
   bps_df_east[,"betaPhotoSpMean"],
-  length = 0, col = "maroon", lwd = 2
+  length = 0, col = "#218380", lwd = 2
 )
 
 arrows(
@@ -1274,12 +1279,12 @@ arrows(
   bps_df_west[,"betaPhotoSpMean"], # y 25
   mg_df_west[,"trait75"], # x mean
   bps_df_west[,"betaPhotoSpMean"],
-  length = 0, col = "darkslategray4", lwd = 2
+  length = 0, col = "#8f2d56", lwd = 2
 )
 
 mtext(side = 3, text = "C:N, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
-  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("darkslategray4", 0.015))
+  abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
 }
 abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
