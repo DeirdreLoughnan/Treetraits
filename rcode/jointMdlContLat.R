@@ -49,15 +49,33 @@ df.wchill <- merge(df, df.chill, by =c("population","chill"))
 df.wchill <- df.wchill[, c("population", "chill","force","photo","lab2", "bb","species", "treatment","Chill_portions","Utah_Model")]
 
 # mergeing the my data with DF
-pheno <- rbind.fill(dl.wchill, df.wchill)
-pheno$force.n <- pheno$force
-pheno$force.n[pheno$force.n == "HF"] <- "1"
-pheno$force.n[pheno$force.n == "LF"] <- "0"
+ pheno <- rbind.fill(dl.wchill, df.wchill)
+ pheno$force.n <- pheno$force
+# pheno$force.n[pheno$force.n == "HF"] <- "1"
+# pheno$force.n[pheno$force.n == "LF"] <- "0"
+# pheno$force.n <- as.numeric(pheno$force.n)
+
+pheno$force.n[pheno$force.n == "HF" & pheno$population == "mp"] <- "15"
+pheno$force.n[pheno$force.n == "HF" & pheno$population == "sm"] <- "15"
+pheno$force.n[pheno$force.n == "LF" & pheno$population == "mp"] <- "10"
+pheno$force.n[pheno$force.n == "LF" & pheno$population == "sm"] <- "10"
+
+# (8*20+16*10)/24 #13.33
+# (8*15+16*5)/24 #8.33
+
+pheno$force.n[pheno$force.n == "HF" & pheno$population == "HF"] <- "13.33"
+pheno$force.n[pheno$force.n == "HF" & pheno$population == "SH"] <- "13.33"
+pheno$force.n[pheno$force.n == "LF" & pheno$population == "HF"] <- "8.33"
+pheno$force.n[pheno$force.n == "LF" & pheno$population == "SH"] <- "8.33"
 pheno$force.n <- as.numeric(pheno$force.n)
+# pheno$photo.n <- pheno$photo
+# pheno$photo.n[pheno$photo.n == "HP"] <- "1"
+# pheno$photo.n[pheno$photo.n == "LP"] <- "0"
+# pheno$photo.n <- as.numeric(pheno$photo.n)
 
 pheno$photo.n <- pheno$photo
-pheno$photo.n[pheno$photo.n == "HP"] <- "1"
-pheno$photo.n[pheno$photo.n == "LP"] <- "0"
+pheno$photo.n[pheno$photo.n == "HP"] <- "12"
+pheno$photo.n[pheno$photo.n == "LP"] <- "8"
 pheno$photo.n <- as.numeric(pheno$photo.n)
 
 pheno$transect <- pheno$population
@@ -154,8 +172,8 @@ mdl <- stan("stan/heightDummyInt.stan",
 
 save(mdl, file="output/heightDummyInt.Rdata")
 
-ssm <- as.shinystan(mdl)
-launch_shinystan(ssm)
+# ssm <- as.shinystan(mdl)
+# launch_shinystan(ssm)
 
 sumer <- summary(mdl)$summary
 
@@ -339,7 +357,7 @@ mdl <- stan("stan/cnDummyInt.stan",
 
 save(mdl, file="output/cnDummyInt.Rdata")
 
-ssm <- as.shinystan(mdl)
-launch_shinystan(ssm)
+# ssm <- as.shinystan(mdl)
+# launch_shinystan(ssm)
 
 sumer <- summary(mdl)$summary
