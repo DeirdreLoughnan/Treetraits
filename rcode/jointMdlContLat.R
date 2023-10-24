@@ -196,23 +196,23 @@ lma.data <- list(yTraiti = leafMA$lma,
   photoi = pheno.t$photo.z2
 )
 
-mdl <- stan("stan/lmaDummyIntNewPrior.stan",
+mdlLMA <- stan("stan/lmaDummyInt.stan",
   data = lma.data,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-sumer <- data.frame(summary(mdl)$summary[c("muSp","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sumer <- data.frame(summary(mdlLMA)$summary[c("muSp","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
 bMuSp <- summary(mdl)$summary[grep("b_muSp\\["),c("mean","2.5%","25%","50%", "75%","97.5%")]
 
-save(mdl, file="output/lmaDummyInt.Rdata")
+save(mdlLMA, file="output/lmaDummyInt.Rdata")
 
 
 # what if we just ran a simple linear model?
-require(lme4)
-simpLin <- lmer(lma ~ transect + transect*latitude + (1|species), leafMA)
-summary(simpLin)
+# require(lme4)
+# simpLin <- lmer(lma ~ transect + transect*latitude + (1|species), leafMA)
+# summary(simpLin)
 
 # Random effects:
 #   Groups   Name        Variance  Std.Dev.
@@ -227,11 +227,13 @@ summary(simpLin)
 # latitude           -0.0016195  0.0002748  -5.894
 # transect1:latitude  0.0050203  0.0006139   8.177
 
-mdlTrt <- stan("stan/justDummyIntTrt.stan",
+mdl <- stan("stan/justDummyIntTrt.stan",
   data = lma.data,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
+
+save(mdl, file="output/lmaDummyInt.Rdata")
 
 sumerTrt <- summary(mdlTrt)$summary
 
@@ -332,8 +334,10 @@ save(mdl, file="output/ssdDummyInt.Rdata")
 ######################################################################
 # 5. carbon to nitrogen ratio
 carbNit <- trtPheno[complete.cases(trtPheno$C.N),]
+carbNit$cn.z2 <- (carbNit$C.N-mean(carbNit$C.N,na.rm=TRUE))/(sd(carbNit$C.N,na.rm=TRUE)*2)
+carbNit$cn.port <- (carbNit$C.N/100)
 
-cn.data <- list(yTraiti = carbNit$C.N, 
+cn.data <- list(yTraiti = carbNit$cn.port, 
   N = nrow(carbNit),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(carbNit$species)),
@@ -351,13 +355,83 @@ cn.data <- list(yTraiti = carbNit$C.N,
 mdl <- stan("stan/cnDummyInt.stan",
   data = cn.data,
   iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat"),
-  control = list(adapt_delta = 0.99, max_treedepth =12)
+  include = FALSE, pars = c("y_hat")
+  #,control = list(adapt_delta = 0.99, max_treedepth =12)
 )
 
 save(mdl, file="output/cnDummyInt.Rdata")
 
-# ssm <- as.shinystan(mdl)
-# launch_shinystan(ssm)
+load("output/cnDummyInt.Rdata")
+ ssm <- as.shinystan(mdl)
+ launch_shinystan(ssm)
 
 sumer <- summary(mdl)$summary
+
+ModelFit <- rstan::extract(mdl)
+
+muSp <- data.frame(ModelFit$b_muSp)
+muSpMean <- colMeans(muSp)
+
+betaForceSp <- data.frame(ModelFit$betaForceSp)
+betaForceSpMean <- colMeans(betaForceSp)
+
+quantile2575 <- function(x){
+  returnQuanilte <- quantile(x, prob = c(0.25, 0.75))
+  return(returnQuanilte)
+}
+
+bf_quan <- apply(betaForceSp, 2, quantile2575) 
+mu_quan <- apply(muSp, 2, quantile2575)
+
+bfs <- rbind(betaForceSpMean, bf_quan)
+bfs_t <- t(bfs)
+bfs_df <- data.frame(bfs_t)
+colnames(bfs_df)[colnames(bfs_df) == "X25."] <- "force25"
+colnames(bfs_df)[colnames(bfs_df) == "X75."] <- "force75"
+bfs_df$species <- specieslist
+
+mg<- rbind(muSpMean, mu_quan)
+mg_t <- t(mg)
+mg_df <- data.frame(mg_t)
+colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
+colnames(mg_df)[colnames(mg_df) == "X75."] <- "trait75"
+mg_df$species <- specieslist
+
+muForceSp <- data.frame(ModelFit$muForceSp)
+muForceSpMean <- colMeans(muForceSp)
+
+betaTraitxForce <- data.frame(ModelFit$betaTraitxForce)
+betaTraitxForceMean <- colMeans(betaTraitxForce)
+
+# mg_df_east <- mg_df[mg_df$species %in% eastSp, ]
+# mg_df_west <- mg_df[mg_df$species %in% westSp, ]
+# 
+# bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
+# bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
+
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+# 3 columns, mean, quantile
+# min and max defined by quantiles
+arrows(
+  mg_df[,"muSpMean"], # x mean
+  bfs_df[,"force25"], # y 25
+  mg_df[,"muSpMean"],
+  bfs_df[,"force75"],
+  length = 0, col= "#218380", lwd = 2
+)
+
+arrows(
+  mg_df[,"trait25"], # x mean
+  bfs_df[,"betaForceSpMean"], # y 25
+  mg_df[,"trait75"], # x mean
+  bfs_df[,"betaForceSpMean"],
+  length = 0, col = "#218380", lwd = 2
+)
+
+
+mtext(side = 3, text = "C:N, Forcing", adj = 0, cex = 1.25)
+for(j in 1:length(muForceSp[,1])){
+  abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+}
+abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+
