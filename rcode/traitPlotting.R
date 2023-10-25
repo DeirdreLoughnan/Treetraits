@@ -26,8 +26,8 @@ spInfo <- read.csv("input/species_list.csv")
 pheno <- read.csv("input/phenoData.csv")
 trtPheno <- read.csv("input/trtData.csv")
 
-load("output/heightDummyInt.Rdata")
-#sumerht <- summary(mdl)$summary
+load("output/heightDummyIntGrand.Rdata")
+sumerht <- summary(mdl)$summary
 mdlHt <- mdl
 postHt <- rstan::extract(mdlHt)
 
@@ -122,20 +122,20 @@ legend("topright",legend = c(expression("Height"),
   lty = "solid", lwd = 7, cex= 1.5, bty = "n")
 
 ##########################################################################
-ggplot() + 
-  stat_eye(data = longPhotoSiteInter, aes(x = site, y = photoSiteInter, fill = "cyan4"), .width = c(.90, .5), cex = 0.75, position = position_dodge(0.9)) +
-  theme_classic() +   
-  theme(legend.position = "none") +
-  labs( x = "Site", y = "Photoperiod response", main = NA)+
-  scale_fill_manual(values = c("cyan4"))
-
-+
-  geom_text(aes(label=species),hjust= 0.5, vjust= 1.5, show.legend = F) +
-  geom_errorbar(aes(ymin= bChill25, ymax = bChill75), width= 0) +
-  geom_errorbar(aes(xmin= bPhoto25, xmax = bPhoto75), width= 0) +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"),
-    legend.key=element_rect(fill="white")) # removed grey boxes around legends
+# ggplot() + 
+#   stat_eye(data = longPhotoSiteInter, aes(x = site, y = photoSiteInter, fill = "cyan4"), .width = c(.90, .5), cex = 0.75, position = position_dodge(0.9)) +
+#   theme_classic() +   
+#   theme(legend.position = "none") +
+#   labs( x = "Site", y = "Photoperiod response", main = NA)+
+#   scale_fill_manual(values = c("cyan4"))
+# 
+# +
+#   geom_text(aes(label=species),hjust= 0.5, vjust= 1.5, show.legend = F) +
+#   geom_errorbar(aes(ymin= bChill25, ymax = bChill75), width= 0) +
+#   geom_errorbar(aes(xmin= bPhoto25, xmax = bPhoto75), width= 0) +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#     legend.key=element_rect(fill="white")) # removed grey boxes around legends
 
 
 # How do transect effects differ?
@@ -146,20 +146,20 @@ a_trtSpHt = mean((sumHt[grep("mu_grand_sp", rownames(sumHt)), 1]))
 b_tranEHt = sumHt[grep("b_tranE", rownames(sumHt)), 1]
 b_tranlatHt = sumHt[grep("b_tranlat", rownames(sumHt)), 1]
 
-b_phenoSpHt = (sum[grep("alphaPhenoSp", rownames(sum)), 1])
-a_phenoSpHt = (sum[grep("muPhenoSp", rownames(sum)), 1])
+b_phenoSpHt = (sumHt[grep("alphaPhenoSp", rownames(sumHt)), 1])
+a_phenoSpHt = (sumHt[grep("muPhenoSp", rownames(sumHt)), 1])
 
-a_chillSpHt = sum[grep("alphaChillSp", rownames(sum)), 1]
-a_forceSpHt = sum[grep("alphaForceSp", rownames(sum)), 1]
-a_photoSpHt = sum[grep("alphaPhotoSp", rownames(sum)), 1]
+a_chillSpHt = sumHt[grep("alphaChillSp", rownames(sumHt)), 1]
+a_forceSpHt = sumHt[grep("alphaForceSp", rownames(sumHt)), 1]
+a_photoSpHt = sumHt[grep("alphaPhotoSp", rownames(sumHt)), 1]
 
-b_photoSpHt = sum[grep("muPhotoSp", rownames(sum)), 1]
-b_forceSpHt = sum[grep("muForceSp", rownames(sum)), 1]
-b_chillSpHt = sum[grep("muChillSp", rownames(sum)), 1]
+b_photoSpHt = sumHt[grep("muPhotoSp", rownames(sumHt)), 1]
+b_forceSpHt = sumHt[grep("muForceSp", rownames(sumHt)), 1]
+b_chillSpHt = sumHt[grep("muChillSp", rownames(sumHt)), 1]
 
-bTrtChillHt = sum[grep("betaTraitxChill", rownames(sum)), 1]
-bTrtForceHt = sum[grep("betaTraitxForce", rownames(sum)), 1]
-bTrtPhotoHt = sum[grep("betaTraitxPhoto", rownames(sum)), 1]
+bTrtChillHt = sumHt[grep("betaTraitxChill", rownames(sumHt)), 1]
+bTrtForceHt = sumHt[grep("betaTraitxForce", rownames(sumHt)), 1]
+bTrtPhotoHt = sumHt[grep("betaTraitxPhoto", rownames(sumHt)), 1]
 
 a_trtsp5Ht <- vector()
 for(i in 1:ncol(postHt$b_muSp)){
