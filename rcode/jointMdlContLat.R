@@ -138,6 +138,7 @@ trtPheno$latitude[trtPheno$latitude == "SH"] <- 45.9310
 trtPheno$latitude[trtPheno$latitude == "WM"] <- 44.92466697
 
 trtPheno$latitude <- as.numeric(trtPheno$latitude)
+trtPheno$latZ <- (trtPheno$latitude-mean(trtPheno$latitude,na.rm=TRUE))/(sd(trtPheno$latitude,na.rm=TRUE)*2)
 
 specieslist <- sort(unique(trtPheno$species))
 sitelist <- sort(unique(trtPheno$transect))
@@ -170,8 +171,14 @@ mdl <- stan("stan/heightDummyInt.stan",
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdl, file="output/heightDummyInt.Rdata")
+mdlHt <- stan("stan/heightDummyIntGrand.stan",
+  data = ht.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+)
 
+save(mdl, file="output/heightDummyInt.Rdata")
+save(mdl, file="output/heightDummyIntGrand.Rdata")
 # ssm <- as.shinystan(mdl)
 # launch_shinystan(ssm)
 
@@ -196,18 +203,47 @@ lma.data <- list(yTraiti = leafMA$lma,
   photoi = pheno.t$photo.z2
 )
 
+lmaZ.data <- list(yTraiti = leafMA$lma, 
+  N = nrow(leafMA),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(leafMA$species)),
+  n_tran = length(unique(leafMA$transect)),
+  #lati = leafMA$latitude,
+  lati = leafMA$latZ,
+  tranE = as.numeric(leafMA$transect),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z2,
+  chilli = pheno.t$chillport.z2,
+  photoi = pheno.t$photo.z2
+)
+
 mdlLMA <- stan("stan/lmaDummyInt.stan",
   data = lma.data,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-sumer <- data.frame(summary(mdlLMA)$summary[c("muSp","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
+  data = lma.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+)
+
+mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
+  data = lmaZ.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+)
+
+sumer <- data.frame(summary(mdlLMA)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
 bMuSp <- summary(mdl)$summary[grep("b_muSp\\["),c("mean","2.5%","25%","50%", "75%","97.5%")]
 
-save(mdlLMA, file="output/lmaDummyInt.Rdata")
+save(mdlLMA, file="output/lmaDummyIntGrandZ.Rdata")
 
+sum <-summary(mdlLMA)$summary
 
 # what if we just ran a simple linear model?
 # require(lme4)
@@ -227,29 +263,29 @@ save(mdlLMA, file="output/lmaDummyInt.Rdata")
 # latitude           -0.0016195  0.0002748  -5.894
 # transect1:latitude  0.0050203  0.0006139   8.177
 
-mdl <- stan("stan/justDummyIntTrt.stan",
-  data = lma.data,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
-)
-
-save(mdl, file="output/lmaDummyInt.Rdata")
-
-sumerTrt <- summary(mdlTrt)$summary
-
-require(rstanarm)
-
-armMdl <- stan_lmer(lma ~ transect + transect*latitude + (1|species), data = leafMA)
-
-sumerTrt <- summary(armMdl)
-head(sumerTrt)
-
-bMuSpArm <- data.frame(sumerTrt)
-bMuSpArm <- bMuSpArm[5:51,]
-
-pdf("figures/rstanArmBmuSpesti.pdf")
-hist(bMuSpArm$mean)
-dev.off()
+# mdl <- stan("stan/justDummyIntTrt.stan",
+#   data = lma.data,
+#   iter = 4000, warmup = 3000, chains=4,
+#   include = FALSE, pars = c("y_hat")
+# )
+# 
+# save(mdl, file="output/lmaDummyInt.Rdata")
+# 
+sumerTrt <- summary(mdl)$summary
+# 
+# require(rstanarm)
+# 
+# armMdl <- stan_lmer(lma ~ transect + transect*latitude + (1|species), data = leafMA)
+# 
+# sumerTrt <- summary(armMdl)
+# head(sumerTrt)
+# 
+# bMuSpArm <- data.frame(sumerTrt)
+# bMuSpArm <- bMuSpArm[5:51,]
+# 
+# pdf("figures/rstanArmBmuSpesti.pdf")
+# hist(bMuSpArm$mean)
+# dev.off()
 # mean         mcse           sd          10%          50%          90% n_eff      Rhat
 # (Intercept)                    0.115272446 2.550651e-04 0.0141260473  0.097737604  0.115132643  0.133558985  3067 0.9993842
 # transect1                     -0.198132898 5.700797e-04 0.0263763362 -0.231257354 -0.198734331 -0.163476550  2141 1.0010089
@@ -302,7 +338,13 @@ mdl <- stan("stan/diamDummyInt.stan",
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdl, file="output/dbhDummyInt.Rdata")
+mdlDBH <- stan("stan/diamDummyIntGrand.stan",
+  data = dbh.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+)
+
+save(mdlDBH, file="output/dbhDummyIntGrand.Rdata")
 
 ######################################################################
 # 4. stem specific density
@@ -329,7 +371,12 @@ mdl <- stan("stan/ssdDummyInt.stan",
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdl, file="output/ssdDummyInt.Rdata")
+mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
+  data = ssd.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+)
+save(mdlSSD, file="output/ssdDummyIntGrand.Rdata")
 
 ######################################################################
 # 5. carbon to nitrogen ratio
@@ -359,7 +406,14 @@ mdl <- stan("stan/cnDummyInt.stan",
   #,control = list(adapt_delta = 0.99, max_treedepth =12)
 )
 
-save(mdl, file="output/cnDummyInt.Rdata")
+mdlCN <- stan("stan/cnDummyIntGrand.stan",
+  data = cn.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+  #,control = list(adapt_delta = 0.99, max_treedepth =12)
+)
+
+save(mdlCN, file="output/cnDummyIntGrand.Rdata")
 
 load("output/cnDummyInt.Rdata")
  ssm <- as.shinystan(mdl)
