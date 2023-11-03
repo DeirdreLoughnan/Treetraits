@@ -273,9 +273,15 @@ hist(trt.dat$mu.grand.sp)
 #### Pheno data generation ##############################
 #All Negative betatraitX Values 
 #--------------------------------------
+<<<<<<< HEAD
 Nspp <- 3 # same number of species as teh traits section fo the model 
 #Number of repeat observations per species
 nRep <- 5
+=======
+Nspp <- 40 # same number of species as teh traits section fo the model 
+#Number of repeat observations per species
+nRep <- 15
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
 nChill <- 2 # sm high low, mp high low
 nPhoto <- 2 # high low
 nForce <- 2 # high amd low
@@ -400,8 +406,13 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
 
 #png("figures/simPosteriorHist.png")
 # priors
+<<<<<<< HEAD
 mu.grand <- 0.5 # the grand mean of the lma model
 sigma.species <- 1 # we want to keep the variaiton across spp. high
+=======
+mu.grand <- 0.05 # the grand mean of the lma model
+sigma.species <- 0.1 # we want to keep the variaiton across spp. high
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
 sigma.transect <- 5
 b.tranE <- 0
 b.tranlat <- 0
@@ -420,11 +431,16 @@ muChillSp <- -15
 sigmaChillSp <- 5
 sigmapheno_y <- 10
 
+<<<<<<< HEAD
+=======
+postLMA <- rstan::extract(mdlLMA)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
 ##Compare results to simulated values
 par(mfrow=c(1,1))
 ##Compare results to simulated values
 
 hist(postLMA$mu_grand, main = paste("muPhenoSp is " , signif(mu.grand,3), sep = ""), xlim = c(0,0.05), col=rgb(0,0,1,1/4))
+<<<<<<< HEAD
 hist(rnorm(1000, 0.5,0.1), col=rgb(1,0,1,1/4))
 abline(v = mu.grand, col="red", lwd=3, lty=2)
 
@@ -446,6 +462,29 @@ abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
 
 hist(postLMA$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""), col=rgb(0,0,1,1/4),  xlim = c(-5,5))
 hist(rnorm(1000, 0,3), col=rgb(1,0,1,1/4), add = T)
+=======
+hist(rnorm(1000, 0.05,0.02), col=rgb(1,0,1,1/4), add = T)
+abline(v = mu.grand, col="red", lwd=3, lty=2)
+
+hist(postLMA$b_tranE, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""),  xlim = c(-5,5),col=rgb(0,0,1,1/4))
+hist(rnorm(1000, 0,.1), col=rgb(1,0,1,1/4), add = T)
+abline(v = b.tranE, col="red", lwd=3, lty=2)
+
+hist(postLMA$b_tranlat, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""), col=rgb(0,0,1,1/4))
+hist(rnorm(1000, 0,0.1), col=rgb(1,0,1,1/4), add = T)
+abline(v = b.tranlat, col="red", lwd=3, lty=2)
+
+hist(postLMA$sigma_sp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""), col=rgb(0,0,1,1/4), xlim =c(-0.10,0.1))
+hist(rnorm(1000, 0.01,0.05), col=rgb(1,0,1,1/4), add = T)
+abline(v = sigma.species, col="red", lwd=3, lty=2)
+
+hist(postLMA$sigma_traity, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""), col=rgb(0,0,1,1/4),  xlim = c(-0.5,0.5))
+hist(rnorm(1000, 0.05,0.1), col=rgb(1,0,1,1/4), add = T)
+abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
+
+hist(postLMA$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""), col=rgb(0,0,1,1/4),  xlim = c(-50,50))
+hist(rnorm(1000, 0,5), col=rgb(1,0,1,1/4), add = T)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
 abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
 #
 
@@ -472,7 +511,11 @@ hist(rnorm(1000, 10,1), col=rgb(1,0,1,1/4), add = T)
 abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
 
 hist(postLMA$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""), col=rgb(0,0,1,1/4),  xlim = c(-5,5))
+<<<<<<< HEAD
 hist(rnorm(1000, 0,3), col=rgb(1,0,1,1/4), add = T)
+=======
+hist(rnorm(1000, 0,2), col=rgb(1,0,1,1/4), add = T)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
 abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
 #
 hist(postLMA$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""), col=rgb(0,0,1,1/4),  xlim = c(-5,5))
@@ -504,8 +547,21 @@ abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
   #------------------------------------------------------------
   
   #Number fo prior check itterations 
+<<<<<<< HEAD
   nRepPrior <- 3
+=======
+  nRepPrior <- 100
+
+  Nrep <- 15 # rep per trait
+  nRep <- 15
+  Npop <- 8
+  Ntran <- 2
+  Nspp <- 40 # number of species 
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
   
+  Ntrt <- Nspp * Npop * Nrep# total number of traits observations
+  Ntrt
+
   # ppc for traits portion
   priorCheckTrait <- data.frame(matrix(NA, Ntrt*nRepPrior, 3))
   names(priorCheckTrait) <- c("simRep", "rep", "species")
@@ -519,6 +575,23 @@ abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
   priorCheckTrait$dumE[priorCheckTrait$dumE == "1"] <- 0
   priorCheckTrait$dumE[priorCheckTrait$dumE == "2"] <- 1
   priorCheckTrait$dumE <- as.numeric(priorCheckTrait$dumE)
+<<<<<<< HEAD
+=======
+  
+  # Add latitudes
+  priorCheckTrait$lat <- priorCheckTrait$pop
+  priorCheckTrait$lat[priorCheckTrait$lat == "1"] <- 54.7824
+  priorCheckTrait$lat[priorCheckTrait$lat == "2"] <- 52.1417
+  priorCheckTrait$lat[priorCheckTrait$lat == "3"] <- 50.8837
+  priorCheckTrait$lat[priorCheckTrait$lat == "4"] <- 49.0646
+  priorCheckTrait$lat[priorCheckTrait$lat == "5"] <- 45.9310
+  priorCheckTrait$lat[priorCheckTrait$lat == "6"] <- 44.92466697
+  priorCheckTrait$lat[priorCheckTrait$lat == "7"] <- 43.99837498
+  priorCheckTrait$lat[priorCheckTrait$lat == "8"] <- 42.5315
+  priorCheckTrait$lat <- as.numeric(priorCheckTrait$lat)
+
+  priorCheckTrait$lat.z <- (priorCheckTrait$lat-mean(priorCheckTrait$lat,na.rm=TRUE))/(sd(priorCheckTrait$lat,na.rm=TRUE)*2)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
   
   # Add latitudes
   priorCheckTrait$lat <- priorCheckTrait$pop
@@ -539,6 +612,13 @@ abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
   specieslist <- sort(unique(trtPheno$species))
   sitelist <- sort(unique(trtPheno$transect))
 
+  mu.grand <- 0.5 # the grand mean of the lma model
+  sigma.species <- 1 # we want to keep the variation across spp. high
+  sigma.transect <- 5
+  b.tranE <- 0
+  b.tranlat <- 0
+  sigma_traity <- 5
+  
 lma.data <- list(yTraiti = leafMass$lma,
                    N = nrow(leafMass),
                    n_spec = length(specieslist),
@@ -546,6 +626,7 @@ lma.data <- list(yTraiti = leafMass$lma,
                    n_tran = length(unique(leafMass$transect)),
                    tranE = leafMass$transect,
                    lati <- leafMass$latitude,
+<<<<<<< HEAD
                    prior_mu_grand_mu = 0.5,
                    prior_mu_grand_sigma = 0.1, 
                    prior_sigma_sp_mu = 1,
@@ -556,6 +637,18 @@ lma.data <- list(yTraiti = leafMass$lma,
                    prior_b_tranE_sigma = 5,
                    prior_sigma_traity_mu = 5,
                    prior_sigma_traity_sigma = 2,
+=======
+                   prior_mu_grand_mu = 0.05,
+                   prior_mu_grand_sigma = 0.001, 
+                   prior_sigma_sp_mu = 0.01,
+                   prior_sigma_sp_sigma = 0.005,
+                   prior_b_tranlat_mu = 0,
+                   prior_b_tranlat_sigma = 0.1,
+                   prior_b_tranE_mu = 0,
+                   prior_b_tranE_sigma = 0.1,
+                   prior_sigma_traity_mu = 0.05,
+                   prior_sigma_traity_sigma = 0.1,
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
                    ## Phenology
                    Nph = nrow(pheno.t),
                    phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -580,11 +673,11 @@ lma.data <- list(yTraiti = leafMass$lma,
                    prior_sigmaPhenoSp_mu = 5, 
                    prior_sigmaPhenoSp_sigma = 5, 
                    prior_betaTraitxForce_mu = 0,
-                   prior_betaTraitxForce_sigma = 1,
+                   prior_betaTraitxForce_sigma = 3,
                    prior_betaTraitxChill_mu = 0,
-                   prior_betaTraitxChill_sigma = 1,
+                   prior_betaTraitxChill_sigma = 3,
                    prior_betaTraitxPhoto_mu = 0,
-                   prior_betaTraitxPhoto_sigma = 1,
+                   prior_betaTraitxPhoto_sigma = 3,
                    prior_sigmaphenoy_mu = 10,
                    prior_sigmaphenoy_sigma = 5 
 ) 
@@ -598,14 +691,24 @@ lma.data <- list(yTraiti = leafMass$lma,
     b_tranlat <- rtruncnorm(1, a = 0, mean = lma.data$prior_b_tranlat_mu, sd = lma.data$prior_b_tranlat_sigma)
     b.tranE <- rtruncnorm(1, a = 0, mean = lma.data$prior_b_tranE_mu, sd = lma.data$prior_b_tranE_sigma)
   
+<<<<<<< HEAD
     muSp <- rnorm(Nspp, 0, sigma.species)
+=======
+    muSp <- rnorm(Nspp, 0, lma.data$prior_sigma_sp_mu)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
     priorCheckTrait$muSp[priorCheckTrait$simRep == ir] <- rep(muSp, each = nRep)
     
     #general varience
     priorCheckTrait$sigma_traity[priorCheckTrait$simRep == ir] <- rtruncnorm(lma.data$prior_sigma_traity_mu,  a = 0, lma.data$prior_sigma_traity_sigma)
+<<<<<<< HEAD
     priorCheckTrait$e[priorCheckTrait$simRep == ir] <- rnorm(Ntrt, 0, sigma_traity)
     
     priorCheckTrait$yTraiti <- muGrand + priorCheckTrait$muSp + b_tranlat *(priorCheckTrait$lat * priorCheckTrait$tran) + b.tranE * priorCheckTrait$tran + priorCheckTrait$e
+=======
+    priorCheckTrait$e[priorCheckTrait$simRep == ir] <- rnorm(Ntrt, 0, lma.data$prior_sigma_traity_mu)
+    
+    priorCheckTrait$yTraiti <- muGrand + priorCheckTrait$muSp + b_tranlat *(priorCheckTrait$lat.z * priorCheckTrait$tran) + b.tranE * priorCheckTrait$tran + priorCheckTrait$e
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
   }# end simulating new priors, from here vectorize code
   
   #Final values
@@ -614,7 +717,11 @@ lma.data <- list(yTraiti = leafMass$lma,
   priorCheckTrait$Traiti <- priorCheckTrait[complete.cases(priorCheckTrait$yTraiti),]
   
   #png("figures/density_Trait_Prior_joint_lma.png")
+<<<<<<< HEAD
   plot(density(priorCheckTraityTraiti$yTraiti))
+=======
+  plot(density(priorCheckTrait$yTraiti))
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
   #dev.off()
   
   #png("figures/GrandSp_PlotPrior_joint_lma.png")
@@ -631,6 +738,7 @@ lma.data <- list(yTraiti = leafMass$lma,
   #####################################################################################
   # Chilling - included as chill portions: 8 values between 45 and 80
   # Forcing included as continuous and accounting for thermoperiodicity
+<<<<<<< HEAD
   
   Nspp <- 3 # same number of species as teh traits section fo the model 
   #Number of repeat observations per species
@@ -645,8 +753,25 @@ lma.data <- list(yTraiti = leafMass$lma,
   
   priorCheckPheno <- data.frame(matrix(NA, Nph*nRepPrior, 3))
   names(priorCheckPheno) <- c("simRep","rep","species")
+=======
   
+  n_spec <- 40 # same number of species as teh traits section fo the model 
+  #Number of repeat observations per species
+  nRep <- 5
+  nChill <- 2 # sm high low, mp high low
+  nPhoto <- 2 # high low
+  nForce <- 2 # high amd low
+  nPop <- 2
+  nSites <- 4
+  #Overall number of pbservations (rows)
+  Nph <- n_spec * nRep*nChill * nForce * nPhoto * nPop*nSites # for phenology model
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
+  
+  
+  priorCheckPheno <- data.frame(matrix(NA, Nph*nRepPrior, 2))
+  names(priorCheckPheno) <- c("simRep","rep")
   priorCheckPheno$simRep <- rep(1:nRepPrior, each = Nph)
+<<<<<<< HEAD
   priorCheckPheno$rep <- rep(c(1:nRep), times = n_spec * nChill * nForce * nPhoto * nPop*nRepPrior)
   priorCheckPheno$species <- rep(rep(c(1:n_spec), each = nRep*nChill * nForce * nPhoto * nPop), times = nRepPrior)
   priorCheckPheno$pop <- rep(1:nPop, each = nRep*nChill * nForce * nPhoto,  times = n_spec*nRepPrior)
@@ -655,11 +780,29 @@ lma.data <- list(yTraiti = leafMass$lma,
   muGrandSp <- muGrand + muSp
   #Make this the name of the full vector of sla per species values - alphaTraitSp 
   priorCheckPheno$alphaTraitSp <-  rep(rep(muGrandSp, each = nRep*nChill * nForce * nPhoto * nPop), times = nRepPrior)
+=======
+  priorCheckPheno$rep <- c(1:nRep)
+  priorCheckPheno$species <- rep(c(1:n_spec), each = nRep, times = nRepPrior)
+  priorCheckPheno$sites <- rep(1:nSites, each = n_spec * nRep*nChill * nForce * nPhoto * nPop, times = nRepPrior)
+  priorCheckPheno$tran <- rep(1:nPop, each = n_spec * nRep*nChill * nForce * nPhoto * nSites, times = nRepPrior)
+  
+  # priorCheckPheno$simRep <- rep(1:nRepPrior, each = Nph)
+  # priorCheckPheno$rep <- rep(c(1:nRep), times = n_spec * nChill * nForce * nPhoto * nPop*nSites*nRepPrior)
+  # priorCheckPheno$species <- rep(rep(c(1:n_spec), each = nRep*nChill * nForce * nPhoto * nPop*nSites), times = nRepPrior)
+  # priorCheckPheno$pop <- rep(1:nPop, each = nRep*nChill * nForce * nPhoto*nSites,  times = n_spec*nRepPrior)
+  # priorCheckPheno$sites <- rep(1:nsites, each = nRep*nChill * nForce * nPhoto * nPop,  times = n_spec*nRepPrior)
+  # 
+  #Simulate SLA data per species
+  muGrandSp <- muGrand + muSp
+  #Make this the name of the full vector of sla per species values - alphaTraitSp 
+  priorCheckPheno$alphaTraitSp <-  rep(rep(muGrandSp, each = nRep*nChill * nForce * nPhoto * nPop*nSites), times = nRepPrior)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
   
   
   forceTrt <- c("LF", "HF")
   priorCheckPheno$force <- rep(forceTrt, each =  nRep, times = n_spec * nChill *  nPhoto * nPop *nRepPrior)
   priorCheckPheno$forcei <- priorCheckPheno$force
+<<<<<<< HEAD
   priorCheckPheno$forcei[which(priorCheckPheno$force == "HF" & priorCheckPheno$pop == "1")] <- "15"
   priorCheckPheno$forcei[which(priorCheckPheno$force == "HF" & priorCheckPheno$pop == "2")] <- "13.33"
   priorCheckPheno$forcei[which(priorCheckPheno$force == "LF" & priorCheckPheno$pop == "1")] <- "10"
@@ -683,8 +826,26 @@ lma.data <- list(yTraiti = leafMass$lma,
   dayleng <- c("12","8")
   priorCheckPheno$photolvl <- rep(c(1:dayleng), each = nRep*Nspp)
   priorCheckPheno$photolvl <- as.numeric(priorCheckPheno$photolvl)
+=======
+  priorCheckPheno$forcei[which(priorCheckPheno$force == "HF" & priorCheckPheno$tran == "1")] <- "15"
+  priorCheckPheno$forcei[which(priorCheckPheno$force == "HF" & priorCheckPheno$tran == "2")] <- "13.33"
+  priorCheckPheno$forcei[which(priorCheckPheno$force == "LF" & priorCheckPheno$tran == "1")] <- "10"
+  priorCheckPheno$forcei[which(priorCheckPheno$force == "LF" & priorCheckPheno$tran == "2")] <- "8.33"
+  priorCheckPheno$forcei <- as.numeric(priorCheckPheno$forcei)
+>>>>>>> a5d2900787f433c45f57aa1bc3ee8da66bc58bf0
   
+  photoTrt <- c("LP", "HP")
+  priorCheckPheno$photo <- rep(photoTrt, each =  nRep, times = n_spec * nChill *  nForce * nPop *nRepPrior)
+  priorCheckPheno$photoi <- priorCheckPheno$photo
+  priorCheckPheno$photoi[which(priorCheckPheno$photo == "HP" )] <- "12"
+  priorCheckPheno$photoi[which(priorCheckPheno$photo == "LP")] <- "8"
+  priorCheckPheno$photoi <- as.numeric(priorCheckPheno$photoi)
   
+  chillTrt <- c("LC", "HC")
+  chilling <- c( 55.09418, 75.32653, 54.95115, 74.67285, 56.62430, 82.06390,44.63226, 79.17552)
+  priorCheckPheno$chill <- rep(chillTrt, each =  nRep, times = n_spec * nPhoto *  nForce  *nRepPrior)
+  priorCheckPheno$chilli <- as.numeric(rep(chilling, each =  n_spec * nRep*nChill * nForce * nPhoto, times = nRepPrior))
+
   for (ir in 1:nRepPrior){
     # Parameter Values
    # ir <- 1
@@ -692,7 +853,7 @@ lma.data <- list(yTraiti = leafMass$lma,
     sigmaPhenoSp <- rtruncnorm(1, a = 0, mean = lma.data$prior_sigmaPhenoSp_mu, sd = lma.data$prior_sigmaPhenoSp_sigma)
     muPhenoSp <- rnorm(1, lma.data$prior_muPhenoSp_mu, lma.data$prior_muPhenoSp_sigma)
     alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
-    priorCheckPheno$alphaPhenoSp[priorCheckPheno$simRep == ir] <- rep(alphaPhenoSp, each = nRep)
+    priorCheckPheno$alphaPhenoSp[priorCheckPheno$sim == ir] <- rep(alphaPhenoSp, each = nRep)
     
     #Cue effects
     priorCheckPheno$betaTraitxForce[priorCheckPheno$simRep == ir] <- rnorm(1,lma.data$prior_betaTraitxForce_mu,lma.data$prior_betaTraitxForce_sigma)

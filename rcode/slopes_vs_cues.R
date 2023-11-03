@@ -158,11 +158,11 @@ files
 
 ################################
 # Height
-load("output/heightDummyInt.Rdata")
+load("output/heightDummyIntGrand.Rdata")
 
 ModelFit <- rstan::extract(mdl)
 
-muSp <- data.frame(ModelFit$b_muSp)
+muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
@@ -207,7 +207,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 # col1.sp <- c( rgb(149 / 255, 216 / 255, 64 / 255, alpha = 0.2), rgb(72 / 255, 38 / 255, 119 / 255, alpha = 0.14))
 # col2.sp <- c( rgb(149 / 255, 216 / 255, 64 / 255, alpha = 0.5), rgb(72 / 255, 38 / 255, 119 / 255, alpha = 0.4))
 
-#pdf(paste("figures/force", files[i], ".pdf", sep = ""))
+
 pdf("figures/cuetraitLatiMdl.pdf", height = 16, width = 12)
 par(mar = c(5, 5, 2, 2), mfrow = c(5,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
@@ -394,11 +394,11 @@ my.label <- paste("c", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 ##########################################
 # LMA
-load("output/lmaDummyInt.Rdata")
+load("output/lmaDummyIntGrand.Rdata")
 
-ModelFit <- rstan::extract(mdl)
+ModelFit <- rstan::extract(mdlLMA)
 
-muSp <- data.frame(ModelFit$b_muSp)
+muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
@@ -620,11 +620,11 @@ put.fig.letter(label=my.label, location= "topleft", font=2)
 #dev.off()
 ####################
 # DBH
-load("output/dbhDummyInt.Rdata")
+load("output/dbhDummyIntGrand.Rdata")
 
-ModelFit <- rstan::extract(mdl)
+ModelFit <- rstan::extract(mdlDBH)
 
-muSp <- data.frame(ModelFit$b_muSp)
+muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
@@ -845,11 +845,11 @@ put.fig.letter(label=my.label, location= "topleft", font=2)
 ###############################################################
 ####################
 # SSD
-load("output/ssdDummyInt.Rdata")
+load("output/ssdDummyIntGrand.Rdata")
 
-ModelFit <- rstan::extract(mdl)
+ModelFit <- rstan::extract(mdlSSD)
 
-muSp <- data.frame(ModelFit$b_muSp)
+muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
@@ -1069,11 +1069,11 @@ my.label <- paste("f", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 #########################################################################################################################
 # C:N
-load("output/cnDummyInt.Rdata")
+load("output/cnDummyIntGrand.Rdata")
 
 ModelFit <- rstan::extract(mdl)
 
-muSp <- data.frame(ModelFit$b_muSp)
+muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
