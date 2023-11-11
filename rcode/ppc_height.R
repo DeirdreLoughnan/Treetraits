@@ -473,7 +473,11 @@ htData <- trtPheno[complete.cases(trtPheno$ht),]
 y <- htData$ht
 yrep <-  post$y_hat
 
-ppc_dens_overlay(y, yrep[1:50,])
+pdf("figures/ht_ypred_trt.pdf")
+ppc_dens_overlay(y, yrep[1:100,])
+dev.off()
+
+hteast <- subset(htData, transect == "1")
 
 pheno.term$species <- tolower(pheno.term$species)
 
@@ -495,6 +499,8 @@ muGrandSp <- sumer[grep("mu_grand_sp\\[", rownames(sumer))]
 betaForceSp <- sumer[grep("betaForceSp\\[", rownames(sumer))]
 betaChillSp <- sumer[grep("betaChillSp\\[", rownames(sumer))]
 betaPhotoSp <- sumer[grep("betaPhotoSp\\[", rownames(sumer))]
+
+y_hat <- sumer[grep("y_hat\\[", rownames(sumer))]
 
 plot(muSp ~ muGrandSp)
 plot(alphaForceSp ~ betaForceSp)
@@ -523,3 +529,4 @@ plot(htSplvl$bb ~ betaPhotoSp)
 plot(htSplvl$bb ~ alphaPhenoSp)
 plot(htSplvl$bb ~ muGrandSp)
 
+plot(htData$ht ~ y_hat)

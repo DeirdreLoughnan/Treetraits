@@ -118,8 +118,7 @@ trtPheno$transect[trtPheno$transect == "WM"] <- "1"
 
 #########################################################
 
-fit <- readRDS("output/dbh_stanfit.RDS")
-
+fit <- readRDS("dbh_stanfit.RDS")
 
 post<- rstan::extract(fit)
 
@@ -281,33 +280,33 @@ pheno.dat$chilli <- rnorm(Nph, 1, 1) #more chilling
 # Parameter Values
 #Species means
 sigmaPhenoSp <- 10
-muPhenoSp <- 40
+muPhenoSp <- 25
 alphaPhenoSp <- rnorm(n_spec, muPhenoSp, sigmaPhenoSp)
 pheno.dat$alphaPhenoSp <- rep(alphaPhenoSp, each = nRep)
 
 #Cue effects
-betaTraitxForce <- -0.5 
-betaTraitxPhoto <- -0.2
-betaTraitxChill <- -0.4
+betaTraitxForce <- 0 
+betaTraitxPhoto <- 0
+betaTraitxChill <- 0
 
 #Species level slopes sans trait data
-muForceSp <- -0.4
-sigmaForceSp <- 4
+muForceSp <- -10
+sigmaForceSp <- 5
 alphaForceSp <- rnorm(n_spec, muForceSp, sigmaForceSp)
 pheno.dat$alphaForceSp <- rep(alphaForceSp, each = nRep)
 
-muPhotoSp <- -0.05
-sigmaPhotoSp <- 4
+muPhotoSp <- -2
+sigmaPhotoSp <- 5
 alphaPhotoSp <- rnorm(n_spec, muPhotoSp, sigmaPhotoSp)
 pheno.dat$alphaPhotoSp <- rep(alphaPhotoSp, each = nRep)
 
-muChillSp <- -0.6
-sigmaChillSp <- 4
+muChillSp <- -15
+sigmaChillSp <- 10
 alphaChillSp <- rnorm(n_spec, muChillSp, sigmaChillSp)
 pheno.dat$alphaChillSp <- rep(alphaChillSp, each = nRep)
 
 #general varience
-sigmapheno_y <- 5
+sigmapheno_y <- 10
 pheno.dat$e <- rnorm(Nph, 0, sigmapheno_y)
 
 #slopes for each cue, combining trait and non-trait aspect of the slope.
@@ -362,41 +361,43 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
 
 #######################################################
 
-# png("figures/simPosteriorHist.png")
-# par(mfrow=c(3,4))
-#Compare results to simulated values
-# hist(postdbh$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
-# abline(v = muPhenoSp, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
-# abline(v = muForceSp, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
-# abline(v = muChillSp, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
-# abline(v = muPhotoSp, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
-# abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
-# 
-# plot(density(postdbh$betaTraitxForce), main = paste("betaTraitxForce is " , signif(betaTraitxForcePos,3), sep = ""))
-# abline(v = betaTraitxForcePos, col="red", lwd=3, lty=2)
-# # 
-# hist(postdbh$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
-# abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
-# # 
-# hist(postdbh$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
-# abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""))
-# abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
-# abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
-# 
-# hist(postdbh$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""))
-# abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
+png("figures/simPosteriorHist_DBH.png")
+par(mfrow=c(3,4))
+##Compare results to simulated values
+hist(postdbh$muPhenoSp, main = paste("muPhenoSp is " , signif(muPhenoSp,3), sep = ""), xlim = c(0,100))
+abline(v = muPhenoSp, col="red", lwd=3, lty=2)
+
+hist(postdbh$muForceSp, main = paste("muForceSp is " , signif(muForceSp,3), sep = ""))
+abline(v = muForceSp, col="red", lwd=3, lty=2)
+
+hist(postdbh$muChillSp, main = paste("muChillSp is " , signif(muChillSp,3), sep = ""))
+abline(v = muChillSp, col="red", lwd=3, lty=2)
+
+hist(postdbh$muPhotoSp, main = paste("muPhotoSp is " , signif(muPhotoSp,3), sep = ""))
+abline(v = muPhotoSp, col="red", lwd=3, lty=2)
+
+hist(postdbh$sigmapheno_y, main = paste("sigmapheno_y is " , signif(sigmapheno_y,3), sep = ""))
+abline(v = sigmapheno_y, col="red", lwd=3, lty=2)
+
+hist(postdbh$betaTraitxForce, main = paste("betaTraitxForce is " , signif(betaTraitxForce,3), sep = ""))
+abline(v = betaTraitxForce, col="red", lwd=3, lty=2)
+#
+hist(postdbh$betaTraitxChill, main = paste("betaTraitxChill is " , signif(betaTraitxChill,3), sep = ""))
+abline(v = betaTraitxChill, col="red", lwd=3, lty=2)
+#
+hist(postdbh$betaTraitxPhoto, main = paste("betaTraitxPhoto is " , signif(betaTraitxPhoto,3), sep = ""))
+abline(v = betaTraitxPhoto, col="red", lwd=3, lty=2)
+
+hist(postdbh$sigmaChillSp, main = paste("sigmaChillSp is " , signif(sigmaChillSp,3), sep = ""))
+abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
+
+hist(postdbh$sigmaForceSp, main = paste("sigmaForceSp is " , signif(sigmaForceSp,3), sep = ""))
+abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
+
+hist(postdbh$sigmaPhotoSp, main = paste("sigmaPhotoSp is " , signif(sigmaPhotoSp,3), sep = ""))
+abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
+
+dev.off()
 
 # png("figures/simulatedPairs.png")
 #pairs(mdl.dbh, pars = c("muForceSp", "muChillSp", "muPhotoSp", "betaTraitxForce", "betaTraitxChill", "betaTraitxPhoto", "lp__")) 
@@ -445,17 +446,17 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
                    forcei = pheno.t$force.z2,
                    chilli = pheno.t$chillport.z2,
                    photoi = pheno.t$photo.z2,
-                   prior_muForceSp_mu = -15,
+                   prior_muForceSp_mu = -10,
                    prior_muForceSp_sigma = 10, #wider
                    prior_muChillSp_mu = -15,
                    prior_muChillSp_sigma = 10,#wider
-                   prior_muPhotoSp_mu = -15,
+                   prior_muPhotoSp_mu = -2,
                    prior_muPhotoSp_sigma = 10,#wider
-                   prior_muPhenoSp_mu = 40,
+                   prior_muPhenoSp_mu = 25,
                    prior_muPhenoSp_sigma = 10,#wider
                    prior_sigmaForceSp_mu = 5,
                    prior_sigmaForceSp_sigma = 5,
-                   prior_sigmaChillSp_mu = 5,#wider
+                   prior_sigmaChillSp_mu = 10,#wider
                    prior_sigmaChillSp_sigma = 5, #wider
                    prior_sigmaPhotoSp_mu = 5,
                    prior_sigmaPhotoSp_sigma = 5,
@@ -470,7 +471,6 @@ plot(pheno.dat$alphaPhotoSp ~ pheno.dat$alphaTraitSp)
                    prior_sigmaphenoy_mu = 10,
                    prior_sigmaphenoy_sigma = 5 #wider
   )
-  
   
   for (ir in 1:nRepPrior){
     # Parameter Values
