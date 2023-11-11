@@ -117,7 +117,7 @@ rownames(meanCN) = c(
   "Trait-photoperiod effect"
 )
 
-pdf(file.path( "figures/traitMuPlot.pdf"), width = 7, height = 5)
+pdf(file.path( "figures/traitMuPlot.pdf"), width = 12, height = 3)
 par(mfrow = c(1,5), mar = c(5, 8, 2, 1))
 # Upper panel: bud burst
 plot(seq(-10,  10,length.out = nrow(meanHt)), 1:nrow(meanHt),
