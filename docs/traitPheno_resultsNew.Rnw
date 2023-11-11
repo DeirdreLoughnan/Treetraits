@@ -1,0 +1,197 @@
+%%% start preambling . . .  %%%
+\documentclass{article}
+
+% required 
+\usepackage[hyphens]{url} % this wraps my URL versus letting it spill across the page, a bad habit LaTeX has
+
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{textcomp}%amoung other things, it allows degrees C to be added
+\usepackage{float}
+\usepackage[utf8]{inputenc} % allow funny letters in citaions 
+\usepackage[nottoc]{tocbibind} %should add Refences to the table of contents?
+\usepackage{amsmath} % making nice equations 
+\usepackage{listings} % add in stan code
+\usepackage{xcolor}
+\usepackage{capt-of}%alows me to set a caption for code in appendix 
+\usepackage[export]{adjustbox} % adding a box around a map
+\usepackage{lineno}
+\linenumbers
+% recommended! Uncomment the below line and change the path for your computer!
+% \SweaveOpts{prefix.string=/Users/Lizzie/Documents/git/teaching/demoSweave/Fig.s/demoFig, eps=FALSE} 
+%put your Fig.s in one place! Also, note that here 'Fig.s' is the folder and 'demoFig' is what each 
+% Fig. produced will be titled plus its number or label (e.g., demoFig-nqpbetter.pdf')
+% make your captioning look better
+\usepackage[small]{caption}
+
+\usepackage{xr-hyper} %refer to Fig.s in another document
+\usepackage{hyperref}
+
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+
+% optional: muck with spacing
+\topmargin -1.5cm        
+\oddsidemargin 0.5cm   
+\evensidemargin 0.5cm  % same as oddsidemargin but for left-hand pages
+\textwidth 15.59cm
+\textheight 21.94cm 
+% \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
+\parindent 0pt		  % sets leading space for paragraphs
+% optional: cute, fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LO]{Draft early 2022}
+\fancyhead[RO]{Temporal Ecology Lab}
+% more optionals! %
+
+%\graphicspath{ {./DoseResponse_WriteupImages/} }% tell latex where to find photos 
+\externaldocument[supp-]{Traitors_Manuscript_supp}
+
+%%% end preambling. %%%
+
+\begin{document}
+
+%\renewcommand{\refname}{\CHead{}}%not sure what this was supposed to do 
+\renewcommand{\bibname}{References}%names reference list 
+
+\SweaveOpts{concordance=TRUE} % For RStudio hiccups
+
+
+\title{Phenological cue use varies with functional traits in North American woody plan communities}
+\date{\today}
+\author{Deirdre Loughnan$^1$, Faith A M Jones$^1$, and E M Wolkovich$^1$}
+\maketitle 
+
+$^1$ Department of Forest and Conservation, Faculty of Forestry, University of British Columbia, 2424 Main Mall
+Vancouver, BC Canada V6T 1Z4. \\
+
+
+Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
+
+\section*{Research questions}
+
+\begin{enumerate}
+\item How do budburst cues relate to functional traits in temperate woody species?
+\item Do phenological cue-trait relationships change across transects? Populations?
+\item How do shrub and tree species differ in their cue-trait relationships?
+\end{enumerate}
+
+\section*{Materials and Methods}
+These plots and tables are using the model output from the model with a dummy variable for transect (east = 1) and an interaction between transect and latitude. Latitude is included as a continuous variable, but based on the prior predictive checks, I decided to z-scored it. 
+
+\section*{Results}
+
+\begin{enumerate}
+%brief summary of what we did
+\item Our study = one of the first to combine trait data with data of phenological cue response for the same individuals
+\begin{enumerate}
+\item Our data spans plant communities in eastern and western deciduous forests of North America
+\item Samples collected from multiple populations---model accounts for variation across populations and transects
+\item Includes woody tree and shrub species = different growth strategies---should vary in suites of traits
+\item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing
+\end{enumerate}
+
+% 1. What other functional traits relate to budburst phenology in temperate woody species?
+\item Found only two of our five traits were related to budburst phenology
+\begin{enumerate}
+\item Of the 5 commonly measured traits we measured---only height and DBH correlated with budburst cues
+\item Height and DBH: short trees had stronger forcing responses, but weaker responses to photoperiod
+\item Other three traits, LMA, SSD, C:N = no relationship to chilling, forcing, or photoperiod. 
+\item Exemplified by the nonexistent effect of traits on phenology---estimate of our betaTraitxCue parameter is fully informed by prior not the data
+\end{enumerate}
+\end{enumerate}
+
+\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/cuetraitLatiZMdl.pdf}
+\caption{Relationship between species traits and cue responses, for height (a-c), leaf mass area (d-f), diameter at breast height (g-i), stem specific density (j-l), and the carbon to nitrogen ratio (m-o). Point colours representing different species groups, tree species are depicted in maroon and shrub species in teal.}
+\label{fig:traitSlopes}
+\end{figure}
+\newpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/betaTraitxCue.pdf}
+\caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on bubdurst timing.}
+\label{fig:betaTraitxCue}
+\end{figure}
+\newpage
+
+
+<<label= tableht, echo=FALSE , results= tex >>=
+getwd()
+require(xtable)
+require(rstan)
+
+load("..//output/heightDummyIntGrandZ.Rdata")
+
+sumer <- data.frame(summary(mdlHt)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+
+print(xtable(sumer, caption="Summary of a joint model for height", label = "tableht"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+
+@
+
+
+<<label= tableht, echo=FALSE , results= tex >>=
+
+require(xtable)
+require(rstan)
+
+load("..//output/lmaDummyIntGrandZ.Rdata")
+
+sumer <- data.frame(summary(mdlLMA)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+
+print(xtable(sumer, caption="Summary of a joint model for leaf mass area", label = "tablelma"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+
+@
+\newpage
+
+<<label= tableht, echo=FALSE , results= tex >>=
+
+require(xtable)
+require(rstan)
+
+load("..//output/dbhDummyIntGrandZ.Rdata")
+
+sumer <- data.frame(summary(mdlDBH)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+
+print(xtable(sumer, caption="Summary of a joint model for diameter at base height", label = "tabledbh"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+
+@
+
+
+<<label= tableht, echo=FALSE , results= tex >>=
+
+require(xtable)
+require(rstan)
+
+load("..//output/ssdDummyIntGrandZ.Rdata")
+
+sumer <- data.frame(summary(mdlSSD)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+
+print(xtable(sumer, caption="Summary of a joint model for stem specific density", label = "tablessd"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+
+@
+\newpage
+
+<<label= tableht, echo=FALSE , results= tex >>=
+
+require(xtable)
+require(rstan)
+
+load("..//output/cnDummyIntGrandZ.Rdata")
+
+sumer <- data.frame(summary(mdlCN)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+
+print(xtable(sumer, caption="Summary of a joint model for carbon to nitrogen ratio", label = "tablecn"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+
+@
+\newpage
+
+\end{document}
