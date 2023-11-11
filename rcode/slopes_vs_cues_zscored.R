@@ -1282,7 +1282,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-mtext(side = 3, text = "SSD, Photoperiod", adj = 0, cex = 1.25)
+mtext(side = 3, text = "C:N, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(muPhotoSp[,1])){
   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
 }
