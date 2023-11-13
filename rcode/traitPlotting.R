@@ -574,7 +574,87 @@ for(sp in 1:47){
   }
 }
 
+############ SHRUB VS TREE ##############################
+spInfo <- read.csv("..//input/species_ring.csv")
+spInfo <- spInfo[, 1:5]
+head(spInfo)
 
+## Start with height:
+fit <- rstan::extract(mdlHt)
+
+chillB <- data.frame(fit$betaChillSp)
+
+colnames(chillB) <- sort(spInfo$species.name)
+
+longChill <- melt(chillB)
+colnames(longChill) <- c("species.name","betaCueSp")
+longChill$cue <- "Chilling"
+
+head(longChill)
+
+###################################################################
+# Photoperiod:
+photoB <- data.frame(fit$betaPhotoSp)
+
+colnames(photoB) <- sort(spInfo$species.name)
+
+longPhoto <- melt(photoB)
+colnames(longPhoto) <- c("species.name","betaCueSp")
+longPhoto$cue <- "Photoperiod"
+head(longPhoto)
+
+###################################################################
+# Forcing:
+forceB <- data.frame(fit$betaForceSp)
+
+colnames(forceB) <- sort(spInfo$species.name)
+
+longForce <- melt(forceB)
+colnames(longForce) <- c("species.name","betaCueSp")
+longForce$cue <- "Forcing"
+
+head(longForce)
+
+longCues <- rbind(longForce, longChill, longPhoto)
+longCues <- merge(longCues, spInfo, by = "species.name")
+
+ring <- subset(longCues, ringType == "Ring ")
+diffuse <- subset(longCues, ringType == "Diffuse")
+difRing <- subset(longCues, ringType == "Diffuse/semi-ring")
+semi <- subset(longCues, ringType == "Semi-ring" )
+
+longCuesRing <- subset(longCues, ringType != "")
+
+ggplot() + 
+  geom_violin(data = longCuesRing, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
+  facet_grid(col = vars(ringType), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
+   ylab ("Cue response") + xlab ("Cue")
+
+
+ggplot() + 
+  geom_violin(data = longCues, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
+  facet_grid(col = vars(type), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
+  ylab ("Cue response") + xlab ("Cue")
+
+  facet_grid(col = vars(type))
+              
+              +
+  stat_pointinterval(data = longest, aes(x = as.factor(cue), y = value, fill = factor(site, level = siteOrder)), .width = c(.5, .95) ,position = position_dodge(0.9)) +
+  theme_classic() +   
+  theme(legend.position = "right", 
+        legend.title = element_blank(),
+        axis.text.x = element_text( size= 16),
+        axis.text.y = element_text( size= 12),
+        axis.title=element_text(size = 14)) +
+  labs( x = "Treatment cue", y = "Cue response (days/standardized unit)", main = NA) +
+  scale_color_manual(values = c("Smithers" = "deepskyblue3",
+                                "Manning Park" = "palegreen4", 
+                                "St. Hippolyte"="darkorchid3", 
+                                "Harvard Forest" = "tomato3"))+
+  scale_fill_manual(values = c("Smithers" = "deepskyblue3",
+                               "Manning Park" = "palegreen4", 
+                               "St. Hippolyte"="darkorchid3", 
+                               "Harvard Forest" = "tomato3"))
 # # Compare the musites for the 4 sites
 # muSiteHtW <- data.frame(postHtW$musite)
 # site <- c("Alex Fraser", "Kamloops","Manning Park", "Smithers")

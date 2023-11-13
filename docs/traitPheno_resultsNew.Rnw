@@ -75,19 +75,19 @@ Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
 \section*{Research questions}
 
 \begin{enumerate}
-\item How do budburst cues relate to functional traits in temperate woody species?
 \item Do phenological cue-trait relationships change across transects? Populations?
+\item How do budburst cues relate to functional traits in temperate woody species?
 \item How do shrub and tree species differ in their cue-trait relationships?
 \end{enumerate}
 
 \section*{Materials and Methods}
-These plots and tables are using the model output from the model with a dummy variable for transect (east = 1) and an interaction between transect and latitude. Latitude is included as a continuous variable, but based on the prior predictive checks, I decided to z-scored it. 
+These plots and tables are using the model output from the model with a dummy variable for transect (east = 1) and an interaction between transect and latitude. Latitude is included as a continuous variable, but based on the prior predictive checks, I decided to z-scored it. 90\% UI given.
 
 \section*{Results}
 
 \begin{enumerate}
 %brief summary of what we did
-\item Our study = one of the first to combine trait data with data of phenological cue response for the same individuals
+\item Our study = one of the first to combine trait data with data of phenological cue response for the same individuals and species assemblages across latitudes
 \begin{enumerate}
 \item Our data spans plant communities in eastern and western deciduous forests of North America
 \item Samples collected from multiple populations---model accounts for variation across populations and transects
@@ -99,13 +99,36 @@ These plots and tables are using the model output from the model with a dummy va
 \item Found only two of our five traits were related to budburst phenology
 \begin{enumerate}
 \item Of the 5 commonly measured traits we measured---only height and DBH correlated with budburst cues
-\item Height and DBH: short trees had stronger forcing responses, but weaker responses to photoperiod
-\item Other three traits, LMA, SSD, C:N = no relationship to chilling, forcing, or photoperiod. 
-\item Exemplified by the nonexistent effect of traits on phenology---estimate of our betaTraitxCue parameter is fully informed by prior not the data
+\item Height and DBH: short trees had stronger forcing responses (Fig. \ref{fig:traitSlopes} a and g), but weaker responses to photoperiod (Fig. \ref{fig:traitSlopes} c and i))
+\item Other three traits, LMA, SSD, C:N = no relationship to chilling, forcing, or photoperiod (Fig. \ref{fig:traitSlopes}). 
+\item Exemplified by the nonexistent effect of traits on phenology---estimate of our betaTraitxCue parameter is fully informed by prior not the data (Fig. \ref{fig:betaTraitxCue})
 \end{enumerate}
 \end{enumerate}
 
-\newpage
+\clearpage
+
+\section*{Figures}
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/transectIntrxn.pdf}
+\caption{We only found biogeographic differences for four of our functional traits, with the direction of the relationship varying across traits. Both height a. height and b. diamter at base height showed strong interactions between latitude and trait values, while c. leaf mass area has the weakest response, and d. stem specific density, and e. carbin:nitrogen moderate interactive effects.}
+\label{fig:tranIny}
+\end{figure}
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/traitMuPlot.pdf}
+\caption{Muplots of each trait model.}
+\label{fig:muPlot}
+\end{figure}
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/betaTraitxCue.pdf}
+\caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on bubdurst timing.}
+\label{fig:betaTraitxCue}
+\end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
@@ -115,21 +138,15 @@ These plots and tables are using the model output from the model with a dummy va
 \end{figure}
 \newpage
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//figures/betaTraitxCue.pdf}
-\caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on bubdurst timing.}
-\label{fig:betaTraitxCue}
-\end{figure}
-\newpage
+\clearpage
 
-
+\section*{Tables}
 <<label= tableht, echo=FALSE , results= tex >>=
 getwd()
 require(xtable)
 require(rstan)
 
-load("..//output/heightDummyIntGrandZ.Rdata")
+load("..//output/mdl2023/z-scored/heightDummyIntGrandZ.Rdata")
 
 sumer <- data.frame(summary(mdlHt)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -143,7 +160,7 @@ print(xtable(sumer, caption="Summary of a joint model for height", label = "tabl
 require(xtable)
 require(rstan)
 
-load("..//output/lmaDummyIntGrandZ.Rdata")
+load("..//output/mdl2023/z-scored/lmaDummyIntGrandZ.Rdata")
 
 sumer <- data.frame(summary(mdlLMA)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -157,7 +174,7 @@ print(xtable(sumer, caption="Summary of a joint model for leaf mass area", label
 require(xtable)
 require(rstan)
 
-load("..//output/dbhDummyIntGrandZ.Rdata")
+load("..//output/mdl2023/z-scored/dbhDummyIntGrandZ.Rdata")
 
 sumer <- data.frame(summary(mdlDBH)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -171,7 +188,7 @@ print(xtable(sumer, caption="Summary of a joint model for diameter at base heigh
 require(xtable)
 require(rstan)
 
-load("..//output/ssdDummyIntGrandZ.Rdata")
+load("..//output/mdl2023/z-scored/ssdDummyIntGrandZ.Rdata")
 
 sumer <- data.frame(summary(mdlSSD)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -185,7 +202,7 @@ print(xtable(sumer, caption="Summary of a joint model for stem specific density"
 require(xtable)
 require(rstan)
 
-load("..//output/cnDummyIntGrandZ.Rdata")
+load("..//output/mdl2023/z-scored/cnDummyIntGrandZ.Rdata")
 
 sumer <- data.frame(summary(mdlCN)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
