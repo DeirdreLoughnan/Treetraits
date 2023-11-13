@@ -23,28 +23,26 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
 }
 
 spInfo <- read.csv("input/species_list.csv")
-pheno <- read.csv("input/phenoData.csv")
-trtPheno <- read.csv("input/trtData.csv")
+# pheno <- read.csv("input/phenoData.csv")
+# trtPheno <- read.csv("input/trtData.csv")
+trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
-load("output/heightDummyIntGrand.Rdata")
-sumerht <- summary(mdl)$summary
-mdlHt <- mdl
+load("output/mdl2023/z-scored/heightDummyIntGrandZ.Rdata")
+sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaDummyInt.Rdata")
+load("output/mdl2023/z-scored/lmaDummyIntGrandZ.Rdata")
 postLMA <- rstan::extract(mdlLMA)
+sm.sum <- summary(mdlLMA)$summary
 
-load("output/dbhDummyInt.Rdata")
-mdlDBH <- mdl
+load("output/mdl2023/z-scored/dbhDummyIntGrandZ.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
-load("output/ssdDummyInt.Rdata")
-mdlCN <- mdl
-postCN <- rstan::extract(mdlCN)
+load("output/mdl2023/z-scored/ssdDummyIntGrandZ.Rdata")
+postCN <- rstan::extract(mdlSSD)
 
-load("output/cnDummyInt.Rdata")
-mdlSSD <- mdl
-postSSD <- rstan::extract(mdlSSD)
+load("output/mdl2023/z-scored/cnDummyIntGrandZ.Rdata")
+postSSD <- rstan::extract(mdlCN)
 
 ###### Compare the spp and site level effects across traits ###########
 # col1 <- rgb(204 / 255, 102 / 255, 119 / 255, alpha = 0.8)
@@ -56,8 +54,7 @@ col3.sp <-c( rgb(9/ 255, 168 / 255, 82 / 255, alpha = 0.6)) # green
 col4.sp <- c( rgb(34 / 255, 166 / 255, 167 / 255, alpha = 0.5)) # blue
 col5.sp <- c( rgb(141 / 255, 34 / 255, 171 / 255, alpha = 0.5)) # purple
 
-
-hist(postHt$b_tranE, col = col2.sp, main = "")
+hist(postHt$b_tranE, col = col2.sp, main = "", xlim = c(-10,10))
 hist(postDBH$b_tranE, col = col3.sp, main = "", add = T)
 hist(postCN$b_tranE, col = col1.sp, main = "", add = T)
 hist(postLMA$b_tranE, col = col4.sp, main = "", add = T)
@@ -98,7 +95,6 @@ hist(postLMA$betaTraitxForce, col = col3.sp, main = "", add = T)
 hist(postSSD$betaTraitxForce, col = col5.sp, main = "", add = T)
 hist(postHt$betaTraitxForce, col = col1.sp, main = "", add = T)
 hist(postDBH$betaTraitxForce, col = col4.sp, main = "", add = T)
-
 
 hist(postCN$betaTraitxChill, col = col2.sp, main = "", xlim = c(-5,5), ylim = c(0,1200))
 hist(postLMA$betaTraitxChill, col = col3.sp, main = "", add = T)
@@ -162,8 +158,8 @@ bTrtForceHt = sumHt[grep("betaTraitxForce", rownames(sumHt)), 1]
 bTrtPhotoHt = sumHt[grep("betaTraitxPhoto", rownames(sumHt)), 1]
 
 a_trtsp5Ht <- vector()
-for(i in 1:ncol(postHt$b_muSp)){
-  quantU <- round(quantile(postHt$b_muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+for(i in 1:ncol(postHt$muSp)){  
+  quantU <- round(quantile(postHt$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
   a_trtsp5Ht <- rbind(a_trtsp5Ht, quantU)
 }
 colnames(a_trtsp5Ht) <- c("Int5","Int95","Int25","Int75")
@@ -172,22 +168,22 @@ b_tran5Ht <- round(quantile(postHt$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
 b_tranlat5Ht <- round(quantile(postHt$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
 
 b_chill5 <- vector()
-for(i in 1:ncol(post$b_chill1)){
-  quantU <- round(quantile(post$b_chill1[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+for(i in 1:ncol(postHt$betaChillSp)){
+  quantU <- round(quantile(postHt$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
   b_chill5 <- rbind(b_chill5, quantU)
 }
 colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
 
 b_force5 <- vector()
-for(i in 1:ncol(post$b_warm)){
-  quantU <- round(quantile(post$b_warm[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+for(i in 1:ncol(postHt$betaForceSp)){
+  quantU <- round(quantile(postHt$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
   b_force5 <- rbind(b_force5, quantU)
 }
 colnames(b_force5) <- c("force5","force95","force25","force75")
 
 b_photo5 <- vector()
-for(i in 1:ncol(post$b_photo)){
-  quantU <- round(quantile(post$b_photo[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+for(i in 1:ncol(postHt$betaPhotoSp)){
+  quantU <- round(quantile(postHt$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
   b_photo5 <- rbind(b_photo5, quantU)
 }
 colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
@@ -199,129 +195,361 @@ wData <- subset(trtPheno, transect == "0" )
 
 # Make the other parameters constant
 
-lati <- seq(42, 55, by = 0.5)
+lati <- seq(40, 60, by = 0.5)
+latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
 tranW <- 0
 tranE <- 1
 
 # plot first for west coast
-ht_w = a_trtSpHt + b_tranEHt * tranW + b_tranlatHt * (tranW*lati)
-ht_e = a_trtSpHt + b_tranEHt * tranE + b_tranlatHt * (tranE*lati)
+ht_w = a_trtSpHt + b_tranEHt * tranW + b_tranlatHt * (tranW*latZ)
+ht_e = a_trtSpHt + b_tranEHt * tranE + b_tranlatHt * (tranE*latZ)
 
-par(mfrow = c(1,2))
-plot(0, type = "n", xlim = c(40,60), ylim = c(0,10),
+par(mfrow = c(1,1))
+plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
   xlab = "Latitude",
   ylab = "Trait")
 abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(ht_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 
-##dbh
-sumDBH <- summary(mdlDBH)$summary
-b_trtSpDBH = (sumDBH [grep("b_muSp", rownames(sumDBH )), 1])
-a_trtSpDBH = (sumDBH [grep("muSp", rownames(sumDBH )), 1]); a_trtSpDBH <- a_trtSpDBH[48]
-b_tranEDBH = sumDBH [grep("b_tranE", rownames(sumDBH )), 1]
-b_tranlatDBH = sumDBH [grep("b_tranlat", rownames(sumDBH )), 1]
-
-DBH_w = a_trtSpDBH + b_tranEDBH * tranW + b_tranlatDBH * (tranW*lati)
-DBH_e = a_trtSpDBH + b_tranEDBH * tranE + b_tranlatDBH * (tranE*lati)
-
-
-abline(lm(DBH_w ~ lati), col = "goldenrod", lwd = 3, lty = 2)
-abline(lm(DBH_e ~lati), col = "goldenrod", lwd = 3, lty = 1)
-
-legend("topright",legend = c(expression("Eastern"),
-  expression("Western"),
-  "Height",
-  "DBH"),
-  col = c("black", "black","darkslategray","goldenrod"),
-  lty = c(1,2, 1,1), bty = "n", lwd =2)
-
+################################################
 ##lma
+
 sumLMA <- summary(mdlLMA)$summary
-b_trtSpLMA = (sumLMA [grep("b_muSp", rownames(sumLMA )), 1])
-a_trtSpLMA = (sumLMA [grep("muSp", rownames(sumLMA )), 1]); a_trtSpLMA <- a_trtSpLMA[48]
-b_tranELMA = sumLMA [grep("b_tranE", rownames(sumLMA )), 1]
-b_tranlatLMA = sumLMA [grep("b_tranlat", rownames(sumLMA )), 1]
+muGrand = (sumLMA[grep("mu_grand", rownames(sumLMA)), 1])
+b_trtSpLMA = (sumLMA[grep("b_muSp", rownames(sumLMA)), 1])
+a_trtSpLMA = mean((sumLMA[grep("mu_grand_sp", rownames(sumLMA)), 1]))
+b_tranELMA = sumLMA[grep("b_tranE", rownames(sumLMA)), 1]
+b_tranlatLMA = sumLMA[grep("b_tranlat", rownames(sumLMA)), 1]
 
-lma_w = a_trtSpLMA + b_tranELMA * tranW + b_tranlatLMA * (tranW*lati)
-lma_e = a_trtSpLMA + b_tranELMA * tranE + b_tranlatLMA * (tranE*lati)
+b_phenoSpLMA = (sumLMA[grep("alphaPhenoSp", rownames(sumLMA)), 1])
+a_phenoSpLMA = (sumLMA[grep("muPhenoSp", rownames(sumLMA)), 1])
+
+a_chillSpLMA = sumLMA[grep("alphaChillSp", rownames(sumLMA)), 1]
+a_forceSpLMA = sumLMA[grep("alphaForceSp", rownames(sumLMA)), 1]
+a_photoSpLMA = sumLMA[grep("alphaPhotoSp", rownames(sumLMA)), 1]
+
+b_photoSpLMA = sumLMA[grep("muPhotoSp", rownames(sumLMA)), 1]
+b_forceSpLMA = sumLMA[grep("muForceSp", rownames(sumLMA)), 1]
+b_chillSpLMA = sumLMA[grep("muChillSp", rownames(sumLMA)), 1]
+
+bTrtChillLMA = sumLMA[grep("betaTraitxChill", rownames(sumLMA)), 1]
+bTrtForceLMA = sumLMA[grep("betaTraitxForce", rownames(sumLMA)), 1]
+bTrtPhotoLMA = sumLMA[grep("betaTraitxPhoto", rownames(sumLMA)), 1]
+
+a_trtsp5LMA <- vector()
+for(i in 1:ncol(postLMA$muSp)){  
+  quantU <- round(quantile(postLMA$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  a_trtsp5LMA <- rbind(a_trtsp5LMA, quantU)
+}
+colnames(a_trtsp5LMA) <- c("Int5","Int95","Int25","Int75")
+
+b_tran5LMA <- round(quantile(postLMA$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
+b_tranlat5LMA <- round(quantile(postLMA$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
+
+b_chill5 <- vector()
+for(i in 1:ncol(postLMA$betaChillSp)){
+  quantU <- round(quantile(postLMA$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_chill5 <- rbind(b_chill5, quantU)
+}
+colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
+
+b_force5 <- vector()
+for(i in 1:ncol(postLMA$betaForceSp)){
+  quantU <- round(quantile(postLMA$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_force5 <- rbind(b_force5, quantU)
+}
+colnames(b_force5) <- c("force5","force95","force25","force75")
+
+b_photo5 <- vector()
+for(i in 1:ncol(postLMA$betaPhotoSp)){
+  quantU <- round(quantile(postLMA$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_photo5 <- rbind(b_photo5, quantU)
+}
+colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+# Make the other parameters constant
+
+# plot first for west coast
+LMA_w = a_trtSpLMA + b_tranELMA * tranW + b_tranlatLMA * (tranW*latZ)
+LMA_e = a_trtSpLMA + b_tranELMA * tranE + b_tranlatLMA * (tranE*latZ)
+
+par(mfrow = c(1,1))
+plot(0, type = "n", xlim = c(25,60), ylim = c(-1,1),
+     xlab = "Latitude",
+     ylab = "Trait")
+abline(lm(LMA_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
+abline(lm(LMA_e ~lati), col = "darkslategray", lwd = 3, lty =1)
+#############################################
+##dbh
+
+sumDBH <- summary(mdlDBH)$summary
+muGrand = (sumDBH[grep("mu_grand", rownames(sumDBH)), 1])
+b_trtSpDBH = (sumDBH[grep("b_muSp", rownames(sumDBH)), 1])
+a_trtSpDBH = mean((sumDBH[grep("mu_grand_sp", rownames(sumDBH)), 1]))
+b_tranEDBH = sumDBH[grep("b_tranE", rownames(sumDBH)), 1]
+b_tranlatDBH = sumDBH[grep("b_tranlat", rownames(sumDBH)), 1]
+
+b_phenoSpDBH = (sumDBH[grep("alphaPhenoSp", rownames(sumDBH)), 1])
+a_phenoSpDBH = (sumDBH[grep("muPhenoSp", rownames(sumDBH)), 1])
+
+a_chillSpDBH = sumDBH[grep("alphaChillSp", rownames(sumDBH)), 1]
+a_forceSpDBH = sumDBH[grep("alphaForceSp", rownames(sumDBH)), 1]
+a_photoSpDBH = sumDBH[grep("alphaPhotoSp", rownames(sumDBH)), 1]
+
+b_photoSpDBH = sumDBH[grep("muPhotoSp", rownames(sumDBH)), 1]
+b_forceSpDBH = sumDBH[grep("muForceSp", rownames(sumDBH)), 1]
+b_chillSpDBH = sumDBH[grep("muChillSp", rownames(sumDBH)), 1]
+
+bTrtChillDBH = sumDBH[grep("betaTraitxChill", rownames(sumDBH)), 1]
+bTrtForceDBH = sumDBH[grep("betaTraitxForce", rownames(sumDBH)), 1]
+bTrtPhotoDBH = sumDBH[grep("betaTraitxPhoto", rownames(sumDBH)), 1]
+
+a_trtsp5DBH <- vector()
+for(i in 1:ncol(postDBH$muSp)){  
+  quantU <- round(quantile(postDBH$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  a_trtsp5DBH <- rbind(a_trtsp5DBH, quantU)
+}
+colnames(a_trtsp5DBH) <- c("Int5","Int95","Int25","Int75")
+
+b_tran5DBH <- round(quantile(postDBH$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
+b_tranlat5DBH <- round(quantile(postDBH$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
+
+b_chill5 <- vector()
+for(i in 1:ncol(postDBH$betaChillSp)){
+  quantU <- round(quantile(postDBH$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_chill5 <- rbind(b_chill5, quantU)
+}
+colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
+
+b_force5 <- vector()
+for(i in 1:ncol(postDBH$betaForceSp)){
+  quantU <- round(quantile(postDBH$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_force5 <- rbind(b_force5, quantU)
+}
+colnames(b_force5) <- c("force5","force95","force25","force75")
+
+b_photo5 <- vector()
+for(i in 1:ncol(postDBH$betaPhotoSp)){
+  quantU <- round(quantile(postDBH$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_photo5 <- rbind(b_photo5, quantU)
+}
+colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+# Make the other parameters constant
+
+tranW <- 0
+tranE <- 1
+
+# plot first for west coast
+DBH_w = a_trtSpDBH + b_tranEDBH * tranW + b_tranlatDBH * (tranW*latZ)
+DBH_e = a_trtSpDBH + b_tranEDBH * tranE + b_tranlatDBH * (tranE*latZ)
+
+par(mfrow = c(1,1))
+plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
+     xlab = "Latitude",
+     ylab = "Trait")
+abline(lm(DBH_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
+abline(lm(DBH_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 
 
-plot(0, type = "n", xlim = c(40,60), ylim = c(0,1),
-  xlab = "Latitude",
-  ylab = "Trait")
-abline(lm(lma_w ~ lati), col = "darkred", lwd = 3, lty = 2)
-abline(lm(lma_e ~lati), col = "darkred", lwd = 3, lty = 1)
-
-
-# SSD
+#############################################
 sumSSD <- summary(mdlSSD)$summary
-b_trtSpSSD = (sumSSD [grep("b_muSp", rownames(sumSSD )), 1])
-a_trtSpSSD = (sumSSD [grep("muSp", rownames(sumSSD )), 1]); a_trtSpSSD <- a_trtSpSSD[48]
-b_tranESSD = sumSSD [grep("b_tranE", rownames(sumSSD )), 1]
-b_tranlatSSD = sumSSD [grep("b_tranlat", rownames(sumSSD )), 1]
+muGrand = (sumSSD[grep("mu_grand", rownames(sumSSD)), 1])
+b_trtSpSSD = (sumSSD[grep("b_muSp", rownames(sumSSD)), 1])
+a_trtSpSSD = mean((sumSSD[grep("mu_grand_sp", rownames(sumSSD)), 1]))
+b_tranESSD = sumSSD[grep("b_tranE", rownames(sumSSD)), 1]
+b_tranlatSSD = sumSSD[grep("b_tranlat", rownames(sumSSD)), 1]
 
-SSD_w = a_trtSpSSD + b_tranESSD * tranW + b_tranlatSSD * (tranW*lati)
-SSD_e = a_trtSpSSD + b_tranESSD * tranE + b_tranlatSSD * (tranE*lati)
+b_phenoSpSSD = (sumSSD[grep("alphaPhenoSp", rownames(sumSSD)), 1])
+a_phenoSpSSD = (sumSSD[grep("muPhenoSp", rownames(sumSSD)), 1])
+
+a_chillSpSSD = sumSSD[grep("alphaChillSp", rownames(sumSSD)), 1]
+a_forceSpSSD = sumSSD[grep("alphaForceSp", rownames(sumSSD)), 1]
+a_photoSpSSD = sumSSD[grep("alphaPhotoSp", rownames(sumSSD)), 1]
+
+b_photoSpSSD = sumSSD[grep("muPhotoSp", rownames(sumSSD)), 1]
+b_forceSpSSD = sumSSD[grep("muForceSp", rownames(sumSSD)), 1]
+b_chillSpSSD = sumSSD[grep("muChillSp", rownames(sumSSD)), 1]
+
+bTrtChillSSD = sumSSD[grep("betaTraitxChill", rownames(sumSSD)), 1]
+bTrtForceSSD = sumSSD[grep("betaTraitxForce", rownames(sumSSD)), 1]
+bTrtPhotoSSD = sumSSD[grep("betaTraitxPhoto", rownames(sumSSD)), 1]
+
+a_trtsp5SSD <- vector()
+for(i in 1:ncol(postSSD$muSp)){  
+  quantU <- round(quantile(postSSD$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  a_trtsp5SSD <- rbind(a_trtsp5SSD, quantU)
+}
+colnames(a_trtsp5SSD) <- c("Int5","Int95","Int25","Int75")
+
+b_tran5SSD <- round(quantile(postSSD$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
+b_tranlat5SSD <- round(quantile(postSSD$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
+
+b_chill5 <- vector()
+for(i in 1:ncol(postSSD$betaChillSp)){
+  quantU <- round(quantile(postSSD$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_chill5 <- rbind(b_chill5, quantU)
+}
+colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
+
+b_force5 <- vector()
+for(i in 1:ncol(postSSD$betaForceSp)){
+  quantU <- round(quantile(postSSD$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_force5 <- rbind(b_force5, quantU)
+}
+colnames(b_force5) <- c("force5","force95","force25","force75")
+
+b_photo5 <- vector()
+for(i in 1:ncol(postSSD$betaPhotoSp)){
+  quantU <- round(quantile(postSSD$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_photo5 <- rbind(b_photo5, quantU)
+}
+colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
 
 
-abline(lm(SSD_w ~ lati), col = "orange2", lwd = 3, lty = 2)
-abline(lm(SSD_e ~lati), col = "orange2", lwd = 3, lty = 1)
+# plot first for west coast
+SSD_w = a_trtSpSSD + b_tranESSD * tranW + b_tranlatSSD * (tranW*latZ)
+SSD_e = a_trtSpSSD + b_tranESSD * tranE + b_tranlatSSD * (tranE*latZ)
 
-# CN
+par(mfrow = c(1,1))
+plot(0, type = "n", xlim = c(25,60), ylim = c(-100,100),
+     xlab = "Latitude",
+     ylab = "Trait")
+abline(lm(SSD_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
+abline(lm(SSD_e ~lati), col = "darkslategray", lwd = 3, lty =1)
+
+#############################################
 sumCN <- summary(mdlCN)$summary
-b_trtSpCN = (sumCN [grep("b_muSp", rownames(sumCN )), 1])
-a_trtSpCN = (sumCN [grep("muSp", rownames(sumCN )), 1]); a_trtSpCN <- a_trtSpCN[48]
-b_tranECN = sumCN [grep("b_tranE", rownames(sumCN )), 1]
-b_tranlatCN = sumCN [grep("b_tranlat", rownames(sumCN )), 1]
+muGrand = (sumCN[grep("mu_grand", rownames(sumCN)), 1])
+b_trtSpCN = (sumCN[grep("b_muSp", rownames(sumCN)), 1])
+a_trtSpCN = mean((sumCN[grep("mu_grand_sp", rownames(sumCN)), 1]))
+b_tranECN = sumCN[grep("b_tranE", rownames(sumCN)), 1]
+b_tranlatCN = sumCN[grep("b_tranlat", rownames(sumCN)), 1]
 
-CN_w = a_trtSpCN + b_tranECN * tranW + b_tranlatCN * (tranW*lati)
-CN_e = a_trtSpCN + b_tranECN * tranE + b_tranlatCN * (tranE*lati)
+b_phenoSpCN = (sumCN[grep("alphaPhenoSp", rownames(sumCN)), 1])
+a_phenoSpCN = (sumCN[grep("muPhenoSp", rownames(sumCN)), 1])
 
-abline(lm(CN_w ~ lati), col = "darkolivegreen", lwd = 3, lty = 2)
-abline(lm(CN_e ~lati), col = "darkolivegreen", lwd = 3, lty = 1)
+a_chillSpCN = sumCN[grep("alphaChillSp", rownames(sumCN)), 1]
+a_forceSpCN = sumCN[grep("alphaForceSp", rownames(sumCN)), 1]
+a_photoSpCN = sumCN[grep("alphaPhotoSp", rownames(sumCN)), 1]
 
-legend("topright",legend = c(expression("eastern"),
-  expression("western"),
-  "LMA","SSD","CN"),
-  col = c("black", "black","maroon","orange2","darkolivegreen"),
-  lty = c(1,2, 1,1,1), bty = "n", lwd =2)
+b_photoSpCN = sumCN[grep("muPhotoSp", rownames(sumCN)), 1]
+b_forceSpCN = sumCN[grep("muForceSp", rownames(sumCN)), 1]
+b_chillSpCN = sumCN[grep("muChillSp", rownames(sumCN)), 1]
 
-###########################################################
-pdf("figures/latTranInteraction.pdf", width = 10, height =5)
-par(mfrow = c(1,2))
-plot(0, type = "n", xlim = c(40,60), ylim = c(0,10),
-  xlab = "Latitude",
-  ylab = "Trait")
-abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
-abline(lm(ht_e ~lati), col = "darkslategray", lwd = 3, lty =1)
+bTrtChillCN = sumCN[grep("betaTraitxChill", rownames(sumCN)), 1]
+bTrtForceCN = sumCN[grep("betaTraitxForce", rownames(sumCN)), 1]
+bTrtPhotoCN = sumCN[grep("betaTraitxPhoto", rownames(sumCN)), 1]
 
-abline(lm(DBH_w ~ lati), col = "goldenrod", lwd = 3, lty = 2)
-abline(lm(DBH_e ~lati), col = "goldenrod", lwd = 3, lty = 1)
+a_trtsp5CN <- vector()
+for(i in 1:ncol(postCN$muSp)){  
+  quantU <- round(quantile(postCN$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  a_trtsp5CN <- rbind(a_trtsp5CN, quantU)
+}
+colnames(a_trtsp5CN) <- c("Int5","Int95","Int25","Int75")
 
-legend("topright",legend = c(expression("Eastern"),
-  expression("Western"),
-  "Height",
-  "DBH"),
-  col = c("black", "black","darkslategray","goldenrod"),
-  lty = c(1,2, 1,1), bty = "n", lwd =2)
+b_tran5CN <- round(quantile(postCN$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
+b_tranlat5CN <- round(quantile(postCN$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
 
-plot(0, type = "n", xlim = c(40,60), ylim = c(0,1),
-  xlab = "Latitude",
-  ylab = "Trait")
-abline(lm(lma_w ~ lati), col = "darkred", lwd = 3, lty = 2)
-abline(lm(lma_e ~lati), col = "darkred", lwd = 3, lty = 1)
+b_chill5 <- vector()
+for(i in 1:ncol(postCN$betaChillSp)){
+  quantU <- round(quantile(postCN$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_chill5 <- rbind(b_chill5, quantU)
+}
+colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
 
-abline(lm(SSD_w ~ lati), col = "orange2", lwd = 3, lty = 2)
-abline(lm(SSD_e ~lati), col = "orange2", lwd = 3, lty = 1)
+b_force5 <- vector()
+for(i in 1:ncol(postCN$betaForceSp)){
+  quantU <- round(quantile(postCN$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_force5 <- rbind(b_force5, quantU)
+}
+colnames(b_force5) <- c("force5","force95","force25","force75")
 
-abline(lm(CN_w ~ lati), col = "darkolivegreen", lwd = 3, lty = 2)
-abline(lm(CN_e ~lati), col = "darkolivegreen", lwd = 3, lty = 1)
+b_photo5 <- vector()
+for(i in 1:ncol(postCN$betaPhotoSp)){
+  quantU <- round(quantile(postCN$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+  b_photo5 <- rbind(b_photo5, quantU)
+}
+colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
 
-legend("topright",legend = c(expression("eastern"),
-  expression("western"),
-  "LMA","SSD","CN"),
-  col = c("black", "black","maroon","orange2","darkolivegreen"),
-  lty = c(1,2, 1,1,1), bty = "n", lwd =2)
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+
+# plot first for west coast
+CN_w = a_trtSpCN + b_tranECN * tranW + b_tranlatCN * (tranW*latZ)
+CN_e = a_trtSpCN + b_tranECN * tranE + b_tranlatCN * (tranE*latZ)
+
+par(mfrow = c(1,1))
+plot(0, type = "n", xlim = c(25,60), ylim = c(-100,100),
+     xlab = "Latitude",
+     ylab = "Trait")
+abline(lm(CN_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
+abline(lm(CN_e ~lati), col = "darkslategray", lwd = 3, lty =1)
+#################################
+pdf("figures/transectIntrxn.pdf", width =13, height =3)
+par(mfrow = c(1,5))
+plot(0, type = "n", xlim = c(40,55), ylim = c(0,10),
+     xlab = "Latitude",
+     ylab = "Height", cex.lab = 1.3)
+
+#abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
+abline(lm(ht_e ~lati), col = "darkslategray4", lwd = 3, lty =1)
+abline(lm(ht_w ~lati), col = "darkslategray4", lwd = 3, lty =2)
+text(40.8, 9, label = "a)", cex = 1.25)
+
+plot(0, type = "n", xlim = c(40,55), ylim = c(0,10),
+     xlab = "Latitude",
+     ylab = "Diameter at breast height", cex.lab = 1.3)
+abline(lm(DBH_e ~lati), col = "goldenrod", lwd = 3, lty =1)
+abline(lm(DBH_w ~lati), col = "goldenrod", lwd = 3, lty =2)
+text(40.8, 9, label = "b)", cex = 1.25)
+
+plot(0, type = "n", xlim = c(40,55), ylim = c(0,1),
+     xlab = "Latitude",
+     ylab = "Leaf mass area", cex.lab = 1.3)
+abline(lm(LMA_e ~lati), col = "darkolivegreen", lwd = 3, lty =1)
+abline(lm(LMA_w ~lati), col = "darkolivegreen", lwd = 3, lty =2)
+text(40.8,0.9, label = "c)", cex = 1.25)
+
+
+plot(0, type = "n", xlim = c(40,55), ylim = c(0,1),
+     xlab = "Latitude",
+     ylab = "Stem specific density", cex.lab = 1.3)
+abline(lm(SSD_e ~lati), col = "maroon", lwd = 3, lty =1)
+abline(lm(SSD_w ~lati), col = "maroon", lwd = 3, lty =2)
+text(40.8,0.9, label = "d)", cex = 1.25)
+
+plot(0, type = "n", xlim = c(40,55), ylim = c(0,1),
+     xlab = "Latitude",
+     ylab = "Carbon:Nitrogen", cex.lab = 1.3)
+abline(lm(CN_e ~lati), col = "purple4", lwd = 3, lty =1)
+abline(lm(CN_w ~lati), col = "purple4", lwd = 3, lty =2)
+text(40.8,0.9, label = "e)", cex = 1.25)
+
+legend("topright",legend = c(expression("Western"),
+                             expression("Eastern")
+),
+col = c("black", "black"),
+lty = c(2,1), lwd = 1, cex= 1.25, bty = "n")
+
 dev.off()
 # #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
 # I think what we want is a loop that goes through each iteration of the posteriors and calculates the bb, but using 20 for forcing, 12 for photoperiod, 75 (75/10 when rescaled), and smithers to start
