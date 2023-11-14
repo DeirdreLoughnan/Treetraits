@@ -102,22 +102,37 @@ These plots and tables are using the model output from the model with a dummy va
 \end{enumerate}
 
 % 1. Do phenological cue-trait relationships change across transects? Populations?
+\item Most traits = some degree of latitudinal variation and an interactive effect with transect.
 \begin{enumerate}
-\item kjskfj
+\item Found moderate to strong interaction between latitude and transect---but effects differed by trait
+\item Both height and ssd = smaller trait values at higher latitudes (\Sexpr{htLatTran}, UI: \Sexpr{lower_htLatTran},\Sexpr{upper_htLatTran} for height, \Sexpr{ssdLatTran}, UI: \Sexpr{lower_ssdLatTran},\Sexpr{upper_ssdLatTran} for SSD)
+\item DBH = strongest response---\Sexpr{dbhLatTran}, UI: \Sexpr{lower_dbhLatTran},\Sexpr{upper_dbhLatTran}---largest diameters occurred in our more Northern populations
+\item C:N also increased with latitude---but relatively weak (\Sexpr{cnLatTran}, UI: \Sexpr{lower_cnLatTran},\Sexpr{upper_cnLatTran})
+\item Only LMA = no effect (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})
+\item Fig. \ref{fig:tranInt}
 \end{enumerate}
 
 %2. What other functional traits relate to budburst phenology in temperate woody species?
 \item Found only two of our five traits were related to budburst phenology
 \begin{enumerate}
-\item Of the 5 commonly measured traits we measured---only height and DBH correlated with budburst cues
-\item Height and DBH: short trees had stronger forcing responses (\Sexpr{htBFSpMean}, UI: \Sexpr{lower_htBFSpMean }, \Sexpr{upper_htBFSpMean } for height and \Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhBFSpMean}, Fig. \ref{fig:traitSlopes} a and g), but weaker responses to photoperiod (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htBPSpMean}, \Sexpr{upper_htBPSpMean} for height and \Sexpr{dbhBPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhBPSpMean}, Fig. \ref{fig:traitSlopes} c and i)
-\item Other three traits, LMA, SSD, C:N = no relationship to chilling, forcing, or photoperiod (Fig. \ref{fig:traitSlopes})---posterior centred around zero
-\item 3 traits lack of trait effect on cues = exemplified by the nonexistent effect on phenology---estimate of our betaTraitxCue parameter is fully informed by prior not the data (Fig. \ref{fig:betaTraitxCue})
+\item Only height and DBH correlated with budburst cues---responses were cosistent across the two traits
+\item Height and DBH: short trees had stronger forcing responses (\Sexpr{htBFSpMean}, UI: \Sexpr{lower_htBFSpMean }, \Sexpr{upper_htBFSpMean } for height and \Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhBFSpMean}, Fig. \ref{fig:traitSlopes} a and g)
+\item But weaker responses to photoperiod (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htBPSpMean}, \Sexpr{upper_htBPSpMean} for height and \Sexpr{dbhBPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhBPSpMean}, Fig. \ref{fig:traitSlopes} c and i)
+\end{enumerate}
+
+\item Other three traits = no relationship to chilling, forcing, or photoperiod cues
+\begin{enumerate}
+\item LMA, SSD, C:N = no relationship---posterior centred around zero (Fig. \ref{fig:traitSlopes})
+\item our estimates of the betaTraitxCue parameters for these traits = fully informed by prior not the data (Fig. \ref{fig:betaTraitxCue})
+\item Also no correlation between between ring porosity of wood with our three cues---based on spp means using posterior estimates \ref{fig:ringPorosity}.
 \end{enumerate}
 
 % How do shrub and tree species differ in their cue-trait relationships?
+\item By including trait effects---find traits can inform spp phenology
 \begin{enumerate}
-\item ksdjfkdj
+\item Estimates bb using our model parameters show clear differences in bb timing between tree and shrub spp \ref{fig:bbShrubTree}
+\item Shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
+\item But effects vary across traits = unique effects on cue responses---estimated order of spp bb order differs between the two models
 \end{enumerate}
 
 \end{enumerate}
@@ -130,13 +145,13 @@ These plots and tables are using the model output from the model with a dummy va
  \centering
  \includegraphics[width=\textwidth]{..//figures/transectIntrxn.pdf}
 \caption{We only found biogeographic differences for four of our functional traits, with the direction of the relationship varying across traits. Both height a. height and b. diamter at base height showed strong interactions between latitude and trait values, while c. leaf mass area has the weakest response, and d. stem specific density, and e. carbin:nitrogen moderate interactive effects.}
-\label{fig:tranIny}
+\label{fig:tranInt}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//figures/traitMuPlot.pdf}
-\caption{Estimated trait variation and cue responses to chilling, forcing, and photoperiod on budburst timing for 47 species, modelled for five traits: a. height, b. diameter at breast height, c. leaf mass area, d. stem specific density, and e. carbon:nitrogren. Of our five traits, only two appear to relate to budburst cues, despite these three cues being important drivers of budburst timing. Lines represent 50\% uncertainty intervals.}
+\caption{Estimated trait variation and cue responses to chilling, forcing, and photoperiod on budburst timing for 47 species, modelled for five traits: a. height, b. leaf mass area, c. diameter at breast height, d. stem specific density, and e. carbon:nitrogren. Of our five traits, only two appear to relate to budburst cues, despite these three cues being important drivers of budburst timing. Lines represent 50\% uncertainty intervals.}
 \label{fig:muPlot}
 \end{figure}
 
@@ -158,7 +173,7 @@ These plots and tables are using the model output from the model with a dummy va
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//figures/dotShrubTree2.pdf}
-\caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a and c) and western (b and d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees, in blue. }
+\caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a and b) and western (c and d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees, in blue. }
 \label{fig:bbShrubTree}
 \end{figure}
 \newpage
@@ -168,7 +183,7 @@ These plots and tables are using the model output from the model with a dummy va
  \centering
  \includegraphics[width=\textwidth]{..//figures/ringPorosity.pdf}
 \caption{Despite differing in thier wood structures and growth strategies, we did not find this trait to correlate with differences in cue responses across speices.}
-\label{fig:bbShrubTree}
+\label{fig:ringPorosity}
 \end{figure}
 \newpage
 \clearpage
@@ -188,7 +203,7 @@ print(xtable(sumer, caption="Summary of a joint model for height", label = "tabl
 @
 
 
-<<label= tableht, echo=FALSE , results= tex >>=
+<<label= tableLMA, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
@@ -202,7 +217,7 @@ print(xtable(sumer, caption="Summary of a joint model for leaf mass area", label
 @
 \newpage
 
-<<label= tableht, echo=FALSE , results= tex >>=
+<<label= tableDBH, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
@@ -216,7 +231,7 @@ print(xtable(sumer, caption="Summary of a joint model for diameter at base heigh
 @
 
 
-<<label= tableht, echo=FALSE , results= tex >>=
+<<label= tableSSD, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
@@ -230,7 +245,7 @@ print(xtable(sumer, caption="Summary of a joint model for stem specific density"
 @
 \newpage
 
-<<label= tableht, echo=FALSE , results= tex >>=
+<<label= tableCN, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
