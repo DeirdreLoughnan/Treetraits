@@ -72,6 +72,12 @@ Vancouver, BC Canada V6T 1Z4. \\
 
 Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
 
+<<label=runcode1,  echo=FALSE>>=
+
+source("..//rcode/traitManuscriptValues.R")
+
+@
+
 \section*{Research questions}
 
 \begin{enumerate}
@@ -87,22 +93,33 @@ These plots and tables are using the model output from the model with a dummy va
 
 \begin{enumerate}
 %brief summary of what we did
-\item Our study = one of the first to combine trait data with data of phenological cue response for the same individuals and species assemblages across latitudes
+\item Our study = one of the first to combine trait data with data of phenological cue response for the same individuals and across species distributions.
 \begin{enumerate}
-\item Our data spans plant communities in eastern and western deciduous forests of North America
-\item Samples collected from multiple populations---model accounts for variation across populations and transects
-\item Includes woody tree and shrub species = different growth strategies---should vary in suites of traits
+\item Our data includes plant communities in eastern and western deciduous forests of North America
+\item Samples collected from multiple populations---modelling approach that accounts for variation across populations and transects
 \item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing
+\item Includes woody tree and shrub species = different growth strategies---and presumably suites of traits
 \end{enumerate}
 
-% 1. What other functional traits relate to budburst phenology in temperate woody species?
+% 1. Do phenological cue-trait relationships change across transects? Populations?
+\begin{enumerate}
+\item kjskfj
+\end{enumerate}
+
+%2. What other functional traits relate to budburst phenology in temperate woody species?
 \item Found only two of our five traits were related to budburst phenology
 \begin{enumerate}
 \item Of the 5 commonly measured traits we measured---only height and DBH correlated with budburst cues
-\item Height and DBH: short trees had stronger forcing responses (Fig. \ref{fig:traitSlopes} a and g), but weaker responses to photoperiod (Fig. \ref{fig:traitSlopes} c and i))
-\item Other three traits, LMA, SSD, C:N = no relationship to chilling, forcing, or photoperiod (Fig. \ref{fig:traitSlopes}). 
-\item Exemplified by the nonexistent effect of traits on phenology---estimate of our betaTraitxCue parameter is fully informed by prior not the data (Fig. \ref{fig:betaTraitxCue})
+\item Height and DBH: short trees had stronger forcing responses (\Sexpr{htBFSpMean}, UI: \Sexpr{lower_htBFSpMean }, \Sexpr{upper_htBFSpMean } for height and \Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhBFSpMean}, Fig. \ref{fig:traitSlopes} a and g), but weaker responses to photoperiod (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htBPSpMean}, \Sexpr{upper_htBPSpMean} for height and \Sexpr{dbhBPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhBPSpMean}, Fig. \ref{fig:traitSlopes} c and i)
+\item Other three traits, LMA, SSD, C:N = no relationship to chilling, forcing, or photoperiod (Fig. \ref{fig:traitSlopes})---posterior centred around zero
+\item 3 traits lack of trait effect on cues = exemplified by the nonexistent effect on phenology---estimate of our betaTraitxCue parameter is fully informed by prior not the data (Fig. \ref{fig:betaTraitxCue})
 \end{enumerate}
+
+% How do shrub and tree species differ in their cue-trait relationships?
+\begin{enumerate}
+\item ksdjfkdj
+\end{enumerate}
+
 \end{enumerate}
 
 \clearpage
@@ -119,7 +136,7 @@ These plots and tables are using the model output from the model with a dummy va
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//figures/traitMuPlot.pdf}
-\caption{Muplots of each trait model.}
+\caption{Estimated trait variation and cue responses to chilling, forcing, and photoperiod on budburst timing for 47 species, modelled for five traits: a. height, b. diameter at breast height, c. leaf mass area, d. stem specific density, and e. carbon:nitrogren. Of our five traits, only two appear to relate to budburst cues, despite these three cues being important drivers of budburst timing. Lines represent 50\% uncertainty intervals.}
 \label{fig:muPlot}
 \end{figure}
 
@@ -138,6 +155,22 @@ These plots and tables are using the model output from the model with a dummy va
 \end{figure}
 \newpage
 
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/dotShrubTree2.pdf}
+\caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a and c) and western (b and d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees, in blue. }
+\label{fig:bbShrubTree}
+\end{figure}
+\newpage
+\clearpage
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/ringPorosity.pdf}
+\caption{Despite differing in thier wood structures and growth strategies, we did not find this trait to correlate with differences in cue responses across speices.}
+\label{fig:bbShrubTree}
+\end{figure}
+\newpage
 \clearpage
 
 \section*{Tables}
