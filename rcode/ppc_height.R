@@ -3,129 +3,6 @@
 # # Aim of this code is to perform several ppc for the trait pheno model for NAm tree traits
 # # This model includes transect as a dummy variable but otherwise is the same as the traitors model
 # 
-# #Started May 6, 2022 by Deirdre
-# 
-# # Aim of this code is to perform several ppc for the trait pheno model for NAm tree traits
-# # This model includes transect as a dummy variable but otherwise is the same as the traitors model
-# 
-# rm(list=ls())
-# options(stringsAsFactors = FALSE)
-# 
-# library(tidyr)
-# library(plyr)
-# library(dplyr)
-# library(reshape2)
-# library(ggplot2)
-# library(rstan)
-# library(bayesplot)# nice posterior check plots 
-# library(shinystan)
-# library(stringr)
-# library(truncnorm)
-# 
-# if(length(grep("deirdreloughnan", getwd()) > 0)) { 
-#   setwd("~/Documents/github/pheno_bc") 
-# }  else{
-#   setwd("/home/deirdre/pheno_bc") # for midge
-# }
-# 
-# # Start by getting the pheno data
-# dl <- read.csv("input/dl_allbb.csv")
-# 
-# temp <- str_split_fixed(dl$trt, "_", 3); head(temp)
-# dl$chill<- temp[,1]
-# dl$photo <- temp[,2]
-# dl$force <- temp[,3]
-# 
-# dl.chill <- read.csv("input/chilling_values_Hope_Smithers.csv")
-# 
-# dl.wchill <- merge(dl, dl.chill, by = c("population","chill"))
-# dl.wchill$lab3 <- dl.wchill$lab2
-# dl.wchill$lab2 <- paste(dl.wchill$species, dl.wchill$population, dl.wchill$rep, sep = "_")
-# 
-# df <- read.csv("input/df_dxb_prepped_data.csv")
-# df.chill <- read.csv("input/chilling_values_eastern.csv")
-# df.wchill <- merge(df, df.chill, by =c("population","chill"))
-# df.wchill <- df.wchill[, c("population", "chill","force","photo","lab2", "bb","species", "treatment","Chill_portions","Utah_Model")]
-# 
-# # mergeing the my data with DF
-# pheno <- rbind.fill(dl.wchill, df.wchill)
-# pheno$force.n <- pheno$force
-# pheno$force.n[pheno$force.n == "HF"] <- "1"
-# pheno$force.n[pheno$force.n == "LF"] <- "0"
-# pheno$force.n <- as.numeric(pheno$force.n)
-# 
-# pheno$photo.n <- pheno$photo
-# pheno$photo.n[pheno$photo.n == "HP"] <- "1"
-# pheno$photo.n[pheno$photo.n == "LP"] <- "0"
-# pheno$photo.n <- as.numeric(pheno$photo.n)
-# 
-# pheno$transect <- pheno$population
-# pheno$transect[pheno$transect == "sm"] <- "0"
-# pheno$transect[pheno$transect == "mp"] <- "0"
-# pheno$transect[pheno$transect == "kl"] <- "0"
-# pheno$transect[pheno$transect == "af"] <- "0"
-# pheno$transect[pheno$transect == "GR"] <- "1"
-# pheno$transect[pheno$transect == "HF"] <- "1"
-# pheno$transect[pheno$transect == "SH"] <- "1"
-# pheno$transect[pheno$transect == "WM"] <- "1"
-# 
-# pheno$transect <- as.numeric(pheno$transect)
-# 
-# # standardize the 0/1 and standardize sites? 
-# pheno$force.z2 <- (pheno$force.n-mean(pheno$force.n,na.rm=TRUE))/(sd(pheno$force.n,na.rm=TRUE)*2)
-# pheno$photo.z2 <- (pheno$photo.n-mean(pheno$photo.n,na.rm=TRUE))/(sd(pheno$photo.n,na.rm=TRUE)*2)
-# pheno$chillport.z2 <- (pheno$Chill_portions-mean(pheno$Chill_portions,na.rm=TRUE))/(sd(pheno$Chill_portions,na.rm=TRUE)*2)
-# 
-# #going to split it into analysis of terminal bb and lateral bb
-# # Starting with the terminal buds:
-# #pheno.term <- pheno[,c("tbb", "chill.n", "force.n", "photo.n", "site.n", "species", "lab2")]
-# pheno.term <- pheno[,c("bb", "force.z2", "photo.z2", "population", "species", "lab2","Utah_Model","Chill_portions","chillport.z2","transect")] #"site2.z2", "site3.z2","site4.z2")]
-# pheno.t <- pheno.term[complete.cases(pheno.term$bb), ] # none,great!
-# length(unique(pheno.t$species))
-# #pheno.t <- pheno.term[complete.cases(pheno.term$bb), ] # 1780 rows data 
-# pheno.t$species <- tolower(pheno.t$species)
-# pheno.t$species.fact <- as.numeric(as.factor(pheno.t$species))
-# sort(unique(pheno.t$species.fact)) # 47 bc two species occur in both transects
-# 
-# # Now get the trait data and subset to only include spp we have pheno data for:
-# setwd("..//Treetraits")
-# trtData <- read.csv("data/allTrt.csv", stringsAsFactors = FALSE)
-# head(trtData)
-# 
-# phenoSp <- sort(unique(pheno.t$species))
-# 
-# trtPheno <- trtData[trtData$species %in% phenoSp, ]
-# length(unique(trtPheno$species))
-# 
-# trtPheno$transect <- trtPheno$site
-# trtPheno$transect[trtPheno$transect == "sm"] <- "0"
-# trtPheno$transect[trtPheno$transect == "mp"] <- "0"
-# trtPheno$transect[trtPheno$transect == "kl"] <- "0"
-# trtPheno$transect[trtPheno$transect == "af"] <- "0"
-# trtPheno$transect[trtPheno$transect == "GR"] <- "1"
-# trtPheno$transect[trtPheno$transect == "HF"] <- "1"
-# trtPheno$transect[trtPheno$transect == "SH"] <- "1"
-# trtPheno$transect[trtPheno$transect == "WM"] <- "1"
-# 
-# trtPheno$latitude <- trtPheno$site
-# trtPheno$latitude[trtPheno$latitude == "sm"] <- 54.7824
-# trtPheno$latitude[trtPheno$latitude == "mp"] <- 49.0646
-# trtPheno$latitude[trtPheno$latitude == "kl"] <- 52.1417
-# trtPheno$latitude[trtPheno$latitude == "af"] <- 50.8837
-# trtPheno$latitude[trtPheno$latitude == "GR"] <- 43.99837498
-# trtPheno$latitude[trtPheno$latitude == "HF"] <- 42.5315
-# trtPheno$latitude[trtPheno$latitude == "SH"] <- 45.9310
-# trtPheno$latitude[trtPheno$latitude == "WM"] <- 44.92466697
-# 
-# trtPheno$latitude <- as.numeric(trtPheno$latitude)
-# trtPheno$latZ <- (trtPheno$latitude-mean(trtPheno$latitude,na.rm=TRUE))/(sd(trtPheno$latitude,na.rm=TRUE))
-# trtPheno$transect <- as.numeric(trtPheno$transect)
-# #########################################################
-
-# One more thesis chapter to go!
-
-# Started Oct 10 2023 by D Loughnan
-# aim of this code is to run the model with latitude as a continuous variable on the real trait data for my bc trait chapter
 
 rm(list=ls())
 options(stringsAsFactors = FALSE)
@@ -136,8 +13,6 @@ require(shinystan)
 require(stringr)
 library(plyr)
 library(dplyr)
-
-
 library(ggplot2)
 library(reshape2)
 # library(viridis)
@@ -153,17 +28,19 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
   setwd("/home/deirdre/Treetraits") # for midge
 }
 
-trtPheno <- read.csv("input/trtPhenoZScore.csv", stringsAsFactors = FALSE)
-pheno.t <- read.csv("input/bbPhenoZScore.csv", stringsAsFactors = FALSE)
+# trtPheno <- read.csv("input/trtPhenoZScore.csv", stringsAsFactors = FALSE)
+# pheno.t <- read.csv("input/bbPhenoZScore.csv", stringsAsFactors = FALSE)
+trtPheno <- read.csv("input/trtPhenoDummy.csv")
+pheno.t <- read.csv("input/phenoDataWChill.csv")
 
 specieslist <- sort(unique(trtPheno$species))
 sitelist <- sort(unique(trtPheno$transect))
 
-load("output/heightDummyIntGrand.Rdata")
+load("output/mdl2023/z-scored/heightDummyIntGrandZ.Rdata")
+postHt<- data.frame(rstan::extract(mdlHt))
 
-postHt<- rstan::extract(mdlHt)
+write.csv(postHt, "output/postHt.csv", row.names = F)
 
-postHt <- data.frame(postHt)
 
 cueTrt <- postHt[, colnames(postHt) %in% c("mu_grand","b_tranE", "b_tranlat","sigma_sp", "sigma_traity")]
 
@@ -245,7 +122,7 @@ muChillSp <- -15
 sigmaChillSp <- 5
 sigmapheno_y <- 10
 
-pdf("HtGrandTrait.pdf")
+pdf("figures/ppcFig/HtGrandTrait.pdf")
 par(mfrow = c(2,3))
 hist(postHt$mu_grand, main = "muGrand", xlim = c(-20,60), col=rgb(0,0,1,1/4))
 hist(rnorm(1000, 20, 10), col=rgb(1,0,1,1/4), add = T)
@@ -268,9 +145,9 @@ hist(postHt$sigma_traity, main = "sigmaTraitY", col=rgb(0,0,1,1/4),  xlim = c(-2
 hist(rnorm(1000, 3,5), col=rgb(1,0,1,1/4), add = T)
 abline(v = sigma_traity, col="red", lwd=3, lty=2)
 # try 0.5,0.5
-dev.off()
+#dev.off()
 
-pdf("HtGrandPheno.pdf")
+pdf("figures/ppcFig/HtGrandPheno.pdf")
 par(mfrow = c(1,1))
 hist(postHt$muPhenoSp, main = "muPhenoSp", xlim = c(0,100), col=rgb(0,0,1,1/4))
 hist(rnorm(1000, 40,10), col=rgb(1,0,1,1/4), add = T)
@@ -308,14 +185,14 @@ hist(postHt$sigmaChillSp, main = "sigmaChillSp", col=rgb(0,0,1,1/4), xlim = c(-1
 hist(rnorm(1000, 5,5), col=rgb(1,0,1,1/4), add = T)
 abline(v = sigmaChillSp, col="red", lwd=3, lty=2)
 # try 5,10
-hist(postHt$sigmaForceSp, main = "sigmaForceSp", col=rgb(0,0,1,1/4),  xlim = c(-10,10))
+hist(postHt$sigmaForceSp, main = "sigmaForceSp", col=rgb(0,0,1,1/4),  xlim = c(-10,20))
 hist(rnorm(1000, 5,5), col=rgb(1,0,1,1/4), add = T)
 abline(v = sigmaForceSp, col="red", lwd=3, lty=2)
 
 hist(postHt$sigmaPhotoSp, main = "sigmaPhotoSp", col=rgb(0,0,1,1/4),  xlim = c(-15,15))
 hist(rnorm(1000, 5,5), col=rgb(1,0,1,1/4), add = T)
 abline(v = sigmaPhotoSp, col="red", lwd=3, lty=2)
-dev.off()
+#dev.off()
 
 #Prior Predictive Check (Run 1000 times and plot results)
 #------------------------------------------------------------
@@ -448,28 +325,28 @@ priorCheckTrait$muGrandSp <- muGrand + priorCheckTrait$muSp
 
 priorCheckTrait$Traiti <- priorCheckTrait[complete.cases(priorCheckTrait$yTraiti),]
 
-png("figures/density_Ht_Prior.png")
+#png("figures/density_Ht_Prior.png")
 plot(density(priorCheckTrait$yTraiti))
-dev.off()
+#dev.off()
 
-png("figures/GrandSp_PlotPrior_joint_Ht.png")
+#png("figures/GrandSp_PlotPrior_joint_Ht.png")
 plot(priorCheckTrait$yTraiti ~ priorCheckTrait$muGrandSp, xlab = "muGrandSp", ylab = "Trait")
-dev.off()
+#dev.off()
 
-png("figures/MuSp_PlotPrior_joint_Ht.png")
+#png("figures/MuSp_PlotPrior_joint_Ht.#png")
 plot(priorCheckTrait$yTraiti ~ priorCheckTrait$muSp, xlab = "MuSp", ylab = "Trait")
-dev.off()
+#dev.off()
 
 
-pdf("figures/ht_ypred_trt.pdf")
+#pdf("figures/ht_ypred_trt.pdf")
 ppc_dens_overlay(y, yrep[1:100,])
-dev.off()
+##dev.off()
 
 hteast <- subset(htData, transect == "1")
 
-png("figures/Mutransect_PlotPrior_Ht.png")
+#png("figures/Mutransect_PlotPrior_Ht.png")
 plot(priorCheckTrait$yTraiti ~ priorCheckTrait$dumE, xlab = "Mutransect", ylab = "Trait")
-dev.off()
+#dev.off()
 #####################################################################################
 # Chilling - included as chill portions: 8 values between 45 and 80
 # Forcing included as continuous and accounting for thermoperiodicity
@@ -591,27 +468,27 @@ priorCheckPheno$yMu <-  priorCheckPheno$alphaPhenoSp +  priorCheckPheno$betaForc
 #Final values
 priorCheckPheno$yPhenoi <- priorCheckPheno$yMu + priorCheckPheno$e
 
-png("figures/pheno_Ht_betaForceSp.png")
+#png("figures/pheno_Ht_betaForceSp.png")
 plot(priorCheckPheno$betaForceSp ~ priorCheckPheno$alphaTraitSp )
-dev.off()
+#dev.off()
 
 priorCheckPheno_posF <- priorCheckPheno[priorCheckPheno$betaForceSp > 0,]
 plot(priorCheckPheno_posF$betaForceSp ~ priorCheckPheno_posF$alphaTraitSp )
 
-png("figures/densityYPrior_joint_Ht.png")
+#png("figures/densityYPrior_joint_Ht.png")
 plot(density(priorCheckPheno$yPhenoi))
-dev.off()
+#dev.off()
 
-png("figures/photoPlotPrior_joint_Ht.png")
+#png("figures/photoPlotPrior_joint_Ht.png")
 plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$photoi, xlab = "Photoperiod", ylab = "Phenological Date")
-dev.off()
+#dev.off()
 
-png("figures/forcingPlotPrior_joint_Ht.png")
+#png("figures/forcingPlotPrior_joint_Ht.png")
 plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$forcei, xlab = "Forcing", ylab = "Phenological Date")
-dev.off()
+#dev.off()
 
 
 plot(htData$ht ~ y_hat)
-png("figures/chillingPlotPrior_joint_Ht.png")
+#png("figures/chillingPlotPrior_joint_Ht.png")
 plot(priorCheckPheno$yPhenoi ~ priorCheckPheno$chilli, xlab = "Chilling", ylab = "Phenological Date")
-dev.off()
+#dev.off()
