@@ -32,23 +32,21 @@ parameters{
   
   real b_tranE;
   
-  //real mu_tranlat;
   real b_tranlat;
   
-  //real<lower = 0> sigma_tranlat; // sd pop
   real<lower = 0> sigma_traity; // sd general
   real<lower = 0> sigma_sp; // sd species
   
   //Phenology
-  real alphaForceSp[n_spec];
-  real muForceSp;
-  real<lower = 0> sigmaForceSp;
+ real alphaForceSp[n_spec];
+ real muForceSp;
+ real<lower = 0> sigmaForceSp;
   real alphaChillSp[n_spec];
   real muChillSp;
   real<lower = 0> sigmaChillSp;
-  real alphaPhotoSp[n_spec];
-  real muPhotoSp;
-  real<lower = 0> sigmaPhotoSp;
+ real alphaPhotoSp[n_spec];
+ real muPhotoSp;
+ real<lower = 0> sigmaPhotoSp;
   real alphaPhenoSp[n_spec];
   real muPhenoSp;
   real<lower = 0> sigmaPhenoSp;
@@ -63,8 +61,8 @@ transformed parameters{
   vector[N] y_hat; 
   
   //Phenology
-  // real betaForceSp[n_spec];     //species level beta forcing
-  // real betaPhotoSp[n_spec];     //species level beta photoperiod
+  real betaForceSp[n_spec];     //species level beta forcing
+  real betaPhotoSp[n_spec];     //species level beta photoperiod
   real betaChillSp[n_spec];     //species level beta chilling
 
   for (i in 1:N){
@@ -73,12 +71,12 @@ transformed parameters{
   }
   
   // Phenology
-  // for (isp in 1:n_spec){
-  //   betaForceSp[isp] = alphaForceSp[isp] + betaTraitxForce * (b_muSp[isp]);
-  // }
-  // for (isp in 1:n_spec){
-  //   betaPhotoSp[isp] = alphaPhotoSp[isp] + betaTraitxPhoto * (b_muSp[isp]);
-  // }
+  for (isp in 1:n_spec){
+    betaForceSp[isp] = alphaForceSp[isp] + betaTraitxForce * (b_muSp[isp]);
+  }
+  for (isp in 1:n_spec){
+    betaPhotoSp[isp] = alphaPhotoSp[isp] + betaTraitxPhoto * (b_muSp[isp]);
+  }
   for (isp in 1:n_spec){
     betaChillSp[isp] = alphaChillSp[isp] + betaTraitxChill * (b_muSp[isp]);
   }
@@ -90,13 +88,10 @@ model{
   //// likelihood
   b_muSp ~ normal(muSp, sigma_sp);
   b_tranlat ~ normal(0,1);
-  muSp ~ normal(0, 5);// beta(1,1);
+  muSp ~ normal(0, 5);// beta(1,1); -3, 0.5
   //mu_grand ~ normal(10,5);
   b_tranE ~ normal(0,5);
-  
- // mu_tranlat ~ normal(0,10);
- // sigma_tranlat ~ normal(0,10);
-  
+
   //// priors
  // mu_grand ~ normal(10,10);
   sigma_sp ~ normal(0,5);
@@ -108,31 +103,31 @@ model{
   // likelihood
   for (i in 1:Nph){
     yPhenoi[i] ~ normal(alphaPhenoSp[phenology_species[i]] +
-    #betaForceSp[phenology_species[i]] * forcei[i] + betaPhotoSp[phenology_species[i]] * photoi[i] 
+    betaForceSp[phenology_species[i]] * forcei[i] + betaPhotoSp[phenology_species[i]] * photoi[i] 
     + betaChillSp[phenology_species[i]] * chilli[i], sigmapheno_y);
   }
   alphaPhenoSp ~ normal(muPhenoSp, sigmaPhenoSp);
- # alphaForceSp ~ normal(muForceSp, sigmaForceSp);
+  alphaForceSp ~ normal(muForceSp, sigmaForceSp);
   alphaChillSp ~ normal(muChillSp, sigmaChillSp);
-#  alphaPhotoSp ~ normal(muPhotoSp, sigmaPhotoSp);
+  alphaPhotoSp ~ normal(muPhotoSp, sigmaPhotoSp);
   //// priors
-  muPhenoSp ~ normal(40,10);
+  muPhenoSp ~ normal(40,20);
   sigmaPhenoSp ~ normal(5,5);
 
   sigmapheno_y ~ normal(10,5);
 // 
-//   muForceSp ~ normal(-15,10);
-//   sigmaForceSp ~ normal(5,5);
+  muForceSp ~ normal(0,10);
+  sigmaForceSp ~ normal(5,5);
 
-  muChillSp ~ normal(-15,10);
+  muChillSp ~ normal(0,10);
   sigmaChillSp ~ normal(5,5);
 
-  // muPhotoSp ~ normal(-15,10);
-  // sigmaPhotoSp ~ normal(5,5);
+  muPhotoSp ~ normal(0,10);
+  sigmaPhotoSp ~ normal(5,5);
 
-  // betaTraitxForce ~ normal(0,1);
-  // betaTraitxPhoto ~ normal(0,1);
-  betaTraitxChill ~ normal(0,1);
+  betaTraitxForce ~ normal(0,0.5);
+  betaTraitxPhoto ~ normal(0,0.5);
+  betaTraitxChill ~ normal(0,0.5);
 
 
 }
