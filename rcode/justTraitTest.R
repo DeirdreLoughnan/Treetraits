@@ -427,9 +427,9 @@ all.data <- list(yTraiti = trt.dat$yTraiti,
                  )
 
 
-mdl <- stan("stan/justDummyInt.stan",
+mdl <- stan("stan/justDummyIntTrait.stan",
             data = all.data,
-            iter = 4000, warmup = 3000, chains=4,
+            iter = 3000, warmup = 2000, chains=4,
             include = FALSE, pars = c("y_hat")
 )
 

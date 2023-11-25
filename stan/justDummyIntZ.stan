@@ -87,7 +87,7 @@ model{
   // Traits
   //// likelihood
   b_muSp ~ normal(muSp, sigma_sp);
-  b_tranlat ~ normal(0,1);
+  b_tranlat ~ normal(0,5);
   muSp ~ normal(0, 5);// beta(1,1); -3, 0.5
   //mu_grand ~ normal(10,5);
   b_tranE ~ normal(0,5);
@@ -125,9 +125,9 @@ model{
   muPhotoSp ~ normal(0,10);
   sigmaPhotoSp ~ normal(5,5);
 
-  betaTraitxForce ~ normal(0,0.5);
-  betaTraitxPhoto ~ normal(0,0.5);
-  betaTraitxChill ~ normal(0,0.5);
+  betaTraitxForce ~ normal(0,100);
+  betaTraitxPhoto ~ normal(0,100);
+  betaTraitxChill ~ normal(0,100);
 
 
 }
