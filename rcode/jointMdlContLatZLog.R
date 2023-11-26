@@ -148,6 +148,28 @@ sitelist <- sort(unique(trtPheno$transect))
 # write.csv(trtPheno ,"input/trtPhenoZScore.csv", row.names = F)
 # write.csv(pheno.t,"input/bbPhenoZScore.csv", row.names = F)
 height <- trtPheno[complete.cases(trtPheno$ht),]
+
+htZ.data <- list(yTraiti = height$ht.z2, 
+  N = nrow(height),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(height$species)),
+  n_tran = length(unique(height$transect.z2)),
+  lati = height$lat.z2,
+  tranE = as.numeric(height$transect.z2),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z2,
+  chilli = pheno.t$chillport.z2,
+  photoi = pheno.t$photo.z2
+)
+
+mdlHt <- stan("stan/heightDummyIntGrandWide.stan",
+  data = htZ.data,
+  iter = 4000, warmup = 3000, chains=4,
+  include = FALSE, pars = c("y_hat")
+)
+
 ######################################################################
 # 2. Leaf mass area
 leafMA <- trtPheno[complete.cases(trtPheno$lma),]
@@ -212,7 +234,7 @@ lmaz2.data <- list(yTraiti = leafMA$lma.z2,
 
 mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
   data = lmaz2.data,
-  iter = 3000, warmup = 2000, chains=4,
+  iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 # using pretty wide priors:
@@ -255,7 +277,7 @@ lmaz2.somedata <- list(yTraiti = leafMA$lma,
 
 mdlLMAZ <- stan("stan/lmaDummyIntGrand.stan",
   data = lmaz2.somedata,
-  iter = 3000, warmup = 2000, chains=4,
+  iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
@@ -449,6 +471,7 @@ sumerTrt <- summary(mdl)$summary
 ######################################################################
 # 3. diameter at breast height
 diam <- trtPheno[complete.cases(trtPheno$dbh),] 
+diam$dbh.z2 <- (diam$dbh-mean(diam$dbh,na.rm=TRUE))/(sd(diam$dbh,na.rm=TRUE)*2)
 
 dbh.data <- list(yTraiti = diam$dbh, 
   N = nrow(diam),
@@ -465,23 +488,59 @@ dbh.data <- list(yTraiti = diam$dbh,
   photoi = pheno.t$photo.z2
 )
 
-mdl <- stan("stan/diamDummyInt.stan",
-  data = dbh.data,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
+dbhZ.data <- list(yTraiti = diam$dbh.z2, 
+  N = nrow(diam),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(diam$species)),
+  n_tran = length(unique(diam$transect.z2)),
+  lati = diam$lat.z2,
+  tranE = as.numeric(diam$transect.z2),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z2,
+  chilli = pheno.t$chillport.z2,
+  photoi = pheno.t$photo.z2
 )
+
+# mdl <- stan("stan/diamDummyInt.stan",
+#   data = dbhZ.data,
+#   iter = 4000, warmup = 3000, chains=4,
+#   include = FALSE, pars = c("y_hat")
+# )
 
 mdlDBH <- stan("stan/diamDummyIntGrand.stan",
-  data = dbh.data,
+  data = dbhZ.data,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlDBH, file="output/dbhDummyIntGrandZ.Rdata")
+save(mdlDBH, file="output/dbhDummyIntGrandZ25.Rdata")
+
+sumer <- data.frame(summary(mdlDBH)$summary[c(
+  "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sumer
+
+postDBH<- data.frame(rstan::extract(mdlDBH))
+
+par(mfrow = c(1,3))
+hist(postDBH$betaTraitxForce, main = "betaTraitxForce",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+
+hist(postDBH$betaTraitxChill, main = "betaTraitxChill",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+
+hist(postDBH$betaTraitxPhoto, main = "betaTraitxPhoto",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
 
 ######################################################################
 # 4. stem specific density
 stem <- trtPheno[complete.cases(trtPheno$ssd),]
+
+stem$ssd.z2 <- (stem$ssd-mean(stem$ssd,na.rm=TRUE))/(sd(stem$ssd,na.rm=TRUE)*2)
 
 ssd.data <- list(yTraiti = stem$ssd, 
   N = nrow(stem),
@@ -498,31 +557,66 @@ ssd.data <- list(yTraiti = stem$ssd,
   photoi = pheno.t$photo.z2
 )
 
-mdl <- stan("stan/ssdDummyInt.stan",
-  data = ssd.data,
+ssdz2.data <- list(yTraiti = stem$ssd, 
+  N = nrow(stem),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(stem$species)),
+  n_tran = length(unique(stem$transect.z2)),
+  lati = stem$lat.z2,
+  tranE = as.numeric(stem$transect.z2),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z2,
+  chilli = pheno.t$chillport.z2,
+  photoi = pheno.t$photo.z2
+)
+
+mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
+  data = ssdz2.data,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
-  data = ssd.data,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
-)
-save(mdlSSD, file="output/ssdDummyIntGrand.Rdata")
+# mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
+#   data = ssd.data,
+#   iter = 4000, warmup = 3000, chains=4,
+#   include = FALSE, pars = c("y_hat")
+# )
+save(mdlSSD, file="output/ssdDummyIntGrandZ25_2.Rdata")
+
+sumer <- data.frame(summary(mdlSSD)$summary[c(
+  "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sumer
+
+postSSD<- data.frame(rstan::extract(mdlSSD))
+
+par(mfrow = c(1,3))
+hist(postSSD$betaTraitxForce, main = "betaTraitxForce",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+
+hist(postSSD$betaTraitxChill, main = "betaTraitxChill",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+
+hist(postSSD$betaTraitxPhoto, main = "betaTraitxPhoto",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+# looks the exact same as if you z-score the lma, so let's not since I am not sure it is a good idea
 
 ######################################################################
 # 5. carbon to nitrogen ratio
 carbNit <- trtPheno[complete.cases(trtPheno$C.N),]
-carbNit$cn.z <- (carbNit$C.N-mean(carbNit$C.N,na.rm=TRUE))/(sd(carbNit$C.N,na.rm=TRUE))
+carbNit$cn.z2 <- (carbNit$C.N-mean(carbNit$C.N,na.rm=TRUE))/(sd(carbNit$C.N,na.rm=TRUE)*2)
 carbNit$cn.port <- (carbNit$C.N/100)
 
-cnZ.data <- list(yTraiti = carbNit$cn.z, 
+cn.data <- list(yTraiti = carbNit$C.N, 
   N = nrow(carbNit),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(carbNit$species)),
   n_tran = length(unique(carbNit$transect)),
-  lati = carbNit$latZ,
+  lati = carbNit$latitude,
   tranE = as.numeric(carbNit$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -532,21 +626,56 @@ cnZ.data <- list(yTraiti = carbNit$cn.z,
   photoi = pheno.t$photo.z2
 )
 
-mdl <- stan("stan/cnDummyInt.stan",
+cnZ.data <- list(yTraiti = carbNit$cn.z2, 
+  N = nrow(carbNit),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(carbNit$species)),
+  n_tran = length(unique(carbNit$transect.z2)),
+  lati = carbNit$lat.z2,
+  tranE = as.numeric(carbNit$transect.z2),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z2,
+  chilli = pheno.t$chillport.z2,
+  photoi = pheno.t$photo.z2
+)
+
+mdl <- stan("stan/lmaDummyIntGrand.stan",
   data = cnZ.data,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
   #,control = list(adapt_delta = 0.99, max_treedepth =12)
 )
 
-mdlCN <- stan("stan/cnDummyIntGrand.stan",
-  data = cnZ.data,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
-  #,control = list(adapt_delta = 0.99, max_treedepth =12)
-)
+# mdlCN <- stan("stan/cnDummyIntGrand.stan",
+#   data = cnZ.data,
+#   iter = 4000, warmup = 3000, chains=4,
+#   include = FALSE, pars = c("y_hat")
+#   #,control = list(adapt_delta = 0.99, max_treedepth =12)
+# )
+sumer <- data.frame(summary(mdl)$summary[c(
+  "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sumer
 
-save(mdlCN, file="output/cnDummyIntGrandZboth.Rdata")
+postSSD<- data.frame(rstan::extract(mdl))
+
+par(mfrow = c(1,3))
+hist(postSSD$betaTraitxForce, main = "betaTraitxForce",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+
+hist(postSSD$betaTraitxChill, main = "betaTraitxChill",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+
+hist(postSSD$betaTraitxPhoto, main = "betaTraitxPhoto",  xlim = c(-200, 200))
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
+abline(v = 0, col="red", lwd=3, lty=2)
+# looks the exact same as if you z-score the lma, so let's not since I am not sure it is a good idea
+
+
+save(mdl, file="output/cnDummyIntGrandZ25.Rdata")
 
 load("output/cnDummyInt.Rdata")
  ssm <- as.shinystan(mdl)
