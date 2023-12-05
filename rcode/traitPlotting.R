@@ -27,22 +27,22 @@ spInfo <- read.csv("input/species_ring.csv")
 # trtPheno <- read.csv("input/trtData.csv")
 trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
-load("output/mdl2023/z-scored/heightDummyIntGrandZ.Rdata")
+load("output/heightDummyIntGrandZ25.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/mdl2023/z-scored/lmaDummyIntGrandZ.Rdata")
+load("output/lmaDummyIntGrandZ25.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 sm.sum <- summary(mdlLMA)$summary
 
-load("output/mdl2023/z-scored/dbhDummyIntGrandZ.Rdata")
+load("output/dbhDummyIntGrandZ25.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
-load("output/mdl2023/z-scored/ssdDummyIntGrandZ.Rdata")
-postCN <- rstan::extract(mdlSSD)
+load("output/ssdDummyIntGrandZ25.Rdata")
+postCN <- rstan::extract(mdl)
 
-load("output/mdl2023/z-scored/cnDummyIntGrandZ.Rdata")
-postSSD <- rstan::extract(mdlCN)
+load("output/cnDummyIntGrandZ25.Rdata")
+postSSD <- rstan::extract(mdlSSD)
 
 ###### Compare the spp and site level effects across traits ###########
 # col1 <- rgb(204 / 255, 102 / 255, 119 / 255, alpha = 0.8)
@@ -196,16 +196,16 @@ wData <- subset(trtPheno, transect == "0" )
 # Make the other parameters constant
 
 lati <- seq(40, 60, by = 0.5)
-latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
-tranW <- 0
-tranE <- 1
+latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+tranW <- -0.4406491
+tranE <- 0.5669498
 
 # plot first for west coast
 ht_w = a_trtSpHt + b_tranEHt * tranW + b_tranlatHt * (tranW*latZ)
 ht_e = a_trtSpHt + b_tranEHt * tranE + b_tranlatHt * (tranE*latZ)
 
 par(mfrow = c(1,1))
-plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
+plot(0, type = "n", xlim = c(25,60), ylim = c(-1,1),
   xlab = "Latitude",
   ylab = "Trait")
 abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
@@ -345,10 +345,6 @@ colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
 eData <- subset(trtPheno, transect == "1" )
 wData <- subset(trtPheno, transect == "0" )
 
-# Make the other parameters constant
-
-tranW <- 0
-tranE <- 1
 
 # plot first for west coast
 DBH_w = a_trtSpDBH + b_tranEDBH * tranW + b_tranlatDBH * (tranW*latZ)
@@ -434,7 +430,7 @@ abline(lm(SSD_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(SSD_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 
 #############################################
-sumCN <- summary(mdlCN)$summary
+sumCN <- summary(mdl)$summary
 muGrand = (sumCN[grep("mu_grand", rownames(sumCN)), 1])
 b_trtSpCN = (sumCN[grep("b_muSp", rownames(sumCN)), 1])
 a_trtSpCN = mean((sumCN[grep("mu_grand_sp", rownames(sumCN)), 1]))
@@ -498,51 +494,51 @@ CN_w = a_trtSpCN + b_tranECN * tranW + b_tranlatCN * (tranW*latZ)
 CN_e = a_trtSpCN + b_tranECN * tranE + b_tranlatCN * (tranE*latZ)
 
 par(mfrow = c(1,1))
-plot(0, type = "n", xlim = c(25,60), ylim = c(-100,100),
+plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
      xlab = "Latitude",
      ylab = "Trait")
 abline(lm(CN_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(CN_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 #################################
-pdf("figures/transectIntrxn.pdf", width =13, height =3)
+pdf("figures/transectIntrxnZ25.pdf", width =13, height =3)
 par(mfrow = c(1,5))
-plot(0, type = "n", xlim = c(40,55), ylim = c(0,10),
+plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
      xlab = "Latitude",
      ylab = "Height", cex.lab = 1.3)
 
 #abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(ht_e ~lati), col = "darkslategray4", lwd = 3, lty =1)
 abline(lm(ht_w ~lati), col = "darkslategray4", lwd = 3, lty =2)
-text(40.8, 9, label = "a)", cex = 1.25)
+text(40.8, 2, label = "a)", cex = 1.25)
 
-plot(0, type = "n", xlim = c(40,55), ylim = c(0,10),
+plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
      xlab = "Latitude",
      ylab = "Diameter at breast height", cex.lab = 1.3)
 abline(lm(DBH_e ~lati), col = "goldenrod", lwd = 3, lty =1)
 abline(lm(DBH_w ~lati), col = "goldenrod", lwd = 3, lty =2)
-text(40.8, 9, label = "b)", cex = 1.25)
+text(40.8, 2, label = "b)", cex = 1.25)
 
-plot(0, type = "n", xlim = c(40,55), ylim = c(0,1),
+plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
      xlab = "Latitude",
      ylab = "Leaf mass area", cex.lab = 1.3)
 abline(lm(LMA_e ~lati), col = "darkolivegreen", lwd = 3, lty =1)
 abline(lm(LMA_w ~lati), col = "darkolivegreen", lwd = 3, lty =2)
-text(40.8,0.9, label = "c)", cex = 1.25)
+text(40.8,2, label = "c)", cex = 1.25)
 
 
-plot(0, type = "n", xlim = c(40,55), ylim = c(0,1),
+plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
      xlab = "Latitude",
      ylab = "Stem specific density", cex.lab = 1.3)
 abline(lm(SSD_e ~lati), col = "maroon", lwd = 3, lty =1)
 abline(lm(SSD_w ~lati), col = "maroon", lwd = 3, lty =2)
-text(40.8,0.9, label = "d)", cex = 1.25)
+text(40.8,2, label = "d)", cex = 1.25)
 
-plot(0, type = "n", xlim = c(40,55), ylim = c(0,1),
+plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
      xlab = "Latitude",
      ylab = "Carbon:Nitrogen", cex.lab = 1.3)
 abline(lm(CN_e ~lati), col = "purple4", lwd = 3, lty =1)
 abline(lm(CN_w ~lati), col = "purple4", lwd = 3, lty =2)
-text(40.8,0.9, label = "e)", cex = 1.25)
+text(40.8,2, label = "e)", cex = 1.25)
 
 legend("topright",legend = c(expression("Western"),
                              expression("Eastern")
