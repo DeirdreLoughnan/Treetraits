@@ -16,7 +16,7 @@ library(lattice)
 require(cowplot)
 require(caper)
 
-install.packages("trait.plot")
+
 
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/Treetraits") 
@@ -25,7 +25,7 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
 }
 
 spInfo <- read.csv("input/species_ring.csv")
-spInfo <- spInfo[, c("species.name","species","type","transect")]
+spInfo <- spInfo[, c("species.name","species","type","transect","X.2")]
 pheno <- read.csv("input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
 trtPheno <- read.csv("input/trtPhenoDummy.csv")
@@ -75,8 +75,12 @@ dataPhy = comparative.data(tree, dat.int, names.col = "species.name", na.omit = 
 phyloplot = dataPhy$phy
 x = dataPhy$data$b_chillSpHt
 y = dataPhy$data$ht
+z = dataPhy$data$b_forceSpHt
+w = dataPhy$data$b_photoSpHt
 names(x)=dataPhy$phy$tip.label
 names(y)=dataPhy$phy$tip.label
+names(z)=dataPhy$phy$tip.label
+names(w)=dataPhy$phy$tip.label
 
 slope <- contMap(tree, x, plot = T)
 slopeCol <- setMap(slope, colors=c("cyan","purple4","red"))
@@ -121,10 +125,80 @@ objy<-contMap(tree,y,plot=FALSE)
 obj<-setMap(obj,invert=TRUE)
 
 
-
+pdf("figures/chillHeightTree.pdf", width =8, height = 6)
 par(mfrow=c(1,2))
-plot(obj,lwd=7,ftype="off",legend=F)
-plot(objy,lwd=7,direction="leftwards",ftype="off",
-  legend=2)
+plot(obj,lwd=7,ftype="off",legend=F, ylim=c(1-0.09*(Ntip(slopeCol$tree)),Ntip(slopeCol$tree)))
+add.color.bar(60, obj$cols, title = "Chilling response", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+plot(objy,lwd=7,direction="leftwards",ftype="off",legend=F, ylim=c(1-0.09*(Ntip(slopeCol$tree)),Ntip(slopeCol$tree)))
 
-add.color.bar(60, slopeCol$cols, title = "Intercept (days)", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+add.color.bar(60, objy$cols, title = "Height", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+dev.off()
+
+# Forcing
+obj<-contMap(tree,z,plot=FALSE)
+objy<-contMap(tree,y,plot=FALSE)
+obj<-setMap(obj,invert=TRUE)
+
+
+pdf("figures/forceHeightTree.pdf", width =8, height = 6)
+par(mfrow=c(1,2))
+plot(obj,lwd=7,ftype="off",legend=F, ylim=c(1-0.09*(Ntip(slopeCol$tree)),Ntip(slopeCol$tree)))
+add.color.bar(60, obj$cols, title = "Forcing response", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+plot(objy,lwd=7,direction="leftwards",ftype="off",legend=F, ylim=c(1-0.09*(Ntip(slopeCol$tree)),Ntip(slopeCol$tree)))
+
+add.color.bar(60, objy$cols, title = "Height", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+dev.off()
+
+# Photoperiod
+obj<-contMap(tree,w,plot=FALSE)
+objy<-contMap(tree,y,plot=FALSE)
+obj<-setMap(obj,invert=TRUE)
+
+
+pdf("figures/photoperiodHeightTree.pdf", width =8, height = 6)
+par(mfrow=c(1,2))
+plot(obj,lwd=7,ftype="off",legend=F, ylim=c(1-0.09*(Ntip(slopeCol$tree)),Ntip(slopeCol$tree)))
+add.color.bar(60, obj$cols, title = "Photoperiod response", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+plot(objy,lwd=7,direction="leftwards",ftype="off",legend=F, ylim=c(1-0.09*(Ntip(slopeCol$tree)),Ntip(slopeCol$tree)))
+
+add.color.bar(60, objy$cols, title = "Height", subtitle="", digits = 1,lims = c(10,50),  prompt = F,x=0.2*h, y = -2)
+dev.off()
+
+nodelabels(text = tree$node.label,
+  frame = "n", cex=0.8, col= "blue")
+
+# Could use node number as a proxy of evolutionary realtedness, bottom of the tree (populs = small node numbers) top = high
+
+nodes <- c(73,73, 73,73, 60,60, 68,69,63,63,63,61,56,78,75,79,87,85,85,90,89,92,52,52,52,66,57,58,58,71,89,89,65,75,71,81,68,70,70,70,84,91,91,82,82,82,92)
+
+dat.int$node <- nodes
+dat.int <- dat.int[,c("species.name","node","ht","b_chillSpHt","b_forceSpHt","b_photoSpHt")]
+
+htChill <- ggplot(dat.int, aes(x = ht, y = b_chillSpHt, col = node))+
+  geom_point(size =2) +
+  labs( x = "Height", y = "Chilling response", main = NA)+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    legend.key=element_rect(fill="white"), legend.title = element_blank(),legend.position = "none") +
+  scale_color_viridis() 
+
+htForce <- ggplot(dat.int, aes(x = ht, y = b_forceSpHt, col = node))+
+  geom_point(size =2) +
+  labs( x = "Height", y = "Forcing response", main = NA)+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    legend.key=element_rect(fill="white"), legend.title = element_blank(),legend.position = "none") +
+  scale_color_viridis() 
+
+
+htPhoto <- ggplot(dat.int, aes(x = ht, y = b_photoSpHt, col = node))+
+  geom_point(size =2) +
+  labs( x = "Height", y = "Photoperiod response", main = NA)+
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    legend.key=element_rect(fill="white"), legend.title = element_blank(),legend.position = "none") +
+  scale_color_viridis() 
+
+pdf("figures/heightCuePhyloRelatedness.pdf", height =4, width = 12)
+plot_grid( htChill, htForce, htPhoto, ncol = 3, nrow =1,align = "v")
+dev.off()

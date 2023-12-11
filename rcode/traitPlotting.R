@@ -39,10 +39,10 @@ load("output/dbhDummyIntGrandZ25.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
 load("output/ssdDummyIntGrandZ25.Rdata")
-postCN <- rstan::extract(mdl)
+postSSD <- rstan::extract(mdlSSD)
 
 load("output/cnDummyIntGrandZ25.Rdata")
-postSSD <- rstan::extract(mdlSSD)
+postCN <- rstan::extract(mdl)
 
 ###### Compare the spp and site level effects across traits ###########
 # col1 <- rgb(204 / 255, 102 / 255, 119 / 255, alpha = 0.8)
@@ -136,57 +136,27 @@ legend("topright",legend = c(expression("Height"),
 
 # How do transect effects differ?
 sumHt <- summary(mdlHt)$summary
-muGrand = (sumHt[grep("mu_grand", rownames(sumHt)), 1])
-b_trtSpHt = (sumHt[grep("b_muSp", rownames(sumHt)), 1])
-a_trtSpHt = mean((sumHt[grep("mu_grand_sp", rownames(sumHt)), 1]))
-b_tranEHt = sumHt[grep("b_tranE", rownames(sumHt)), 1]
-b_tranlatHt = sumHt[grep("b_tranlat", rownames(sumHt)), 1]
 
-b_phenoSpHt = (sumHt[grep("alphaPhenoSp", rownames(sumHt)), 1])
-a_phenoSpHt = (sumHt[grep("muPhenoSp", rownames(sumHt)), 1])
+a_spHt = mean((sumHt[grep("mu_grand", rownames(sumHt)), 1]))
+a_spHt5 <- quantile(postHt$mu_grand, c(0.05))
+a_spHt95 <- quantile(postHt$mu_grand, c(0.95))
+a_spHt25 <- quantile(postHt$mu_grand, c(0.25))
+a_spHt75 <- quantile(postHt$mu_grand, c(0.75))
+a_spHt <- cbind(a_spHt, a_spHt5,a_spHt95, a_spHt25,a_spHt75)
 
-a_chillSpHt = sumHt[grep("alphaChillSp", rownames(sumHt)), 1]
-a_forceSpHt = sumHt[grep("alphaForceSp", rownames(sumHt)), 1]
-a_photoSpHt = sumHt[grep("alphaPhotoSp", rownames(sumHt)), 1]
+b_tranHt <- sumHt[grep("b_tranE", rownames(sumHt)), 1]
+b_tranHt5 <- quantile(postHt$b_tranE, c(0.05))
+b_tranHt95 <- quantile(postHt$b_tranE, c(0.95))
+b_tranHt25 <- quantile(postHt$b_tranE, c(0.25))
+b_tranHt75 <- quantile(postHt$b_tranE, c(0.75))
+b_tranHt <- cbind(b_tranHt, b_tranHt5,b_tranHt95, b_tranHt25,b_tranHt75)
 
-b_photoSpHt = sumHt[grep("muPhotoSp", rownames(sumHt)), 1]
-b_forceSpHt = sumHt[grep("muForceSp", rownames(sumHt)), 1]
-b_chillSpHt = sumHt[grep("muChillSp", rownames(sumHt)), 1]
-
-bTrtChillHt = sumHt[grep("betaTraitxChill", rownames(sumHt)), 1]
-bTrtForceHt = sumHt[grep("betaTraitxForce", rownames(sumHt)), 1]
-bTrtPhotoHt = sumHt[grep("betaTraitxPhoto", rownames(sumHt)), 1]
-
-a_trtsp5Ht <- vector()
-for(i in 1:ncol(postHt$muSp)){  
-  quantU <- round(quantile(postHt$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  a_trtsp5Ht <- rbind(a_trtsp5Ht, quantU)
-}
-colnames(a_trtsp5Ht) <- c("Int5","Int95","Int25","Int75")
-
-b_tran5Ht <- round(quantile(postHt$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
-b_tranlat5Ht <- round(quantile(postHt$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
-
-b_chill5 <- vector()
-for(i in 1:ncol(postHt$betaChillSp)){
-  quantU <- round(quantile(postHt$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  b_chill5 <- rbind(b_chill5, quantU)
-}
-colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
-
-b_force5 <- vector()
-for(i in 1:ncol(postHt$betaForceSp)){
-  quantU <- round(quantile(postHt$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  b_force5 <- rbind(b_force5, quantU)
-}
-colnames(b_force5) <- c("force5","force95","force25","force75")
-
-b_photo5 <- vector()
-for(i in 1:ncol(postHt$betaPhotoSp)){
-  quantU <- round(quantile(postHt$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  b_photo5 <- rbind(b_photo5, quantU)
-}
-colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
+b_tranlatHt <- sumHt[grep("b_tranlat", rownames(sumHt)), 1]
+b_tranlatHt5 <- quantile(postHt$b_tranlat, c(0.05))
+b_tranlatHt95 <- quantile(postHt$b_tranlat, c(0.95))
+b_tranlatHt25 <- quantile(postHt$b_tranlat, c(0.25))
+b_tranlatHt75 <- quantile(postHt$b_tranlat, c(0.75))
+b_tranlatHt <- cbind(b_tranlatHt, b_tranlatHt5,b_tranlatHt95, b_tranlatHt25,b_tranlatHt75)
 
 ## Simulate interaction with transect and latitude:
 
@@ -201,23 +171,335 @@ tranW <- -0.4406491
 tranE <- 0.5669498
 
 # plot first for west coast
-ht_w = a_trtSpHt + b_tranEHt * tranW + b_tranlatHt * (tranW*latZ)
-ht_e = a_trtSpHt + b_tranEHt * tranE + b_tranlatHt * (tranE*latZ)
+ht_w = a_spHt[1] + b_tranHt[1] * tranW + b_tranlatHt[1] * (tranW*latZ)
+ht_e = a_SpHt[1] + b_tranHt[1] * tranE + b_tranlatHt[1] * (tranE*latZ)
 
-par(mfrow = c(1,1))
-plot(0, type = "n", xlim = c(25,60), ylim = c(-1,1),
-  xlab = "Latitude",
-  ylab = "Trait")
-abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
-abline(lm(ht_e ~lati), col = "darkslategray", lwd = 3, lty =1)
+ht_w5 = a_spHt[2] + b_tranHt[2] * tranW + b_tranlatHt[2] * (tranW*latZ)
+ht_e5 = a_spHt[2] + b_tranHt[2] * tranE + b_tranlatHt[2] * (tranE*latZ)
+
+ht_w95 = a_spHt[3] + b_tranHt[3] * tranW + b_tranlatHt[3] * (tranW*latZ)
+ht_e95 = a_spHt[3] + b_tranHt[3] * tranE + b_tranlatHt[3] * (tranE*latZ)
+
+htEW <- data.frame(htw = ht_w, hte = ht_e,  ht_w5 =ht_w5, ht_w95 = ht_w95, ht_e5 = ht_e5, ht_e95 = ht_e95  )
+
+
+intHt <- ggplot(htEW) +
+  geom_line(aes(y = htw, x = latZ), col = "cyan4", lty = "dashed") +
+  geom_ribbon(data = htEW, aes(ymin = ht_w5, ymax = ht_w95, x= latZ), alpha = 0.2, fill = "cyan4") +
+  geom_line(aes(y = hte, x = latZ), col = "cyan3") + 
+  geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= latZ), alpha = 0.2, fill = "cyan3") + 
+  xlab("Standardized latitude") + ylab("Standardized height") +
+  xlim (-0.8,0.8) + 
+  ylim (-0.5,0.5) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+  
+
 
 ################################################
 ##lma
 
+
+sumLMA <- summary(mdlLMA)$summary
+
+a_spLMA = mean((sumLMA[grep("mu_grand", rownames(sumLMA)), 1]))
+a_spLMA5 <- quantile(postLMA$mu_grand, c(0.05))
+a_spLMA95 <- quantile(postLMA$mu_grand, c(0.95))
+a_spLMA25 <- quantile(postLMA$mu_grand, c(0.25))
+a_spLMA75 <- quantile(postLMA$mu_grand, c(0.75))
+a_spLMA <- cbind(a_spLMA, a_spLMA5,a_spLMA95, a_spLMA25,a_spLMA75)
+
+b_tranLMA <- sumLMA[grep("b_tranE", rownames(sumLMA)), 1]
+b_tranLMA5 <- quantile(postLMA$b_tranE, c(0.05))
+b_tranLMA95 <- quantile(postLMA$b_tranE, c(0.95))
+b_tranLMA25 <- quantile(postLMA$b_tranE, c(0.25))
+b_tranLMA75 <- quantile(postLMA$b_tranE, c(0.75))
+b_tranLMA <- cbind(b_tranLMA, b_tranLMA5,b_tranLMA95, b_tranLMA25,b_tranLMA75)
+
+b_tranlatLMA <- sumLMA[grep("b_tranlat", rownames(sumLMA)), 1]
+b_tranlatLMA5 <- quantile(postLMA$b_tranlat, c(0.05))
+b_tranlatLMA95 <- quantile(postLMA$b_tranlat, c(0.95))
+b_tranlatLMA25 <- quantile(postLMA$b_tranlat, c(0.25))
+b_tranlatLMA75 <- quantile(postLMA$b_tranlat, c(0.75))
+b_tranlatLMA <- cbind(b_tranlatLMA, b_tranlatLMA5,b_tranlatLMA95, b_tranlatLMA25,b_tranlatLMA75)
+
+quantile2575 <- function(x){
+  returnQuanilte <- quantile(x, prob = c(0.05, 0.95))
+  return(returnQuanilte)
+}
+
+bf_quan <- apply(data.frame(postLMA$b_tranE), 2, quantile2575)
+mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+# Make the other parameters constant
+
+lati <- seq(40, 60, by = 0.5)
+latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+tranW <- -0.4406491
+tranE <- 0.5669498
+
+
+# plot first for west coast
+LMA_w = a_spLMA[1] + b_tranLMA[1] * tranW + b_tranlatLMA[1] * (tranW*latZ)
+LMA_e = a_spLMA[1] + b_tranLMA[1] * tranE + b_tranlatLMA[1] * (tranE*latZ)
+
+LMA_w5 = a_spLMA[2] + b_tranLMA[2] * tranW + b_tranlatLMA[2] * (tranW*latZ)
+LMA_e5 = a_spLMA[2] + b_tranLMA[2] * tranE + b_tranlatLMA[2] * (tranE*latZ)
+
+LMA_w95 = a_spLMA[3] + b_tranLMA[3] * tranW + b_tranlatLMA[3] * (tranW*latZ)
+LMA_e95 = a_spLMA[3] + b_tranLMA[3] * tranE + b_tranlatLMA[3] * (tranE*latZ)
+
+LMAEW <- data.frame(LMAw = LMA_w, LMAe = LMA_e,  LMA_w5 =LMA_w5, LMA_w95 = LMA_w95, LMA_e5 = LMA_e5, LMA_e95 = LMA_e95  )
+
+
+intLMA <- ggplot(LMAEW) +
+  geom_line(aes(y = LMAw, x = latZ), col = "darkolivegreen", lty = 2) +
+  geom_ribbon(data = LMAEW, aes(ymin = LMA_w5, ymax = LMA_w95, x= latZ), alpha = 0.2, fill = "darkolivegreen") +
+  geom_line(aes(y = LMAe, x = latZ), col = "darkolivegreen3") +
+  geom_ribbon(data = LMAEW, aes(ymin = LMA_e5, ymax = LMA_e95, x= latZ), alpha = 0.2, fill = "darkolivegreen3") +
+  scale_color_manual(values = c("darkolivegreen","darkolivegreen3"), labels = c("Western", "Eastern"), name = "") +
+  xlab("Standardized latitude") + ylab("Standardized heigLMA") +
+  xlim (-0.8,0.8) + 
+  ylim (-1,1) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+### DBH
+
+
+sumDBH <- summary(mdlDBH)$summary
+
+a_spDBH = mean((sumDBH[grep("mu_grand", rownames(sumDBH)), 1]))
+a_spDBH5 <- quantile(postDBH$mu_grand, c(0.05))
+a_spDBH95 <- quantile(postDBH$mu_grand, c(0.95))
+a_spDBH25 <- quantile(postDBH$mu_grand, c(0.25))
+a_spDBH75 <- quantile(postDBH$mu_grand, c(0.75))
+a_spDBH <- cbind(a_spDBH, a_spDBH5,a_spDBH95, a_spDBH25,a_spDBH75)
+
+b_tranDBH <- sumDBH[grep("b_tranE", rownames(sumDBH)), 1]
+b_tranDBH5 <- quantile(postDBH$b_tranE, c(0.05))
+b_tranDBH95 <- quantile(postDBH$b_tranE, c(0.95))
+b_tranDBH25 <- quantile(postDBH$b_tranE, c(0.25))
+b_tranDBH75 <- quantile(postDBH$b_tranE, c(0.75))
+b_tranDBH <- cbind(b_tranDBH, b_tranDBH5,b_tranDBH95, b_tranDBH25,b_tranDBH75)
+
+b_tranlatDBH <- sumDBH[grep("b_tranlat", rownames(sumDBH)), 1]
+b_tranlatDBH5 <- quantile(postDBH$b_tranlat, c(0.05))
+b_tranlatDBH95 <- quantile(postDBH$b_tranlat, c(0.95))
+b_tranlatDBH25 <- quantile(postDBH$b_tranlat, c(0.25))
+b_tranlatDBH75 <- quantile(postDBH$b_tranlat, c(0.75))
+b_tranlatDBH <- cbind(b_tranlatDBH, b_tranlatDBH5,b_tranlatDBH95, b_tranlatDBH25,b_tranlatDBH75)
+
+
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+# Make the other parameters constant
+
+lati <- seq(40, 60, by = 0.5)
+latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+tranW <- -0.4406491
+tranE <- 0.5669498
+
+
+# plot first for west coast
+DBH_w = a_spDBH[1] + b_tranDBH[1] * tranW + b_tranlatDBH[1] * (tranW*latZ)
+DBH_e = a_spDBH[1] + b_tranDBH[1] * tranE + b_tranlatDBH[1] * (tranE*latZ)
+
+DBH_w5 = a_spDBH[2] + b_tranDBH[2] * tranW + b_tranlatDBH[2] * (tranW*latZ)
+DBH_e5 = a_spDBH[2] + b_tranDBH[2] * tranE + b_tranlatDBH[2] * (tranE*latZ)
+
+DBH_w95 = a_spDBH[3] + b_tranDBH[3] * tranW + b_tranlatDBH[3] * (tranW*latZ)
+DBH_e95 = a_spDBH[3] + b_tranDBH[3] * tranE + b_tranlatDBH[3] * (tranE*latZ)
+
+DBHEW <- data.frame(DBHw = DBH_w, DBHe = DBH_e,  DBH_w5 =DBH_w5, DBH_w95 = DBH_w95, DBH_e5 = DBH_e5, DBH_e95 = DBH_e95  )
+
+
+intDBH <- ggplot(DBHEW) +
+  geom_line(aes(y = DBHw, x = latZ), col = "goldenrod4", lty =2) +
+  geom_ribbon(data = DBHEW, aes(ymin = DBH_w5, ymax = DBH_w95, x= latZ), alpha = 0.2, fill = "goldenrod4") +
+  geom_line(aes(y = DBHe, x = latZ), col = "goldenrod") +
+  geom_ribbon(data = DBHEW, aes(ymin = DBH_e5, ymax = DBH_e95, x= latZ), alpha = 0.2, fill = "goldenrod") +
+  #scale_color_manual(values = c("goldenrod4","goldenrod"), labels = c("Western", "Eastern"), name = "") +
+  scale_linetype_manual(values = c(1,2), labels = c("Western", "Eastern"), name = "") +
+  xlab("Standardized latitude") + ylab("Standardized heigDBH") +
+  xlim (-0.8,0.8) + 
+  ylim (-1,1) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+## C:N
+
+sumCN <- summary(mdl)$summary
+
+a_spCN = mean((sumCN[grep("mu_grand", rownames(sumCN)), 1]))
+a_spCN5 <- quantile(postCN$mu_grand, c(0.05))
+a_spCN95 <- quantile(postCN$mu_grand, c(0.95))
+a_spCN25 <- quantile(postCN$mu_grand, c(0.25))
+a_spCN75 <- quantile(postCN$mu_grand, c(0.75))
+a_spCN <- cbind(a_spCN, a_spCN5,a_spCN95, a_spCN25,a_spCN75)
+
+b_tranCN <- sumCN[grep("b_tranE", rownames(sumCN)), 1]
+b_tranCN5 <- quantile(postCN$b_tranE, c(0.05))
+b_tranCN95 <- quantile(postCN$b_tranE, c(0.95))
+b_tranCN25 <- quantile(postCN$b_tranE, c(0.25))
+b_tranCN75 <- quantile(postCN$b_tranE, c(0.75))
+b_tranCN <- cbind(b_tranCN, b_tranCN5,b_tranCN95, b_tranCN25,b_tranCN75)
+
+b_tranlatCN <- sumCN[grep("b_tranlat", rownames(sumCN)), 1]
+b_tranlatCN5 <- quantile(postCN$b_tranlat, c(0.05))
+b_tranlatCN95 <- quantile(postCN$b_tranlat, c(0.95))
+b_tranlatCN25 <- quantile(postCN$b_tranlat, c(0.25))
+b_tranlatCN75 <- quantile(postCN$b_tranlat, c(0.75))
+b_tranlatCN <- cbind(b_tranlatCN, b_tranlatCN5,b_tranlatCN95, b_tranlatCN25,b_tranlatCN75)
+
+
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+# Make the other parameters constant
+
+lati <- seq(40, 60, by = 0.5)
+latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+tranW <- -0.4406491
+tranE <- 0.5669498
+
+
+# plot first for west coast
+CN_w = a_spCN[1] + b_tranCN[1] * tranW + b_tranlatCN[1] * (tranW*latZ)
+CN_e = a_spCN[1] + b_tranCN[1] * tranE + b_tranlatCN[1] * (tranE*latZ)
+
+CN_w5 = a_spCN[2] + b_tranCN[2] * tranW + b_tranlatCN[2] * (tranW*latZ)
+CN_e5 = a_spCN[2] + b_tranCN[2] * tranE + b_tranlatCN[2] * (tranE*latZ)
+
+CN_w95 = a_spCN[3] + b_tranCN[3] * tranW + b_tranlatCN[3] * (tranW*latZ)
+CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*latZ)
+
+CNEW <- data.frame(CNw = CN_w, CNe = CN_e,  CN_w5 =CN_w5, CN_w95 = CN_w95, CN_e5 = CN_e5, CN_e95 = CN_e95  )
+
+
+intCN <- ggplot(CNEW) +
+  geom_line(aes(y = CNw, x = latZ), color = "purple4", linetype = "dashed") +
+  geom_ribbon(data = CNEW, aes(ymin = CN_w5, ymax = CN_w95, x= latZ), alpha = 0.2, fill = "purple4") +
+  geom_line(aes(y = CNe, x = latZ), col = "purple2") +
+  geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= latZ), alpha = 0.2, fill = "purple2") +
+  # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
+  xlab("Standardized latitude") + ylab("Standardized heigCN") +
+  xlim (-0.8,0.8) + 
+  ylim (-1,1.3) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+
+
+
+sumSSD <- summary(mdlSSD)$summary
+
+a_spSSD = mean((sumSSD[grep("mu_grand", rownames(sumSSD)), 1]))
+a_spSSD5 <- quantile(postSSD$mu_grand, c(0.05))
+a_spSSD95 <- quantile(postSSD$mu_grand, c(0.95))
+a_spSSD25 <- quantile(postSSD$mu_grand, c(0.25))
+a_spSSD75 <- quantile(postSSD$mu_grand, c(0.75))
+a_spSSD <- cbind(a_spSSD, a_spSSD5,a_spSSD95, a_spSSD25,a_spSSD75)
+
+b_tranSSD <- sumSSD[grep("b_tranE", rownames(sumSSD)), 1]
+b_tranSSD5 <- quantile(postSSD$b_tranE, c(0.05))
+b_tranSSD95 <- quantile(postSSD$b_tranE, c(0.95))
+b_tranSSD25 <- quantile(postSSD$b_tranE, c(0.25))
+b_tranSSD75 <- quantile(postSSD$b_tranE, c(0.75))
+b_tranSSD <- cbind(b_tranSSD, b_tranSSD5,b_tranSSD95, b_tranSSD25,b_tranSSD75)
+
+b_tranlatSSD <- sumSSD[grep("b_tranlat", rownames(sumSSD)), 1]
+b_tranlatSSD5 <- quantile(postSSD$b_tranlat, c(0.05))
+b_tranlatSSD95 <- quantile(postSSD$b_tranlat, c(0.95))
+b_tranlatSSD25 <- quantile(postSSD$b_tranlat, c(0.25))
+b_tranlatSSD75 <- quantile(postSSD$b_tranlat, c(0.75))
+b_tranlatSSD <- cbind(b_tranlatSSD, b_tranlatSSD5,b_tranlatSSD95, b_tranlatSSD25,b_tranlatSSD75)
+
+
+
+## Simulate interaction with transect and latitude:
+
+eData <- subset(trtPheno, transect == "1" )
+wData <- subset(trtPheno, transect == "0" )
+
+# Make the other parameters constant
+
+lati <- seq(40, 60, by = 0.5)
+latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+tranW <- -0.4406491
+tranE <- 0.5669498
+
+
+# plot first for west coast
+SSD_w = a_spSSD[1] + b_tranSSD[1] * tranW + b_tranlatSSD[1] * (tranW*latZ)
+SSD_e = a_spSSD[1] + b_tranSSD[1] * tranE + b_tranlatSSD[1] * (tranE*latZ)
+
+SSD_w5 = a_spSSD[2] + b_tranSSD[2] * tranW + b_tranlatSSD[2] * (tranW*latZ)
+SSD_e5 = a_spSSD[2] + b_tranSSD[2] * tranE + b_tranlatSSD[2] * (tranE*latZ)
+
+SSD_w95 = a_spSSD[3] + b_tranSSD[3] * tranW + b_tranlatSSD[3] * (tranW*latZ)
+SSD_e95 = a_spSSD[3] + b_tranSSD[3] * tranE + b_tranlatSSD[3] * (tranE*latZ)
+
+SSDEW <- data.frame(SSDw = SSD_w, SSDe = SSD_e,  SSD_w5 =SSD_w5, SSD_w95 = SSD_w95, SSD_e5 = SSD_e5, SSD_e95 = SSD_e95  )
+
+
+intSSD <- ggplot(SSDEW) +
+  geom_line(aes(y = SSDw, x = latZ), color = "maroon4", linetype = "dashed") +
+  geom_ribbon(data = SSDEW, aes(ymin = SSD_w5, ymax = SSD_w95, x= latZ), alpha = 0.2, fill = "maroon4") +
+  geom_line(aes(y = SSDe, x = latZ), col = "maroon") +
+  geom_ribbon(data = SSDEW, aes(ymin = SSD_e5, ymax = SSD_e95, x= latZ), alpha = 0.2, fill = "maroon") +
+  xlab("Standardized latitude") + ylab("Standardized heigSSD") +
+  xlim (-0.8,0.8) + 
+  ylim (-1,1.3) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(), legend.position=c(.0,.0),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+
+pdf("figures/intrxnPlots.pdf", height =5, width = 20)
+plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 4, nrow =1,align = "v")
+dev.off()
+
+# OLD CODE
+
 sumLMA <- summary(mdlLMA)$summary
 muGrand = (sumLMA[grep("mu_grand", rownames(sumLMA)), 1])
 b_trtSpLMA = (sumLMA[grep("b_muSp", rownames(sumLMA)), 1])
-a_trtSpLMA = mean((sumLMA[grep("mu_grand_sp", rownames(sumLMA)), 1]))
+a_trtSpLMA = mean((sumLMA[grep("mu_grand", rownames(sumLMA)), 1]))
 b_tranELMA = sumLMA[grep("b_tranE", rownames(sumLMA)), 1]
 b_tranlatLMA = sumLMA[grep("b_tranlat", rownames(sumLMA)), 1]
 
@@ -236,36 +518,37 @@ bTrtChillLMA = sumLMA[grep("betaTraitxChill", rownames(sumLMA)), 1]
 bTrtForceLMA = sumLMA[grep("betaTraitxForce", rownames(sumLMA)), 1]
 bTrtPhotoLMA = sumLMA[grep("betaTraitxPhoto", rownames(sumLMA)), 1]
 
-a_trtsp5LMA <- vector()
-for(i in 1:ncol(postLMA$muSp)){  
-  quantU <- round(quantile(postLMA$muSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  a_trtsp5LMA <- rbind(a_trtsp5LMA, quantU)
-}
-colnames(a_trtsp5LMA) <- c("Int5","Int95","Int25","Int75")
+# a_trtsp5LMA <- vector()
+# for(i in 1:ncol(postLMA$muSp)){  
+#   quantU <- quantile(postLMA$mu_grand[,i], c(0.05, 0.95, 0.25, 0.75))
+#   a_trtsp5LMA <- rbind(a_trtsp5LMA, quantU)
+# }
+# colnames(a_trtsp5LMA) <- c("Int5","Int95","Int25","Int75")
 
-b_tran5LMA <- round(quantile(postLMA$b_tranE, c(0.05, 0.95, 0.25, 0.75)),1)
-b_tranlat5LMA <- round(quantile(postLMA$b_tranlat, c(0.05, 0.95, 0.25, 0.75)),1)
+a_trtsp5LMA <- quantile(postLMA$mu_grand, c(0.05, 0.95, 0.25, 0.75))
+b_tran5LMA <- quantile(postLMA$b_tranE, c(0.05, 0.95, 0.25, 0.75))
+b_tranlat5LMA <- quantile(postLMA$b_tranlat, c(0.05, 0.95, 0.25, 0.75))
 
-b_chill5 <- vector()
-for(i in 1:ncol(postLMA$betaChillSp)){
-  quantU <- round(quantile(postLMA$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  b_chill5 <- rbind(b_chill5, quantU)
-}
-colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
-
-b_force5 <- vector()
-for(i in 1:ncol(postLMA$betaForceSp)){
-  quantU <- round(quantile(postLMA$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  b_force5 <- rbind(b_force5, quantU)
-}
-colnames(b_force5) <- c("force5","force95","force25","force75")
-
-b_photo5 <- vector()
-for(i in 1:ncol(postLMA$betaPhotoSp)){
-  quantU <- round(quantile(postLMA$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
-  b_photo5 <- rbind(b_photo5, quantU)
-}
-colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
+# b_chill5 <- vector()
+# for(i in 1:ncol(postLMA$betaChillSp)){
+#   quantU <- round(quantile(postLMA$betaChillSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+#   b_chill5 <- rbind(b_chill5, quantU)
+# }
+# colnames(b_chill5) <- c("chill5","chill95","chill25","chill75")
+# 
+# b_force5 <- vector()
+# for(i in 1:ncol(postLMA$betaForceSp)){
+#   quantU <- round(quantile(postLMA$betaForceSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+#   b_force5 <- rbind(b_force5, quantU)
+# }
+# colnames(b_force5) <- c("force5","force95","force25","force75")
+# 
+# b_photo5 <- vector()
+# for(i in 1:ncol(postLMA$betaPhotoSp)){
+#   quantU <- round(quantile(postLMA$betaPhotoSp[,i], c(0.05, 0.95, 0.25, 0.75)),1)
+#   b_photo5 <- rbind(b_photo5, quantU)
+# }
+# colnames(b_photo5) <- c("photo5","photo95","photo25","photo75")
 
 ## Simulate interaction with transect and latitude:
 
@@ -278,12 +561,38 @@ wData <- subset(trtPheno, transect == "0" )
 LMA_w = a_trtSpLMA + b_tranELMA * tranW + b_tranlatLMA * (tranW*latZ)
 LMA_e = a_trtSpLMA + b_tranELMA * tranE + b_tranlatLMA * (tranE*latZ)
 
-par(mfrow = c(1,1))
-plot(0, type = "n", xlim = c(25,60), ylim = c(-1,1),
-     xlab = "Latitude",
-     ylab = "Trait")
-abline(lm(LMA_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
-abline(lm(LMA_e ~lati), col = "darkslategray", lwd = 3, lty =1)
+LMA_w5 = mean(a_trtsp5LMA[1]) + b_tran5LMA[1] * tranW + b_tranlat5LMA[1] * (tranW*latZ)
+LMA_e5 = mean(a_trtsp5LMA[1]) + b_tran5LMA[1] * tranE + b_tranlat5LMA[1] * (tranE*latZ)
+
+LMA_w95 = mean(a_trtsp5LMA[2]) + b_tran5LMA[2] * tranW + b_tranlat5LMA[2] * (tranW*latZ)
+LMA_e95 = mean(a_trtsp5LMA[2]) + b_tran5LMA[2] * tranE + b_tranlat5LMA[2] * (tranE*latZ)
+
+intLMA <- data.frame(LMAw = c(LMA_w ),LMAw5 = c(LMA_w5),LMAw95 = c(LMA_w95), LMAe = c(LMA_e), LMAe5 = c(LMA_e5), LMAe95 = c(LMA_e95))
+
+ggplot(intLMA) +
+  geom_line(aes(y = LMAw, x = latZ, col = "cyan4")) +
+  geom_ribbon( aes(ymin = LMAw5, ymax = LMAw95, x= latZ), alpha = 0.2, fill = "cyan4") +
+  geom_line(aes(y = LMAe, x = latZ, col = "cyan3")) + 
+  geom_ribbon(data = LAEW, aes(ymin = ht_e5, ymax = ht_e95, x= latZ), alpha = 0.2, fill = "cyan3") + 
+  xlab("Standardized latitude") + ylab("Standardized height") +
+  xlim (-0.8,0.8) + 
+  ylim (-0.5,0.5) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+
+
+# par(mfrow = c(1,1))
+# plot(0, type = "n", xlim = c(25,60), ylim = c(-1,1),
+#      xlab = "Latitude",
+#      ylab = "Trait")
+# abline(lm(LMA_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
+# abline(lm(LMA_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 #############################################
 ##dbh
 
