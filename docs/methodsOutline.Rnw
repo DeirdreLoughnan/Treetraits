@@ -1,0 +1,194 @@
+%%% start preambling . . .  %%%
+\documentclass{article}
+
+% required 
+\usepackage[hyphens]{url} % this wraps my URL versus letting it spill across the page, a bad habit LaTeX has
+
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{textcomp}%amoung other things, it allows degrees C to be added
+\usepackage{float}
+\usepackage[utf8]{inputenc} % allow funny letters in citaions 
+\usepackage[nottoc]{tocbibind} %should add Refences to the table of contents?
+\usepackage{amsmath} % making nice equations 
+\usepackage{listings} % add in stan code
+\usepackage{xcolor}
+\usepackage{capt-of}%alows me to set a caption for code in appendix 
+\usepackage[export]{adjustbox} % adding a box around a map
+\usepackage{lineno}
+\linenumbers
+% recommended! Uncomment the below line and change the path for your computer!
+% \SweaveOpts{prefix.string=/Users/Lizzie/Documents/git/teaching/demoSweave/Fig.s/demoFig, eps=FALSE} 
+%put your Fig.s in one place! Also, note that here 'Fig.s' is the folder and 'demoFig' is what each 
+% Fig. produced will be titled plus its number or label (e.g., demoFig-nqpbetter.pdf')
+% make your captioning look better
+\usepackage[small]{caption}
+
+\usepackage{xr-hyper} %refer to Fig.s in another document
+\usepackage{hyperref}
+
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+
+% optional: muck with spacing
+\topmargin -1.5cm        
+\oddsidemargin 0.5cm   
+\evensidemargin 0.5cm  % same as oddsidemargin but for left-hand pages
+\textwidth 15.59cm
+\textheight 21.94cm 
+% \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
+\parindent 0pt		  % sets leading space for paragraphs
+% optional: cute, fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LO]{Draft early 2022}
+\fancyhead[RO]{Temporal Ecology Lab}
+% more optionals! %
+
+%\graphicspath{ {./DoseResponse_WriteupImages/} }% tell latex where to find photos 
+\externaldocument[supp-]{Traitors_Manuscript_supp}
+
+%%% end preambling. %%%
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+
+\section*{Materials and Methods}
+
+\subsection*{Field sampling}
+
+\begin{enumerate}
+\item General pop description
+\begin{enumerate}
+\item Combined \emph{in situ} trait data with budburst data from two growth chamber ccutting experiments
+\item Traits were measured across four eastern populations --- Harvard Forest, Massachusetts, USA (42.55$^{\circ}$N, 72.20$^{\circ}$W) and St. Hippolyte, Quebec, Canada (45.98$^{\circ}$N, 74.01$^{\circ}$W) and four western population --- Smithers (54.78$^{\circ}$N, 127.17$^{\circ}$W) and E.C. Manning Park (49.06$^{\circ}$N, 120.78$^{\circ}$W)
+\item Growth chamber study --- cuttings collected from the most southern and northern populations in each transect
+\item Both datasets span latitudinal gradient of 4-6$^{\circ}$
+\end{enumerate}
+
+\item Describing spp
+\begin{enumerate}
+\item Across populations --- measured XX species --- XX spp eastern transect and XX spp western transect
+\item Chose spp that were most abundant in forest communities
+\item Eastern transect: XX shrubs and XX trees
+\item Western transect: XX shrubs and XX trees
+\item X species occurred in both transect
+\end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Functional traits}
+\begin{enumerate}
+\item General sampling info
+\begin{enumerate}
+\item Traits were measured in the summer prior to each growth chamber study.
+\item Eastern transect: traits measured summer 2015 
+\item Western transect: traits measured May 29 to July 30, 2019
+\item For each --- measured traits for X-10 healthy, adult, individuals of each species
+\end{enumerate}
+
+\item Trait sampling --- structural/wood traits
+\begin{enumerate}
+\item Measured a total of five traits: LMA (n = X), C:N (n = X), SSD (n = X), height (n = X), and DBH (n = X)
+\item Traits were measured according to recommendations of Perez-Harguindeguy2013.
+\item Height was measured using a XX range finder.
+\item Diameter at breast height was measured 1.42 m from the ground.
+\item Wood volume was measured within 12 hours of collection --- 10 cm sample taken from tree branches or shrub primary stems --- measured using the water displacement method
+\item Branch segments were dried at 105^{\circ}$C for 24h and weighted.
+
+\item Trait sampling --- leaf traits
+\item Leaf traits were measured for five haphazardly selected, fully expanded, and hardened leaves 
+\item High resolution scans of leaf area taken using Canon flatbed scanner within 12 hours of collection
+\item Leaf area was then quantified using the ImageJ software
+\item Leaves were dried for 48h at 70^{\circ}$C and weighed using a precision balance.
+\end{enumerate}
+\end{enumerate}
+
+\subsection*{Growth chamber study}
+\begin{enumerate}
+\item General information
+\item To collect branch cuttings for growth chamber study --- returned to our highest and lowest latitude populations in each transect
+\item Eastern transect: Hippolyte and Harvard Forested visited again in 20-28 January for growth chamber study --- study conducted at Arnold Arboretum
+\item Western transect: traits measured May 29 to July 30, 2019 --- Smithers and Manning park visited again in 19-28 October, 2019 --- study conducted at UBC
+\end{enumerate}
+
+\item Treatments and duration
+\begin{enumerate}
+\item For both growth chamber studies --- 8 distinct treatments:
+\begin{enumerate}
+\item two levels of chilling --- no additional chilling or 30 days at 4^{\circ}$C = eastern study, and 30 days or 70 days of chilling at 4^{\circ}$C for our western study --- all dark
+\item two levels of forcing—a cool regime of 15:5^{\circ}$C and a warm regime of 20:10^{\circ}$C
+\item two photoperiods of either 8 or 12 hours
+\end{enumerate}
+\item For detailed disucssion of study differences see Loughnan et al. (phenology paper)
+\end{enumerate}
+
+\item Data collection --- BBCH
+\begin{enumerate}
+\item Phenological stages were based on BBCH scale adapted for our specific species
+\item Observations made every 1-3 days for each sample
+\item stages were recorded up to full leaf expansion --- limited our analysis to budburst 
+\item Eastern study lasted for 82 days, 19320 observations
+\item Western study lasted for 113 days, 47844 observations
+\end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Statistical Anlaysis}
+
+\begin{enumerate}
+\item Our analysis combined the trait data with the budburst data from the growth chamber study
+\item 
+\end{enumerate}
+
+\subsection*{Joint model of trait and phenology}
+To understand connections between phenology and other species traits, we built a joint model for each trait (height, SLA, LNC, and seed mass) with the major phenological cues (forcing, chilling, and photoperiod) to predict day of year of budburst. This allowed us to jointly estimate species trait effects and responses to phenological cues in one model, carrying through all uncertainty across varying datasets and approaches (e.g. comparing across the \emph{in situ} observational trait data in the TRY and BIEN databases and the experimental plant phenology data of the OSPREE database). As phenological cues are the most proximate drivers of variation in budburst, and appear to represent different strategies along a continuum from acquisitive to conservative, our model allows traits to influence each cue separately (Fig. \ref{fig:cuetraits}). \\
+
+The joint model includes a hierarchical linear model to partition variation for individual observations (\emph{i}) of a given trait value ($y_{\text{trait}[i]}$) to the effects of species (\emph{sp id}), study (\emph{study id}), and residual variation ($\sigma_{\text{trait}}$, sometimes called `measurement error').
+% General on eqns: Gelman and Hill discusses how to write equations starting on page 262, with some good alternatives. I like to use words instead of letters for indexing when possible (so `sp' and `study' below) and i is often used for the observation-level in statistics, so should not be used otherwise. 
+% There could be a couple things off about this equation (that we can hopefully catch and fix) but I think it works mostly. 
+% The previous draft of equations seemed to use some cool labeling techniques for equations; it would be great to add these back in, especially if we plan to reference eqn numbers (maybe less necessary if not). 
+% Ailene likes to order cues by the temporal order that they effect plants (chilling, forcing, photoperiod) -- given that we seem to find this is also the order of effect size across cues I think it seems reasonable, and I have tried to implement it. But I probably messed it up some places (and if you like this we should follow it throughout the text). 
+\begin{align}
+\mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{transect} + \beta_{transect \times latitude} 
+
+\alpha_{\text{sp[sp id]}} &  \sim normal(0, \sigma_{\alpha_{\text{sp}}}) \nonumber \\
+
+
+
+\alpha_{\text{study[study id]}} & \sim normal(0,\sigma_{\alpha_{\text{study}}}) \nonumber \\
+y_{\text{trait}[i]} & \sim normal( \mu_{trait}, \sigma_{\text{trait}}) \nonumber 
+\end{align}
+It estimates a separate value for each species ($\alpha_{\text{sp[sp id]}}$), and study ($\alpha_{\text{study[study id]}}$), while partially pooling across species and studies to yield overall estimates of variance across each ($\sigma_{\alpha_{\text{sp}}}$ and $\sigma_{\alpha_{\text{study}}}$, respectively). This partial pooling (often called `random effects') controls for variation in sample size and variability to yield more accurate estimates for each species. \\
+
+These species-level estimates of traits ($\alpha_{\text{trait sp[sp id]}}$) were then used as predictors of species-level estimates of each phenological cue ($\beta_{\text{force[sp]}}$, $\beta_{\text{chill[sp]}}$, $\beta_{\text{photo[sp]}}$) 
+\begin{align}
+\beta_{\text{chill[sp]}} & = \alpha_{\text{chill}[sp]} + \beta_{\text{trait}.\text{chill}} \times \alpha_{\text{trait sp[sp]}} \nonumber \\
+\beta_{\text{force[sp]}} & = \alpha_{\text{force}[sp]} + \beta_{\text{trait}.\text{force}} \times \alpha_{\text{trait sp[sp]}} \\
+\beta_{\text{photo[sp]}} & = \alpha_{\text{photo}[sp]} + \beta_{\text{trait}.\text{photo}} \times \alpha_{\text{trait sp[sp]}} \nonumber 
+\end{align}
+
+This model allows an overall effect of each trait---estimated across species---on each phenological cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$), while also allowing for species-level variation in cues that is not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$; this importantly means that variation across species is not forced onto the trait effect). Thus the model tests the power of traits to predict species-level differences.\\
+
+Days to budburst ($y_{\text{pheno[i]}}$) is then predicted by the phenological cues and variation across experiments in chilling, forcing and photoperiod levels ($C_i$, $F_i$, $P_i$, respectively, which we z-scored to allow direct comparison of cues), with residual variation allowed across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$):
+\begin{align}
+\mu_{pheno} & = \alpha_{\text{pheno[sp]}}+ \beta_{\text{chill[sp]}} \times C_i + \beta_{\text{force[sp]}}\times F_i + \beta_{\text{photo[sp]}} \times P_i\\
+y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber 
+\end{align}
+The model includes partial pooling for residual variation in days to budburst across species and variation in each phenological cue not attributed to the trait:
+\begin{align}
+\alpha_{\text{pheno}} \sim normal(\mu_{\alpha_{\text{pheno}}},\sigma_{\alpha_{\text{pheno}}}) \\
+\alpha_{\text{force}} \sim normal(\mu_{\alpha_{\text{force}}},\sigma_{\alpha_{\text{force}}}) \nonumber \\
+\alpha_{\text{chill}} \sim normal(\mu_{\alpha_{\text{chill}}},\sigma_{\alpha_{\text{chill}}}) \nonumber \\
+\alpha_{\text{photo}} \sim normal(\mu_{\alpha_{\text{photo}}},\sigma_{\alpha_{\text{photo}}}) \nonumber
+\end{align}
+
+We chose weakly informative priors, and validated them using a series of prior predictive checks. The model was coded in the Stan programming language, fit using the rstan package \citep{rstan2018}, with 1,000 iterations per chain across 4 chain (4,000 total sampling iterations), and all models met basic diagnostic checks, including no divergences, high effective sample size (\textit{n\_eff}), and $\hat{R}$ close to 1.  
+
+
+\end{document}
+
