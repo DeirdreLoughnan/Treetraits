@@ -16,8 +16,10 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
   setwd("/home/deirdre/Treetraits") # for midge
 }
 spInfo <- read.csv("input/species_ring.csv")
+colnames(spInfo)[colnames(spInfo) == "X"] <- "ringType"
+
 spInfo <- spInfo[,1:5]
-load("output/mdl2023/z-scored/heightDummyIntGrandZ.Rdata")
+load("output/heightDummyIntGrandZ25.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
@@ -221,11 +223,6 @@ dataEast <- data[data$species.name %in% eastSp,]
 meanPtE <- aggregate(dataEast[c("meanBB", "meanBBHigh","Int")], dataEast[c("species.name","type","transect")], FUN = mean)
 names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept")
 
-###################
-
-meanPtW <- aggregate(datawest[c("meanBB", "meanBBHigh","Int")], datawest[c("species.name","type","transect")], FUN = mean)
-names(meanPtW) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept")
-
 
 htE <- ggplot(meanPtE) +
   geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
@@ -303,7 +300,7 @@ rankW <- rankW[order(rankW$meanBBHigh),]
 rankW$rankHighC <- seq(1:nrow(rankW))
 
 ########### DBH ##############################
-load("output/mdl2023/z-scored/dbhDummyIntGrandZ.Rdata")
+load("output/dbhDummyIntGrandZ25.Rdata")
 sumerDBH <- summary(mdlDBH)$summary
 postDBH <- rstan::extract(mdlDBH)
 

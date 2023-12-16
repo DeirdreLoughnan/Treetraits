@@ -494,6 +494,245 @@ pdf("figures/intrxnPlots.pdf", height =5, width = 20)
 plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 4, nrow =1,align = "v")
 dev.off()
 
+
+# #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
+# I think what we want is a loop that goes through each iteration of the posteriors and calculates the bb, but using 20 for forcing, 12 for photoperiod, 75 (75/10 when rescaled), and smithers to start
+# 
+
+#If we are using the old model, we will use the z-scored values for the parameters
+photo <- -0.5033863 #8 h photo
+siteSM <- 0
+force <- -0.3568628 #5/15 C trt
+chill <- -0.3546922 # low chill
+
+m <- matrix(nrow = 1000, ncol = 47)
+
+for(sp in 1:47){
+  for (it in 1:nrow(m)){
+    m[it,sp] <- post$a_sp[it,sp]+ post$b_site2[it] * siteSM + post$b_site3[it] * siteSM + post$b_site4[it] * siteSM + 
+      post$b_warm[it,sp] * force + post$b_photo[it, sp] * photo + post$b_chill[it,sp] * chill +
+      post$b_inter_wp[it,sp] * (force*photo) + post$b_inter_wc1[it,sp] * (force*chill) + post$b_inter_pc1[it,sp] * (photo*chill) +
+      post$b_inter_s2c1[it,sp] * (chill*siteSM) + post$b_inter_ws2[it,sp] * (force*siteSM) + post$b_inter_ps2[it,sp] * (photo*siteSM) +
+      post$b_inter_s3c1[it,sp] * (chill*siteSM) + post$b_inter_ws3[it,sp] * (force*siteSM) + post$b_inter_ps3[it,sp] * (photo*siteSM) +
+      post$b_inter_s4c1[it,sp] * (chill*siteSM) + post$b_inter_ws4[it,sp] * (force*siteSM) + post$b_inter_ps4[it,sp] * (photo*siteSM)
+  }
+}
+
+############ SHRUB VS TREE ##############################
+spInfo <- read.csv("input/species_ring.csv")
+colnames(spInfo)[colnames(spInfo) == "X"] <- "ringType"
+
+spInfo <- spInfo[, 1:5]
+head(spInfo)
+
+## Start with height:
+fit <- rstan::extract(mdlHt)
+
+chillB <- data.frame(fit$betaChillSp)
+
+colnames(chillB) <- sort(spInfo$species.name)
+
+longChill <- melt(chillB)
+colnames(longChill) <- c("species.name","betaCueSp")
+longChill$cue <- "Chilling"
+
+head(longChill)
+
+###################################################################
+# Photoperiod:
+photoB <- data.frame(fit$betaPhotoSp)
+
+colnames(photoB) <- sort(spInfo$species.name)
+
+longPhoto <- melt(photoB)
+colnames(longPhoto) <- c("species.name","betaCueSp")
+longPhoto$cue <- "Photoperiod"
+head(longPhoto)
+
+###################################################################
+# Forcing:
+forceB <- data.frame(fit$betaForceSp)
+
+colnames(forceB) <- sort(spInfo$species.name)
+
+longForce <- melt(forceB)
+colnames(longForce) <- c("species.name","betaCueSp")
+longForce$cue <- "Forcing"
+
+head(longForce)
+
+longCues <- rbind(longForce, longChill, longPhoto)
+longCues <- merge(longCues, spInfo, by = "species.name")
+
+ring <- subset(longCues, ringType == "Ring ")
+diffuse <- subset(longCues, ringType == "Diffuse")
+difRing <- subset(longCues, ringType == "Diffuse/semi-ring")
+semi <- subset(longCues, ringType == "Semi-ring" )
+
+longCuesRing <- subset(longCues, ringType != "")
+
+ggplot() + 
+  geom_violin(data = longCuesRing, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
+  facet_grid(col = vars(ringType), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
+   ylab ("Cue response") + xlab ("Cue")
+
+
+ggplot() + 
+  geom_violin(data = longCues, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
+  facet_grid(col = vars(type), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
+  ylab ("Cue response") + xlab ("Cue")
+
+  facet_grid(col = vars(type))
+              
+              +
+  stat_pointinterval(data = longest, aes(x = as.factor(cue), y = value, fill = factor(site, level = siteOrder)), .width = c(.5, .95) ,position = position_dodge(0.9)) +
+  theme_classic() +   
+  theme(legend.position = "right", 
+        legend.title = element_blank(),
+        axis.text.x = element_text( size= 16),
+        axis.text.y = element_text( size= 12),
+        axis.title=element_text(size = 14)) +
+  labs( x = "Treatment cue", y = "Cue response (days/standardized unit)", main = NA) +
+  scale_color_manual(values = c("Smithers" = "deepskyblue3",
+                                "Manning Park" = "palegreen4", 
+                                "St. Hippolyte"="darkorchid3", 
+                                "Harvard Forest" = "tomato3"))+
+  scale_fill_manual(values = c("Smithers" = "deepskyblue3",
+                               "Manning Park" = "palegreen4", 
+                               "St. Hippolyte"="darkorchid3", 
+                               "Harvard Forest" = "tomato3"))
+  
+  
+  # compare points:
+  # chilling
+
+longChill <- merge(longChill, spInfo, by = "species.name")
+  
+meanChill <- aggregate(longChill[c("betaCueSp")], longChill[c("ringType")], FUN = mean)
+names(meanChill) <- c( "ringType", "betaCueSp")
+
+meanError75 <- aggregate(longChill[c("betaCueSp")], longChill[c( "ringType")], FUN = function(i) quantile(i, probs = 0.75, na.rm = T))
+names(meanError75) <- c( "ringType", "error75")
+
+meanError25 <- aggregate(longChill[c("betaCueSp")], longChill[c( "ringType")], FUN = function(i) quantile(i, probs = 0.25, na.rm = T))
+names(meanError25) <- c( "ringType", "error25")
+
+meanError95 <- aggregate(longChill[c("betaCueSp")], longChill[c("ringType")], FUN = function(i) quantile(i, probs = 0.95, na.rm = T))
+names(meanError95) <- c( "ringType", "error95")
+
+meanError05 <- aggregate(longChill[c("betaCueSp")], longChill[c( "ringType")], FUN = function(i) quantile(i, probs = 0.05, na.rm = T))
+names(meanError05) <- c( "ringType", "error05")
+
+
+meanChill2 <- merge(meanChill, meanError05, by = c( "ringType"))
+meanChill2 <- merge(meanChill2, meanError25, by = c("ringType"))
+meanChill2 <- merge(meanChill2, meanError75, by = c("ringType"))
+meanChill2 <- merge(meanChill2, meanError95, by = c("ringType"))
+
+# require(dplyr)
+# longCues %>% group_by(species.name) %>%
+#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
+meanChill2 <- subset(meanChill2, ringType !="")
+ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType)) +
+  geom_point(size = 7,  color = "cyan4") +
+  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "cyan4") +
+  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "cyan4") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + labs( x = "Ring Type", y = "Chilling response (days/standardized unit)", main = NA) +
+   theme(legend.title = element_blank()) 
+# theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+#       axis.text.y=element_text(size = 15),
+#       axis.title=element_text(size=  17),
+#       legend.position = "none") +
+#   labs( x = "Ring Type", y = "Chilling response (days/standardized unit)", main = NA) +
+#   theme(legend.title = element_blank()) 
+  
+longforce <- merge(longForce, spInfo, by = "species.name")
+
+meanforce <- aggregate(longforce[c("betaCueSp")], longforce[c("ringType")], FUN = mean)
+names(meanforce) <- c( "ringType", "betaCueSp")
+
+meanError75 <- aggregate(longforce[c("betaCueSp")], longforce[c( "ringType")], FUN = function(i) quantile(i, probs = 0.75, na.rm = T))
+names(meanError75) <- c( "ringType", "error75")
+
+meanError25 <- aggregate(longforce[c("betaCueSp")], longforce[c( "ringType")], FUN = function(i) quantile(i, probs = 0.25, na.rm = T))
+names(meanError25) <- c( "ringType", "error25")
+
+meanError95 <- aggregate(longforce[c("betaCueSp")], longforce[c("ringType")], FUN = function(i) quantile(i, probs = 0.95, na.rm = T))
+names(meanError95) <- c( "ringType", "error95")
+
+meanError05 <- aggregate(longforce[c("betaCueSp")], longforce[c( "ringType")], FUN = function(i) quantile(i, probs = 0.05, na.rm = T))
+names(meanError05) <- c( "ringType", "error05")
+
+
+meanforce2 <- merge(meanforce, meanError05, by = c( "ringType"))
+meanforce2 <- merge(meanforce2, meanError25, by = c("ringType"))
+meanforce2 <- merge(meanforce2, meanError75, by = c("ringType"))
+meanforce2 <- merge(meanforce2, meanError95, by = c("ringType"))
+
+# require(dplyr)
+# longCues %>% group_by(species.name) %>%
+#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
+meanforce2 <- subset(meanforce2, ringType !="")
+ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
+  geom_point(size = 7, color = "goldenrod") +
+  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "goldenrod") +
+  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "goldenrod") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+  #       axis.text.y=element_text(size = 15),
+  #       axis.title=element_text(size=  17),
+  #       legend.position = "none") +
+  labs( x = "Ring Type", y = "Forceing response (days/standardized unit)", main = NA) +
+  theme(legend.title = element_blank())
+
+longphoto <- merge(longPhoto, spInfo, by = "species.name")
+
+meanphoto <- aggregate(longphoto[c("betaCueSp")], longphoto[c("ringType")], FUN = mean)
+names(meanphoto) <- c( "ringType", "betaCueSp")
+
+meanError75 <- aggregate(longphoto[c("betaCueSp")], longphoto[c( "ringType")], FUN = function(i) quantile(i, probs = 0.75, na.rm = T))
+names(meanError75) <- c( "ringType", "error75")
+
+meanError25 <- aggregate(longphoto[c("betaCueSp")], longphoto[c( "ringType")], FUN = function(i) quantile(i, probs = 0.25, na.rm = T))
+names(meanError25) <- c( "ringType", "error25")
+
+meanError95 <- aggregate(longphoto[c("betaCueSp")], longphoto[c("ringType")], FUN = function(i) quantile(i, probs = 0.95, na.rm = T))
+names(meanError95) <- c( "ringType", "error95")
+
+meanError05 <- aggregate(longphoto[c("betaCueSp")], longphoto[c( "ringType")], FUN = function(i) quantile(i, probs = 0.05, na.rm = T))
+names(meanError05) <- c( "ringType", "error05")
+
+
+meanphoto2 <- merge(meanphoto, meanError05, by = c( "ringType"))
+meanphoto2 <- merge(meanphoto2, meanError25, by = c("ringType"))
+meanphoto2 <- merge(meanphoto2, meanError75, by = c("ringType"))
+meanphoto2 <- merge(meanphoto2, meanError95, by = c("ringType"))
+
+# require(dplyr)
+# longCues %>% group_by(species.name) %>%
+#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
+meanphoto2 <- subset(meanphoto2, ringType !="")
+ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
+  geom_point(size = 7, color = "maroon") +
+  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, size = 0.5, color = "maroon") +
+  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+  #       axis.text.y=element_text(size = 15),
+  #       axis.title=element_text(size=  17),
+  #       legend.position = "none") +
+  labs( x = "Ring Type", y = "photoing response (days/standardized unit)", main = NA) +
+  theme(legend.title = element_blank()) 
+
+pdf("figures/ringPorosityHeight.pdf", width = 12, height = 4)
+plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
+dev.off()
+
+
+## Old code
 # OLD CODE
 
 sumLMA <- summary(mdlLMA)$summary
@@ -661,8 +900,8 @@ DBH_e = a_trtSpDBH + b_tranEDBH * tranE + b_tranlatDBH * (tranE*latZ)
 
 par(mfrow = c(1,1))
 plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
-     xlab = "Latitude",
-     ylab = "Trait")
+  xlab = "Latitude",
+  ylab = "Trait")
 abline(lm(DBH_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(DBH_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 
@@ -733,8 +972,8 @@ SSD_e = a_trtSpSSD + b_tranESSD * tranE + b_tranlatSSD * (tranE*latZ)
 
 par(mfrow = c(1,1))
 plot(0, type = "n", xlim = c(25,60), ylim = c(-100,100),
-     xlab = "Latitude",
-     ylab = "Trait")
+  xlab = "Latitude",
+  ylab = "Trait")
 abline(lm(SSD_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(SSD_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 
@@ -804,16 +1043,16 @@ CN_e = a_trtSpCN + b_tranECN * tranE + b_tranlatCN * (tranE*latZ)
 
 par(mfrow = c(1,1))
 plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
-     xlab = "Latitude",
-     ylab = "Trait")
+  xlab = "Latitude",
+  ylab = "Trait")
 abline(lm(CN_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(CN_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 #################################
 pdf("figures/transectIntrxnZ25.pdf", width =13, height =3)
 par(mfrow = c(1,5))
 plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
-     xlab = "Latitude",
-     ylab = "Height", cex.lab = 1.3)
+  xlab = "Latitude",
+  ylab = "Height", cex.lab = 1.3)
 
 #abline(lm(ht_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(ht_e ~lati), col = "darkslategray4", lwd = 3, lty =1)
@@ -821,271 +1060,38 @@ abline(lm(ht_w ~lati), col = "darkslategray4", lwd = 3, lty =2)
 text(40.8, 2, label = "a)", cex = 1.25)
 
 plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
-     xlab = "Latitude",
-     ylab = "Diameter at breast height", cex.lab = 1.3)
+  xlab = "Latitude",
+  ylab = "Diameter at breast height", cex.lab = 1.3)
 abline(lm(DBH_e ~lati), col = "goldenrod", lwd = 3, lty =1)
 abline(lm(DBH_w ~lati), col = "goldenrod", lwd = 3, lty =2)
 text(40.8, 2, label = "b)", cex = 1.25)
 
 plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
-     xlab = "Latitude",
-     ylab = "Leaf mass area", cex.lab = 1.3)
+  xlab = "Latitude",
+  ylab = "Leaf mass area", cex.lab = 1.3)
 abline(lm(LMA_e ~lati), col = "darkolivegreen", lwd = 3, lty =1)
 abline(lm(LMA_w ~lati), col = "darkolivegreen", lwd = 3, lty =2)
 text(40.8,2, label = "c)", cex = 1.25)
 
 
 plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
-     xlab = "Latitude",
-     ylab = "Stem specific density", cex.lab = 1.3)
+  xlab = "Latitude",
+  ylab = "Stem specific density", cex.lab = 1.3)
 abline(lm(SSD_e ~lati), col = "maroon", lwd = 3, lty =1)
 abline(lm(SSD_w ~lati), col = "maroon", lwd = 3, lty =2)
 text(40.8,2, label = "d)", cex = 1.25)
 
 plot(0, type = "n", xlim = c(40,55), ylim = c(-2,2),
-     xlab = "Latitude",
-     ylab = "Carbon:Nitrogen", cex.lab = 1.3)
+  xlab = "Latitude",
+  ylab = "Carbon:Nitrogen", cex.lab = 1.3)
 abline(lm(CN_e ~lati), col = "purple4", lwd = 3, lty =1)
 abline(lm(CN_w ~lati), col = "purple4", lwd = 3, lty =2)
 text(40.8,2, label = "e)", cex = 1.25)
 
 legend("topright",legend = c(expression("Western"),
-                             expression("Eastern")
+  expression("Eastern")
 ),
-col = c("black", "black"),
-lty = c(2,1), lwd = 1, cex= 1.25, bty = "n")
+  col = c("black", "black"),
+  lty = c(2,1), lwd = 1, cex= 1.25, bty = "n")
 
-dev.off()
-# #<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>#
-# I think what we want is a loop that goes through each iteration of the posteriors and calculates the bb, but using 20 for forcing, 12 for photoperiod, 75 (75/10 when rescaled), and smithers to start
-# 
-
-#If we are using the old model, we will use the z-scored values for the parameters
-photo <- -0.5033863 #8 h photo
-siteSM <- 0
-force <- -0.3568628 #5/15 C trt
-chill <- -0.3546922 # low chill
-
-m <- matrix(nrow = 1000, ncol = 47)
-
-for(sp in 1:47){
-  for (it in 1:nrow(m)){
-    m[it,sp] <- post$a_sp[it,sp]+ post$b_site2[it] * siteSM + post$b_site3[it] * siteSM + post$b_site4[it] * siteSM + 
-      post$b_warm[it,sp] * force + post$b_photo[it, sp] * photo + post$b_chill[it,sp] * chill +
-      post$b_inter_wp[it,sp] * (force*photo) + post$b_inter_wc1[it,sp] * (force*chill) + post$b_inter_pc1[it,sp] * (photo*chill) +
-      post$b_inter_s2c1[it,sp] * (chill*siteSM) + post$b_inter_ws2[it,sp] * (force*siteSM) + post$b_inter_ps2[it,sp] * (photo*siteSM) +
-      post$b_inter_s3c1[it,sp] * (chill*siteSM) + post$b_inter_ws3[it,sp] * (force*siteSM) + post$b_inter_ps3[it,sp] * (photo*siteSM) +
-      post$b_inter_s4c1[it,sp] * (chill*siteSM) + post$b_inter_ws4[it,sp] * (force*siteSM) + post$b_inter_ps4[it,sp] * (photo*siteSM)
-  }
-}
-
-############ SHRUB VS TREE ##############################
-spInfo <- read.csv("..//input/species_ring.csv")
-spInfo <- spInfo[, 1:5]
-head(spInfo)
-
-## Start with height:
-fit <- rstan::extract(mdlHt)
-
-chillB <- data.frame(fit$betaChillSp)
-
-colnames(chillB) <- sort(spInfo$species.name)
-
-longChill <- melt(chillB)
-colnames(longChill) <- c("species.name","betaCueSp")
-longChill$cue <- "Chilling"
-
-head(longChill)
-
-###################################################################
-# Photoperiod:
-photoB <- data.frame(fit$betaPhotoSp)
-
-colnames(photoB) <- sort(spInfo$species.name)
-
-longPhoto <- melt(photoB)
-colnames(longPhoto) <- c("species.name","betaCueSp")
-longPhoto$cue <- "Photoperiod"
-head(longPhoto)
-
-###################################################################
-# Forcing:
-forceB <- data.frame(fit$betaForceSp)
-
-colnames(forceB) <- sort(spInfo$species.name)
-
-longForce <- melt(forceB)
-colnames(longForce) <- c("species.name","betaCueSp")
-longForce$cue <- "Forcing"
-
-head(longForce)
-
-longCues <- rbind(longForce, longChill, longPhoto)
-longCues <- merge(longCues, spInfo, by = "species.name")
-
-ring <- subset(longCues, ringType == "Ring ")
-diffuse <- subset(longCues, ringType == "Diffuse")
-difRing <- subset(longCues, ringType == "Diffuse/semi-ring")
-semi <- subset(longCues, ringType == "Semi-ring" )
-
-longCuesRing <- subset(longCues, ringType != "")
-
-ggplot() + 
-  geom_violin(data = longCuesRing, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
-  facet_grid(col = vars(ringType), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
-   ylab ("Cue response") + xlab ("Cue")
-
-
-ggplot() + 
-  geom_violin(data = longCues, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
-  facet_grid(col = vars(type), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
-  ylab ("Cue response") + xlab ("Cue")
-
-  facet_grid(col = vars(type))
-              
-              +
-  stat_pointinterval(data = longest, aes(x = as.factor(cue), y = value, fill = factor(site, level = siteOrder)), .width = c(.5, .95) ,position = position_dodge(0.9)) +
-  theme_classic() +   
-  theme(legend.position = "right", 
-        legend.title = element_blank(),
-        axis.text.x = element_text( size= 16),
-        axis.text.y = element_text( size= 12),
-        axis.title=element_text(size = 14)) +
-  labs( x = "Treatment cue", y = "Cue response (days/standardized unit)", main = NA) +
-  scale_color_manual(values = c("Smithers" = "deepskyblue3",
-                                "Manning Park" = "palegreen4", 
-                                "St. Hippolyte"="darkorchid3", 
-                                "Harvard Forest" = "tomato3"))+
-  scale_fill_manual(values = c("Smithers" = "deepskyblue3",
-                               "Manning Park" = "palegreen4", 
-                               "St. Hippolyte"="darkorchid3", 
-                               "Harvard Forest" = "tomato3"))
-  
-  
-  # compare points:
-  # chilling
-
-longChill <- merge(longChill, spInfo, by = "species.name")
-  
-meanChill <- aggregate(longChill[c("betaCueSp")], longChill[c("ringType")], FUN = mean)
-names(meanChill) <- c( "ringType", "betaCueSp")
-
-meanError75 <- aggregate(longChill[c("betaCueSp")], longChill[c( "ringType")], FUN = function(i) quantile(i, probs = 0.75, na.rm = T))
-names(meanError75) <- c( "ringType", "error75")
-
-meanError25 <- aggregate(longChill[c("betaCueSp")], longChill[c( "ringType")], FUN = function(i) quantile(i, probs = 0.25, na.rm = T))
-names(meanError25) <- c( "ringType", "error25")
-
-meanError95 <- aggregate(longChill[c("betaCueSp")], longChill[c("ringType")], FUN = function(i) quantile(i, probs = 0.95, na.rm = T))
-names(meanError95) <- c( "ringType", "error95")
-
-meanError05 <- aggregate(longChill[c("betaCueSp")], longChill[c( "ringType")], FUN = function(i) quantile(i, probs = 0.05, na.rm = T))
-names(meanError05) <- c( "ringType", "error05")
-
-
-meanChill2 <- merge(meanChill, meanError05, by = c( "ringType"))
-meanChill2 <- merge(meanChill2, meanError25, by = c("ringType"))
-meanChill2 <- merge(meanChill2, meanError75, by = c("ringType"))
-meanChill2 <- merge(meanChill2, meanError95, by = c("ringType"))
-
-# require(dplyr)
-# longCues %>% group_by(species.name) %>%
-#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
-
-ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType), size = 7) +
-  geom_point(size = 7,  color = "cyan4") +
-  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, size = 0.5, color = "cyan4") +
-  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "cyan4") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + labs( x = "Ring Type", y = "Chilling response (days/standardized unit)", main = NA) +
-   theme(legend.title = element_blank()) 
-# theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-#       axis.text.y=element_text(size = 15),
-#       axis.title=element_text(size=  17),
-#       legend.position = "none") +
-#   labs( x = "Ring Type", y = "Chilling response (days/standardized unit)", main = NA) +
-#   theme(legend.title = element_blank()) 
-  
-longforce <- merge(longForce, spInfo, by = "species.name")
-
-meanforce <- aggregate(longforce[c("betaCueSp")], longforce[c("ringType")], FUN = mean)
-names(meanforce) <- c( "ringType", "betaCueSp")
-
-meanError75 <- aggregate(longforce[c("betaCueSp")], longforce[c( "ringType")], FUN = function(i) quantile(i, probs = 0.75, na.rm = T))
-names(meanError75) <- c( "ringType", "error75")
-
-meanError25 <- aggregate(longforce[c("betaCueSp")], longforce[c( "ringType")], FUN = function(i) quantile(i, probs = 0.25, na.rm = T))
-names(meanError25) <- c( "ringType", "error25")
-
-meanError95 <- aggregate(longforce[c("betaCueSp")], longforce[c("ringType")], FUN = function(i) quantile(i, probs = 0.95, na.rm = T))
-names(meanError95) <- c( "ringType", "error95")
-
-meanError05 <- aggregate(longforce[c("betaCueSp")], longforce[c( "ringType")], FUN = function(i) quantile(i, probs = 0.05, na.rm = T))
-names(meanError05) <- c( "ringType", "error05")
-
-
-meanforce2 <- merge(meanforce, meanError05, by = c( "ringType"))
-meanforce2 <- merge(meanforce2, meanError25, by = c("ringType"))
-meanforce2 <- merge(meanforce2, meanError75, by = c("ringType"))
-meanforce2 <- merge(meanforce2, meanError95, by = c("ringType"))
-
-# require(dplyr)
-# longCues %>% group_by(species.name) %>%
-#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
-
-ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
-  geom_point(size = 7, color = "goldenrod") +
-  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, size = 0.5, color = "goldenrod") +
-  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "goldenrod") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-  #       axis.text.y=element_text(size = 15),
-  #       axis.title=element_text(size=  17),
-  #       legend.position = "none") +
-  labs( x = "Ring Type", y = "Forceing response (days/standardized unit)", main = NA) +
-  theme(legend.title = element_blank())
-
-longphoto <- merge(longPhoto, spInfo, by = "species.name")
-
-meanphoto <- aggregate(longphoto[c("betaCueSp")], longphoto[c("ringType")], FUN = mean)
-names(meanphoto) <- c( "ringType", "betaCueSp")
-
-meanError75 <- aggregate(longphoto[c("betaCueSp")], longphoto[c( "ringType")], FUN = function(i) quantile(i, probs = 0.75, na.rm = T))
-names(meanError75) <- c( "ringType", "error75")
-
-meanError25 <- aggregate(longphoto[c("betaCueSp")], longphoto[c( "ringType")], FUN = function(i) quantile(i, probs = 0.25, na.rm = T))
-names(meanError25) <- c( "ringType", "error25")
-
-meanError95 <- aggregate(longphoto[c("betaCueSp")], longphoto[c("ringType")], FUN = function(i) quantile(i, probs = 0.95, na.rm = T))
-names(meanError95) <- c( "ringType", "error95")
-
-meanError05 <- aggregate(longphoto[c("betaCueSp")], longphoto[c( "ringType")], FUN = function(i) quantile(i, probs = 0.05, na.rm = T))
-names(meanError05) <- c( "ringType", "error05")
-
-
-meanphoto2 <- merge(meanphoto, meanError05, by = c( "ringType"))
-meanphoto2 <- merge(meanphoto2, meanError25, by = c("ringType"))
-meanphoto2 <- merge(meanphoto2, meanError75, by = c("ringType"))
-meanphoto2 <- merge(meanphoto2, meanError95, by = c("ringType"))
-
-# require(dplyr)
-# longCues %>% group_by(species.name) %>%
-#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
-
-ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
-  geom_point(size = 7, color = "maroon") +
-  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, size = 0.5, color = "maroon") +
-  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-  #       axis.text.y=element_text(size = 15),
-  #       axis.title=element_text(size=  17),
-  #       legend.position = "none") +
-  labs( x = "Ring Type", y = "photoing response (days/standardized unit)", main = NA) +
-  theme(legend.title = element_blank()) 
-
-pdf("figures/ringPorosity.pdf", width = 12, height = 4)
-plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
 dev.off()
