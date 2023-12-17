@@ -15,380 +15,239 @@ if(length(grep("deirdreloughnan", getwd()) > 0)) {
   setwd("/home/deirdre/Treetraits") # for midge
 }
 
-col4table <- c("mean","sd","2.5%","25%","50%","75%","97.5%","Rhat")
-col4fig <- c("mean","sd","25%","50%","75%","Rhat")
+# want plots with just the cues and plot with just the traitxcue interactions
 
-mu_trait <- c( 
- # "mu_grand",
-  "b_tranE",
-  "b_tranlat")
-
-mu_pheno <- c(
- # "muPhenoSp",
-  "muForceSp", 
-  "muChillSp",
-  "muPhotoSp")
-
-mu_bTC <- c(
-  "betaTraitxForce",
-  "betaTraitxChill",
-  "betaTraitxPhoto")
-
-quantile590 <- function(x){
-  returnQuanilte <- quantile(x, prob = c(0.05, 0.9))
-  return(returnQuanilte)
-}
-
-
-### mu plot of trait part
+spInfo <- read.csv("input/species_ring.csv")
+pheno <- read.csv("input/phenoDataWChill.csv")
+# trtPheno <- read.csv("input/trtData.csv")
+trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
 load("output/heightDummyIntGrandZ25.Rdata")
-postHt<- rstan::extract(mdlHt)
 sumHt <- summary(mdlHt)$summary
-
-bTranHt <- apply(data.frame(postHt$b_tranE), 2, quantile590 )
-bTranLatHt <- apply(data.frame(postHt$b_tranlat), 2, quantile590 )
-
-traitHt <- sumHt[mu_trait, col4table]
-traitHt <- cbind(traitHt, bTran_quan, bTranLat_quan)
-
-load("output/dbhDummyIntGrandZ25.Rdata")
-postDBH<- rstan::extract(mdlDBH)
-sumDBH <- summary(mdlDBH)$summary
-
-bTranDBH <- apply(data.frame(postDBH$b_tranE), 2, quantile590 )
-bTranLatDBH <- apply(data.frame(postDBH$b_tranlat), 2, quantile590 )
-
-traitDBH <- sumDBH[mu_trait, col4table]
-traitDBH <- cbind(traitDBH, bTran_quan, bTranLat_quan)
-
-rownames(traitDBH) = c( 
-  "Transect",
-  "Transect x latitude"
-)
+postHt <- rstan::extract(mdlHt)
 
 load("output/lmaDummyIntGrandZ25.Rdata")
-postLMA<- rstan::extract(mdlLMA)
-sumLMA <- summary(mdlLMA)$summary
+postLMA <- rstan::extract(mdlLMA)
+sumLMA<- summary(mdlLMA)$summary
 
-bTranLMA <- apply(data.frame(postLMA$b_tranE), 2, quantile590 )
-bTranLatLMA <- apply(data.frame(postLMA$b_tranlat), 2, quantile590 )
-
-traitLMA <- sumLMA[mu_trait, col4table]
-traitLMA <- cbind(traitLMA, bTran_quan, bTranLat_quan)
-
-rownames(traitLMA) = c( 
-  "Transect",
-  "Transect x latitude"
-)
-
-load("output/cnDummyIntGrandZ25.Rdata")
-postCN<- rstan::extract(mdl)
-sumCN <- summary(mdl)$summary
-
-quantile590 <- function(x){
-  returnQuanilte <- quantile(x, prob = c(0.05, 0.9))
-  return(returnQuanilte)
-}
-
-bTranCN <- apply(data.frame(postCN$b_tranE), 2, quantile590 )
-bTranLatCN <- apply(data.frame(postCN$b_tranlat), 2, quantile590 )
-
-traitCN <- sumCN[mu_trait, col4table]
-traitCN <- cbind(traitCN, bTran_quan, bTranLat_quan)
-
-rownames(traitCN) = c( 
-  "Transect",
-  "Transect x latitude"
-)
+load("output/dbhDummyIntGrandZ25.Rdata")
+postDBH <- rstan::extract(mdlDBH)
+sumDBH<- summary(mdlLMA)$summary
 
 load("output/ssdDummyIntGrandZ25.Rdata")
-postSSD<- rstan::extract(mdlSSD)
-sumSSD <- summary(mdlSSD)$summary
+postSSD <- rstan::extract(mdlSSD)
+sumSSD<- summary(mdlLMA)$summary
 
-bTranSSD <- apply(data.frame(postSSD$b_tranE), 2, quantile590 )
-bTranLatSSD <- apply(data.frame(postSSD$b_tranlat), 2, quantile590 )
+load("output/cnDummyIntGrandZ25.Rdata")
+postCN <- rstan::extract(mdl)
+sumCN<- summary(mdlLMA)$summary
 
-traitSSD <- sumSSD[mu_trait, col4table]
-traitSSD <- cbind(traitSSD, bTran_quan, bTranLat_quan)
 
-rownames(traitSSD) = c( 
-  "Transect",
-  "Transect x latitude"
-)
+muForceHt = mean((sumHt[grep("muForceSp", rownames(sumHt)), 1]))
+muForceHt5 <- quantile(postHt$muForceSp, c(0.05))
+muForceHt95 <- quantile(postHt$muForceSp, c(0.95))
+muForceHt25 <- quantile(postHt$muForceSp, c(0.25))
+muForceHt75 <- quantile(postHt$muForceSp, c(0.75))
+muForceHt <- data.frame(cbind(muForceHt, muForceHt5,muForceHt95, muForceHt25,muForceHt75))
+muForceHt$cue <- "Forcing"
+names(muForceHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-pdf(file.path( "../figures/traitMuPlot.pdf"), width = 15, height = 3)
-par(mfrow = c(1,5), mar = c(5, 8, 2, 0.05))
-# Upper panel: bud burst
-plot(seq(-1,1,length.out = nrow(traitHt)), 1:nrow(traitHt),
-  type = "n", xlab = "",
-  ylab = "", yaxt = "n", cex.lab = 2)
+muChillHt <- sumHt[grep("muChillSp", rownames(sumHt)), 1]
+muChillHt5 <- quantile(postHt$muChillSp, c(0.05))
+muChillHt95 <- quantile(postHt$muChillSp, c(0.95))
+muChillHt25 <- quantile(postHt$muChillSp, c(0.25))
+muChillHt75 <- quantile(postHt$muChillSp, c(0.75))
+muChillHt <- data.frame(cbind(muChillHt, muChillHt5,muChillHt95, muChillHt25,muChillHt75))
+muChillHt$cue <- "Chilling"
+names(muChillHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-axis(2, at = nrow(meanHt):1, labels = rownames(meanHt), las = 1, cex.axis = 1)
-points(meanHt[, 'mean'],
-  nrow(meanHt):1,
-  pch = 16,
-  col = "darkslategray4",
-  cex = 2)
-arrows(meanHt[, "97.5%"], nrow(meanHt):1, meanHt[, "2.5%"], nrow(meanHt):1,
-  len = 0, col = "black")
-abline(v = 0, lty = 3)
-text(-10, 8.5, label = "a)", cex = 1.25)
-# LMA
-par(mar = c(5, 1, 2, 0.25))
+muPhotoHt <- sumHt[grep("muPhotoSp", rownames(sumHt)), 1]
+muPhotoHt5 <- quantile(postHt$muPhotoSp, c(0.05))
+muPhotoHt95 <- quantile(postHt$muPhotoSp, c(0.95))
+muPhotoHt25 <- quantile(postHt$muPhotoSp, c(0.25))
+muPhotoHt75 <- quantile(postHt$muPhotoSp, c(0.75))
+muPhotoHt <- data.frame(cbind(muPhotoHt, muPhotoHt5,muPhotoHt95, muPhotoHt25,muPhotoHt75))
+muPhotoHt$cue <- "Photoperiod"
+names(muPhotoHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-plot(seq(-10,  10,length.out = nrow(meanLMA)), 1:nrow(meanLMA),
-  type = "n", xlab = "",
-  ylab = "", yaxt = "n", cex.lab = 2)
-abline(v = 0, lty = 3)
 
-points(meanLMA[, 'mean'],
-  nrow(meanLMA):1,
-  pch = 16,
-  col = "darkolivegreen",
-  cex = 2)
-arrows(meanLMA[, "97.5%"], nrow(meanLMA):1, meanLMA[, "2.5%"], nrow(meanLMA):1,
-  len = 0, col = "black")
-text(-10, 8.5, label = "b)", cex = 1.25)
+cueHt <- rbind(muForceHt,muChillHt,muPhotoHt)
 
-# DBH
-plot(seq(-10,  10,length.out = nrow(meanDBH)), 1:nrow(meanDBH),
-  type = "n", xlab = "Estimated change in budburst day",
-  ylab = "", yaxt = "n", cex.lab = 1.5)
-abline(v = 0, lty = 3)
+cueHeightPlot <- ggplot(cueHt,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "cyan4") +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "cyan4") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -10.5, y = 3.4, label = "a) Height", cex = 10) +
+  theme(legend.title = element_blank()) 
 
-points(meanDBH[, 'mean'],
-  nrow(meanDBH):1,
-  pch = 16,
-  col = "goldenrod",
-  cex = 2)
-arrows(meanDBH[, "97.5%"], nrow(meanDBH):1, meanDBH[, "2.5%"], nrow(meanDBH):1,
-  len = 0, col = "black")
-text(-10, 8.5, label = "c)", cex = 1.25)
+########################################################################
+muForceLMA = mean((sumLMA[grep("muForceSp", rownames(sumLMA)), 1]))
+muForceLMA5 <- quantile(postLMA$muForceSp, c(0.05))
+muForceLMA95 <- quantile(postLMA$muForceSp, c(0.95))
+muForceLMA25 <- quantile(postLMA$muForceSp, c(0.25))
+muForceLMA75 <- quantile(postLMA$muForceSp, c(0.75))
+muForceLMA <- data.frame(cbind(muForceLMA, muForceLMA5,muForceLMA95, muForceLMA25,muForceLMA75))
+muForceLMA$cue <- "Forcing"
+names(muForceLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-# SSD
+muChillLMA <- sumLMA[grep("muChillSp", rownames(sumLMA)), 1]
+muChillLMA5 <- quantile(postLMA$muChillSp, c(0.05))
+muChillLMA95 <- quantile(postLMA$muChillSp, c(0.95))
+muChillLMA25 <- quantile(postLMA$muChillSp, c(0.25))
+muChillLMA75 <- quantile(postLMA$muChillSp, c(0.75))
+muChillLMA <- data.frame(cbind(muChillLMA, muChillLMA5,muChillLMA95, muChillLMA25,muChillLMA75))
+muChillLMA$cue <- "Chilling"
+names(muChillLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-plot(seq(-10,  10,length.out = nrow(meanSSD)), 1:nrow(meanSSD),
-  type = "n", xlab = "",
-  ylab = "", yaxt = "n", cex.lab = 2)
-abline(v = 0, lty = 3)
+muPhotoLMA <- sumLMA[grep("muPhotoSp", rownames(sumLMA)), 1]
+muPhotoLMA5 <- quantile(postLMA$muPhotoSp, c(0.05))
+muPhotoLMA95 <- quantile(postLMA$muPhotoSp, c(0.95))
+muPhotoLMA25 <- quantile(postLMA$muPhotoSp, c(0.25))
+muPhotoLMA75 <- quantile(postLMA$muPhotoSp, c(0.75))
+muPhotoLMA <- data.frame(cbind(muPhotoLMA, muPhotoLMA5,muPhotoLMA95, muPhotoLMA25,muPhotoLMA75))
+muPhotoLMA$cue <- "Photoperiod"
+names(muPhotoLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-points(meanSSD[, 'mean'],
-  nrow(meanSSD):1,
-  pch = 16,
-  col = "maroon",
-  cex = 2)
-arrows(meanSSD[, "97.5%"], nrow(meanSSD):1, meanSSD[, "2.5%"], nrow(meanSSD):1,
-  len = 0, col = "black")
-text(-10, 8.5, label = "d)", cex = 1.25)
+cueLMA <- rbind(muForceLMA,muChillLMA,muPhotoLMA)
 
-# CN
-plot(seq(-10,  10,length.out = nrow(meanCN)), 1:nrow(meanCN),
-  type = "n", xlab = "",
-  ylab = "", yaxt = "n")
-abline(v = 0, lty = 3, cex.lab = 2)
+cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "darkolivegreen") +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "darkolivegreen") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "d) LMA", cex = 10) +
+  theme(legend.title = element_blank()) 
 
-points(meanCN[, 'mean'],
-  nrow(meanCN):1,
-  pch = 16,
-  col = "purple4",
-  cex = 2)
-arrows(meanCN[, "97.5%"], nrow(meanCN):1, meanCN[, "2.5%"], nrow(meanCN):1,
-  len = 0, col = "black")
-text(-10, 8.5, label = "e)", cex = 1.25)
-dev.off()
-### mu plot of cues
+########################################################################
 
-phenoHt <- sumHt[mu_pheno, col4table]
-phenoHt <- cbind(phenoHt, bTran_quan, bTranLat_quan)
+muForceDBH = mean((sumDBH[grep("muForceSp", rownames(sumDBH)), 1]))
+muForceDBH5 <- quantile(postDBH$muForceSp, c(0.05))
+muForceDBH95 <- quantile(postDBH$muForceSp, c(0.95))
+muForceDBH25 <- quantile(postDBH$muForceSp, c(0.25))
+muForceDBH75 <- quantile(postDBH$muForceSp, c(0.75))
+muForceDBH <- data.frame(cbind(muForceDBH, muForceDBH5,muForceDBH95, muForceDBH25,muForceDBH75))
+muForceDBH$cue <- "Forcing"
+names(muForceDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-phenoDBH <- sumDBH[mu_pheno, col4table]
-phenoDBH <- cbind(phenoDBH, bTran_quan, bTranLat_quan)
+muChillDBH <- sumDBH[grep("muChillSp", rownames(sumDBH)), 1]
+muChillDBH5 <- quantile(postDBH$muChillSp, c(0.05))
+muChillDBH95 <- quantile(postDBH$muChillSp, c(0.95))
+muChillDBH25 <- quantile(postDBH$muChillSp, c(0.25))
+muChillDBH75 <- quantile(postDBH$muChillSp, c(0.75))
+muChillDBH <- data.frame(cbind(muChillDBH, muChillDBH5,muChillDBH95, muChillDBH25,muChillDBH75))
+muChillDBH$cue <- "Chilling"
+names(muChillDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-phenoSSD <- sumSSD[mu_pheno, col4table]
-phenoSSD <- cbind(phenoSSD, bTran_quan, bTranLat_quan)
+muPhotoDBH <- sumDBH[grep("muPhotoSp", rownames(sumDBH)), 1]
+muPhotoDBH5 <- quantile(postDBH$muPhotoSp, c(0.05))
+muPhotoDBH95 <- quantile(postDBH$muPhotoSp, c(0.95))
+muPhotoDBH25 <- quantile(postDBH$muPhotoSp, c(0.25))
+muPhotoDBH75 <- quantile(postDBH$muPhotoSp, c(0.75))
+muPhotoDBH <- data.frame(cbind(muPhotoDBH, muPhotoDBH5,muPhotoDBH95, muPhotoDBH25,muPhotoDBH75))
+muPhotoDBH$cue <- "Photoperiod"
+names(muPhotoDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-phenoCN <- sumCN[mu_pheno, col4table]
-phenoCN <- cbind(phenoCN, bTran_quan, bTranLat_quan)
+cueDBH <- rbind(muForceDBH,muChillDBH,muPhotoDBH)
 
-phenoLMA <- sumLMA[mu_pheno, col4table]
-phenoLMA <- cbind(phenoLMA, bTran_quan, bTranLat_quan)
+cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "goldenrod") +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "goldenrod") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "b) DBH", cex = 10) +
+  theme(legend.title = element_blank()) 
 
-### mu plot of betaTraitxCue
+########################################################################
+muForceCN = mean((sumCN[grep("muForceSp", rownames(sumCN)), 1]))
+muForceCN5 <- quantile(postCN$muForceSp, c(0.05))
+muForceCN95 <- quantile(postCN$muForceSp, c(0.95))
+muForceCN25 <- quantile(postCN$muForceSp, c(0.25))
+muForceCN75 <- quantile(postCN$muForceSp, c(0.75))
+muForceCN <- data.frame(cbind(muForceCN, muForceCN5,muForceCN95, muForceCN25,muForceCN75))
+muForceCN$cue <- "Forcing"
+names(muForceCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-meanHt <- sumHt[mu_p, col4table]
+muChillCN <- sumCN[grep("muChillSp", rownames(sumCN)), 1]
+muChillCN5 <- quantile(postCN$muChillSp, c(0.05))
+muChillCN95 <- quantile(postCN$muChillSp, c(0.95))
+muChillCN25 <- quantile(postCN$muChillSp, c(0.25))
+muChillCN75 <- quantile(postCN$muChillSp, c(0.75))
+muChillCN <- data.frame(cbind(muChillCN, muChillCN5,muChillCN95, muChillCN25,muChillCN75))
+muChillCN$cue <- "Chilling"
+names(muChillCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-rownames(meanHt) = c( 
-  #"Root trait intercept", "Lambda",
-  "Grand mean",
-  "Transect",
-  "Transect x latitude",
-#  "Budburst slope",
-  "Forcing",
-  "Chilling",
-  "Photoperiod",
-  "Trait x forcing",
-  "Trait x chill",
-  "Trait x photo"
-)
+muPhotoCN <- sumCN[grep("muPhotoSp", rownames(sumCN)), 1]
+muPhotoCN5 <- quantile(postCN$muPhotoSp, c(0.05))
+muPhotoCN95 <- quantile(postCN$muPhotoSp, c(0.95))
+muPhotoCN25 <- quantile(postCN$muPhotoSp, c(0.25))
+muPhotoCN75 <- quantile(postCN$muPhotoSp, c(0.75))
+muPhotoCN <- data.frame(cbind(muPhotoCN, muPhotoCN5,muPhotoCN95, muPhotoCN25,muPhotoCN75))
+muPhotoCN$cue <- "Photoperiod"
+names(muPhotoCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-load("output/mdl2023/z-scored/lmaDummyIntGrandZ.Rdata")
-lmaModelFit <- rstan::extract(mdlLMA)
-sumLMA <- summary(mdlLMA)$summary
+cueCN <- rbind(muForceCN,muChillCN,muPhotoCN)
 
-meanLMA <- sumLMA[mu_params, col4table]
+cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "purple4") +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "purple4") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+  #       axis.text.y=element_text(size = 15),
+  #       axis.title=element_text(size=  17),
+  #       legend.position = "none") +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11.3, y = 3.4, label = "e) C:N", cex = 10) +
+  theme(legend.title = element_blank()) 
 
-rownames(meanLMA) = c( 
-  #"Root trait intercept", "Lambda",
-  "Grand mean",
-  "Transect",
-  "Transect by latitude",
-  #  "Budburst slope",
-  "Forcing",
-  "Chilling",
-  "Photoperiod",
-  "Trait-forcing effect",
-  "Trait-chilling effect",
-  "Trait-photoperiod effect"
-)
+########################################################################
 
-load("output/mdl2023/z-scored/dbhDummyIntGrandZ.Rdata")
-dbhModelFit <- rstan::extract(mdlDBH)
-sumDBH <- summary(mdlDBH)$summary
+muForceSSD = mean((sumSSD[grep("muForceSp", rownames(sumSSD)), 1]))
+muForceSSD5 <- quantile(postSSD$muForceSp, c(0.05))
+muForceSSD95 <- quantile(postSSD$muForceSp, c(0.95))
+muForceSSD25 <- quantile(postSSD$muForceSp, c(0.25))
+muForceSSD75 <- quantile(postSSD$muForceSp, c(0.75))
+muForceSSD <- data.frame(cbind(muForceSSD, muForceSSD5,muForceSSD95, muForceSSD25,muForceSSD75))
+muForceSSD$cue <- "Forcing"
+names(muForceSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-meanDBH <- sumDBH[mu_params, col4table]
+muChillSSD <- sumSSD[grep("muChillSp", rownames(sumSSD)), 1]
+muChillSSD5 <- quantile(postSSD$muChillSp, c(0.05))
+muChillSSD95 <- quantile(postSSD$muChillSp, c(0.95))
+muChillSSD25 <- quantile(postSSD$muChillSp, c(0.25))
+muChillSSD75 <- quantile(postSSD$muChillSp, c(0.75))
+muChillSSD <- data.frame(cbind(muChillSSD, muChillSSD5,muChillSSD95, muChillSSD25,muChillSSD75))
+muChillSSD$cue <- "Chilling"
+names(muChillSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-rownames(meanDBH) = c( 
-  #"Root trait intercept", "Lambda",
-  "Grand mean",
-  "Transect",
-  "Transect by latitude",
-  #  "Budburst slope",
-  "Forcing",
-  "Chilling",
-  "Photoperiod",
-  "Trait-forcing effect",
-  "Trait-chilling effect",
-  "Trait-photoperiod effect"
-)
+muPhotoSSD <- sumSSD[grep("muPhotoSp", rownames(sumSSD)), 1]
+muPhotoSSD5 <- quantile(postSSD$muPhotoSp, c(0.05))
+muPhotoSSD95 <- quantile(postSSD$muPhotoSp, c(0.95))
+muPhotoSSD25 <- quantile(postSSD$muPhotoSp, c(0.25))
+muPhotoSSD75 <- quantile(postSSD$muPhotoSp, c(0.75))
+muPhotoSSD <- data.frame(cbind(muPhotoSSD, muPhotoSSD5,muPhotoSSD95, muPhotoSSD25,muPhotoSSD75))
+muPhotoSSD$cue <- "Photoperiod"
+names(muPhotoSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
-load("output/mdl2023/z-scored/ssdDummyIntGrandZ.Rdata")
-ssdModelFit <- rstan::extract(mdlSSD)
-sumSSD <- summary(mdlSSD)$summary
+cueSSD <- rbind(muForceSSD,muChillSSD,muPhotoSSD)
 
-meanSSD <- sumSSD[mu_params, col4table]
+cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "maroon") +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "maroon") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "c) SSD", cex = 10) +
+  theme(legend.title = element_blank()) 
 
-rownames(meanSSD) = c( 
-  #"Root trait intercept", "Lambda",
-  "Grand mean",
-  "Transect",
-  "Transect by latitude",
-  #  "Budburst slope",
-  "Forcing",
-  "Chilling",
-  "Photoperiod",
-  "Trait-forcing effect",
-  "Trait-chilling effect",
-  "Trait-photoperiod effect"
-)
-
-load("output/mdl2023/z-scored/cnDummyIntGrandZ.Rdata")
-cnModelFit <- rstan::extract(mdlCN)
-sumCN <- summary(mdlCN)$summary
-
-meanCN <- sumCN[mu_params, col4table]
-
-rownames(meanCN) = c( 
-  #"Root trait intercept", "Lambda",
-  "Grand mean",
-  "Transect",
-  "Transect by latitude",
-  #  "Budburst slope",
-  "Forcing",
-  "Chilling",
-  "Photoperiod",
-  "Trait-forcing effect",
-  "Trait-chilling effect",
-  "Trait-photoperiod effect"
-)
-
-pdf(file.path( "../figures/traitMuPlot.pdf"), width = 15, height = 3)
-par(mfrow = c(1,5), mar = c(5, 8, 2, 0.05))
-# Upper panel: bud burst
-plot(seq(-10,  10,length.out = nrow(meanHt)), 1:nrow(meanHt),
-     type = "n", xlab = "",
-     ylab = "", yaxt = "n", cex.lab = 2)
-
-axis(2, at = nrow(meanHt):1, labels = rownames(meanHt), las = 1, cex.axis = 1)
-points(meanHt[, 'mean'],
-       nrow(meanHt):1,
-       pch = 16,
-       col = "darkslategray4",
-       cex = 2)
-arrows(meanHt[, "97.5%"], nrow(meanHt):1, meanHt[, "2.5%"], nrow(meanHt):1,
-       len = 0, col = "black")
-abline(v = 0, lty = 3)
-text(-10, 8.5, label = "a)", cex = 1.25)
-# LMA
-par(mar = c(5, 1, 2, 0.25))
-
-plot(seq(-10,  10,length.out = nrow(meanLMA)), 1:nrow(meanLMA),
-     type = "n", xlab = "",
-     ylab = "", yaxt = "n", cex.lab = 2)
-abline(v = 0, lty = 3)
-
-points(meanLMA[, 'mean'],
-       nrow(meanLMA):1,
-       pch = 16,
-       col = "darkolivegreen",
-       cex = 2)
-arrows(meanLMA[, "97.5%"], nrow(meanLMA):1, meanLMA[, "2.5%"], nrow(meanLMA):1,
-       len = 0, col = "black")
-text(-10, 8.5, label = "b)", cex = 1.25)
-
-# DBH
-plot(seq(-10,  10,length.out = nrow(meanDBH)), 1:nrow(meanDBH),
-     type = "n", xlab = "Estimated change in budburst day",
-     ylab = "", yaxt = "n", cex.lab = 1.5)
-abline(v = 0, lty = 3)
-
-points(meanDBH[, 'mean'],
-       nrow(meanDBH):1,
-       pch = 16,
-       col = "goldenrod",
-       cex = 2)
-arrows(meanDBH[, "97.5%"], nrow(meanDBH):1, meanDBH[, "2.5%"], nrow(meanDBH):1,
-       len = 0, col = "black")
-text(-10, 8.5, label = "c)", cex = 1.25)
-
-# SSD
-
-plot(seq(-10,  10,length.out = nrow(meanSSD)), 1:nrow(meanSSD),
-     type = "n", xlab = "",
-     ylab = "", yaxt = "n", cex.lab = 2)
-abline(v = 0, lty = 3)
-
-points(meanSSD[, 'mean'],
-       nrow(meanSSD):1,
-       pch = 16,
-       col = "maroon",
-       cex = 2)
-arrows(meanSSD[, "97.5%"], nrow(meanSSD):1, meanSSD[, "2.5%"], nrow(meanSSD):1,
-       len = 0, col = "black")
-text(-10, 8.5, label = "d)", cex = 1.25)
-
-# CN
-plot(seq(-10,  10,length.out = nrow(meanCN)), 1:nrow(meanCN),
-     type = "n", xlab = "",
-     ylab = "", yaxt = "n")
-abline(v = 0, lty = 3, cex.lab = 2)
-
-points(meanCN[, 'mean'],
-       nrow(meanCN):1,
-       pch = 16,
-       col = "purple4",
-       cex = 2)
-arrows(meanCN[, "97.5%"], nrow(meanCN):1, meanCN[, "2.5%"], nrow(meanCN):1,
-       len = 0, col = "black")
-text(-10, 8.5, label = "e)", cex = 1.25)
+pdf("figures/muCuePlots.pdf", height =5, width = 25)
+plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1,align = "v")
 dev.off()

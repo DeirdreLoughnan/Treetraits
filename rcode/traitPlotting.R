@@ -172,7 +172,7 @@ tranE <- 0.5669498
 
 # plot first for west coast
 ht_w = a_spHt[1] + b_tranHt[1] * tranW + b_tranlatHt[1] * (tranW*latZ)
-ht_e = a_SpHt[1] + b_tranHt[1] * tranE + b_tranlatHt[1] * (tranE*latZ)
+ht_e = a_spHt[1] + b_tranHt[1] * tranE + b_tranlatHt[1] * (tranE*latZ)
 
 ht_w5 = a_spHt[2] + b_tranHt[2] * tranW + b_tranlatHt[2] * (tranW*latZ)
 ht_e5 = a_spHt[2] + b_tranHt[2] * tranE + b_tranlatHt[2] * (tranE*latZ)
@@ -190,7 +190,7 @@ intHt <- ggplot(htEW) +
   geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= latZ), alpha = 0.2, fill = "cyan3") + 
   xlab("Standardized latitude") + ylab("Standardized height") +
   xlim (-0.8,0.8) + 
-  ylim (-0.5,0.5) + 
+  ylim (-1,1.2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
@@ -198,7 +198,7 @@ intHt <- ggplot(htEW) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -0.7, y = 1, label = "a)", cex = 10) 
   
 
 
@@ -229,14 +229,14 @@ b_tranlatLMA25 <- quantile(postLMA$b_tranlat, c(0.25))
 b_tranlatLMA75 <- quantile(postLMA$b_tranlat, c(0.75))
 b_tranlatLMA <- cbind(b_tranlatLMA, b_tranlatLMA5,b_tranlatLMA95, b_tranlatLMA25,b_tranlatLMA75)
 
-quantile2575 <- function(x){
-  returnQuanilte <- quantile(x, prob = c(0.05, 0.95))
-  return(returnQuanilte)
-}
-
-bf_quan <- apply(data.frame(postLMA$b_tranE), 2, quantile2575)
-mugrand_quan <- apply(muGrandSp, 2, quantile2575)
-
+# quantile2575 <- function(x){
+#   returnQuanilte <- quantile(x, prob = c(0.05, 0.95))
+#   return(returnQuanilte)
+# }
+# 
+# bf_quan <- apply(data.frame(postLMA$b_tranE), 2, quantile2575)
+# mugrand_quan <- apply(muGrandSp, 2, quantile2575)
+# 
 
 ## Simulate interaction with transect and latitude:
 
@@ -270,16 +270,16 @@ intLMA <- ggplot(LMAEW) +
   geom_line(aes(y = LMAe, x = latZ), col = "darkolivegreen3") +
   geom_ribbon(data = LMAEW, aes(ymin = LMA_e5, ymax = LMA_e95, x= latZ), alpha = 0.2, fill = "darkolivegreen3") +
   scale_color_manual(values = c("darkolivegreen","darkolivegreen3"), labels = c("Western", "Eastern"), name = "") +
-  xlab("Standardized latitude") + ylab("Standardized heigLMA") +
+  xlab("Standardized latitude") + ylab("Standardized LMA") +
   xlim (-0.8,0.8) + 
-  ylim (-1,1) + 
+  ylim (-1,1.2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -0.7, y = 1, label = "d)", cex = 10) 
 ### DBH
 
 
@@ -341,16 +341,16 @@ intDBH <- ggplot(DBHEW) +
   geom_ribbon(data = DBHEW, aes(ymin = DBH_e5, ymax = DBH_e95, x= latZ), alpha = 0.2, fill = "goldenrod") +
   #scale_color_manual(values = c("goldenrod4","goldenrod"), labels = c("Western", "Eastern"), name = "") +
   scale_linetype_manual(values = c(1,2), labels = c("Western", "Eastern"), name = "") +
-  xlab("Standardized latitude") + ylab("Standardized heigDBH") +
+  xlab("Standardized latitude") + ylab("Standardized DBH") +
   xlim (-0.8,0.8) + 
-  ylim (-1,1) + 
+  ylim (-1,1.2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -0.7, y = 1, label = "b)", cex = 10) 
 ## C:N
 
 sumCN <- summary(mdl)$summary
@@ -410,16 +410,16 @@ intCN <- ggplot(CNEW) +
   geom_line(aes(y = CNe, x = latZ), col = "purple2") +
   geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= latZ), alpha = 0.2, fill = "purple2") +
   # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
-  xlab("Standardized latitude") + ylab("Standardized heigCN") +
+  xlab("Standardized latitude") + ylab("Standardized CN") +
   xlim (-0.8,0.8) + 
-  ylim (-1,1.3) + 
+  ylim (-1,1.2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -0.7, y = 1, label = "e)", cex = 10) 
 
 
 
@@ -479,19 +479,19 @@ intSSD <- ggplot(SSDEW) +
   geom_ribbon(data = SSDEW, aes(ymin = SSD_w5, ymax = SSD_w95, x= latZ), alpha = 0.2, fill = "maroon4") +
   geom_line(aes(y = SSDe, x = latZ), col = "maroon") +
   geom_ribbon(data = SSDEW, aes(ymin = SSD_e5, ymax = SSD_e95, x= latZ), alpha = 0.2, fill = "maroon") +
-  xlab("Standardized latitude") + ylab("Standardized heigSSD") +
+  xlab("Standardized latitude") + ylab("Standardized SSD") +
   xlim (-0.8,0.8) + 
-  ylim (-1,1.3) + 
+  ylim (-1,1.2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.0,.0),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank())# +  annotate("text", x = -5.4, y = 125, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -0.7, y = 1, label = "c)", cex = 10) 
 
-pdf("figures/intrxnPlots.pdf", height =5, width = 20)
-plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 4, nrow =1,align = "v")
+pdf("figures/intrxnPlots.pdf", height =5, width = 25)
+plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 5, nrow =1,align = "v")
 dev.off()
 
 
