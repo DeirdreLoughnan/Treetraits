@@ -75,6 +75,7 @@ cueHt <- rbind(muForceHt,muChillHt,muPhotoHt)
 
 cueHeightPlot <- ggplot(cueHt,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "cyan4") +
+  geom_vline(xintercept = 0, linetype='dashed') +
   geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "cyan4") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -114,6 +115,7 @@ cueLMA <- rbind(muForceLMA,muChillLMA,muPhotoLMA)
 
 cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "darkolivegreen") +
+  geom_vline(xintercept = 0, linetype='dashed') +
   geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "darkolivegreen") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -155,6 +157,7 @@ cueDBH <- rbind(muForceDBH,muChillDBH,muPhotoDBH)
 
 cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "goldenrod") +
+  geom_vline(xintercept = 0, linetype='dashed') +
   geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "goldenrod") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -195,6 +198,7 @@ cueCN <- rbind(muForceCN,muChillCN,muPhotoCN)
 
 cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "purple4") +
+  geom_vline(xintercept = 0, linetype='dashed') +
   geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "purple4") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -240,6 +244,7 @@ cueSSD <- rbind(muForceSSD,muChillSSD,muPhotoSSD)
 
 cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "maroon") +
+  geom_vline(xintercept = 0, linetype='dashed') +
   geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "maroon") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -250,4 +255,225 @@ cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
 
 pdf("figures/muCuePlots.pdf", height =5, width = 25)
 plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1,align = "v")
+dev.off()
+
+
+#########################################
+betaTraitxForceHt = mean((sumHt[grep("betaTraitxForce", rownames(sumHt)), 1]))
+betaTraitxForceHt5 <- quantile(postHt$betaTraitxForce, c(0.05))
+betaTraitxForceHt95 <- quantile(postHt$betaTraitxForce, c(0.95))
+betaTraitxForceHt25 <- quantile(postHt$betaTraitxForce, c(0.25))
+betaTraitxForceHt75 <- quantile(postHt$betaTraitxForce, c(0.75))
+betaTraitxForceHt <- data.frame(cbind(betaTraitxForceHt, betaTraitxForceHt5,betaTraitxForceHt95, betaTraitxForceHt25,betaTraitxForceHt75))
+betaTraitxForceHt$cue <- "Forcing"
+names(betaTraitxForceHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxChillHt <- sumHt[grep("betaTraitxChill", rownames(sumHt)), 1]
+betaTraitxChillHt5 <- quantile(postHt$betaTraitxChill, c(0.05))
+betaTraitxChillHt95 <- quantile(postHt$betaTraitxChill, c(0.95))
+betaTraitxChillHt25 <- quantile(postHt$betaTraitxChill, c(0.25))
+betaTraitxChillHt75 <- quantile(postHt$betaTraitxChill, c(0.75))
+betaTraitxChillHt <- data.frame(cbind(betaTraitxChillHt, betaTraitxChillHt5,betaTraitxChillHt95, betaTraitxChillHt25,betaTraitxChillHt75))
+betaTraitxChillHt$cue <- "Chilling"
+names(betaTraitxChillHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxPhotoHt <- sumHt[grep("betaTraitxPhoto", rownames(sumHt)), 1]
+betaTraitxPhotoHt5 <- quantile(postHt$betaTraitxPhoto, c(0.05))
+betaTraitxPhotoHt95 <- quantile(postHt$betaTraitxPhoto, c(0.95))
+betaTraitxPhotoHt25 <- quantile(postHt$betaTraitxPhoto, c(0.25))
+betaTraitxPhotoHt75 <- quantile(postHt$betaTraitxPhoto, c(0.75))
+betaTraitxPhotoHt <- data.frame(cbind(betaTraitxPhotoHt, betaTraitxPhotoHt5,betaTraitxPhotoHt95, betaTraitxPhotoHt25,betaTraitxPhotoHt75))
+betaTraitxPhotoHt$cue <- "Photoperiod"
+names(betaTraitxPhotoHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+
+cueTraitHt <- rbind(betaTraitxForceHt,betaTraitxChillHt,betaTraitxPhotoHt)
+
+cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "cyan4") +
+  geom_vline(xintercept = 0, linetype='dashed') +
+  xlim (-11,25) +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "cyan4") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated cue response in budburst days", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "a) Height", cex = 10) +
+  theme(legend.title = element_blank()) 
+
+########################################################################
+betaTraitxForceLMA = mean((sumLMA[grep("betaTraitxForce", rownames(sumLMA)), 1]))
+betaTraitxForceLMA5 <- quantile(postLMA$betaTraitxForce, c(0.05))
+betaTraitxForceLMA95 <- quantile(postLMA$betaTraitxForce, c(0.95))
+betaTraitxForceLMA25 <- quantile(postLMA$betaTraitxForce, c(0.25))
+betaTraitxForceLMA75 <- quantile(postLMA$betaTraitxForce, c(0.75))
+betaTraitxForceLMA <- data.frame(cbind(betaTraitxForceLMA, betaTraitxForceLMA5,betaTraitxForceLMA95, betaTraitxForceLMA25,betaTraitxForceLMA75))
+betaTraitxForceLMA$cue <- "Forcing"
+names(betaTraitxForceLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxChillLMA <- sumLMA[grep("betaTraitxChill", rownames(sumLMA)), 1]
+betaTraitxChillLMA5 <- quantile(postLMA$betaTraitxChill, c(0.05))
+betaTraitxChillLMA95 <- quantile(postLMA$betaTraitxChill, c(0.95))
+betaTraitxChillLMA25 <- quantile(postLMA$betaTraitxChill, c(0.25))
+betaTraitxChillLMA75 <- quantile(postLMA$betaTraitxChill, c(0.75))
+betaTraitxChillLMA <- data.frame(cbind(betaTraitxChillLMA, betaTraitxChillLMA5,betaTraitxChillLMA95, betaTraitxChillLMA25,betaTraitxChillLMA75))
+betaTraitxChillLMA$cue <- "Chilling"
+names(betaTraitxChillLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxPhotoLMA <- sumLMA[grep("betaTraitxPhoto", rownames(sumLMA)), 1]
+betaTraitxPhotoLMA5 <- quantile(postLMA$betaTraitxPhoto, c(0.05))
+betaTraitxPhotoLMA95 <- quantile(postLMA$betaTraitxPhoto, c(0.95))
+betaTraitxPhotoLMA25 <- quantile(postLMA$betaTraitxPhoto, c(0.25))
+betaTraitxPhotoLMA75 <- quantile(postLMA$betaTraitxPhoto, c(0.75))
+betaTraitxPhotoLMA <- data.frame(cbind(betaTraitxPhotoLMA, betaTraitxPhotoLMA5,betaTraitxPhotoLMA95, betaTraitxPhotoLMA25,betaTraitxPhotoLMA75))
+betaTraitxPhotoLMA$cue <- "Photoperiod"
+names(betaTraitxPhotoLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+cueTraitLMA <- rbind(betaTraitxForceLMA,betaTraitxChillLMA,betaTraitxPhotoLMA)
+
+cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "darkolivegreen") +
+  geom_vline(xintercept = 0, linetype='dashed') +
+  xlim (-11,25) +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "darkolivegreen") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "d) LMA", cex = 10) +
+  theme(legend.title = element_blank()) 
+
+########################################################################
+
+betaTraitxForceDBH = mean((sumDBH[grep("betaTraitxForce", rownames(sumDBH)), 1]))
+betaTraitxForceDBH5 <- quantile(postDBH$betaTraitxForce, c(0.05))
+betaTraitxForceDBH95 <- quantile(postDBH$betaTraitxForce, c(0.95))
+betaTraitxForceDBH25 <- quantile(postDBH$betaTraitxForce, c(0.25))
+betaTraitxForceDBH75 <- quantile(postDBH$betaTraitxForce, c(0.75))
+betaTraitxForceDBH <- data.frame(cbind(betaTraitxForceDBH, betaTraitxForceDBH5,betaTraitxForceDBH95, betaTraitxForceDBH25,betaTraitxForceDBH75))
+betaTraitxForceDBH$cue <- "Forcing"
+names(betaTraitxForceDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxChillDBH <- sumDBH[grep("betaTraitxChill", rownames(sumDBH)), 1]
+betaTraitxChillDBH5 <- quantile(postDBH$betaTraitxChill, c(0.05))
+betaTraitxChillDBH95 <- quantile(postDBH$betaTraitxChill, c(0.95))
+betaTraitxChillDBH25 <- quantile(postDBH$betaTraitxChill, c(0.25))
+betaTraitxChillDBH75 <- quantile(postDBH$betaTraitxChill, c(0.75))
+betaTraitxChillDBH <- data.frame(cbind(betaTraitxChillDBH, betaTraitxChillDBH5,betaTraitxChillDBH95, betaTraitxChillDBH25,betaTraitxChillDBH75))
+betaTraitxChillDBH$cue <- "Chilling"
+names(betaTraitxChillDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxPhotoDBH <- sumDBH[grep("betaTraitxPhoto", rownames(sumDBH)), 1]
+betaTraitxPhotoDBH5 <- quantile(postDBH$betaTraitxPhoto, c(0.05))
+betaTraitxPhotoDBH95 <- quantile(postDBH$betaTraitxPhoto, c(0.95))
+betaTraitxPhotoDBH25 <- quantile(postDBH$betaTraitxPhoto, c(0.25))
+betaTraitxPhotoDBH75 <- quantile(postDBH$betaTraitxPhoto, c(0.75))
+betaTraitxPhotoDBH <- data.frame(cbind(betaTraitxPhotoDBH, betaTraitxPhotoDBH5,betaTraitxPhotoDBH95, betaTraitxPhotoDBH25,betaTraitxPhotoDBH75))
+betaTraitxPhotoDBH$cue <- "Photoperiod"
+names(betaTraitxPhotoDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+cueTraitDBH <- rbind(betaTraitxForceDBH,betaTraitxChillDBH,betaTraitxPhotoDBH)
+
+cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "goldenrod") +
+  geom_vline(xintercept = 0, linetype='dashed') +
+  xlim (-11,25) +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "goldenrod") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "b) DBH", cex = 10) +
+  theme(legend.title = element_blank()) 
+
+########################################################################
+betaTraitxForceCN = mean((sumCN[grep("betaTraitxForce", rownames(sumCN)), 1]))
+betaTraitxForceCN5 <- quantile(postCN$betaTraitxForce, c(0.05))
+betaTraitxForceCN95 <- quantile(postCN$betaTraitxForce, c(0.95))
+betaTraitxForceCN25 <- quantile(postCN$betaTraitxForce, c(0.25))
+betaTraitxForceCN75 <- quantile(postCN$betaTraitxForce, c(0.75))
+betaTraitxForceCN <- data.frame(cbind(betaTraitxForceCN, betaTraitxForceCN5,betaTraitxForceCN95, betaTraitxForceCN25,betaTraitxForceCN75))
+betaTraitxForceCN$cue <- "Forcing"
+names(betaTraitxForceCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxChillCN <- sumCN[grep("betaTraitxChill", rownames(sumCN)), 1]
+betaTraitxChillCN5 <- quantile(postCN$betaTraitxChill, c(0.05))
+betaTraitxChillCN95 <- quantile(postCN$betaTraitxChill, c(0.95))
+betaTraitxChillCN25 <- quantile(postCN$betaTraitxChill, c(0.25))
+betaTraitxChillCN75 <- quantile(postCN$betaTraitxChill, c(0.75))
+betaTraitxChillCN <- data.frame(cbind(betaTraitxChillCN, betaTraitxChillCN5,betaTraitxChillCN95, betaTraitxChillCN25,betaTraitxChillCN75))
+betaTraitxChillCN$cue <- "Chilling"
+names(betaTraitxChillCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxPhotoCN <- sumCN[grep("betaTraitxPhoto", rownames(sumCN)), 1]
+betaTraitxPhotoCN5 <- quantile(postCN$betaTraitxPhoto, c(0.05))
+betaTraitxPhotoCN95 <- quantile(postCN$betaTraitxPhoto, c(0.95))
+betaTraitxPhotoCN25 <- quantile(postCN$betaTraitxPhoto, c(0.25))
+betaTraitxPhotoCN75 <- quantile(postCN$betaTraitxPhoto, c(0.75))
+betaTraitxPhotoCN <- data.frame(cbind(betaTraitxPhotoCN, betaTraitxPhotoCN5,betaTraitxPhotoCN95, betaTraitxPhotoCN25,betaTraitxPhotoCN75))
+betaTraitxPhotoCN$cue <- "Photoperiod"
+names(betaTraitxPhotoCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+cueTraitCN <- rbind(betaTraitxForceCN,betaTraitxChillCN,betaTraitxPhotoCN)
+
+cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "purple4") +
+  geom_vline(xintercept = 0, linetype='dashed') +
+  xlim (-11,25) +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "purple4") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+  #       axis.text.y=element_text(size = 15),
+  #       axis.title=element_text(size=  17),
+  #       legend.position = "none") +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "e) C:N", cex = 10) +
+  theme(legend.title = element_blank()) 
+
+########################################################################
+
+betaTraitxForceSSD = mean((sumSSD[grep("betaTraitxForce", rownames(sumSSD)), 1]))
+betaTraitxForceSSD5 <- quantile(postSSD$betaTraitxForce, c(0.05))
+betaTraitxForceSSD95 <- quantile(postSSD$betaTraitxForce, c(0.95))
+betaTraitxForceSSD25 <- quantile(postSSD$betaTraitxForce, c(0.25))
+betaTraitxForceSSD75 <- quantile(postSSD$betaTraitxForce, c(0.75))
+betaTraitxForceSSD <- data.frame(cbind(betaTraitxForceSSD, betaTraitxForceSSD5,betaTraitxForceSSD95, betaTraitxForceSSD25,betaTraitxForceSSD75))
+betaTraitxForceSSD$cue <- "Forcing"
+names(betaTraitxForceSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxChillSSD <- sumSSD[grep("betaTraitxChill", rownames(sumSSD)), 1]
+betaTraitxChillSSD5 <- quantile(postSSD$betaTraitxChill, c(0.05))
+betaTraitxChillSSD95 <- quantile(postSSD$betaTraitxChill, c(0.95))
+betaTraitxChillSSD25 <- quantile(postSSD$betaTraitxChill, c(0.25))
+betaTraitxChillSSD75 <- quantile(postSSD$betaTraitxChill, c(0.75))
+betaTraitxChillSSD <- data.frame(cbind(betaTraitxChillSSD, betaTraitxChillSSD5,betaTraitxChillSSD95, betaTraitxChillSSD25,betaTraitxChillSSD75))
+betaTraitxChillSSD$cue <- "Chilling"
+names(betaTraitxChillSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+betaTraitxPhotoSSD <- sumSSD[grep("betaTraitxPhoto", rownames(sumSSD)), 1]
+betaTraitxPhotoSSD5 <- quantile(postSSD$betaTraitxPhoto, c(0.05))
+betaTraitxPhotoSSD95 <- quantile(postSSD$betaTraitxPhoto, c(0.95))
+betaTraitxPhotoSSD25 <- quantile(postSSD$betaTraitxPhoto, c(0.25))
+betaTraitxPhotoSSD75 <- quantile(postSSD$betaTraitxPhoto, c(0.75))
+betaTraitxPhotoSSD <- data.frame(cbind(betaTraitxPhotoSSD, betaTraitxPhotoSSD5,betaTraitxPhotoSSD95, betaTraitxPhotoSSD25,betaTraitxPhotoSSD75))
+betaTraitxPhotoSSD$cue <- "Photoperiod"
+names(betaTraitxPhotoSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
+cueTraitSSD <- rbind(betaTraitxForceSSD,betaTraitxChillSSD,betaTraitxPhotoSSD)
+
+cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
+  geom_point(size = 7, color = "maroon") +
+  geom_vline(xintercept = 0, linetype='dashed') +
+  xlim (-11,25) +
+  geom_errorbar(aes(xmin= five, xmax = nintyFive,ymin= cue, ymax = cue), size = 0.5, color = "maroon") +
+  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "c) SSD", cex = 10) +
+  theme(legend.title = element_blank()) 
+
+pdf("figures/muCueTraitPlots.pdf", height =5, width = 25)
+plot_grid( cueTraitHeightPlot,cueTraitDBHPlot,cueTraitSSDPlot,cueTraitLMAPlot,cueTraitCNPlot , ncol = 5, nrow =1,align = "v")
 dev.off()
