@@ -102,40 +102,48 @@ These plots and tables are using the model output from the model with a dummy va
 \end{enumerate}
 
 % 1. Do phenological cue-trait relationships change across transects? Populations?
-\item Most traits = small population effects but interaction between pop and transect for some.
+\item Most traits small population effects---but some traits show strong interaction between pop and transect
+% Ht:  population effect (-ve) but latxtran effect crosses zero (95% UI)
+% LMA:  strong latxtran interaction
+% DBH: population effect (-ve) but latxtran effect weak (95% UI crosses zero)
+% SSD: weak population and latxtran effect (95% UI crosses zero)
+% C:N strong latxtran interaction
 \begin{enumerate}
-\item Found moderate to strong interaction between latitude and transect---but effects differed by trait
-\item Both height and ssd = smaller trait values at higher latitudes = but ssd showed weak effects (\Sexpr{htLatTran}, UI: \Sexpr{lower_htLatTran},\Sexpr{upper_htLatTran} for height, \Sexpr{ssdLatTran}, UI: \Sexpr{lower_ssdLatTran},\Sexpr{upper_ssdLatTran} for SSD)
-\item DBH = strongest response---\Sexpr{dbhLatTran}, UI: \Sexpr{lower_dbhLatTran},\Sexpr{upper_dbhLatTran}---largest diameters occurred in our more Northern populations
-\item C:N also increased with latitude---but relatively weak (\Sexpr{cnLatTran}, UI: \Sexpr{lower_cnLatTran},\Sexpr{upper_cnLatTran})
-\item Only C:N and LMA = no effect (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran} for both traits) 
+\item Found differences between our transects for height and DBH--- smaller for eastern species 
+\item Moderate to strong interaction between leaf traits across latitude and transects
+\item Both LMA and C:N = larger trait values with increasing latitude in eastern transect, but smaller values in western transect species (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran} for LMA, \Sexpr{cnLatTran}, UI: \Sexpr{lower_cnLatTran},\Sexpr{upper_cnLatTran} for C:N)
+\item No relationships between transect or latitude for SSD
 \item Fig. \ref{fig:tranInt}
 \end{enumerate}
 
 %2. What other functional traits relate to budburst phenology in temperate woody species?
-\item Found only two of our five traits were related to budburst phenology
+% Multiple paragraphs --- discuss ht and DBH and SSD and then leaf traits
+\item All traits related to one or more budburst cue---but responses were variable across cues and traits
 \begin{enumerate}
-\item Only height and DBH correlated with budburst cues---responses were consistent across the two traits
-\item Smaller, short trees had stronger forcing responses (\Sexpr{htBFSpMean}, UI: \Sexpr{lower_htBFSpMean }, \Sexpr{upper_htBFSpMean } for height and \Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhBFSpMean}, Fig. \ref{fig:traitSlopes} a and g)
-\item But weaker responses to photoperiod (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htBPSpMean}, \Sexpr{upper_htBPSpMean} for height and \Sexpr{dbhBPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhBPSpMean}, Fig. \ref{fig:traitSlopes} c and i)
+\item Wood and structural traits all showed similar cue relationships but differed in strength
+\item Height only related to photoperiod---taller trees stronger photoperiod responses = earlier bb under high cues (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htBPSpMean}, \Sexpr{upper_htBPSpMean})---no response to forcing or chilling. 
+\item Cues had a moderate relationship to DBH---found weakest cue responses of large diameter trees to forcing (\Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhBFSpMean}) and chilling (\Sexpr{dbhBCSpMean}, UI: \Sexpr{lower_dbhBCSpMean}, \Sexpr{upper_dbhBCSpMean}) = later budburst than smaller trees---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhBPSpMean}) 
+\item Strongest cue responses found for SSD---increasing stem specific density lead to weaker cue responses to forcing (\Sexpr{ssdBFSpMean}, UI: \Sexpr{lower_ssdBFSpMean}, \Sexpr{upper_ssdBFSpMean}) and chilling (\Sexpr{ssdBCSpMean}, UI: \Sexpr{lower_ssdBCSpMean}, \Sexpr{upper_ssdBCSpMean}) = later budburst under high cues---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{ssdMuPSpMean}, UI: \Sexpr{lower_ssdBPSpMean}, \Sexpr{upper_ssdBPSpMean}) 
+\item Ref Fig. \ref{fig:traitSlopes} and Fig. \ref{fig:muCueTraitPlot}
+\item But no correlation between between ring porosity of wood with our three cues---based on spp means using posterior estimates \ref{fig:ringPorosity}.
 \end{enumerate}
 
-\item Other three traits = no relationship to chilling, forcing, or photoperiod cues
+\item leaf traits varied more in the direction of cue responses 
 \begin{enumerate}
-\item LMA, SSD, C:N = no relationship---posterior centered around zero (Fig. \ref{fig:traitSlopes})
-\item our estimates of the betaTraitxCue parameters for these traits = fully informed by prior not the data (Fig. \ref{fig:betaTraitxCue})
-\item Also no correlation between between ring porosity of wood with our three cues---based on spp means using posterior estimates \ref{fig:ringPorosity}.
+\item LMA showed weak relationships with forcing and chilling---larger LMA stronger responses under high forcing (\Sexpr{lmaBFSpMean}, UI: \Sexpr{lower_lmaBFSpMean}, \Sexpr{upper_lmaBFSpMean}) and chilling (\Sexpr{lmaBCSpMean}, UI: \Sexpr{lower_lmaBCSpMean}, \Sexpr{upper_lmaBCSpMean})---but strong responses to photoperiod with larger LMA species advancing in bb with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaBPSpMean}, \Sexpr{upper_lmaBPSpMean})
+\item In contrast---C:N strong responses to forcing and chilling but not photoperiod---high C:N species weaker responses to forcing (\Sexpr{cnBFSpMean}, UI: \Sexpr{lower_cnBFSpMean}, \Sexpr{upper_cnBFSpMean}), chilling (\Sexpr{cnBCSpMean}, UI: \Sexpr{lower_cnBCSpMean}, \Sexpr{upper_cnBCSpMean}) and photoperiods (\Sexpr{cnMuPSpMean}, UI: \Sexpr{lower_cnBPSpMean}, \Sexpr{upper_cnBPSpMean})---with high temperatures and longer daylengths all leading to later budburst in high C:N species.
 \end{enumerate}
 
 \item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work. 
 \begin{enumerate}
-\item All models produced positive phenological responses to cues
+\item All models showed earlier budburst in response to all three cues
 \item Individual spp varied in both their timing and cue responses.
 \item But in general spp responses were strongest for chilling and weakest for photoperiod.
+\item ref Fig. \ref{fig:muCuePlot} and Fig. \ref{fig:muCueTraitPlot}
 \end{enumerate}
 
 % How do shrub and tree species differ in their cue-trait relationships?
-\item Including height and DBH trait effects better informed spp level estimates of phenology
+\item Including trait effects better informed spp level estimates of phenology
 \begin{enumerate}
 \item Estimates bb using our model parameters show clear differences in bb timing between tree and shrub spp (Fig. \ref{fig:bbShrubTree})
 \item Shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
@@ -155,6 +163,22 @@ These plots and tables are using the model output from the model with a dummy va
 \label{fig:tranInt}
 \end{figure}
 
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/betaTraitxCueZ25.pdf}
+\caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on budburst timing.}
+\label{fig:betaTraitxCue}
+\end{figure}
+
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//figures/ringPorosityHeight.pdf}
+\caption{Ring porosity and height.}
+\label{fig:ringPorosity}
+\end{figure}
+\newpage
+
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//figures/muCuePlots.pdf}
@@ -171,21 +195,6 @@ These plots and tables are using the model output from the model with a dummy va
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/betaTraitxCueZ25.pdf}
-\caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on budburst timing.}
-\label{fig:betaTraitxCue}
-\end{figure}
-
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//figures/cuetraitLatiZMdl25.pdf}
-\caption{Relationship between species traits and cue responses, for height (a-c), leaf mass area (d-f), diameter at breast height (g-i), stem specific density (j-l), and the carbon to nitrogen ratio (m-o). Point colours representing different species groups, tree species are depicted in maroon and shrub species in teal.}
-\label{fig:traitSlopes}
-\end{figure}
-\newpage
-
-\begin{figure}[ht]\centering\hfill
- \centering
  \includegraphics[width=\textwidth]{..//figures/dotShrubTreeHtLMA.pdf}
 \caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a and b) and western (c and d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees, in blue. }
 \label{fig:bbShrubTree}
@@ -193,14 +202,6 @@ These plots and tables are using the model output from the model with a dummy va
 \newpage
 \clearpage
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//figures/betaTraitxCueZ25.pdf}
-\caption{Despite differing in their wood structures and growth strategies, we did not find this trait to correlate with differences in cue responses across species.}
-\label{fig:ringPorosity}
-\end{figure}
-\newpage
-\clearpage
 
 \section*{Tables}
 <<label= tableht, echo=FALSE , results= tex >>=
