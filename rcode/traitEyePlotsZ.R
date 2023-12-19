@@ -19,9 +19,27 @@ spInfo <- read.csv("input/species_ring.csv")
 pheno <- read.csv("input/phenoDataWChill.csv")
 trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
-load("output/heightDummyIntGrandZ25.Rdata")
+load("output/htContLat.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
+
+load("output/lmaContLat.Rdata")
+postLMA <- rstan::extract(mdlLMA)
+#sumerlma <- summary(mdlLMA)$summary
+
+load("output/dbhContLat.Rdata")
+postDBH <- rstan::extract(mdlDBH)
+
+load("output/ssdContLat.Rdata")
+postSSD <- rstan::extract(mdlSSD)
+
+load("output/cnContLat.Rdata")
+postCN <- rstan::extract(mdlCN)
+
+
+# load("output/heightDummyIntGrandZ25.Rdata")
+# sumerht <- summary(mdlHt)$summary
+# postHt <- rstan::extract(mdlHt)
 
 bTrtChillHt <- data.frame(postHt$betaTraitxChill)
 bTrtForceHt <- data.frame(postHt$betaTraitxForce)
@@ -30,11 +48,11 @@ bTrtPhotoHt <- data.frame(postHt$betaTraitxPhoto)
 HtCue <- cbind(bTrtChillHt,bTrtForceHt,bTrtPhotoHt)
 names(HtCue) <- c("Chill", "Force","Photo")
 
-HtCueL <- melt(HtCue)
+HtCueL <- reshape2::melt(HtCue)
 HtCueL$trait <- "Height"
 
-load("output/lmaDummyIntGrandZ25.Rdata")
-postLMA <- rstan::extract(mdlLMA)
+# load("output/lmaDummyIntGrandZ25.Rdata")
+# postLMA <- rstan::extract(mdlLMA)
 
 bTrtChillLMA <- data.frame(postLMA$betaTraitxChill)
 bTrtForceLMA <- data.frame(postLMA$betaTraitxForce)
@@ -43,12 +61,12 @@ bTrtPhotoLMA <- data.frame(postLMA$betaTraitxPhoto)
 LMACue <- cbind(bTrtChillLMA,bTrtForceLMA,bTrtPhotoLMA)
 names(LMACue) <- c("Chill", "Force","Photo")
 
-LMACueL <- melt(LMACue)
+LMACueL <- reshape2::melt(LMACue)
 LMACueL$trait <- "LMA"
 
-load("output/dbhDummyIntGrandZ25.Rdata")
-mdlDBH <- mdlDBH
-postDBH <- rstan::extract(mdlDBH)
+# load("output/dbhDummyIntGrandZ25.Rdata")
+# mdlDBH <- mdlDBH
+# postDBH <- rstan::extract(mdlDBH)
 
 bTrtChillDBH <- data.frame(postDBH$betaTraitxChill)
 bTrtForceDBH <- data.frame(postDBH$betaTraitxForce)
@@ -57,12 +75,12 @@ bTrtPhotoDBH <- data.frame(postDBH$betaTraitxPhoto)
 DBHCue <- cbind(bTrtChillDBH,bTrtForceDBH,bTrtPhotoDBH)
 names(DBHCue) <- c("Chill", "Force","Photo")
 
-DBHCueL <- melt(DBHCue)
+DBHCueL <- reshape2::melt(DBHCue)
 DBHCueL$trait <- "DBH"
 
-load("output/CNDummyIntGrandZ25.Rdata")
-mdlCN <- mdl
-postCN <- rstan::extract(mdlCN)
+# load("output/CNDummyIntGrandZ25.Rdata")
+# mdlCN <- mdl
+# postCN <- rstan::extract(mdlCN)
 
 bTrtChillCN <- data.frame(postCN$betaTraitxChill)
 bTrtForceCN <- data.frame(postCN$betaTraitxForce)
@@ -71,11 +89,11 @@ bTrtPhotoCN <- data.frame(postCN$betaTraitxPhoto)
 CNCue <- cbind(bTrtChillCN,bTrtForceCN,bTrtPhotoCN)
 names(CNCue) <- c("Chill", "Force","Photo")
 
-CNCueL <- melt(CNCue)
+CNCueL <- reshape2::melt(CNCue)
 CNCueL$trait <- "C:N"
 
-load("output/ssdDummyIntGrandZ25.Rdata")
-postSSD <- rstan::extract(mdlSSD)
+# load("output/ssdDummyIntGrandZ25.Rdata")
+# postSSD <- rstan::extract(mdlSSD)
 
 bTrtChillSSD <- data.frame(postSSD$betaTraitxChill)
 bTrtForceSSD <- data.frame(postSSD$betaTraitxForce)
@@ -84,7 +102,7 @@ bTrtPhotoSSD <- data.frame(postSSD$betaTraitxPhoto)
 SSDCue <- cbind(bTrtChillSSD,bTrtForceSSD,bTrtPhotoSSD)
 names(SSDCue) <- c("Chill", "Force","Photo")
 
-SSDCueL <- melt(SSDCue)
+SSDCueL <- reshape2::melt(SSDCue)
 SSDCueL$trait <- "SSD"
 
 trtCue <- rbind(HtCueL, LMACueL, DBHCueL, CNCueL, SSDCueL)
