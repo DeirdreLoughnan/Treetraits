@@ -68,7 +68,7 @@ library(reshape2)
 # chillCueL <- round(quantile(fit$mu_b_chill1, c(0.05)),1)
 
 
-load("..//output/heightDummyIntGrandZ25.Rdata")
+load("..//output/htContLat.Rdata")
 htModelFit <- rstan::extract(mdlHt)
 
 htLatTran <- as.numeric(round(mean(htModelFit$b_tranlat),1))
@@ -114,7 +114,7 @@ htChillMax <- max(htChillSpMean)
 
 ######## Leaf mass area###############################
 
-load("..//output/lmaDummyIntGrandZ25.Rdata")
+load("..//output/lmaContLat.Rdata")
 lmaModelFit <- rstan::extract(mdlLMA)
 
 lmaBFSpMean <- as.numeric(round(mean(lmaModelFit$betaTraitxForce),1))
@@ -163,8 +163,8 @@ lower_lmaLatTran <- format(round(quantile(lmaModelFit$b_tranlat, prob = 0.05),1)
 upper_lmaLatTran <- round(quantile(lmaModelFit$b_tranlat, prob = 0.95),1)
 
 ##### C:N ###############################
-load("..//output/cnDummyIntGrandZ25.Rdata")
-cnModelFit <- rstan::extract(mdl)
+load("..//output/cnContLat.Rdata")
+cnModelFit <- rstan::extract(mdlCN)
 
 cnBFSpMean <- as.numeric(round(mean(cnModelFit$betaTraitxForce),1))
 lower_cnBFSpMean <- format(round(quantile(cnModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
@@ -213,7 +213,7 @@ upper_cnLatTran <- round(quantile(cnModelFit$b_tranlat, prob = 0.95),1)
 #cnmuSp <- apply(posterior_ssd$muSp, MARGIN = 2, FUN = mean)
 
 ##### SSD  ###############################
-load("..//output/ssdDummyIntGrandZ25.Rdata")
+load("..//output/ssdContLat.Rdata")
 ssdModelFit <- rstan::extract(mdlSSD)
 
 ssdBFSpMean <- as.numeric(round(mean(ssdModelFit$betaTraitxForce),1))
@@ -260,8 +260,9 @@ ssdChillMax <- max(ssdChillSpMean)
 ssdLatTran <- as.numeric(round(mean(ssdModelFit$b_tranlat),1))
 lower_ssdLatTran <- format(round(quantile(ssdModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
 upper_ssdLatTran <- round(quantile(ssdModelFit$b_tranlat, prob = 0.95),1)
+
 ########## DBH ###############################
-load("..//output/dbhDummyIntGrandZ25.Rdata")
+load("..//output/dbhContLat.Rdata")
 dbhModelFit <- rstan::extract(mdlDBH)
 
 dbhBFSpMean <- as.numeric(round(mean(dbhModelFit$betaTraitxForce),1))

@@ -444,7 +444,7 @@ chillB <- data.frame(fit$betaChillSp)
 
 colnames(chillB) <- sort(spInfo$species.name)
 
-longChill <- melt(chillB)
+longChill <- reshape2::melt(chillB)
 colnames(longChill) <- c("species.name","betaCueSp")
 longChill$cue <- "Chilling"
 
@@ -456,7 +456,7 @@ photoB <- data.frame(fit$betaPhotoSp)
 
 colnames(photoB) <- sort(spInfo$species.name)
 
-longPhoto <- melt(photoB)
+longPhoto <- reshape2::melt(photoB)
 colnames(longPhoto) <- c("species.name","betaCueSp")
 longPhoto$cue <- "Photoperiod"
 head(longPhoto)
@@ -467,7 +467,7 @@ forceB <- data.frame(fit$betaForceSp)
 
 colnames(forceB) <- sort(spInfo$species.name)
 
-longForce <- melt(forceB)
+longForce <- reshape2::melt(forceB)
 colnames(longForce) <- c("species.name","betaCueSp")
 longForce$cue <- "Forcing"
 
@@ -545,13 +545,15 @@ meanChill2 <- merge(meanChill2, meanError95, by = c("ringType"))
 # longCues %>% group_by(species.name) %>%
 #   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
 meanChill2 <- subset(meanChill2, ringType !="")
+
 ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType)) +
   geom_point(size = 7,  color = "cyan4") +
+  ylim (-30,3) +
   geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "cyan4") +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "cyan4") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + labs( x = "Ring Type", y = "Chilling response (days/standardized unit)", main = NA) +
-   theme(legend.title = element_blank()) 
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + labs( x = "Ring Type", y = "Chilling response (days/m height)", main = NA) +
+   theme(legend.title = element_blank()) +  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
 # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
 #       axis.text.y=element_text(size = 15),
 #       axis.title=element_text(size=  17),
@@ -586,12 +588,15 @@ meanforce2 <- merge(meanforce2, meanError95, by = c("ringType"))
 # longCues %>% group_by(species.name) %>%
 #   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
 meanforce2 <- subset(meanforce2, ringType !="")
+
 ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
   geom_point(size = 7, color = "goldenrod") +
+  ylim (-30,3) +
   geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "goldenrod") +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "goldenrod") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +  
+  annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
   # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
   #       axis.text.y=element_text(size = 15),
   #       axis.title=element_text(size=  17),
@@ -626,12 +631,15 @@ meanphoto2 <- merge(meanphoto2, meanError95, by = c("ringType"))
 # longCues %>% group_by(species.name) %>%
 #   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
 meanphoto2 <- subset(meanphoto2, ringType !="")
+
 ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   geom_point(size = 7, color = "maroon") +
+  ylim (-30,3) +
   geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, size = 0.5, color = "maroon") +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
   # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
   #       axis.text.y=element_text(size = 15),
   #       axis.title=element_text(size=  17),
@@ -639,7 +647,7 @@ ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   labs( x = "Ring Type", y = "photoing response (days/standardized unit)", main = NA) +
   theme(legend.title = element_blank()) 
 
-pdf("figures/ringPorosityHeight.pdf", width = 12, height = 4)
+pdf("figures/ringPorosityHeight100.pdf", width = 12, height = 4)
 plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
 dev.off()
 

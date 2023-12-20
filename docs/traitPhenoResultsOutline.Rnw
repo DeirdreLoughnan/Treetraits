@@ -44,7 +44,7 @@
 % optional: cute, fancy headers
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\fancyhead[LO]{Draft early 2022}
+\fancyhead[LO]{Loughnan et al. 2023}
 \fancyhead[RO]{Temporal Ecology Lab}
 % more optionals! %
 
@@ -73,8 +73,9 @@ Vancouver, BC Canada V6T 1Z4. \\
 Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
 
 <<label=runcode1,  echo=FALSE>>=
-getwd()
-source("..//rcode/manuscriptValues.R")
+require(rstan)
+setwd("~/Documents/github/Treetraits/rcode")
+source("manuscriptValues.R")
 
 @
 
@@ -121,9 +122,9 @@ These plots and tables are using the model output from the model with a dummy va
 \item All traits related to one or more budburst cue---but responses were variable across cues and traits
 \begin{enumerate}
 \item Wood and structural traits all showed similar cue relationships but differed in strength
-\item Height only related to photoperiod---taller trees stronger photoperiod responses = earlier bb under high cues (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htBPSpMean}, \Sexpr{upper_htBPSpMean})---no response to forcing or chilling. 
-\item Cues had a moderate relationship to DBH---found weakest cue responses of large diameter trees to forcing (\Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhBFSpMean}) and chilling (\Sexpr{dbhBCSpMean}, UI: \Sexpr{lower_dbhBCSpMean}, \Sexpr{upper_dbhBCSpMean}) = later budburst than smaller trees---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhBPSpMean}) 
-\item Strongest cue responses found for SSD---increasing stem specific density lead to weaker cue responses to forcing (\Sexpr{ssdBFSpMean}, UI: \Sexpr{lower_ssdBFSpMean}, \Sexpr{upper_ssdBFSpMean}) and chilling (\Sexpr{ssdBCSpMean}, UI: \Sexpr{lower_ssdBCSpMean}, \Sexpr{upper_ssdBCSpMean}) = later budburst under high cues---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{ssdMuPSpMean}, UI: \Sexpr{lower_ssdBPSpMean}, \Sexpr{upper_ssdBPSpMean}) 
+\item Height only related to photoperiod---taller trees stronger photoperiod responses = earlier bb under high cues (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean})---no response to forcing or chilling. 
+\item Cues had a moderate relationship to DBH---found weakest cue responses of large diameter trees to forcing (\Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhMuFSpMean}) and chilling (\Sexpr{dbhMuCSpMean}, UI: \Sexpr{lower_dbhMuCSpMean}, \Sexpr{upper_dbhMuCSpMean}) = later budburst than smaller trees---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhMuPSpMean}, \Sexpr{upper_dbhMuPSpMean}) 
+\item Strongest cue responses found for SSD---increasing stem specific density lead to weaker cue responses to forcing (\Sexpr{ssdMuFSpMean}, UI: \Sexpr{lower_ssdMuFSpMean}, \Sexpr{upper_ssdMuFSpMean}) and chilling (\Sexpr{ssdMuCSpMean}, UI: \Sexpr{lower_ssdMuCSpMean}, \Sexpr{upper_ssdMuCSpMean}) = later budburst under high cues---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{ssdMuPSpMean}, UI: \Sexpr{lower_ssdMuPSpMean}, \Sexpr{upper_ssdMuPSpMean}) 
 \item Ref Fig. \ref{fig:traitSlopes} and Fig. \ref{fig:muCueTraitPlot}
 \item But no correlation between between ring porosity of wood with our three cues---based on spp means using posterior estimates \ref{fig:ringPorosity}.
 \end{enumerate}
@@ -164,38 +165,45 @@ These plots and tables are using the model output from the model with a dummy va
 \end{figure}
 
 
+% \begin{figure}[ht]\centering\hfill
+%  \centering
+%  \includegraphics[width=\textwidth]{..//figures/betaTraitxCueZ25.pdf}
+% \caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on budburst timing.}
+% \label{fig:betaTraitxCue}
+% \end{figure}
+
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/betaTraitxCueZ25.pdf}
-\caption{Only some traits were related to budburst phenological cues. For leaf mass area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on budburst timing.}
-\label{fig:betaTraitxCue}
+ \includegraphics[width=\textwidth]{..//figures/cuetrait100.pdf}
+\caption{Relationship between species traits and cue responses, for height (a-c), leaf mass area (d-f), diameter at breast height (g-i), stem specific density (j-l), and the carbon to nitrogen ratio (m-o). Point colours representing different species groups, tree species are depicted in maroon and shrub species in teal.}
+\label{fig:traitSlopes}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/ringPorosityHeight.pdf}
-\caption{Ring porosity and height.}
+ \includegraphics[width=\textwidth]{..//figures/ringPorosityHeight100.pdf}
+\caption{Despite differing in their wood structures and growth strategies, we did not find this trait to correlate with differences in cue responses across species. Thinner lines represent the 90\% UI and thicker lines the 50\% UI. Here we show the results for height only, see supplementary material for additional trait estimates.}
 \label{fig:ringPorosity}
 \end{figure}
 \newpage
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/muCuePlots.pdf}
+ \includegraphics[width=\textwidth]{..//figures/muCuePlots100.pdf}
 \caption{We found consistent estimates for budburst cue responses to chilling, forcing, and photoperiod for each of our trait models: a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. carbon:nitrogen. Lines represent 90\% uncertainty intervals.}
 \label{fig:muCuePlot}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/muCueTraitPlots.pdf}
-\caption{The relationships between traits and cue responses varied considerably across each of our trait models, a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. carbon:nitrogen, and for individual cues. Lines represent 90\% uncertainty intervals.}
+ \includegraphics[width=\textwidth]{..//figures/muCueTraitPlots100.pdf}
+\caption{The relationships between traits and cue responses varied considerably across each of our trait models, a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. carbon:nitrogen, and for individual cues. Lines represent 90\% uncertainty intervals. Note the differences in the scale of the x-axis.}
 \label{fig:muCueTraitPlot}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/dotShrubTreeHtLMA.pdf}
+ \includegraphics[width=\textwidth]{..//figures/dotShrubTreeHtCN100.pdf}
 \caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a and b) and western (c and d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees, in blue. }
 \label{fig:bbShrubTree}
 \end{figure}
@@ -209,7 +217,7 @@ These plots and tables are using the model output from the model with a dummy va
 require(xtable)
 require(rstan)
 
-load("..//output/heightDummyIntGrandZ25.Rdata")
+load("..//output/htContLat.Rdata")
 
 sumer <- data.frame(summary(mdlHt)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -223,7 +231,7 @@ print(xtable(sumer, caption="Summary of a joint model for height", label = "tabl
 require(xtable)
 require(rstan)
 
-load("..//output/lmaDummyIntGrandZ25.Rdata")
+load("..//output/lmaContLat.Rdata")
 
 sumer <- data.frame(summary(mdlLMA)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -237,7 +245,7 @@ print(xtable(sumer, caption="Summary of a joint model for leaf mass area", label
 require(xtable)
 require(rstan)
 
-load("..//output/dbhDummyIntGrandZ25.Rdata")
+load("..//output/dbhContLat.Rdata")
 
 sumer <- data.frame(summary(mdlDBH)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -251,7 +259,7 @@ print(xtable(sumer, caption="Summary of a joint model for diameter at base heigh
 require(xtable)
 require(rstan)
 
-load("..//output/ssdDummyIntGrandZ25.Rdata")
+load("..//output/ssdContLat.Rdata")
 
 sumer <- data.frame(summary(mdlSSD)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
@@ -265,9 +273,9 @@ print(xtable(sumer, caption="Summary of a joint model for stem specific density"
 require(xtable)
 require(rstan)
 
-load("..//output/cnDummyIntGrandZ25.Rdata")
+load("..//output/cnContLat.Rdata")
 
-sumer <- data.frame(summary(mdl)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sumer <- data.frame(summary(mdlCN)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 
 print(xtable(sumer, caption="Summary of a joint model for carbon to nitrogen ratio", label = "tablecn"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
 
