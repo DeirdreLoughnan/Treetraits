@@ -26,7 +26,7 @@ load("output/htContLat.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLat.Rdata")
+load("output/lmaContLat10.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 sumLMA<- summary(mdlLMA)$summary
 
@@ -505,19 +505,19 @@ cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated cue response in budburst days", y = "", main = NA) +  annotate("text", x = -0.5, y = 3.4, label = "a) Height", cex = 10) +
+  labs( x = "Estimated cue response in budburst days", y = "", main = NA) +  annotate("text", x = -0.4, y = 3.4, label = "a) Height", cex = 10) +
   theme(legend.title = element_blank()) 
 
 cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "darkolivegreen") +
   geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-4,2) +
+ # xlim (-4,25) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -3, y = 3.4, label = "d) LMA", cex = 10) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -18, y = 3.4, label = "d) LMA", cex = 10) +
   theme(legend.title = element_blank()) 
 
 cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
@@ -545,19 +545,19 @@ cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
   #       axis.text.y=element_text(size = 15),
   #       axis.title=element_text(size=  17),
   #       legend.position = "none") +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -0.5, y = 3.4, label = "e) C:N", cex = 10) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -0.3, y = 3.4, label = "e) C:N", cex = 10) +
   theme(legend.title = element_blank()) 
 
 cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "maroon") +
   geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-1,1) +
+  xlim (-10,10) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, color = "maroon", width = 0) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -0.5, y = 3.4, label = "c) SSD", cex = 10) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -5, y = 3.4, label = "c) SSD", cex = 10) +
   theme(legend.title = element_blank()) 
 
 pdf("figures/muCueTraitPlots100.pdf", height =5, width = 25)
@@ -572,7 +572,7 @@ cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -16, y = 3.4, label = "c) SSD", cex = 10) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -14, y = 3.4, label = "c) SSD", cex = 10) +
   theme(legend.title = element_blank()) 
 
 cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +

@@ -181,7 +181,7 @@ leafMA$lma.z <- (leafMA$lma-mean(leafMA$lma,na.rm=TRUE))/(sd(leafMA$lma,na.rm=TR
 leafMA$lma100 <- leafMA$lma*100
 leafMA$lmalog <- log10(leafMA$lma)
 
-lma.100 <- list(yTraiti = leafMA$lma100, 
+lma <- list(yTraiti = leafMA$lma, 
   N = nrow(leafMA),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(leafMA$species)),
@@ -197,16 +197,29 @@ lma.100 <- list(yTraiti = leafMA$lma100,
 )
 
 mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
-  data = lma.100,
+  data = lma,
   iter = 4000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlLMA, file="output/lmaContLat.Rdata")
+save(mdlLMA, file="output/lmaContLatNone.Rdata")
 
-
+lma.100 <- list(yTraiti = leafMA$lma100, 
+  N = nrow(leafMA),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(leafMA$species)),
+  n_tran = length(unique(leafMA$transect)),
+  lati = leafMA$lat.z,
+  tranE = as.numeric(leafMA$transect),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z,
+  chilli = pheno.t$chillport.z,
+  photoi = pheno.t$photo.z
+)
 ## What about log 10? 
-lma.log <- list(yTraiti = leafMA$lma.z, 
+lma.log <- list(yTraiti = leafMA$lmalog, 
   N = nrow(leafMA),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(leafMA$species)),
@@ -238,15 +251,15 @@ postLMA<- data.frame(rstan::extract(mdlLMA))
 
 par(mfrow = c(1,1))
 hist(postLMA$betaTraitxForce, main = "betaTraitxForce",  xlim = c(-50, 50))
-hist(rnorm(1000, 0,5), col=rgb(1,0,1,1/4), add = T)
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
 abline(v = 0, col="red", lwd=3, lty=2)
 
 hist(postLMA$betaTraitxChill, main = "betaTraitxChill",  xlim = c(-200, 200))
-hist(rnorm(1000, 0,5), col=rgb(1,0,1,1/4), add = T)
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
 abline(v = 0, col="red", lwd=3, lty=2)
 
 hist(postLMA$betaTraitxPhoto, main = "betaTraitxPhoto",  xlim = c(-200, 200))
-hist(rnorm(1000, 0,5), col=rgb(1,0,1,1/4), add = T)
+hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
 abline(v = 0, col="red", lwd=3, lty=2)
 
 
@@ -310,7 +323,7 @@ stem$ssd.z2 <- (stem$ssd-mean(stem$ssd,na.rm=TRUE))/(sd(stem$ssd,na.rm=TRUE)*2)
 stem$ssd100 <- stem$ssd*100
 stem$ssdlog <- log10(stem$ssd)
 
-ssd.data <- list(yTraiti = stem$ssd100, 
+ssd.data <- list(yTraiti = stem$ssd, 
   N = nrow(stem),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(stem$species)),

@@ -33,7 +33,7 @@ load("output/htContLat.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLat.Rdata")
+load("output/lmaContLat10.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 #sumerlma <- summary(mdlLMA)$summary
 
@@ -127,13 +127,18 @@ intHt <- ggplot(htEW) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.3, y = 10, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 10, label = "a)", cex = 10) 
   
 
 ################################################
 ##lma
 
 sumLMA <- summary(mdlLMA)$summary
+# postLMA <- rstan::extract(mdlLMA)
+# lati <- seq(40, 60, by = 0.5)
+# latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
+# tranW <- 0
+# tranE <- 1
 
 a_spLMA = mean((sumLMA[grep("mu_grand", rownames(sumLMA)), 1]))
 a_spLMA5 <- quantile(postLMA$mu_grand, c(0.05))
@@ -141,7 +146,7 @@ a_spLMA95 <- quantile(postLMA$mu_grand, c(0.95))
 a_spLMA25 <- quantile(postLMA$mu_grand, c(0.25))
 a_spLMA75 <- quantile(postLMA$mu_grand, c(0.75))
 a_spLMA <- cbind(a_spLMA, a_spLMA5,a_spLMA95, a_spLMA25,a_spLMA75)
-a_spLMA <- a_spLma/100
+a_spLMA <- a_spLMA/10
 
 b_tranLMA <- sumLMA[grep("b_tranE", rownames(sumLMA)), 1]
 b_tranLMA5 <- quantile(postLMA$b_tranE, c(0.05))
@@ -176,21 +181,21 @@ LMAEW <- data.frame(LMAw = LMA_w, LMAe = LMA_e,  LMA_w5 =LMA_w5, LMA_w95 = LMA_w
 
 
 intLMA <- ggplot(LMAEW) +
-  geom_line(aes(y = (LMAw/100), x = latZ), col = "darkolivegreen", lty = 2) +
-  geom_ribbon(data = LMAEW, aes(ymin = (LMA_w5/100), ymax = (LMA_w95/100), x= latZ), alpha = 0.2, fill = "darkolivegreen") +
-  geom_line(aes(y = (LMAe/100), x = latZ), col = "darkolivegreen3") +
-  geom_ribbon(data = LMAEW, aes(ymin = (LMA_e5/100), ymax = (LMA_e95/100), x= latZ), alpha = 0.2, fill = "darkolivegreen3") +
+  geom_line(aes(y = (LMAw), x = latZ), col = "darkolivegreen", lty = 2) +
+  geom_ribbon(data = LMAEW, aes(ymin = (LMA_w5), ymax = (LMA_w95), x= latZ), alpha = 0.2, fill = "darkolivegreen") +
+  geom_line(aes(y = (LMAe), x = latZ), col = "darkolivegreen3") +
+  geom_ribbon(data = LMAEW, aes(ymin = (LMA_e5), ymax = (LMA_e95), x= latZ), alpha = 0.2, fill = "darkolivegreen3") +
   scale_color_manual(values = c("darkolivegreen","darkolivegreen3"), labels = c("Western", "Eastern"), name = "") +
   xlab("Standardized latitude") + labs(y = bquote('Leaf mass area '~(g/m^2))) +
   xlim (-1.5,1.5) + 
-  ylim (0,0.1) + 
+  ylim (0,0.6) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.3, y = 0.1, label = "d)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 0.6, label = "d)", cex = 10) 
 ### DBH
 
 
@@ -261,7 +266,7 @@ intDBH <- ggplot(DBHEW) +
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.3, y = 17, label = "b)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 17, label = "b)", cex = 10) 
 ## C:N
 
 sumCN <- summary(mdlCN)$summary
@@ -342,7 +347,7 @@ a_spSSD95 <- quantile(postSSD$mu_grand_sp, c(0.95))
 a_spSSD25 <- quantile(postSSD$mu_grand_sp, c(0.25))
 a_spSSD75 <- quantile(postSSD$mu_grand_sp, c(0.75))
 a_spSSD <- cbind(a_spSSD, a_spSSD5,a_spSSD95, a_spSSD25,a_spSSD75)
-a_spSSD <- a_spSSD/100
+a_spSSD <- a_spSSD
 
 b_tranSSD <- sumSSD[grep("b_tranE", rownames(sumSSD)), 1]
 b_tranSSD5 <- quantile(postSSD$b_tranE, c(0.05))
@@ -367,10 +372,6 @@ wData <- subset(trtPheno, transect == "0" )
 
 # Make the other parameters constant
 
-# lati <- seq(40, 60, by = 0.5)
-# latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
-# tranW <- -0.4406491
-# tranE <- 0.5669498
 
 
 # plot first for west coast
@@ -393,16 +394,16 @@ intSSD <- ggplot(SSDEW) +
   geom_ribbon(data = (SSDEW), aes(ymin = (SSD_e5), ymax = (SSD_e95), x= latZ), alpha = 0.2, fill = "maroon") +
   xlab("Standardized latitude") +  labs(y = bquote('Stem specific density'~(g/cm^2)))  +
   xlim (-1.5,1.5) + 
-  #ylim (0,1) + 
+ # ylim (0,1) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.0,.0),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.3, y = 17, label = "c)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 1, label = "c)", cex = 10) 
 
-pdf("figures/intrxnPlots.pdf", height =5, width = 25)
+pdf("figures/intrxnPlots100.pdf", height =5, width = 25)
 plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 5, nrow =1,align = "v")
 dev.off()
 
@@ -483,40 +484,40 @@ semi <- subset(longCues, ringType == "Semi-ring" )
 
 longCuesRing <- subset(longCues, ringType != "")
 
-ggplot() + 
-  geom_violin(data = longCuesRing, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
-  facet_grid(col = vars(ringType), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
-   ylab ("Cue response") + xlab ("Cue")
-
-
-ggplot() + 
-  geom_violin(data = longCues, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
-  facet_grid(col = vars(type), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
-  ylab ("Cue response") + xlab ("Cue")
-
-  facet_grid(col = vars(type))
-              
-              +
-  stat_pointinterval(data = longest, aes(x = as.factor(cue), y = value, fill = factor(site, level = siteOrder)), .width = c(.5, .95) ,position = position_dodge(0.9)) +
-  theme_classic() +   
-  theme(legend.position = "right", 
-        legend.title = element_blank(),
-        axis.text.x = element_text( size= 16),
-        axis.text.y = element_text( size= 12),
-        axis.title=element_text(size = 14)) +
-  labs( x = "Treatment cue", y = "Cue response (days/standardized unit)", main = NA) +
-  scale_color_manual(values = c("Smithers" = "deepskyblue3",
-                                "Manning Park" = "palegreen4", 
-                                "St. Hippolyte"="darkorchid3", 
-                                "Harvard Forest" = "tomato3"))+
-  scale_fill_manual(values = c("Smithers" = "deepskyblue3",
-                               "Manning Park" = "palegreen4", 
-                               "St. Hippolyte"="darkorchid3", 
-                               "Harvard Forest" = "tomato3"))
-  
-  
-  # compare points:
-  # chilling
+# ggplot() + 
+#   geom_violin(data = longCuesRing, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
+#   facet_grid(col = vars(ringType), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
+#    ylab ("Cue response") + xlab ("Cue")
+# 
+# 
+# ggplot() + 
+#   geom_violin(data = longCues, aes(x = as.factor(cue), y = betaCueSp, col = factor(cue))) +
+#   facet_grid(col = vars(type), scales = "free_y") + theme(strip.background = element_blank(), strip.text.y = element_blank(),panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.line = element_line(colour = "black")) + theme(legend.title=element_blank()) +
+#   ylab ("Cue response") + xlab ("Cue")
+# 
+#   facet_grid(col = vars(type))
+#               
+#               +
+#   stat_pointinterval(data = longest, aes(x = as.factor(cue), y = value, fill = factor(site, level = siteOrder)), .width = c(.5, .95) ,position = position_dodge(0.9)) +
+#   theme_classic() +   
+#   theme(legend.position = "right", 
+#         legend.title = element_blank(),
+#         axis.text.x = element_text( size= 16),
+#         axis.text.y = element_text( size= 12),
+#         axis.title=element_text(size = 14)) +
+#   labs( x = "Treatment cue", y = "Cue response (days/standardized unit)", main = NA) +
+#   scale_color_manual(values = c("Smithers" = "deepskyblue3",
+#                                 "Manning Park" = "palegreen4", 
+#                                 "St. Hippolyte"="darkorchid3", 
+#                                 "Harvard Forest" = "tomato3"))+
+#   scale_fill_manual(values = c("Smithers" = "deepskyblue3",
+#                                "Manning Park" = "palegreen4", 
+#                                "St. Hippolyte"="darkorchid3", 
+#                                "Harvard Forest" = "tomato3"))
+#   
+#   
+#   # compare points:
+#   # chilling
 
 longChill <- merge(longChill, spInfo, by = "species.name")
   
