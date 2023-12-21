@@ -431,10 +431,10 @@ load("output/lmaContLat.Rdata")
 
 ModelFit <- rstan::extract(mdlLMA)
 
-muSp <- data.frame(ModelFit$mu_grand_sp)
+muSp <- (data.frame(ModelFit$mu_grand_sp)/100)
 muSpMean <- colMeans(muSp)
 
-betaForceSp <- data.frame(ModelFit$betaForceSp)
+betaForceSp <- data.frame(ModelFit$betaForceSp)/100
 betaForceSpMean <- colMeans(betaForceSp)
 
 quantile2575 <- function(x){
@@ -459,7 +459,7 @@ colnames(mg_df)[colnames(mg_df) == "X25."] <- "trait25"
 colnames(mg_df)[colnames(mg_df) == "X75."] <- "trait75"
 mg_df$species <- specieslist
 
-muForceSp <- data.frame(ModelFit$muForceSp)
+muForceSp <- data.frame(ModelFit$muForceSp)/100
 muForceSpMean <- colMeans(muForceSp)
 a5 <- quantile(muForceSp$ModelFit.muForceSp, prob = c(0.25))
 a95 <- quantile(muForceSp$ModelFit.muForceSp, prob = c(0.75))
@@ -523,7 +523,7 @@ my.label <- paste("d", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 
 ######################################################
-betaChillSp <- data.frame(ModelFit$betaChillSp)
+betaChillSp <- data.frame(ModelFit$betaChillSp)/100
 betaChillSpMean <- colMeans(betaChillSp)
 bc_quan <- apply(betaChillSp, 2, quantile2575)
 
@@ -534,7 +534,7 @@ colnames(bcs_df)[colnames(bcs_df) == "X25."] <- "chill25"
 colnames(bcs_df)[colnames(bcs_df) == "X75."] <- "chill75"
 bcs_df$species <- specieslist
 
-muChillSp <- data.frame(ModelFit$muChillSp)
+muChillSp <- data.frame(ModelFit$muChillSp)/100
 muChillSpMean <- colMeans(muChillSp)
 a5 <- quantile(muChillSp$ModelFit.muChillSp, prob = c(0.25))
 a95 <- quantile(muChillSp$ModelFit.muChillSp, prob = c(0.75))
@@ -600,7 +600,7 @@ arrows(
 my.label <- paste("e", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 #######################################################################
-betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
+betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)/100
 betaPhotoSpMean <- colMeans(betaPhotoSp)
 bp_quan <- apply(betaPhotoSp, 2, quantile2575)
 
@@ -611,7 +611,7 @@ colnames(bps_df)[colnames(bps_df) == "X25."] <- "photo25"
 colnames(bps_df)[colnames(bps_df) == "X75."] <- "photo75"
 bps_df$species <- specieslist
 
-muPhotoSp <- data.frame(ModelFit$muPhotoSp)
+muPhotoSp <- data.frame(ModelFit$muPhotoSp)/100
 muPhotoSpMean <- colMeans(muPhotoSp)
 a5 <- quantile(muPhotoSp$ModelFit.muPhotoSp, prob = c(0.25))
 a95 <- quantile(muPhotoSp$ModelFit.muPhotoSp, prob = c(0.75))
