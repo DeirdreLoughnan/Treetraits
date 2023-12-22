@@ -33,7 +33,7 @@ load("output/htContLat.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLat10.Rdata")
+load("output/lmaContLat.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 #sumerlma <- summary(mdlLMA)$summary
 
@@ -134,7 +134,7 @@ intHt <- ggplot(htEW) +
 ##lma
 
 sumLMA <- summary(mdlLMA)$summary
-# postLMA <- rstan::extract(mdlLMA)
+# postLMA <- rstan::extract(mdlLMAhundo)
 # lati <- seq(40, 60, by = 0.5)
 # latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
 # tranW <- 0
@@ -146,7 +146,7 @@ a_spLMA95 <- quantile(postLMA$mu_grand, c(0.95))
 a_spLMA25 <- quantile(postLMA$mu_grand, c(0.25))
 a_spLMA75 <- quantile(postLMA$mu_grand, c(0.75))
 a_spLMA <- cbind(a_spLMA, a_spLMA5,a_spLMA95, a_spLMA25,a_spLMA75)
-a_spLMA <- a_spLMA/10
+a_spLMA <- a_spLMA/100
 
 b_tranLMA <- sumLMA[grep("b_tranE", rownames(sumLMA)), 1]
 b_tranLMA5 <- quantile(postLMA$b_tranE, c(0.05))
@@ -154,6 +154,7 @@ b_tranLMA95 <- quantile(postLMA$b_tranE, c(0.95))
 b_tranLMA25 <- quantile(postLMA$b_tranE, c(0.25))
 b_tranLMA75 <- quantile(postLMA$b_tranE, c(0.75))
 b_tranLMA <- cbind(b_tranLMA, b_tranLMA5,b_tranLMA95, b_tranLMA25,b_tranLMA75)
+b_tranLMA <- b_tranLMA/100
 
 b_tranlatLMA <- sumLMA[grep("b_tranlat", rownames(sumLMA)), 1]
 b_tranlatLMA5 <- quantile(postLMA$b_tranlat, c(0.05))
@@ -161,7 +162,7 @@ b_tranlatLMA95 <- quantile(postLMA$b_tranlat, c(0.95))
 b_tranlatLMA25 <- quantile(postLMA$b_tranlat, c(0.25))
 b_tranlatLMA75 <- quantile(postLMA$b_tranlat, c(0.75))
 b_tranlatLMA <- cbind(b_tranlatLMA, b_tranlatLMA5,b_tranlatLMA95, b_tranlatLMA25,b_tranlatLMA75)
-
+b_tranlatLMA <- b_tranlatLMA/100
 eData <- subset(trtPheno, transect == "1" )
 wData <- subset(trtPheno, transect == "0" )
 
@@ -188,14 +189,14 @@ intLMA <- ggplot(LMAEW) +
   scale_color_manual(values = c("darkolivegreen","darkolivegreen3"), labels = c("Western", "Eastern"), name = "") +
   xlab("Standardized latitude") + labs(y = bquote('Leaf mass area '~(g/m^2))) +
   xlim (-1.5,1.5) + 
-  ylim (0,0.6) + 
+  ylim (0,0.1) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 0.6, label = "d)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 0.1, label = "d)", cex = 10) 
 ### DBH
 
 
@@ -403,7 +404,7 @@ intSSD <- ggplot(SSDEW) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
   theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 1, label = "c)", cex = 10) 
 
-pdf("figures/intrxnPlots100.pdf", height =5, width = 25)
+pdf("figures/intrxnPlots100test.pdf", height =5, width = 25)
 plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 5, nrow =1,align = "v")
 dev.off()
 

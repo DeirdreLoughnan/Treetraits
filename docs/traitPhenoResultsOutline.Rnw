@@ -219,24 +219,81 @@ require(rstan)
 
 load("..//output/htContLat.Rdata")
 
-sumer <- data.frame(summary(mdlHt)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sum <- summary(mdlHt)$summary
 
-print(xtable(sumer, caption="Summary of a joint model for height", label = "tableht"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+fit <- rstan::extract(mdlHt)
+
+mu_params_4 <- c(
+  "b_tranE","b_tranlat",
+  "muForceSp", "muChillSp", "muPhotoSp", 
+  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
+  
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+names(meanz4) <- "mean"
+
+rownames(meanz4) = c( "Transect", "Transect x latitude",
+                      "Forcing","Chilling", "Photoperiod",
+                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
+)
+
+# now get the 90% UI:
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+
+meanz4 <- cbind(meanz4,  upper)
+
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+
 
 @
 
 
-<<label= tableLMA, echo=FALSE , results= tex >>=
+<<label= tableDBH, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
 
-load("..//output/lmaContLat10.Rdata")
+load("..//output/DBHContLat.Rdata")
 
-sumer <- data.frame(summary(mdlLMA)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sum <- summary(mdlDBH)$summary
 
-print(xtable(sumer, caption="Summary of a joint model for leaf mass area", label = "tablelma"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+fit <- rstan::extract(mdlDBH)
 
+mu_params_4 <- c(
+  "b_tranE","b_tranlat",
+  "muForceSp", "muChillSp", "muPhotoSp", 
+  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
+  
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+names(meanz4) <- "mean"
+
+rownames(meanz4) = c( "Transect", "Transect x latitude",
+                      "Forcing","Chilling", "Photoperiod",
+                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
+)
+
+# now get the 90% UI:
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+
+upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+
+meanz4 <- cbind(meanz4, upper)
+
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 \newpage
 
@@ -245,28 +302,85 @@ print(xtable(sumer, caption="Summary of a joint model for leaf mass area", label
 require(xtable)
 require(rstan)
 
-load("..//output/dbhContLat.Rdata")
+load("..//output/ssdContLat.Rdata")
 
-sumer <- data.frame(summary(mdlDBH)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sum <- summary(mdlSSD)$summary
 
-print(xtable(sumer, caption="Summary of a joint model for diameter at base height", label = "tabledbh"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+fit <- rstan::extract(mdlSSD)
 
+mu_params_4 <- c(
+  "b_tranE","b_tranlat",
+  "muForceSp", "muChillSp", "muPhotoSp", 
+  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
+  
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+names(meanz4) <- "mean"
+
+rownames(meanz4) = c( "Transect", "Transect x latitude",
+                      "Forcing","Chilling", "Photoperiod",
+                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
+)
+
+# now get the 90% UI:
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+
+upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+
+meanz4 <- cbind(meanz4, upper)
+
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
-<<label= tableSSD, echo=FALSE , results= tex >>=
+
+
+<<label= tableLMA, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
 
-load("..//output/ssdContLat.Rdata")
+load("..//output/lmaContLat.Rdata")
 
-sumer <- data.frame(summary(mdlSSD)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sum <- summary(mdlLMA)$summary
 
-print(xtable(sumer, caption="Summary of a joint model for stem specific density", label = "tablessd"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+fit <- rstan::extract(mdlLMA)
 
+mu_params_4 <- c(
+  "b_tranE","b_tranlat",
+  "muForceSp", "muChillSp", "muPhotoSp", 
+  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
+  
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+names(meanz4) <- "mean"
+
+rownames(meanz4) = c( "Transect", "Transect x latitude",
+                      "Forcing","Chilling", "Photoperiod",
+                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
+)
+
+# now get the 90% UI:
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+
+upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+
+meanz4 <- cbind(meanz4, upper)
+
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
-\newpage
 
 <<label= tableCN, echo=FALSE , results= tex >>=
 
@@ -275,10 +389,38 @@ require(rstan)
 
 load("..//output/cnContLat.Rdata")
 
-sumer <- data.frame(summary(mdlCN)$summary[c("mu_grand","b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
+sum <- summary(mdlCN)$summary
 
-print(xtable(sumer, caption="Summary of a joint model for carbon to nitrogen ratio", label = "tablecn"),include.rownames= T, caption.placement="top", hline.after=c(-1,0))
+fit <- rstan::extract(mdlCN)
 
+mu_params_4 <- c(
+  "b_tranE","b_tranlat",
+  "muForceSp", "muChillSp", "muPhotoSp", 
+  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
+  
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+names(meanz4) <- "mean"
+
+rownames(meanz4) = c( "Transect", "Transect x latitude",
+                      "Forcing","Chilling", "Photoperiod",
+                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
+)
+
+# now get the 90% UI:
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+
+upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+
+meanz4 <- cbind(meanz4, upper)
+
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of CN and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 \newpage
 

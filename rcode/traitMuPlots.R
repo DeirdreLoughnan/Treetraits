@@ -26,7 +26,7 @@ load("output/htContLat.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLat10.Rdata")
+load("output/lmaContLat.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 sumLMA<- summary(mdlLMA)$summary
 
@@ -327,8 +327,10 @@ betaTraitxForceLMA95 <- quantile(postLMA$betaTraitxForce, c(0.95))
 betaTraitxForceLMA25 <- quantile(postLMA$betaTraitxForce, c(0.25))
 betaTraitxForceLMA75 <- quantile(postLMA$betaTraitxForce, c(0.75))
 betaTraitxForceLMA <- data.frame(cbind(betaTraitxForceLMA, betaTraitxForceLMA5,betaTraitxForceLMA95, betaTraitxForceLMA25,betaTraitxForceLMA75))
+
 betaTraitxForceLMA$cue <- "Trait x Forcing"
 names(betaTraitxForceLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
+
 
 betaTraitxChillLMA <- sumLMA[grep("betaTraitxChill", rownames(sumLMA)), 1]
 betaTraitxChillLMA5 <- quantile(postLMA$betaTraitxChill, c(0.05))
@@ -336,6 +338,7 @@ betaTraitxChillLMA95 <- quantile(postLMA$betaTraitxChill, c(0.95))
 betaTraitxChillLMA25 <- quantile(postLMA$betaTraitxChill, c(0.25))
 betaTraitxChillLMA75 <- quantile(postLMA$betaTraitxChill, c(0.75))
 betaTraitxChillLMA <- data.frame(cbind(betaTraitxChillLMA, betaTraitxChillLMA5,betaTraitxChillLMA95, betaTraitxChillLMA25,betaTraitxChillLMA75))
+
 betaTraitxChillLMA$cue <- "Trait x Chilling"
 names(betaTraitxChillLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cue")
 
@@ -353,13 +356,13 @@ cueTraitLMA <- rbind(betaTraitxForceLMA,betaTraitxChillLMA,betaTraitxPhotoLMA)
 cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "darkolivegreen") +
   geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-15,40) +
+  xlim (-10,10) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "d) LMA", cex = 10) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -8, y = 3.4, label = "d) LMA", cex = 10) +
   theme(legend.title = element_blank()) 
 
 ########################################################################
@@ -511,15 +514,16 @@ cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
 cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "darkolivegreen") +
   geom_vline(xintercept = 0, linetype='dashed') +
- # xlim (-4,25) +
+  xlim (-10,10) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -18, y = 3.4, label = "d) LMA", cex = 10) +
+  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -5, y = 3.4, label = "d) LMA", cex = 10) +
   theme(legend.title = element_blank()) 
 
+##
 cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "goldenrod") +
   geom_vline(xintercept = 0, linetype='dashed') +
