@@ -20,7 +20,7 @@ colnames(spInfo)[colnames(spInfo) == "X"] <- "ringType"
 spInfo <- spInfo[,1:5]
 
 trtPheno <- read.csv("input/trtPhenoDummy.csv")
-trtMeans <- aggregate(trtPheno[c("ssd","ht","lma","dbh","C.N")], trtPheno[c("species")], FUN = mean, na.rm = T)
+trtMeans <- aggregate(trtPheno[c("ssd","ht","lma","dbh","C.N","per.N")], trtPheno[c("species")], FUN = mean, na.rm = T)
 
 spInfo <- merge(spInfo, trtMeans, by = "species")
 
@@ -28,7 +28,7 @@ spInfo <- merge(spInfo, trtMeans, by = "species")
 # sumHt <- summary(mdlHt)$summary
 # postHt <- rstan::extract(mdlHt)
 
-load("output/htContLat.Rdata")
+load("output/htContLat6.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
@@ -44,9 +44,9 @@ postHt <- rstan::extract(mdlHt)
 # postSSD <- rstan::extract(mdlSSD)
 # sumSSD<- summary(mdlSSD)$summary
 
-load("output/cnContLat.Rdata")
-postCN <- rstan::extract(mdlCN)
-sumCN<- summary(mdlCN)$summary
+load("output/lncContLat.Rdata")
+postCN <- rstan::extract(mdlPerN)
+sumCN<- summary(mdlPerN)$summary
 
 
 a_sp = (sumHt[grep("mu_grand_sp", rownames(sumHt)), 1])
@@ -226,15 +226,15 @@ data <- long[order(long$meanBB),]
 # data$species.name <- factor(data$species.name, levels=unique(data$species.name) )
 #data <- transform(data, variable=reorder(species.name, -meanBB) ) 
 
-names(data) <- c("species.name","valueLow", "valueHigh","species","type","transect","ringType","ssd","ht","CN","CN","C.N","meanBB","meanBBHigh", "Int","Int5","Int95","Int25","Int75","force5","force95","force25","force75","chill5", "chill95", "chill25", "chill75","photo5", "photo95", "photo25", "photo75","spMeanForce", "spMeanChill", "spMeanPhoto","bb5","bb95","bb25","bb75", "spacing","bb5High","bb95High","bb75High","bb25High", "valueHigh","chill","force","photo","intercept")
+names(data) <- c("species.name","valueLow", "valueHigh","species","type","transect","ringType","ssd","ht","lma","dbh","C.N","per.N","meanBB","meanBBHigh", "Int","Int5","Int95","Int25","Int75","force5","force95","force25","force75","chill5", "chill95", "chill25", "chill75","photo5", "photo95", "photo25", "photo75","spMeanForce", "spMeanChill", "spMeanPhoto","bb5","bb95","bb25","bb75", "spacing","bb5High","bb95High","bb75High","bb25High", "valueHigh","chill","force","photo","intercept")
 
 east <- subset(spInfo, transect != "west")
 eastSp <- unique(east$species.name)
 
 dataEast <- data[data$species.name %in% eastSp,]
 
-meanPtE <- aggregate(dataEast[c("meanBB", "meanBBHigh","Int","ht","CN")], dataEast[c("species.name","type","transect")], FUN = mean)
-names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","CN")
+meanPtE <- aggregate(dataEast[c("meanBB", "meanBBHigh","Int","ht","per.N")], dataEast[c("species.name","type","transect")], FUN = mean)
+names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","lnc")
 
 
  htE <- ggplot(meanPtE) +
@@ -308,8 +308,8 @@ westSp <- unique(west$species.name)
 
 datawest <- data[data$species.name %in% westSp,]
 
-meanPtW <- aggregate(datawest[c("meanBB", "meanBBHigh","Int","ht","CN")], datawest[c("species.name","type","transect")], FUN = mean)
-names(meanPtW) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","CN")
+meanPtW <- aggregate(datawest[c("meanBB", "meanBBHigh","Int","ht","per.N")], datawest[c("species.name","type","transect")], FUN = mean)
+names(meanPtW) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","lnc")
 
 htW <- ggplot(meanPtW) +
   geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
@@ -325,7 +325,7 @@ htW <- ggplot(meanPtW) +
         axis.title=element_text(size=20)) +
   ylim (-20,35) +
   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(7,30)) +
-  labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
+  labs( x = "", y = "Day of budburst (days/m height)", main = NA) +
   theme(legend.title = element_blank()) +  annotate("text", x = 16, y = 35, label = "b) Western transect - height", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
@@ -472,13 +472,13 @@ quantile75.25 <- function(x){
   return(returnQuanilte)
 }
 
-bb_quan <- apply(m, 2, quantile595)
+bb_quan <- apply(mCN, 2, quantile595)
 bb_t <- t(bb_quan)
 bb_df <- data.frame(bb_t)
 colnames(bb_df)[colnames(bb_df) == "X5."] <- "bb5"
 colnames(bb_df)[colnames(bb_df) == "X95."] <- "bb95"
 
-bb_quan75.25 <- apply(m, 2, quantile75.25)
+bb_quan75.25 <- apply(mCN, 2, quantile75.25)
 bb_t75.25 <- t(bb_quan75.25)
 bb_df75.25 <- data.frame(bb_t75.25)
 colnames(bb_df75.25)[colnames(bb_df75.25) == "X75."] <- "bb75"
@@ -486,13 +486,13 @@ colnames(bb_df75.25)[colnames(bb_df75.25) == "X25."] <- "bb25"
 colnames(bb_df)[colnames(bb_df) == "X25."] <- "bb25"
 colnames(bb_df)[colnames(bb_df) == "X75."] <- "bb75"
 
-bb_quanHigh <- apply(mHigh, 2, quantile595)
+bb_quanHigh <- apply(mCNHigh, 2, quantile595)
 bb_tHigh <- t(bb_quanHigh)
 bb_dfHigh <- data.frame(bb_tHigh)
 colnames(bb_dfHigh)[colnames(bb_dfHigh) == "X5."] <- "bb5High"
 colnames(bb_dfHigh)[colnames(bb_dfHigh) == "X95."] <- "bb95High"
 
-bb_quan75.25High <- apply(mHigh, 2, quantile75.25)
+bb_quan75.25High <- apply(mCNHigh, 2, quantile75.25)
 bb_t75.25High <- t(bb_quan75.25High)
 bb_df75.25High <- data.frame(bb_t75.25High)
 colnames(bb_df75.25High)[colnames(bb_df75.25High) == "X75."] <- "bb75High"
@@ -510,12 +510,12 @@ spInfo <- cbind(spInfo, bb_df75.25High)
 spInfo$valueHigh <- spInfo$meanBBHigh
 
 
-m <- data.frame(m)
+mCN2 <- data.frame(mCN)
 
-long <- melt(m)
+long <- reshape2::melt(mCN2)
 names(long) <- c("species.name", "valueLow")
 
-mHigh <- data.frame(mHigh)
+mHigh <- data.frame(mCNHigh)
 
 longHigh <- melt(mHigh)
 names(longHigh) <- c("species.name", "valueHigh")
@@ -567,20 +567,20 @@ data <- long[order(long$meanBB),]
 # data$species.name <- factor(data$species.name, levels=unique(data$species.name) )
 #data <- transform(data, variable=reorder(species.name, -meanBB) ) 
 
-names(data) <- c("species.name","valueLow", "valueHigh","species","type","transect","ringType","ssd","ht","CN","CN","C.N","meanBB","meanBBHigh", "Int","Int5","Int95","Int25","Int75","force5","force95","force25","force75","chill5", "chill95", "chill25", "chill75","photo5", "photo95", "photo25", "photo75","spMeanForce", "spMeanChill", "spMeanPhoto","bb5","bb95","bb25","bb75", "spacing","bb5High","bb95High","bb75High","bb25High", "valueHigh","chill","force","photo","intercept")
+names(data) <- c("species.name","valueLow", "valueHigh","species","type","transect","ringType","ssd","ht","lma", "dbh","C.N","per.N","meanBB","meanBBHigh", "Int","Int5","Int95","Int25","Int75","force5","force95","force25","force75","chill5", "chill95", "chill25", "chill75","photo5", "photo95", "photo25", "photo75","spMeanForce", "spMeanChill", "spMeanPhoto","bb5","bb95","bb25","bb75", "spacing","bb5High","bb95High","bb75High","bb25High", "valueHigh","chill","force","photo","intercept")
 
 east <- subset(spInfo, transect != "west")
 eastSp <- unique(east$species.name)
 
 dataEast <- data[data$species.name %in% eastSp,]
 
-meanPtE <- aggregate(dataEast[c("meanBB", "meanBBHigh","Int","ht","CN")], dataEast[c("species.name","type","transect")], FUN = mean)
-names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","CN")
+meanPtE <- aggregate(dataEast[c("meanBB", "meanBBHigh","Int","ht","per.N")], dataEast[c("species.name","type","transect")], FUN = mean)
+names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","lnc")
 
 ###################
 
-meanPtW <- aggregate(datawest[c("meanBB", "meanBBHigh","Int","ht","CN")], datawest[c("species.name","type","transect")], FUN = mean)
-names(meanPtW) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","CN")
+meanPtW <- aggregate(datawest[c("meanBB", "meanBBHigh","Int","ht","per.N")], datawest[c("species.name","type","transect")], FUN = mean)
+names(meanPtW) <- c("species.name","type","transect","Budburst", "BudburstHigh","Intercept","ht","lnc")
 
 
 CNE <- ggplot(meanPtE) +
@@ -596,9 +596,9 @@ CNE <- ggplot(meanPtE) +
         axis.text.y=element_text(size = 15),
         axis.title=element_text(size=20)) +
   ylim (-20,35) +
-  scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(18,35)) +
-  labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 23.5, y = 35, label = "c) Eastern transect - CN", cex =8) +
+  scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(5,21)) +
+  labs( x = "", y = "Day of budburst (days/% LNC)", main = NA) +
+  theme(legend.title = element_blank()) +  annotate("text", x = 10, y = 35, label = "c) Eastern transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -648,9 +648,9 @@ CNW <- ggplot(meanPtW) +
   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
         axis.text.y=element_text(size = 15),
         axis.title=element_text(size=20)) +
-  scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(21,38)) +
-  labs( x = "", y = "Day of budburst (days/C:N)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 26.5, y = 35, label = "d) western transect - CN", cex =8) +
+  scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(8,24)) +
+  labs( x = "", y = "Day of budburst (days/% LNC)", main = NA) +
+  theme(legend.title = element_blank()) +  annotate("text", x = 13, y = 35, label = "d) western transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -678,7 +678,7 @@ CNW <- ggplot(meanPtW) +
 #     "intercept" ),
 #     breaks = c("Budburst","BudburstHigh", "Intercept"))
 
-pdf("figures/dotShrubTreeHtCN.pdf", width = 15, height = 10)
+pdf("figures/dotShrubTreeHtCN6.pdf", width = 15, height = 10)
 plot_grid(htE, htW, CNE,CNW, nrow = 2, ncol = 2, align = "v")
 dev.off()
 # 
@@ -771,183 +771,183 @@ dev.off()
 # plot_grid(htOrderE, htOrderW, CNOrderE, CNOrderW, nrow = 2, ncol = 2, align = "v")
 # dev.off()
 
-
-htE <- ggplot(meanPtE) +
-  geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
-  geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
-  geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtE, col = "black") +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtE, col = "black") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
-  theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
-        axis.text.y=element_text(size = 15),
-        axis.title=element_text(size=20)) +
-  scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(5,22)) +
-  labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 11, y = 20, label = "a) Eastern transect - height", cex =8) +
-  scale_color_manual(values = c("maroon","cyan4")) +
-  scale_shape_discrete( labels = c("low cue",
-                                   "high cue",
-                                   "intercept" ),
-                        breaks = c("Budburst","BudburstHigh", "Intercept"))
-
-
-htW <- ggplot(meanPtW) +
-  geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
-  geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
-  geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtW, col = "black") +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtW, col = "black") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
-  theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
-        axis.text.y=element_text(size = 15),
-        axis.title=element_text(size=20)) +
-  scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(5,20)) +
-  labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 10.5, y = 30, label = "c) western transect - height", cex =8) +
-  scale_color_manual(values = c("maroon","cyan4")) +
-  scale_shape_discrete( labels = c("low cue",
-                                   "high cue",
-                                   "intercept" ),
-                        breaks = c("Budburst","BudburstHigh", "Intercept"))
-
-CNE <- ggplot(meanPtE) +
-  geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
-  geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
-  geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtE, col = "black") +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtE, col = "black") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
-  theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
-        axis.text.y=element_text(size = 15),
-        axis.title=element_text(size=20)) +
-  scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(4,22)) +
-  labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 10.5, y = 30, label = "b) Eastern transect - CN", cex =8) +
-  scale_color_manual(values = c("maroon","cyan4")) +
-  scale_shape_discrete( labels = c("low cue",
-                                   "high cue",
-                                   "intercept" ),
-                        breaks = c("Budburst","BudburstHigh", "Intercept"))
-
-CNW <- ggplot(meanPtW) +
-  geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
-  geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
-  geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtW, col = "black") +
-  geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtW, col = "black") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
-  theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
-        axis.text.y=element_text(size = 15),
-        axis.title=element_text(size=20)) +
-  scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(4,22)) +
-  labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 14.5, y = 30, label = "d) western transect - CN", cex =8) +
-  scale_color_manual(values = c("maroon","cyan4")) +
-  scale_shape_discrete( labels = c("low cue",
-                                   "high cue",
-                                   "intercept" ),
-                        breaks = c("Budburst","BudburstHigh", "Intercept"))
-
-pdf("figures/dotShrubTree.pdf", width = 15, height = 10)
-plot_grid(htE,CNE,htW, CNW, nrow = 2, ncol = 2, align = "v")
-dev.off()
-
-##################################################
-# do different traits alter the timing of spp in the community?
-
-rankCN <- spInfo[,c("species.name","species","type","transect","meanBB","meanBBHigh","Int")]
-rankCN <- rankCN[order(rankCN$Int),]
-
-rankCNE <- subset(rankCN, transect == "east")
-rankCNE <- rankCNE[order(rankCNE$Int),]
-rankCNE$rankCNInt <- seq(1:nrow(rankCNE))
-
-rankCNE <- rankCNE[order(rankCNE$meanBB),]
-rankCNE$rankCNLowC <- seq(1:nrow(rankCNE))
-
-rankCNE <- rankCNE[order(rankCNE$meanBBHigh),]
-rankCNE$rankCNHighC <- seq(1:nrow(rankCNE))
-
-rankCNW <- subset(rankCN, transect == "west")
-rankCNW <- rankCNW[order(rankCNW$Int),]
-rankCNW$rankCNInt <- seq(1:nrow(rankCNW))
-
-rankCNW <- rankCNW[order(rankCNW$meanBB),]
-rankCNW$rankCNLowC <- seq(1:nrow(rankCNW))
-
-rankCNW <- rankCNW[order(rankCNW$meanBBHigh),]
-rankCNW$rankCNHighC <- seq(1:nrow(rankCNW))
-
-eastRank <- merge(rankE, rankCNE, by = c("species.name", "species", "type","transect"))
-
-pdf("figures/rankEstiBB.pdf", width = 9, height =3)
-colTran <- c("maroon","navy","forestgreen")
-par(mfrow = c(1,3), mar = c(5.1, 4.8, 4.1, 2.1))
-plot(eastRank$rankLowC~eastRank$rankCNLowC, 
-     col = "darkolivegreen",
-     pch = 19,
-     xlab = "Height low cue rank",
-     ylab = "CN low cue rank",
-     cex.lab =1.5,
-     cex =1.5)
-abline(0,1)
-
-plot(eastRank$rankHighC~eastRank$rankCNHighC, 
-     col = "darkolivegreen",
-     pch = 19,
-     xlab = "Height high cue rank",
-     ylab = "CN high cue rank",
-     cex.lab =1.5,
-     cex =1.5)
-abline(0,1)
-
-plot(eastRank$rankInt~eastRank$rankCNInt, 
-     col = "darkolivegreen",
-     pch = 19,
-     xlab = "Height high cue rank",
-     ylab = "CN high cue rank",
-     cex.lab =1.5,
-     cex =1.5)
-abline(0,1)
-
-###### Western ########
-westRank <- merge(rankW, rankCNW, by = c("species.name", "species", "type","transect"))
-
-pdf("figures/rankEstiBB.pdf", width = 9, height =3)
-colTran <- c("maroon","navy","forestgreen")
-par(mfrow = c(1,3), mar = c(5.1, 4.8, 4.1, 2.1))
-plot(westRank$rankLowC~westRank$rankCNLowC, 
-     col = "darkolivegreen",
-     pch = 19,
-     xlab = "Height low cue rank",
-     ylab = "CN low cue rank",
-     cex.lab =1.5,
-     cex =1.5)
-abline(0,1)
-
-plot(westRank$rankHighC~westRank$rankCNHighC, 
-     col = "darkolivegreen",
-     pch = 19,
-     xlab = "Height high cue rank",
-     ylab = "CN high cue rank",
-     cex.lab =1.5,
-     cex =1.5)
-abline(0,1)
-
-plot(westRank$rankInt~westRank$rankCNInt, 
-     col = "darkolivegreen",
-     pch = 19,
-     xlab = "Height high cue rank",
-     ylab = "CN high cue rank",
-     cex.lab =1.5,
-     cex =1.5)
-abline(0,1)
+# 
+# htE <- ggplot(meanPtE) +
+#   geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
+#   geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
+#   geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtE, col = "black") +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtE, col = "black") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#         legend.key=element_rect(fill="white")) +
+#   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
+#         axis.text.y=element_text(size = 15),
+#         axis.title=element_text(size=20)) +
+#   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(5,22)) +
+#   labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
+#   theme(legend.title = element_blank()) +  annotate("text", x = 11, y = 20, label = "a) Eastern transect - height", cex =8) +
+#   scale_color_manual(values = c("maroon","cyan4")) +
+#   scale_shape_discrete( labels = c("low cue",
+#                                    "high cue",
+#                                    "intercept" ),
+#                         breaks = c("Budburst","BudburstHigh", "Intercept"))
+# 
+# 
+# htW <- ggplot(meanPtW) +
+#   geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
+#   geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
+#   geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtW, col = "black") +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtW, col = "black") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#         legend.key=element_rect(fill="white")) +
+#   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
+#         axis.text.y=element_text(size = 15),
+#         axis.title=element_text(size=20)) +
+#   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(5,20)) +
+#   labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
+#   theme(legend.title = element_blank()) +  annotate("text", x = 10.5, y = 30, label = "c) western transect - height", cex =8) +
+#   scale_color_manual(values = c("maroon","cyan4")) +
+#   scale_shape_discrete( labels = c("low cue",
+#                                    "high cue",
+#                                    "intercept" ),
+#                         breaks = c("Budburst","BudburstHigh", "Intercept"))
+# 
+# CNE <- ggplot(meanPtE) +
+#   geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
+#   geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
+#   geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtE, col = "black") +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtE, col = "black") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#         legend.key=element_rect(fill="white")) +
+#   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
+#         axis.text.y=element_text(size = 15),
+#         axis.title=element_text(size=20)) +
+#   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(4,22)) +
+#   labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
+#   theme(legend.title = element_blank()) +  annotate("text", x = 10.5, y = 30, label = "b) Eastern transect - CN", cex =8) +
+#   scale_color_manual(values = c("maroon","cyan4")) +
+#   scale_shape_discrete( labels = c("low cue",
+#                                    "high cue",
+#                                    "intercept" ),
+#                         breaks = c("Budburst","BudburstHigh", "Intercept"))
+# 
+# CNW <- ggplot(meanPtW) +
+#   geom_point(aes(y= Budburst, x = Budburst, shape = "Budburst", col=type ), size = 5) +
+#   geom_point(aes(y= BudburstHigh, x = Budburst, shape = "BudburstHigh", col=type), size = 5) +
+#   geom_point(aes(y= Intercept, x = Budburst, shape = "Intercept", col=type), size = 5) +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtW, col = "black") +
+#   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtW, col = "black") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#         panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#         legend.key=element_rect(fill="white")) +
+#   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
+#         axis.text.y=element_text(size = 15),
+#         axis.title=element_text(size=20)) +
+#   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(4,22)) +
+#   labs( x = "", y = "Day of budburst (days/standardized units)", main = NA) +
+#   theme(legend.title = element_blank()) +  annotate("text", x = 14.5, y = 30, label = "d) western transect - CN", cex =8) +
+#   scale_color_manual(values = c("maroon","cyan4")) +
+#   scale_shape_discrete( labels = c("low cue",
+#                                    "high cue",
+#                                    "intercept" ),
+#                         breaks = c("Budburst","BudburstHigh", "Intercept"))
+# 
+# pdf("figures/dotShrubTree.pdf", width = 15, height = 10)
+# plot_grid(htE,CNE,htW, CNW, nrow = 2, ncol = 2, align = "v")
+# dev.off()
+# 
+# ##################################################
+# # do different traits alter the timing of spp in the community?
+# 
+# rankCN <- spInfo[,c("species.name","species","type","transect","meanBB","meanBBHigh","Int")]
+# rankCN <- rankCN[order(rankCN$Int),]
+# 
+# rankCNE <- subset(rankCN, transect == "east")
+# rankCNE <- rankCNE[order(rankCNE$Int),]
+# rankCNE$rankCNInt <- seq(1:nrow(rankCNE))
+# 
+# rankCNE <- rankCNE[order(rankCNE$meanBB),]
+# rankCNE$rankCNLowC <- seq(1:nrow(rankCNE))
+# 
+# rankCNE <- rankCNE[order(rankCNE$meanBBHigh),]
+# rankCNE$rankCNHighC <- seq(1:nrow(rankCNE))
+# 
+# rankCNW <- subset(rankCN, transect == "west")
+# rankCNW <- rankCNW[order(rankCNW$Int),]
+# rankCNW$rankCNInt <- seq(1:nrow(rankCNW))
+# 
+# rankCNW <- rankCNW[order(rankCNW$meanBB),]
+# rankCNW$rankCNLowC <- seq(1:nrow(rankCNW))
+# 
+# rankCNW <- rankCNW[order(rankCNW$meanBBHigh),]
+# rankCNW$rankCNHighC <- seq(1:nrow(rankCNW))
+# 
+# eastRank <- merge(rankE, rankCNE, by = c("species.name", "species", "type","transect"))
+# 
+# pdf("figures/rankEstiBB.pdf", width = 9, height =3)
+# colTran <- c("maroon","navy","forestgreen")
+# par(mfrow = c(1,3), mar = c(5.1, 4.8, 4.1, 2.1))
+# plot(eastRank$rankLowC~eastRank$rankCNLowC, 
+#      col = "darkolivegreen",
+#      pch = 19,
+#      xlab = "Height low cue rank",
+#      ylab = "CN low cue rank",
+#      cex.lab =1.5,
+#      cex =1.5)
+# abline(0,1)
+# 
+# plot(eastRank$rankHighC~eastRank$rankCNHighC, 
+#      col = "darkolivegreen",
+#      pch = 19,
+#      xlab = "Height high cue rank",
+#      ylab = "CN high cue rank",
+#      cex.lab =1.5,
+#      cex =1.5)
+# abline(0,1)
+# 
+# plot(eastRank$rankInt~eastRank$rankCNInt, 
+#      col = "darkolivegreen",
+#      pch = 19,
+#      xlab = "Height high cue rank",
+#      ylab = "CN high cue rank",
+#      cex.lab =1.5,
+#      cex =1.5)
+# abline(0,1)
+# 
+# ###### Western ########
+# westRank <- merge(rankW, rankCNW, by = c("species.name", "species", "type","transect"))
+# 
+# pdf("figures/rankEstiBB.pdf", width = 9, height =3)
+# colTran <- c("maroon","navy","forestgreen")
+# par(mfrow = c(1,3), mar = c(5.1, 4.8, 4.1, 2.1))
+# plot(westRank$rankLowC~westRank$rankCNLowC, 
+#      col = "darkolivegreen",
+#      pch = 19,
+#      xlab = "Height low cue rank",
+#      ylab = "CN low cue rank",
+#      cex.lab =1.5,
+#      cex =1.5)
+# abline(0,1)
+# 
+# plot(westRank$rankHighC~westRank$rankCNHighC, 
+#      col = "darkolivegreen",
+#      pch = 19,
+#      xlab = "Height high cue rank",
+#      ylab = "CN high cue rank",
+#      cex.lab =1.5,
+#      cex =1.5)
+# abline(0,1)
+# 
+# plot(westRank$rankInt~westRank$rankCNInt, 
+#      col = "darkolivegreen",
+#      pch = 19,
+#      xlab = "Height high cue rank",
+#      ylab = "CN high cue rank",
+#      cex.lab =1.5,
+#      cex =1.5)
+# abline(0,1)

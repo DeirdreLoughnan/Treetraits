@@ -29,7 +29,7 @@ trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
 # Ht and DBH and CN natural, LMA and SSD rescaled by 100
 # cues and latitude still z scored by only by 1 sd
-load("output/htContLat.Rdata")
+load("output/htContLat6.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
@@ -37,14 +37,14 @@ load("output/lmaContLat.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 #sumerlma <- summary(mdlLMA)$summary
 
-load("output/dbhContLat.Rdata")
+load("output/dbhContLat6.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
-load("output/ssdContLat.Rdata")
+load("output/ssdContLat6.Rdata")
 postSSD <- rstan::extract(mdlSSD)
 
-load("output/cnContLat.Rdata")
-postCN <- rstan::extract(mdlCN)
+load("output/lncContLat.Rdata")
+postCN <- rstan::extract(mdlPerN)
 
 # load("output/heightDummyIntGrandZ25.Rdata")
 # sumerht <- summary(mdlHt)$summary
@@ -270,7 +270,7 @@ intDBH <- ggplot(DBHEW) +
   theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 17, label = "b)", cex = 10) 
 ## C:N
 
-sumCN <- summary(mdlCN)$summary
+sumCN <- summary(mdlPerN)$summary
 
 a_spCN = mean((sumCN[grep("mu_grand", rownames(sumCN)), 1]))
 a_spCN5 <- quantile(postCN$mu_grand, c(0.05))
@@ -327,16 +327,16 @@ intCN <- ggplot(CNEW) +
   geom_line(aes(y = CNe, x = latZ), col = "purple2") +
   geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= latZ), alpha = 0.2, fill = "purple2") +
   # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
-  xlab("Standardized latitude") + ylab("Carobn:Nitrogen") +
+  xlab("Standardized latitude") + ylab("Leaf nitrogen content (%)") +
   xlim (-1.5,1.5) + 
-  ylim (-2,35) + 
+  ylim (-2,10) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 35, label = "e)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 10, label = "e)", cex = 10) 
 
 
 
@@ -404,7 +404,7 @@ intSSD <- ggplot(SSDEW) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
   theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 1, label = "c)", cex = 10) 
 
-pdf("figures/intrxnPlots100test.pdf", height =5, width = 25)
+pdf("figures/intrxnPlots1006.pdf", height =5, width = 25)
 plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 5, nrow =1,align = "v")
 dev.off()
 
@@ -649,7 +649,7 @@ ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   labs( x = "Ring Type", y = "photoing response (days/standardized unit)", main = NA) +
   theme(legend.title = element_blank()) 
 
-pdf("figures/ringPorosityHeight100.pdf", width = 12, height = 4)
+pdf("figures/ringPorosityHeight1006.pdf", width = 12, height = 4)
 plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
 dev.off()
 
@@ -900,7 +900,7 @@ abline(lm(SSD_w ~ lati), col = "darkslategray", lwd = 3, lty = 2)
 abline(lm(SSD_e ~lati), col = "darkslategray", lwd = 3, lty =1)
 
 #############################################
-sumCN <- summary(mdl)$summary
+sumCN <- summary(mdlPerN)$summary
 muGrand = (sumCN[grep("mu_grand", rownames(sumCN)), 1])
 b_trtSpCN = (sumCN[grep("b_muSp", rownames(sumCN)), 1])
 a_trtSpCN = mean((sumCN[grep("mu_grand_sp", rownames(sumCN)), 1]))

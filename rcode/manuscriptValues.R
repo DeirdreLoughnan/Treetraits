@@ -163,54 +163,54 @@ lower_lmaLatTran <- format(round(quantile(lmaModelFit$b_tranlat, prob = 0.05),1)
 upper_lmaLatTran <- round(quantile(lmaModelFit$b_tranlat, prob = 0.95),1)
 
 ##### C:N ###############################
-load("..//output/cnContLat.Rdata")
-cnModelFit <- rstan::extract(mdlCN)
+load("..//output/lncContLat.Rdata")
+lncModelFit <- rstan::extract(mdlPerN)
 
-cnBFSpMean <- as.numeric(round(mean(cnModelFit$betaTraitxForce),1))
-lower_cnBFSpMean <- format(round(quantile(cnModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
-upper_cnBFSpMean <- round(quantile(cnModelFit$betaTraitxForce, prob = 0.95),1)
-cnBFSpMean; lower_cnBFSpMean; upper_cnBFSpMean
+lncBFSpMean <- as.numeric(round(mean(lncModelFit$betaTraitxForce),1))
+lower_lncBFSpMean <- format(round(quantile(lncModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
+upper_lncBFSpMean <- round(quantile(lncModelFit$betaTraitxForce, prob = 0.95),1)
+lncBFSpMean; lower_lncBFSpMean; upper_lncBFSpMean
 
-cnBCSpMean <- as.numeric(round(mean(cnModelFit$betaTraitxChill),1))
-lower_cnBCSpMean <- round(quantile(cnModelFit$betaTraitxChill, prob = 0.05),1)
-upper_cnBCSpMean <- round(quantile(cnModelFit$betaTraitxChill, prob = 0.95),1)
-cnBCSpMean; lower_cnBCSpMean; upper_cnBCSpMean
+lncBCSpMean <- as.numeric(round(mean(lncModelFit$betaTraitxChill),1))
+lower_lncBCSpMean <- round(quantile(lncModelFit$betaTraitxChill, prob = 0.05),1)
+upper_lncBCSpMean <- round(quantile(lncModelFit$betaTraitxChill, prob = 0.95),1)
+lncBCSpMean; lower_lncBCSpMean; upper_lncBCSpMean
 
-cnBPSpMean <- as.numeric(round(mean(cnModelFit$betaTraitxPhoto),1))
-lower_cnBPSpMean <- round(quantile(cnModelFit$betaTraitxPhoto, prob = 0.05),1)
-upper_cnBPSpMean <- format(round(quantile(cnModelFit$betaTraitxPhoto, prob = 0.95),1), nsmall =1)
-cnBPSpMean; lower_cnBPSpMean; upper_cnBPSpMean
+lncBPSpMean <- as.numeric(round(mean(lncModelFit$betaTraitxPhoto),1))
+lower_lncBPSpMean <- round(quantile(lncModelFit$betaTraitxPhoto, prob = 0.05),1)
+upper_lncBPSpMean <- format(round(quantile(lncModelFit$betaTraitxPhoto, prob = 0.95),1), nsmall =1)
+lncBPSpMean; lower_lncBPSpMean; upper_lncBPSpMean
 
-cnchill <- data.frame(cnModelFit$alphaChillSp)
-cnChillSpMean <- colMeans(cnchill)
-cnChillMax <- max(cnChillSpMean)
+lncchill <- data.frame(lncModelFit$alphaChillSp)
+lncChillSpMean <- colMeans(lncchill)
+lncChillMax <- max(lncChillSpMean)
 
 # muForceSp
-cnMuFSpMean <- as.numeric(round(mean(cnModelFit$muForceSp),1))
-lower_cnMuFSpMean <- format(round(quantile(cnModelFit$muForceSp, prob = 0.05),1), nsmall =1)
-upper_cnMuFSpMean <- round(quantile(cnModelFit$muForceSp, prob = 0.95),1)
-cnMuFSpMean; lower_cnMuFSpMean; upper_cnMuFSpMean
+lncMuFSpMean <- as.numeric(round(mean(lncModelFit$muForceSp),1))
+lower_lncMuFSpMean <- format(round(quantile(lncModelFit$muForceSp, prob = 0.05),1), nsmall =1)
+upper_lncMuFSpMean <- round(quantile(lncModelFit$muForceSp, prob = 0.95),1)
+lncMuFSpMean; lower_lncMuFSpMean; upper_lncMuFSpMean
 
 #muChillSP
-cnMuCSpMean <- as.numeric(round(mean(cnModelFit$muChillSp),1))
-lower_cnMuCSpMean <- format(round(quantile(cnModelFit$muChillSp, prob = 0.05),1), nsmall =1)
-upper_cnMuCSpMean <- round(quantile(cnModelFit$muChillSp, prob = 0.95),1)
-cnMuCSpMean; lower_cnMuCSpMean; upper_cnMuCSpMean
+lncMuCSpMean <- as.numeric(round(mean(lncModelFit$muChillSp),1))
+lower_lncMuCSpMean <- format(round(quantile(lncModelFit$muChillSp, prob = 0.05),1), nsmall =1)
+upper_lncMuCSpMean <- round(quantile(lncModelFit$muChillSp, prob = 0.95),1)
+lncMuCSpMean; lower_lncMuCSpMean; upper_lncMuCSpMean
 
 #muPhotoSp
-cnMuPSpMean <- as.numeric(round(mean(cnModelFit$muPhotoSp),1))
-lower_cnMuPSpMean <- format(round(quantile(cnModelFit$muPhotoSp, prob = 0.05),1), nsmall =1)
-upper_cnMuPSpMean <- round(quantile(cnModelFit$muPhotoSp, prob = 0.95),1)
-cnMuPSpMean; lower_cnMuPSpMean; upper_cnMuPSpMean
+lncMuPSpMean <- as.numeric(round(mean(lncModelFit$muPhotoSp),1))
+lower_lncMuPSpMean <- format(round(quantile(lncModelFit$muPhotoSp, prob = 0.05),1), nsmall =1)
+upper_lncMuPSpMean <- round(quantile(lncModelFit$muPhotoSp, prob = 0.95),1)
+lncMuPSpMean; lower_lncMuPSpMean; upper_lncMuPSpMean
 
-cnchill <- data.frame(cnModelFit$alphaChillSp)
-cnChillSpMean <- colMeans(cnchill)
-cnChillMax <- max(cnChillSpMean)
+lncchill <- data.frame(lncModelFit$alphaChillSp)
+lncChillSpMean <- colMeans(lncchill)
+lncChillMax <- max(lncChillSpMean)
 
-cnLatTran <- as.numeric(round(mean(cnModelFit$b_tranlat),1))
-lower_cnLatTran <- format(round(quantile(cnModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
-upper_cnLatTran <- round(quantile(cnModelFit$b_tranlat, prob = 0.95),1)
-#cnmuSp <- apply(posterior_ssd$muSp, MARGIN = 2, FUN = mean)
+lncLatTran <- as.numeric(round(mean(lncModelFit$b_tranlat),1))
+lower_lncLatTran <- format(round(quantile(lncModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
+upper_lncLatTran <- round(quantile(lncModelFit$b_tranlat, prob = 0.95),1)
+#lncmuSp <- apply(posterior_ssd$muSp, MARGIN = 2, FUN = mean)
 
 ##### SSD  ###############################
 load("..//output/ssdContLat.Rdata")

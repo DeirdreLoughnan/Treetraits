@@ -103,43 +103,40 @@ These plots and tables are using the model output from the model with a dummy va
 \end{enumerate}
 
 % 1. Do phenological cue-trait relationships change across transects? Populations?
-\item Most traits small population effects---but some traits show strong interaction between pop and transect
+\item Traits differed in their population-level variation
 % Ht:  population effect (-ve) but latxtran effect crosses zero (95% UI)
-% LMA:  strong latxtran interaction
-% DBH: population effect (-ve) but latxtran effect weak (95% UI crosses zero)
-% SSD: weak population and latxtran effect (95% UI crosses zero)
-% C:N strong latxtran interaction
+% LMA:  strong latxtran interaction and pop effect both +ve
+% DBH: population effect (-ve) but -ve latxtran effect  (95% UI crosses zero)
+% SSD: no population and latxtran effect (95% UI crosses zero)
+% LNC strong latxtran interaction
 \begin{enumerate}
-\item Found differences between our transects for height and DBH--- smaller for eastern species 
-\item Moderate to strong interaction between leaf traits across latitude and transects
-\item Both LMA and C:N = larger trait values with increasing latitude in eastern transect, but smaller values in western transect species (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran} for LMA, \Sexpr{cnLatTran}, UI: \Sexpr{lower_cnLatTran},\Sexpr{upper_cnLatTran} for C:N)
-\item No relationships between transect or latitude for SSD
+\item Most of our traits varied across populations---changing both between the two transects and with latitude
+\item Height (\Sexpr{htLatTran}, UI: \Sexpr{lower_htLatTran},\Sexpr{upper_htLatTran}), DBH (\Sexpr{dbhLatTran}, UI: \Sexpr{lower_dbhLatTran},\Sexpr{upper_dbhLatTran}), and LMA (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---strong interactions between latitude and transect
+\item We found tree height to decline with increasing latitude, while tree DBH and LMA both increased
+\item LNC differed between the two transects (\Sexpr{lncLatTran}, UI: \Sexpr{lower_lncLatTran},\Sexpr{upper_lncLatTran}---greater in western transect
+\item But no population-level variation in SSD
 \item Fig. \ref{fig:tranInt}
-\end{enumerate}
 
 %2. What other functional traits relate to budburst phenology in temperate woody species?
 % Multiple paragraphs --- discuss ht and DBH and SSD and then leaf traits
-\item All traits related to one or more budburst cue---but responses were variable across cues and traits
+\item All traits related to at least one budburst cue---but responses were generally weak
 \begin{enumerate}
-\item Wood and structural traits all showed similar cue relationships but differed in strength
-\item Height only related to photoperiod---taller trees stronger photoperiod responses = earlier bb under high cues (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean})---no response to forcing or chilling. 
-\item Cues had a moderate relationship to DBH---found weakest cue responses of large diameter trees to forcing (\Sexpr{dbhBFSpMean}, UI: \Sexpr{lower_dbhBFSpMean}, \Sexpr{upper_dbhMuFSpMean}) and chilling (\Sexpr{dbhMuCSpMean}, UI: \Sexpr{lower_dbhMuCSpMean}, \Sexpr{upper_dbhMuCSpMean}) = later budburst than smaller trees---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhMuPSpMean}, \Sexpr{upper_dbhMuPSpMean}) 
-\item Strongest cue responses found for SSD---increasing stem specific density lead to weaker cue responses to forcing (\Sexpr{ssdMuFSpMean}, UI: \Sexpr{lower_ssdMuFSpMean}, \Sexpr{upper_ssdMuFSpMean}) and chilling (\Sexpr{ssdMuCSpMean}, UI: \Sexpr{lower_ssdMuCSpMean}, \Sexpr{upper_ssdMuCSpMean}) = later budburst under high cues---but strong responses to photoperiod with greater advances in bb with longer photoperiods (\Sexpr{ssdMuPSpMean}, UI: \Sexpr{lower_ssdMuPSpMean}, \Sexpr{upper_ssdMuPSpMean}) 
-\item Ref Fig. \ref{fig:traitSlopes} and Fig. \ref{fig:muCueTraitPlot}
-\item But no correlation between between ring porosity of wood with our three cues---based on spp means using posterior estimates \ref{fig:ringPorosity}.
+\item Of our three cues---photoperiod strongest relationship with other traits
+\item Our two structural traits = similar cue relationships---taller plants with greater DBH = stronger photoperiod responses = earlier bb under longer daylengths (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean} for height and (\Sexpr{dbhBPSpMean}, UI: \Sexpr{lower_dbhBPSpMean}, \Sexpr{upper_dbhMuPSpMean} for DBH) 
+\item But no correlation between between ring porosity of wood with cues \ref{fig:ringPorosity}.
 \end{enumerate}
 
 \item leaf traits varied more in the direction of cue responses 
 \begin{enumerate}
-\item LMA showed weak relationships with forcing and chilling---larger LMA stronger responses under high forcing (\Sexpr{lmaBFSpMean}, UI: \Sexpr{lower_lmaBFSpMean}, \Sexpr{upper_lmaBFSpMean}) and chilling (\Sexpr{lmaBCSpMean}, UI: \Sexpr{lower_lmaBCSpMean}, \Sexpr{upper_lmaBCSpMean})---but strong responses to photoperiod with larger LMA species advancing in bb with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaBPSpMean}, \Sexpr{upper_lmaBPSpMean})
-\item In contrast---C:N strong responses to forcing and chilling but not photoperiod---high C:N species weaker responses to forcing (\Sexpr{cnBFSpMean}, UI: \Sexpr{lower_cnBFSpMean}, \Sexpr{upper_cnBFSpMean}), chilling (\Sexpr{cnBCSpMean}, UI: \Sexpr{lower_cnBCSpMean}, \Sexpr{upper_cnBCSpMean}) and photoperiods (\Sexpr{cnMuPSpMean}, UI: \Sexpr{lower_cnBPSpMean}, \Sexpr{upper_cnBPSpMean})---with high temperatures and longer daylengths all leading to later budburst in high C:N species.
+\item LMA showed strong responses to photoperiod with low LMA species advancing in bb with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaBPSpMean}, \Sexpr{upper_lmaBPSpMean})
+\item In contrast---LNC strong responses to forcing but not chilling or photoperiod---high LNC species responded more to warmer spring temperatures (\Sexpr{cnBFSpMean}, UI: \Sexpr{lower_cnBFSpMean}, \Sexpr{upper_cnBFSpMean})
 \end{enumerate}
 
 \item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work. 
 \begin{enumerate}
 \item All models showed earlier budburst in response to all three cues
-\item Individual spp varied in both their timing and cue responses.
-\item But in general spp responses were strongest for chilling and weakest for photoperiod.
+\item Individual spp varied in both their timing and cue responses---but for most models responses were strongest for chilling and weakest for photoperiod.
+\item Only our LMA produced unique cue estimates---estimating photoperiod cues (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) stronger than forcing cues (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean}) (Table \ref{tabLMA})
 \item ref Fig. \ref{fig:muCuePlot} and Fig. \ref{fig:muCueTraitPlot}
 \end{enumerate}
 
@@ -159,7 +156,7 @@ These plots and tables are using the model output from the model with a dummy va
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/intrxnPlots100.pdf}
+ \includegraphics[width=\textwidth]{..//figures/intrxnPlots1006.pdf}
 \caption{We only found biogeographic differences for four of our functional traits, with the direction of the relationship varying across traits. Both height a. height and b. diameter at base height showed strong interactions between latitude and trait values, while c. leaf mass area has the weakest response, and d. stem specific density, and e. carbon:nitrogen moderate interactive effects.}
 \label{fig:tranInt}
 \end{figure}
@@ -174,14 +171,14 @@ These plots and tables are using the model output from the model with a dummy va
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/cuetrait100.pdf}
+ \includegraphics[width=\textwidth]{..//figures/cuetrait1006.pdf}
 \caption{Relationship between species traits and cue responses, for height (a-c), leaf mass area (d-f), diameter at breast height (g-i), stem specific density (j-l), and the carbon to nitrogen ratio (m-o). Point colours representing different species groups, tree species are depicted in maroon and shrub species in teal.}
 \label{fig:traitSlopes}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/ringPorosityHeight100.pdf}
+ \includegraphics[width=\textwidth]{..//figures/ringPorosityHeight1006.pdf}
 \caption{Despite differing in their wood structures and growth strategies, we did not find this trait to correlate with differences in cue responses across species. Thinner lines represent the 90\% UI and thicker lines the 50\% UI. Here we show the results for height only, see supplementary material for additional trait estimates.}
 \label{fig:ringPorosity}
 \end{figure}
@@ -189,21 +186,21 @@ These plots and tables are using the model output from the model with a dummy va
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/muCuePlots100.pdf}
+ \includegraphics[width=\textwidth]{..//figures/muCuePlots1006.pdf}
 \caption{We found consistent estimates for budburst cue responses to chilling, forcing, and photoperiod for each of our trait models: a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. carbon:nitrogen. Lines represent 90\% uncertainty intervals.}
 \label{fig:muCuePlot}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/muCueTraitPlots100.pdf}
+ \includegraphics[width=\textwidth]{..//figures/muCueTraitPlots1006.pdf}
 \caption{The relationships between traits and cue responses varied considerably across each of our trait models, a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. carbon:nitrogen, and for individual cues. Lines represent 90\% uncertainty intervals. Note the differences in the scale of the x-axis.}
 \label{fig:muCueTraitPlot}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//figures/dotShrubTreeHtCN.pdf}
+ \includegraphics[width=\textwidth]{..//figures/dotShrubTreeHtCN6.pdf}
 \caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a and b) and western (c and d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees, in blue. }
 \label{fig:bbShrubTree}
 \end{figure}
@@ -217,7 +214,7 @@ These plots and tables are using the model output from the model with a dummy va
 require(xtable)
 require(rstan)
 
-load("..//output/htContLat.Rdata")
+load("..//output/htContLat6.Rdata")
 
 sum <- summary(mdlHt)$summary
 
@@ -260,7 +257,7 @@ print(xtable(meanz4, caption="Summary output from a joint Bayesian model of heig
 require(xtable)
 require(rstan)
 
-load("..//output/DBHContLat.Rdata")
+load("..//output/DBHContLat6.Rdata")
 
 sum <- summary(mdlDBH)$summary
 
@@ -302,7 +299,7 @@ print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH 
 require(xtable)
 require(rstan)
 
-load("..//output/ssdContLat.Rdata")
+load("..//output/ssdContLat6.Rdata")
 
 sum <- summary(mdlSSD)$summary
 
@@ -387,11 +384,11 @@ print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA 
 require(xtable)
 require(rstan)
 
-load("..//output/cnContLat.Rdata")
+load("..//output/lncContLat.Rdata")
 
-sum <- summary(mdlCN)$summary
+sum <- summary(mdlPerN)$summary
 
-fit <- rstan::extract(mdlCN)
+fit <- rstan::extract(mdlPerN)
 
 mu_params_4 <- c(
   "b_tranE","b_tranlat",
@@ -420,7 +417,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of CN and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 \newpage
 
