@@ -60,8 +60,12 @@
 
 \SweaveOpts{concordance=TRUE} % For RStudio hiccups
 
+%Title ideas:
+% old title: Phenological cue use varies with functional traits in North American woody plant communities
+% Cues shaping woody plant temporal niche differs from cues driving species overall trait phenotype 
+% ....need more
 
-\title{Phenological cue use varies with functional traits in North American woody plan communities}
+\title{Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst}
 \date{\today}
 \author{Deirdre Loughnan$^1$, Faith A M Jones$^1$, and E M Wolkovich$^1$}
 \maketitle 
@@ -88,7 +92,155 @@ setwd("~/Documents/github/Treetraits/docs")
 \end{enumerate}
 
 \section*{Materials and Methods}
-These plots and tables are using the model output from the model with a dummy variable for transect (east = 1) and an interaction between transect and latitude. Latitude is included as a continuous variable, but based on the prior predictive checks, I decided to z-scored it. 90\% UI given in text.
+\subsection*{Field sampling}
+
+\begin{enumerate}
+\item General pop description
+\begin{enumerate}
+\item Combined \emph{in situ} trait data with budburst data from two growth chamber cutting experiments
+\item Traits were measured across four eastern populations --- Harvard Forest, Massachusetts, USA (42.55$^{\circ}$N, 72.20$^{\circ}$W) and St. Hippolyte, Quebec, Canada (45.98$^{\circ}$N, 74.01$^{\circ}$W) and four western population --- Smithers (54.78$^{\circ}$N, 127.17$^{\circ}$W) and E.C. Manning Park (49.06$^{\circ}$N, 120.78$^{\circ}$W)
+\item Growth chamber study --- cuttings collected from the most southern and northern populations in each transect
+\item Both datasets span latitudinal gradient of 4-6$^{\circ}$
+\end{enumerate}
+
+\item Describing spp
+\begin{enumerate}
+\item Across populations --- measured \Sexpr{nSpp} species --- \Sexpr{nSppE} eastern transect and \Sexpr{nSppW} western transect
+\item Selected spp that were most abundant in forest communities
+\item Eastern transect: \Sexpr{nSppES} shrubs and \Sexpr{nSppET} trees
+\item Western transect: \Sexpr{nSppWS} shrubs and \Sexpr{nSppWT} trees
+\item Three species occurred in both transect
+\end{enumerate}
+\end{enumerate}
+
+\subsection*{Functional traits}
+
+\begin{enumerate}
+\item General sampling info
+\begin{enumerate}
+\item Traits were measured in the summer prior to each growth chamber study.
+\item Eastern transect: traits measured summer 2015 
+\item Western transect: traits measured May 29 to July 30, 2019
+\item For each --- measured traits for X-10 healthy, adult, individuals of each species
+\end{enumerate}
+
+\item Trait sampling --- structural/wood traits
+\begin{enumerate}
+\item Measured a total of five traits: height (n = \Sexpr{nHt}), DBH (n = \Sexpr{nDBH}), SSD (n = \Sexpr{nSSD}), LMA (n = \Sexpr{nLMA}), LNC (n = \Sexpr{nLNC})
+\item Traits were measured according to recommendations of Perez-Harguindeguy2013.
+\item Height was measured using a range finder (XX brand etc.).
+\item Diameter at breast height was measured 1.42 m from the ground.
+\item Wood volume was measured within 12 hours of collection --- 10 cm sample taken from tree branches or shrub primary stems --- measured using the water displacement method
+\item Branch segments were dried at 105$^{\circ}$C for 24h and weighted.
+\end{enumerate}
+
+\item Trait sampling --- leaf traits
+\begin{enumerate}
+\item Leaf traits were measured for five haphazardly selected, fully expanded, and hardened leaves 
+\item High resolution scans of leaf area taken using Canon flatbed scanner within 12 hours of collection
+\item Leaf area was then quantified using the ImageJ software
+\item Leaves were dried for 48h at 70$^{\circ}$C and weighed using a precision balance.
+\end{enumerate}
+\end{enumerate}
+
+\subsection*{Growth chamber study}
+\begin{enumerate}
+\item General information
+\begin{enumerate}
+\item To collect branch cuttings for growth chamber study --- returned to our highest and lowest latitude populations in each transect
+\item Eastern transect: Hippolyte and Harvard Forested visited again in 20-28 January for growth chamber study --- study conducted at Arnold Arboretum
+\item Western transect: traits measured May 29 to July 30, 2019 --- Smithers and Manning park visited again in 19-28 October, 2019 --- study conducted at UBC
+\end{enumerate}
+
+\item Treatments and duration
+\begin{enumerate}
+\item For both growth chamber studies --- 8 distinct treatments:
+\item two levels of chilling --- no additional chilling or 30 days at 4$^{\circ}$C = eastern study, and 30 days or 70 days of chilling at 4$^{\circ}$C for our western study --- all dark
+\item two levels of forcing—a cool regime of 15:5$^{\circ}$C and a warm regime of 20:10$^{\circ}$C
+\item two photoperiods of either 8 or 12 hours
+\item For detailed disucssion of study differences see Loughnan et al. (phenology paper)
+\end{enumerate}
+
+\item Data collection --- BBCH
+\begin{enumerate}
+\item Phenological stages were based on BBCH scale adapted for our specific species
+\item Observations made every 1-3 days for each sample
+\item stages were recorded up to full leaf expansion --- limited our analysis to budburst 
+\item Eastern study lasted for 82 days, 19320 observations---add Sexpr obj
+\item Western study lasted for 113 days, 47844 observations
+\end{enumerate}
+
+\end{enumerate}
+
+\subsection*{Statistical Anlaysis}
+
+\begin{enumerate}
+\item Introduce approach and why it is useful:
+\begin{enumerate}
+\item Our analysis combined the trait data with the budburst data from the growth chamber study
+\item Built joint model for each trait---directly models the relationship between leaf and structural traits and budburst 
+\item Approach carries through uncertainty between trait and phenology data---combines observational trait data with experimental phenology data
+\end{enumerate}
+
+\item Begin to describe the model:
+\begin{enumerate}
+\item hierarchical linear model---partitioning variation of individual observations (\emph{i}) of a given trait value ($y_{\text{trait}[i]}$) to the effects of species (\emph{sp id}), and population-level differences arising from transects (\emph{transect id}) or the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and residual variation ($\sigma_{\text{trait}}$), sometimes called `measurement error').
+\item Transect included as a dummy variable and latitude as a continuous variable 
+\item Latitude values z-scored 
+\item Most traits were modeled using their natural units---except LMA was rescaled by 100
+\end{enumerate}
+
+\item describe trait part of model
+\begin{enumerate}
+\item Model give unique estimates for each species ($\alpha_{\text{sp[sp id]}}$) and estimate of variance---partial pooling---controls for variation in the number of trait estimates per spp and trait variability 
+\item Estimate for differences between transect ($\beta_{transect}$) and the interaction between transects and latitude ($\beta_{transect \times latitude}$) 
+\item These species-level estimates of traits become predictors of species-level estimates of each cue--- ($\beta_{\text{force[sp]}}$, $\beta_{\text{chill[sp]}}$, $\beta_{\text{photo[sp]}}$) 
+\end{enumerate}
+
+Trait model:
+\begin{align}
+\mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{\text{transect}} +\beta_{\text{transect} \times \text{latitude}} \\
+\beta_{transect} &  \sim normal( \mu_{transect}, \sigma_{\text{transect}}) \nonumber \\
+\beta_{\text{transect} \times \text{latitude}} &  \sim normal( \mu_{\text{transect} \times \text{latitude}}, \sigma_{\text{transect} \times \text{latitude}}) \nonumber 
+\end{align}
+
+Cue part:
+\begin{align}
+\beta_{\text{chill[sp]}} & = \alpha_{\text{chill}[sp]} + \beta_{\text{trait}.\text{chill}} \times \alpha_{\text{trait sp[sp]}} \nonumber \\
+\beta_{\text{force[sp]}} & = \alpha_{\text{force}[sp]} + \beta_{\text{trait}.\text{force}} \times \alpha_{\text{trait sp[sp]}} \\
+\beta_{\text{photo[sp]}} & = \alpha_{\text{photo}[sp]} + \beta_{\text{trait}.\text{photo}} \times \alpha_{\text{trait sp[sp]}} \nonumber 
+\end{align}
+
+\item Explain phenology part of model
+\begin{enumerate}
+ \item Across each spp---get esti of overall effect of each trait on cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$)
+\item and estimate of species-level cue variation not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$) = estimate of how well trait effects explain species-level differences
+\item Also get estimates of species responses to cues ($C_i$, $F_i$, $P_i$, respectively---z-scored)---with residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$)
+\item Partial pooling for residual variation across species and variation in cues not attributed to the trait
+\end{enumerate}
+
+\begin{align}
+\mu_{pheno} & = \alpha_{\text{pheno[sp]}}+ \beta_{\text{chill[sp]}} \times C_i + \beta_{\text{force[sp]}}\times F_i + \beta_{\text{photo[sp]}} \times P_i\\
+y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber 
+\end{align}
+
+\begin{align}
+\alpha_{\text{pheno}} \sim normal(\mu_{\alpha_{\text{pheno}}},\sigma_{\alpha_{\text{pheno}}}) \\
+\alpha_{\text{force}} \sim normal(\mu_{\alpha_{\text{force}}},\sigma_{\alpha_{\text{force}}}) \nonumber \\
+\alpha_{\text{chill}} \sim normal(\mu_{\alpha_{\text{chill}}},\sigma_{\alpha_{\text{chill}}}) \nonumber \\
+\alpha_{\text{photo}} \sim normal(\mu_{\alpha_{\text{photo}}},\sigma_{\alpha_{\text{photo}}}) \nonumber
+\end{align}
+
+\item General info about model checks etc.:
+\begin{enumerate}
+\item weakly informative priors
+\item validated model priors using prior predictive checks
+\item model was coded in the Stan programming language and fit using the rstan package cite rstan2018
+\item Four chains (4000-6000 total sampling iterations), and all models met basic diagnostic checks, including no divergences, high effective sample size (\emph{$n_{eff}$}), and $\hat{R}$ close to 1---LMA model still has low ESS---issue with neff---otherwise this is true
+\item 90\% UI given in text
+
+\end{enumerate} 
+\end{enumerate} 
 
 \section*{Results}
 
@@ -116,7 +268,7 @@ These plots and tables are using the model output from the model with a dummy va
 \item LNC differed between the two transects (\Sexpr{lncLatTran}, UI: \Sexpr{lower_lncLatTran},\Sexpr{upper_lncLatTran}---greater in western transect
 \item But no population-level variation in SSD
 \item Fig. \ref{fig:tranInt}
-
+\end{enumerate}
 %2. What other functional traits relate to budburst phenology in temperate woody species?
 % Multiple paragraphs --- discuss ht and DBH and SSD and then leaf traits
 \item All traits related to at least one budburst cue---but responses were generally weak
@@ -129,7 +281,7 @@ These plots and tables are using the model output from the model with a dummy va
 \item leaf traits varied more in the direction of cue responses 
 \begin{enumerate}
 \item LMA showed strong responses to photoperiod with low LMA species advancing in bb with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaBPSpMean}, \Sexpr{upper_lmaBPSpMean})
-\item In contrast---LNC strong responses to forcing but not chilling or photoperiod---high LNC species responded more to warmer spring temperatures (\Sexpr{cnBFSpMean}, UI: \Sexpr{lower_cnBFSpMean}, \Sexpr{upper_cnBFSpMean})
+\item In contrast---LNC strong responses to forcing but not chilling or photoperiod---high LNC species responded more to warmer spring temperatures (\Sexpr{lncBFSpMean}, UI: \Sexpr{lower_lncBFSpMean}, \Sexpr{upper_lncBFSpMean})
 \end{enumerate}
 
 \item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work. 
@@ -143,9 +295,10 @@ These plots and tables are using the model output from the model with a dummy va
 % How do shrub and tree species differ in their cue-trait relationships?
 \item Including trait effects better informed spp level estimates of phenology
 \begin{enumerate}
-\item Estimates bb using our model parameters show clear differences in bb timing between tree and shrub spp (Fig. \ref{fig:bbShrubTree})
-\item Shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
-\item But species-level effects vary across traits = unique effects on cue responses---estimated order of spp bb order differs between the two models
+\item Estimates bb using our model parameters show clear differences in bb timing between tree and shrub spp for some traits (Fig. \ref{fig:bbShrubTree})
+\item Height showed strong correlations between bb timing and trait values---shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
+\item But this was not case for leaf traits---LNC showed no distinct separation between species functional groups (Fig. \ref{fig:bbShrubTree})
+%\item But species-level effects vary across traits = unique effects on cue responses---estimated order of spp bb order differs between the two models
 \end{enumerate}
 
 \end{enumerate}
@@ -290,7 +443,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 \newpage
 
@@ -332,7 +485,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
@@ -376,7 +529,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableCN, echo=FALSE , results= tex >>=
@@ -417,7 +570,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled and ..... The model includes photoperiod and forcing as continuous variables.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 \newpage
 
