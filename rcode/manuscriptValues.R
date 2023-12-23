@@ -5,8 +5,49 @@ require(shinystan)
 library(tidybayes)
 library(reshape2)
 
-########## Height ###############################
 
+########## General values ###############################
+spInfo <- read.csv("..//input/species_ring.csv")
+
+spInfoE <- subset(spInfo, transect != "west")
+spInfoW <- subset(spInfo, transect != "east")
+
+spInfoEShrub <- subset(spInfoE, type == "shrub")
+spInfoWShrub <- subset(spInfoW, type == "shrub")
+
+spInfoETree <- subset(spInfoE, type == "tree")
+spInfoWTree <- subset(spInfoW, type == "tree")
+
+nSpp <- length(unique(spInfo$species.name))
+nSppE <- length(unique(spInfoE$species.name))
+nSppW <- length(unique(spInfoW$species.name))
+nSppES <- length(unique(spInfoEShrub$species.name))
+nSppWS <- length(unique(spInfoWShrub$species.name))
+nSppET <- length(unique(spInfoETree$species.name))
+nSppWT <- length(unique(spInfoWTree$species.name))
+
+
+pheno <- read.csv("..//input/phenoDataWChill.csv")
+# trtPheno <- read.csv("input/trtData.csv")
+trtPheno <- read.csv("..//input/trtPhenoDummy.csv")
+
+height <- trtPheno[complete.cases(trtPheno$ht),]
+nHt <- nrow(height)
+
+leafMA <- trtPheno[complete.cases(trtPheno$lma),]
+nLMA <- nrow(leafMA)
+
+diam <- trtPheno[complete.cases(trtPheno$dbh),] 
+nDBH <- nrow(diam)
+
+stem <- trtPheno[complete.cases(trtPheno$ssd),]
+nSSD <- nrow(stem)
+
+carbNit <- trtPheno[complete.cases(trtPheno$C.N),]
+nCNit <- nrow(carbNit)
+
+nit <- trtPheno[complete.cases(trtPheno$per.N),]
+nLNC <- nrow(nit)
 # col4fig <- c("mean","sd","25%","50%","75%","Rhat")
 # col4table <- c("mean","sd","2.5%","50%","97.5%","Rhat")
 # 
@@ -70,6 +111,10 @@ library(reshape2)
 
 load("..//output/htContLat.Rdata")
 htModelFit <- rstan::extract(mdlHt)
+
+htTran <- as.numeric(round(mean(htModelFit$b_tranE),1))
+lower_htTran <- format(round(quantile(htModelFit$b_tranE, prob = 0.05),1), nsmall =1)
+upper_htTran <- round(quantile(htModelFit$b_tranE, prob = 0.95),1)
 
 htLatTran <- as.numeric(round(mean(htModelFit$b_tranlat),1))
 lower_htLatTran <- format(round(quantile(htModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
@@ -211,6 +256,12 @@ lncLatTran <- as.numeric(round(mean(lncModelFit$b_tranlat),1))
 lower_lncLatTran <- format(round(quantile(lncModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
 upper_lncLatTran <- round(quantile(lncModelFit$b_tranlat, prob = 0.95),1)
 #lncmuSp <- apply(posterior_ssd$muSp, MARGIN = 2, FUN = mean)
+
+lncTran <- as.numeric(round(mean(lncModelFit$b_tranE),1))
+lower_lncTran <- format(round(quantile(lncModelFit$b_tranE, prob = 0.05),1), nsmall =1)
+upper_lncTran <- round(quantile(lncModelFit$b_tranE, prob = 0.95),1)
+#lncmuSp <- apply(posterior_ssd$muSp, MARGIN = 2, FUN = mean)
+
 
 ##### SSD  ###############################
 load("..//output/ssdContLat.Rdata")
