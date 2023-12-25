@@ -65,7 +65,7 @@
 % Cues shaping woody plant temporal niche differs from cues driving species overall trait phenotype 
 % ....need more
 
-\title{Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst}
+\title{Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst} %24Dec2023emw -- I really like the bold title! But it sounds so specific that it would likely limit where you could get the paper into review (... and it took me a lot of re-reading it to understand what you might mean. I am not sure we actually test this latter point, do we?). Maybe: Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature [Sounds weird, but something to work on -- maybe committee will have ideas.]
 \date{\today}
 \author{Deirdre Loughnan$^1$, Faith A M Jones$^1$, and E M Wolkovich$^1$}
 \maketitle 
@@ -98,15 +98,15 @@ setwd("~/Documents/github/Treetraits/docs")
 \item General pop description
 \begin{enumerate}
 \item Combined \emph{in situ} trait data with budburst data from two growth chamber cutting experiments
+\item Both datasets span latitudinal gradient of 4-6$^{\circ}$ %24Dec2023emw -- I moved this up. 
 \item Traits were measured across four eastern populations --- Harvard Forest, Massachusetts, USA (42.55$^{\circ}$N, 72.20$^{\circ}$W) and St. Hippolyte, Quebec, Canada (45.98$^{\circ}$N, 74.01$^{\circ}$W) and four western population --- Smithers (54.78$^{\circ}$N, 127.17$^{\circ}$W) and E.C. Manning Park (49.06$^{\circ}$N, 120.78$^{\circ}$W)
 \item Growth chamber study --- cuttings collected from the most southern and northern populations in each transect
-\item Both datasets span latitudinal gradient of 4-6$^{\circ}$
 \end{enumerate}
 
 \item Describing spp
 \begin{enumerate}
 \item Across populations --- measured \Sexpr{nSpp} species --- \Sexpr{nSppE} eastern transect and \Sexpr{nSppW} western transect
-\item Selected spp that were most abundant in forest communities
+\item Selected angiosperm spp that were most abundant in forest communities %24Dec2023emw -- add reasoning to focus on angiosperms -- both good for phylogenetic reasons and because leafout likely under more similar controls than if you added a bunch of evergreen conifers
 \item Eastern transect: \Sexpr{nSppES} shrubs and \Sexpr{nSppET} trees
 \item Western transect: \Sexpr{nSppWS} shrubs and \Sexpr{nSppWT} trees
 \item Three species occurred in both transect
@@ -143,7 +143,7 @@ setwd("~/Documents/github/Treetraits/docs")
 \end{enumerate}
 \end{enumerate}
 
-\subsection*{Growth chamber study}
+\subsection*{Growth chamber study} %24Dec2023emw -- I would refer to your other chapter for much of this, and try to publish that paper first so you can refer to it when submitting to a journal. This will cut down the methods a good bit. 
 \begin{enumerate}
 \item General information
 \begin{enumerate}
@@ -185,8 +185,8 @@ setwd("~/Documents/github/Treetraits/docs")
 \item Begin to describe the model:
 \begin{enumerate}
 \item hierarchical linear model---partitioning variation of individual observations (\emph{i}) of a given trait value ($y_{\text{trait}[i]}$) to the effects of species (\emph{sp id}), and population-level differences arising from transects (\emph{transect id}) or the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and residual variation or 'measurement error' ($\sigma_{\text{trait}}$)
-\item Transect included as a dummy variable and latitude as a continuous variable 
-\item Latitude values z-scored 
+\item Transect included as a dummy variable and latitude as a continuous variable  %24Dec2023emw -- say 'categorical' instead of dummy -- more people know what you mean then, and the goal is to be understandable to the most people.
+\item Latitude values z-scored %24Dec2023emw -- weird choice -- why? I guess okay, but be prepared to explain why ONLY this was z-scored. I would probably combine this and the below in a sentence saying you worked mainly in natural units, but made several small changes for the model numerical stability. You could ask Mike his advice on how to explain/phrase when he visits. 
 \item Most traits were modeled using their natural units---except LMA was rescaled by 100
 \end{enumerate}
 
@@ -197,7 +197,7 @@ setwd("~/Documents/github/Treetraits/docs")
 \item These species-level estimates of traits become predictors of species-level estimates of each cue--- ($\beta_{\text{force[sp]}}$, $\beta_{\text{chill[sp]}}$, $\beta_{\text{photo[sp]}}$) 
 \end{enumerate}
 
-Trait model:
+Trait model: %24Dec2023emw -- math is wrong, if you have a grand mean then you don't have mu in the following normal equation lines, right? ... I am skipping the rest of the math until you cross-check this math against your stan code more. 
 \begin{align}
 \mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{\text{transect}} +\beta_{\text{transect} \times \text{latitude}} \\
 \beta_{transect} &  \sim normal( \mu_{transect}, \sigma_{\text{transect}}) \nonumber \\
@@ -244,8 +244,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 
 \section*{Results}
 
-\begin{enumerate}
-%brief summary of what we did
+\begin{enumerate} %24Dec2023emw  -- reads more like discussion, I would save almost all of this text for the discussion I think. You could instead open with some of the numbers you have in the methods (this will also slim the methods!) -- numbers for each trait, how many species, phenology etc. (or give ranges and refer to a table in supp). Opening results with how much data you have is usually good and you can weave in a few reminders of the methods -- including joint model, populations etc. (for example, In total we collected XX trait data etc... Using a joint modeling approach we then combined them with data from XX cuttings across XX species in a chamber experiment. 
 \item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions.
 \begin{enumerate}
 \item Includes plant communities in eastern and western deciduous forests of North America
@@ -264,16 +263,16 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 
 %dlDec20: the height result seems strange to me, that the model would estimate greater height for the west coast that has so many more shrubs, both have left skewed height distribution, but the west coast does have some very tall trees
 \begin{enumerate}
-\item Most of our traits varied across populations---changing either between the two transects or with an interactive effect between transect and latitude
-\item Height differed between our eastern and western transect (\Sexpr{htTran}, UI: \Sexpr{lower_htTran},\Sexpr{upper_htTran}), with a weak effect of latitude 
+\item Most of our traits varied across populations---either between the two transects (main effect of transect only) or by latitudes within each transect (an interactive effect between transect and latitude) %24Dec2023emw  -- rewrote end less statistically -- 
+\item Height differed between our eastern and western transect (\Sexpr{htTran}, UI: \Sexpr{lower_htTran},\Sexpr{upper_htTran}), with a weak effect of latitude  %24Dec2023emw  -- where is taller? And what is this weak effect? Please give all the numbers for stats you're reporting ... and please adjust the rest below so you're consistent in phrasing and giving directionality and all stats. (This also makes it hard to address your question, but be sure you are taking into account all transect and latitude effects when you try to interpret this effect. )
 \item DBH (\Sexpr{dbhLatTran}, UI: \Sexpr{lower_dbhLatTran},\Sexpr{upper_dbhLatTran}), and LMA (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---strong interactions between latitude and transect
 \item Tree DBH and LMA both increased with latitude
 \item LNC differed between the two transects (\Sexpr{lncTran}, UI: \Sexpr{lower_lncTran},\Sexpr{upper_lncTran})---greater in western transect
 \item But no population-level variation in SSD
-\item Fig. \ref{fig:tranInt}
+\item Fig. \ref{fig:tranInt} %24Dec2023emw -- I would end this section by contrasting population level variation versus species -- you want to remind readers that species differences DWARF population differences before you go ahead and focus on species below. 
 \end{enumerate}
 %2. What other functional traits relate to budburst phenology in temperate woody species?
-% Multiple paragraphs --- discuss ht and DBH and SSD and then leaf traits
+% Multiple paragraphs --- discuss ht and DBH and SSD and then leaf traits %24Dec2023emw  -- I like the organized grouping of traits like this!
 \item All traits related to at least one budburst cue---but responses were generally weak
 \begin{enumerate}
 \item Of our three cues---photoperiod strongest relationship with other traits
@@ -281,22 +280,26 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \item But no relationship between between ring porosity of wood with cues---see similar cue estimates across each of the four ring types \ref{fig:ringPorosity}.
 \end{enumerate}
 
-\item leaf traits varied more in their cue responses 
+\item leaf traits varied more in their cue responses %24Dec2023emw -- varied how? Across cues or species or? 
+%24Dec2023emw -- try to clean up and remove too many different versions of 'cues' now if possible. Remember you can use the cues themselves (chilling, forcing photoperiod) or just 'cues' or 'treatments' or such. Check figure legends for this too. 
 \begin{enumerate}
 \item LMA showed strong responses to photoperiod with low LMA species advancing in bb with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean})
 \item But LNC had no responses to any of our three cues
 \end{enumerate}
 
-\item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work. 
+\item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work. %24Dec2023emw  -- again, this reads as discussion as a topic sentence (understandable -- topic sentences are HARD for results), maybe you just need to say 'Regardless of trait effects, we found temperature effects on budburst far stronger than photoperiod.'
+%24Dec2023emw -- also, you should adjust this to remind readers that these cues drive budburst, either at the start or end (end would flow better to next paragraph). 
 \begin{enumerate}
 \item All models showed earlier budburst in response to all three cues
 \item Individual spp varied in both their timing and cue responses---but generally responses were strongest for chilling and weakest for photoperiod.
+%24Dec2023emw -- I think you probably need a sentence reminding folks that the cues lead to budburst (see comments above) and that the budburst order can vary by trait in this model (and why) for them to get this next part below... 
 \item Only our LMA model produced unique cue estimates---estimating photoperiod cues (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that were slightly stronger than forcing cues (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean}) (Table \ref{tabLMA})
 \item ref Fig. \ref{fig:muCuePlot} and Fig. \ref{fig:muCueTraitPlot}
 \end{enumerate}
 
 % How do shrub and tree species differ in their cue-trait relationships?
-\item Including trait effects provides novel insights into how they relate to phenology and cues
+%24Dec2023emw -- I tried moving this up ... I was thinking it would work better since it links to shrubs, tree etc. but then I got an idea of your ordering and moved it back down. I think your ordering is good, but you need to adjust the text to make it work. I think you likely need to transition better from your last point above to guide the reader to understand the below; remember that it will be really unnatural to most.  
+\item Including trait effects provides novel insights into how they relate to phenology and cues %24Dec2023emw -- This one line reads more discussion-y, so I think you need a new topic sentence for the points below (which seem good for the results). 
 \begin{enumerate}
 \item Estimates bb using our model parameters show clear differences in bb timing between tree and shrub spp for some traits but not all (Fig. \ref{fig:bbShrubTree})
 \item Height showed strong correlations between bb timing and trait values---shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
@@ -304,7 +307,10 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 %\item But species-level effects vary across traits = unique effects on cue responses---estimated order of spp bb order differs between the two models
 \end{enumerate}
 
+
 \end{enumerate}
+
+%24Dec2023emw -- looking good! Please work up edits to the outline here for methods and results and -- if you still have time before I can look at this again -- work on the discussion outline. (And if you still have time you could write up the methods.)
 
 \clearpage
 
