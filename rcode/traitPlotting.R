@@ -320,8 +320,7 @@ CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*latZ)
 
 CNEW <- data.frame(CNw = CN_w, CNe = CN_e,  CN_w5 =CN_w5, CN_w95 = CN_w95, CN_e5 = CN_e5, CN_e95 = CN_e95  )
 
-
-intCN <- ggplot(CNEW) +
+ggplot(CNEW) +
   geom_line(aes(y = CNw, x = latZ), color = "purple4", linetype = "dashed") +
   geom_ribbon(data = CNEW, aes(ymin = CN_w5, ymax = CN_w95, x= latZ), alpha = 0.2, fill = "purple4") +
   geom_line(aes(y = CNe, x = latZ), col = "purple2") +
@@ -329,7 +328,7 @@ intCN <- ggplot(CNEW) +
   # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
   xlab("Standardized latitude") + ylab("Leaf nitrogen content (%)") +
   xlim (-1.5,1.5) + 
-  ylim (-2,10) + 
+  ylim (0,10) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+

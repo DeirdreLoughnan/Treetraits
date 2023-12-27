@@ -134,9 +134,9 @@ model{
   muPhotoSp ~ normal(-5,5);
   sigmaPhotoSp ~ normal(5,5);
 
-  betaTraitxForce ~ normal(0,50);
-  betaTraitxPhoto ~ normal(0,50);
-  betaTraitxChill ~ normal(0,50);
+  betaTraitxForce ~ normal(0,25);
+  betaTraitxPhoto ~ normal(0,25);
+  betaTraitxChill ~ normal(0,25);
 
 }
 

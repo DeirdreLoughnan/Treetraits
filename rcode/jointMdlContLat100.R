@@ -166,11 +166,11 @@ ht.data <- list(yTraiti = height$ht,
 
 mdlHt <- stan("stan/heightDummyIntGrand.stan",
   data = ht.data,
-  iter = 4000, warmup = 3000, chains=4,
+  iter = 6000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlHt, file="output/htContLat.Rdata")
+save(mdlHt, file="output/htContLat6.Rdata")
 
 ######################################################################
 # 2. Leaf mass area
@@ -196,15 +196,30 @@ lma <- list(yTraiti = leafMA$lma,
   photoi = pheno.t$photo.z
 )
 
-mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
-  data = lma,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
-)
-
-save(mdlLMA, file="output/lmaContLatNone.Rdata")
+# mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
+#   data = lma,
+#   iter = 4000, warmup = 3000, chains=4,
+#   include = FALSE, pars = c("y_hat")
+# )
+# 
+# save(mdlLMA, file="output/lmaContLatNone.Rdata")
 
 lma.100 <- list(yTraiti = leafMA$lma100, 
+  N = nrow(leafMA),
+  n_spec = length(specieslist),
+  trait_species = as.numeric(as.factor(leafMA$species)),
+  n_tran = length(unique(leafMA$transect)),
+  lati = leafMA$lat.z,
+  tranE = as.numeric(leafMA$transect),
+  Nph = nrow(pheno.t),
+  phenology_species = as.numeric(as.factor(pheno.t$species)),
+  yPhenoi = pheno.t$bb,
+  forcei = pheno.t$force.z,
+  chilli = pheno.t$chillport.z,
+  photoi = pheno.t$photo.z
+)
+
+lma.10 <- list(yTraiti = (leafMA$lma)*10, 
   N = nrow(leafMA),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(leafMA$species)),
@@ -236,14 +251,15 @@ lma.log <- list(yTraiti = leafMA$lmalog,
 )
 
 mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
-  data = lma.log,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
-)
+  data = lma.100,
+  include = FALSE, pars = c("y_hat"),
+  iter = 4000, chains= 4, warmup = 3000,
+  control = list(adapt_delta =0.99))
 
-save(mdlLMA, file="output/lmaContLatLog.Rdata")
 
-sumer100 <- data.frame(summary(mdlLMA)$summary[c(
+save(mdlLMA, file="output/lmaContLat6Rdata")
+
+sumer100 <- data.frame(summary(mdlLMAten)$summary[c("mu_grand",
   "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 sumer100
 
@@ -290,11 +306,11 @@ dbh.data <- list(yTraiti = diam$dbh,
 
 mdlDBH <- stan("stan/diamDummyIntGrand.stan",
   data = dbh.data,
-  iter = 4000, warmup = 3000, chains=4,
+  iter = 6000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlDBH, file="output/dbhContLat.Rdata")
+save(mdlDBH, file="output/dbhContLat6.Rdata")
 
 sumer <- data.frame(summary(mdlDBH)$summary[c(
   "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
@@ -341,36 +357,36 @@ ssd.data <- list(yTraiti = stem$ssd,
 
 mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
   data = ssd.data,
-  iter = 4000, warmup = 3000, chains=4,
+  iter = 6000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlSSD, file="output/ssdContLat.Rdata")
+save(mdlSSD, file="output/ssdContLat6.Rdata")
 
 ########## 
-ssd.data <- list(yTraiti = stem$ssdlog, 
-  N = nrow(stem),
-  n_spec = length(specieslist),
-  trait_species = as.numeric(as.factor(stem$species)),
-  n_tran = length(unique(stem$transect)),
-  lati = stem$lat.z,
-  tranE = as.numeric(stem$transect),
-  Nph = nrow(pheno.t),
-  phenology_species = as.numeric(as.factor(pheno.t$species)),
-  yPhenoi = pheno.t$bb,
-  forcei = pheno.t$force.z,
-  chilli = pheno.t$chillport.z,
-  photoi = pheno.t$photo.z
-)
+# ssd.data <- list(yTraiti = stem$ssdlog, 
+#   N = nrow(stem),
+#   n_spec = length(specieslist),
+#   trait_species = as.numeric(as.factor(stem$species)),
+#   n_tran = length(unique(stem$transect)),
+#   lati = stem$lat.z,
+#   tranE = as.numeric(stem$transect),
+#   Nph = nrow(pheno.t),
+#   phenology_species = as.numeric(as.factor(pheno.t$species)),
+#   yPhenoi = pheno.t$bb,
+#   forcei = pheno.t$force.z,
+#   chilli = pheno.t$chillport.z,
+#   photoi = pheno.t$photo.z
+# )
+# 
+# 
+# mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
+#   data = ssd.data,
+#   iter = 4000, warmup = 3000, chains=4,
+#   include = FALSE, pars = c("y_hat")
+# )
 
-
-mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
-  data = ssd.data,
-  iter = 4000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
-)
-
-save(mdlSSD, file="output/ssdContLatLog.Rdata")
+# save(mdlSSD, file="output/ssdContLatLog.Rdata")
 
 sumer <- data.frame(summary(mdlSSD)$summary[c(
   "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
@@ -378,7 +394,7 @@ sumer
 
 postSSD<- data.frame(rstan::extract(mdlSSD))
 
-par(mfrow = c(1,3))
+par(mfrow = c(1,1))
 hist(postSSD$betaTraitxForce, main = "betaTraitxForce",  xlim = c(-200, 200))
 hist(rnorm(1000, 0,25), col=rgb(1,0,1,1/4), add = T)
 abline(v = 0, col="red", lwd=3, lty=2)
@@ -446,7 +462,7 @@ sumer <- data.frame(summary(mdlCN)$summary[c(
   "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 sumer
 
-postSSD<- data.frame(rstan::extract(mdl))
+postSSD<- data.frame(rstan::extract(mdlSSD))
 
 par(mfrow = c(1,3))
 hist(postSSD$betaTraitxForce, main = "betaTraitxForce",  xlim = c(-200, 200))
@@ -467,19 +483,19 @@ save(mdlCN, file="output/cnContLat.Rdata")
 
 #####
 ######################################################################
-# 5. carbon to nitrogen ratio
+# 5. leaf nitrogen content
 nit <- trtPheno[complete.cases(trtPheno$per.N),]
 #carbNit$n.z2 <- (carbNit$-mean(carbNit$C.N,na.rm=TRUE))/(sd(carbNit$C.N,na.rm=TRUE)*2)
 carbNit$n.port <- (carbNit$per.N/100)
 carbNit$nLog <- log10(carbNit$per.N)
 
-nit.data <- list(yTraiti = carbNit$nLog, 
-  N = nrow(carbNit),
+nit.data <- list(yTraiti = nit$per.N, 
+  N = nrow(nit),
   n_spec = length(specieslist),
-  trait_species = as.numeric(as.factor(carbNit$species)),
-  n_tran = length(unique(carbNit$transect)),
-  lati = carbNit$lat.z,
-  tranE = as.numeric(carbNit$transect),
+  trait_species = as.numeric(as.factor(nit$species)),
+  n_tran = length(unique(nit$transect)),
+  lati = nit$lat.z,
+  tranE = as.numeric(nit$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
   yPhenoi = pheno.t$bb,
@@ -488,21 +504,22 @@ nit.data <- list(yTraiti = carbNit$nLog,
   photoi = pheno.t$photo.z
 )
 
-mdlPerN <- stan("stan/lmaDummyIntGrand.stan",
+mdlPerN <- stan("stan/cnDummyIntGrand.stan",
   data = nit.data,
-  iter = 4000, warmup = 3000, chains=4,
+  iter = 6000, warmup = 3000, chains=4,
   include = FALSE, pars = c("y_hat")
   #,control = list(adapt_delta = 0.99, max_treedepth =12)
 )
 
+save(mdlPerN, file="output/lncContLat.Rdata")
 
 # load("output/nitDummyInt.Rdata")
 #  ssm <- as.shinystan(mdl)
 #  launch_shinystan(ssm)
 
-sumer <- summary(mdl)$summary
+sumer <- summary(mdlPerN)$summary
 
-ModelFit <- rstan::extract(mdl)
+ModelFit <- rstan::extract(mdlPerN)
 
 muSp <- data.frame(ModelFit$b_muSp)
 muSpMean <- colMeans(muSp)

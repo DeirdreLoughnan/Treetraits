@@ -218,7 +218,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 # col2.sp <- c( rgb(149 / 255, 216 / 255, 64 / 255, alpha = 0.5), rgb(72 / 255, 38 / 255, 119 / 255, alpha = 0.4))
 
 
-pdf("figures/cuetrait100.pdf", height = 16, width = 12)
+pdf("figures/cuetrait1006.pdf", height = 16, width = 12)
 par(mar = c(5, 5, 2, 2), mfrow = c(5,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
@@ -1185,10 +1185,10 @@ arrows(
 my.label <- paste("l", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 #########################################################################################################################
-# C:N
-load("output/cnContLat.Rdata")
+# LNC
+load("output/lncContLat.Rdata")
 
-ModelFit <- rstan::extract(mdlCN)
+ModelFit <- rstan::extract(mdlPerN)
 
 muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -1239,7 +1239,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
-mtext(side = 3, text = "C:N, Forcing", adj = 0, cex = 1.25)
+mtext(side = 3, text = "LNC, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
   abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
 }
@@ -1317,7 +1317,7 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Trait value", cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
-mtext(side = 3, text = "C:N, Chilling", adj = 0, cex = 1.25)
+mtext(side = 3, text = "LNC, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
   abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
 }
@@ -1392,7 +1392,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
-mtext(side = 3, text = "C:N, Photoperiod", adj = 0, cex = 1.25)
+mtext(side = 3, text = "LNC, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
   abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
 }
