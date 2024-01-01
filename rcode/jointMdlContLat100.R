@@ -141,6 +141,7 @@ trtPheno$latitude[trtPheno$latitude == "WM"] <- 44.92466697
 trtPheno$latitude <- as.numeric(trtPheno$latitude)
 trtPheno$lat.z <- (trtPheno$latitude-mean(trtPheno$latitude,na.rm=TRUE))/(sd(trtPheno$latitude,na.rm=TRUE))
 trtPheno$lat.z2 <- (trtPheno$latitude-mean(trtPheno$latitude,na.rm=TRUE))/(sd(trtPheno$latitude,na.rm=TRUE)*2)
+trtPheno$lat.100 <- (trtPheno$latitude/100)
 
 specieslist <- sort(unique(trtPheno$species))
 sitelist <- sort(unique(trtPheno$transect))
@@ -154,7 +155,7 @@ ht.data <- list(yTraiti = height$ht,
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(height$species)),
   n_tran = length(unique(height$transect)),
-  lati = height$lat.z,
+  lati = height$latitude,
   tranE = as.numeric(height$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -170,7 +171,7 @@ mdlHt <- stan("stan/heightDummyIntGrand.stan",
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlHt, file="output/htContLat6.Rdata")
+save(mdlHt, file="output/htContLatHundoLat.Rdata")
 
 ######################################################################
 # 2. Leaf mass area
@@ -209,7 +210,7 @@ lma.100 <- list(yTraiti = leafMA$lma100,
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(leafMA$species)),
   n_tran = length(unique(leafMA$transect)),
-  lati = leafMA$lat.z,
+  lati = leafMA$latitude,
   tranE = as.numeric(leafMA$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -253,13 +254,13 @@ lma.log <- list(yTraiti = leafMA$lmalog,
 mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
   data = lma.100,
   include = FALSE, pars = c("y_hat"),
-  iter = 4000, chains= 4, warmup = 3000,
-  control = list(adapt_delta =0.99))
+  iter = 4000, chains= 4, warmup = 3000)
+  #control = list(max_treedepth =11)) # may run better with 8000
 
 
-save(mdlLMA, file="output/lmaContLat6Rdata")
+save(mdlLMA, file="output/lmaContLatHundoLat.Rdata")
 
-sumer100 <- data.frame(summary(mdlLMAten)$summary[c("mu_grand",
+sumer100 <- data.frame(summary(mdlLMA)$summary[c("mu_grand",
   "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
 sumer100
 
@@ -294,7 +295,7 @@ dbh.data <- list(yTraiti = diam$dbh,
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(diam$species)),
   n_tran = length(unique(diam$transect)),
-  lati = diam$lat.z,
+  lati = diam$latitude,
   tranE = as.numeric(diam$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -310,7 +311,7 @@ mdlDBH <- stan("stan/diamDummyIntGrand.stan",
   include = FALSE, pars = c("y_hat")
 )
 
-save(mdlDBH, file="output/dbhContLat6.Rdata")
+save(mdlDBH, file="output/dbhContLatHundoLat.Rdata")
 
 sumer <- data.frame(summary(mdlDBH)$summary[c(
   "b_tranE","b_tranlat", "muForceSp", "muChillSp", "muPhotoSp","muPhenoSp","betaTraitxForce", "betaTraitxChill","betaTraitxPhoto","sigma_traity" ,"sigma_sp", "sigmaForceSp", "sigmaChillSp", "sigmaPhotoSp","sigmaPhenoSp","sigmapheno_y"),c("mean","2.5%","25%","50%", "75%","97.5%")])
@@ -344,7 +345,7 @@ ssd.data <- list(yTraiti = stem$ssd,
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(stem$species)),
   n_tran = length(unique(stem$transect)),
-  lati = stem$lat.z,
+  lati = stem$latitude,
   tranE = as.numeric(stem$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -358,10 +359,11 @@ ssd.data <- list(yTraiti = stem$ssd,
 mdlSSD <- stan("stan/ssdDummyIntGrand.stan",
   data = ssd.data,
   iter = 6000, warmup = 3000, chains=4,
-  include = FALSE, pars = c("y_hat")
+  include = FALSE, pars = c("y_hat"),
+  control = list(max_treedepth =12)
 )
 
-save(mdlSSD, file="output/ssdContLat6.Rdata")
+save(mdlSSD, file="output/ssdContLatHundoLat.Rdata")
 
 ########## 
 # ssd.data <- list(yTraiti = stem$ssdlog, 
@@ -435,7 +437,7 @@ cn.data <- list(yTraiti = carbNit$cn.port,
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(carbNit$species)),
   n_tran = length(unique(carbNit$transect)),
-  lati = carbNit$lat.z,
+  lati = carbNit$lat.,
   tranE = as.numeric(carbNit$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -486,15 +488,15 @@ save(mdlCN, file="output/cnContLat.Rdata")
 # 5. leaf nitrogen content
 nit <- trtPheno[complete.cases(trtPheno$per.N),]
 #carbNit$n.z2 <- (carbNit$-mean(carbNit$C.N,na.rm=TRUE))/(sd(carbNit$C.N,na.rm=TRUE)*2)
-carbNit$n.port <- (carbNit$per.N/100)
-carbNit$nLog <- log10(carbNit$per.N)
+# carbNit$n.port <- (carbNit$per.N/100)
+# carbNit$nLog <- log10(carbNit$per.N)
 
 nit.data <- list(yTraiti = nit$per.N, 
   N = nrow(nit),
   n_spec = length(specieslist),
   trait_species = as.numeric(as.factor(nit$species)),
   n_tran = length(unique(nit$transect)),
-  lati = nit$lat.z,
+  lati = nit$latitude,
   tranE = as.numeric(nit$transect),
   Nph = nrow(pheno.t),
   phenology_species = as.numeric(as.factor(pheno.t$species)),
@@ -511,7 +513,7 @@ mdlPerN <- stan("stan/cnDummyIntGrand.stan",
   #,control = list(adapt_delta = 0.99, max_treedepth =12)
 )
 
-save(mdlPerN, file="output/lncContLat.Rdata")
+save(mdlPerN, file="output/lncContLatHundoLat.Rdata")
 
 # load("output/nitDummyInt.Rdata")
 #  ssm <- as.shinystan(mdl)
