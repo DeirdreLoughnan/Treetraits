@@ -22,23 +22,23 @@ pheno <- read.csv("input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
 trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
-load("output/htContLat6.Rdata")
+load("output/htContLatHundoLat.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLat.Rdata")
+load("output/lmaContLatHundoLat.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 sumLMA<- summary(mdlLMA)$summary
 
-load("output/dbhContLat6.Rdata")
+load("output/dbhContLatHundoLat.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 sumDBH<- summary(mdlDBH)$summary
 
-load("output/ssdContLat6.Rdata")
+load("output/ssdContLatHundoLat.Rdata")
 postSSD <- rstan::extract(mdlSSD)
 sumSSD<- summary(mdlSSD)$summary
 
-load("output/lncContLat.Rdata")
+load("output/lncContLatHundoLat.Rdata")
 postCN <- rstan::extract(mdlPerN)
 sumCN<- summary(mdlPerN)$summary
 # load("output/cnContLat.Rdata")
@@ -280,10 +280,10 @@ cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
    theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -30, y = 3.4, label = "c) SSD", cex = 10) +
   theme(legend.title = element_blank()) 
-
-pdf("figures/muCuePlots1006.pdf", height =5, width = 25)
-plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1,align = "v")
-dev.off()
+# 
+# pdf("figures/muCuePlotsHundo.pdf", height =5, width = 25)
+# plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1,align = "v")
+# dev.off()
 
 
 #########################################
@@ -568,7 +568,7 @@ cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
   labs( x = "Change in budburst day     ", y = "", main = NA) +  annotate("text", x = -19, y = 3.4, label = "c) SSD", cex = 10) + scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
 
-pdf("figures/muCuePlots1006.pdf", height =5, width = 25)
+pdf("figures/muCuePlotsHundo.pdf", height =5, width = 25)
 plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1 ,align = "v", rel_widths = c(0.9,0.9,1,0.9,0.9))
 dev.off()
 #####################################################
@@ -624,16 +624,15 @@ cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
 cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "maroon") +
   geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-20,20) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, color = "maroon", width = 0) +
+  xlim (-20,22) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title = element_text( size=30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -5, y = 3.4, label = "c) SSD", cex = 10) + scale_y_discrete(limits=rev) +
-  theme(legend.title = element_blank()) 
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -5, y = 3.4, label = "c) SSD", cex = 10) + scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
-pdf("figures/muCueTraitPlots1006.pdf", height =5, width = 25)
+pdf("figures/muCueTraitPlotsHundo.pdf", height =5, width = 25)
 plot_grid( cueTraitHeightPlot,cueTraitDBHPlot,cueTraitSSDPlot,cueTraitLMAPlot,cueTraitCNPlot , ncol = 5, nrow =1,align = "hv")
 dev.off()
 # , rel_widths = c(1, 0.05, 1)

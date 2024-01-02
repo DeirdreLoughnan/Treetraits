@@ -162,7 +162,7 @@ specieslist <- sort(unique(trtPheno$species))
 
 ################################
 # Height
-load("output/htContLat.Rdata")
+load("output/htContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlHt)
 
@@ -218,7 +218,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 # col2.sp <- c( rgb(149 / 255, 216 / 255, 64 / 255, alpha = 0.5), rgb(72 / 255, 38 / 255, 119 / 255, alpha = 0.4))
 
 
-pdf("figures/cuetrait1006.pdf", height = 16, width = 12)
+pdf("figures/cuetraitHundo.pdf", height = 16, width = 12)
 par(mar = c(5, 5, 2, 2), mfrow = c(5,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
@@ -427,7 +427,7 @@ my.label <- paste("c", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 ##########################################
 # LMA
-load("output/lmaContLat.Rdata")
+load("output/lmaContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlLMA)
 
@@ -676,7 +676,7 @@ put.fig.letter(label=my.label, location= "topleft", font=2)
 #dev.off()
 ####################
 # DBH
-load("output/dbhContLat.Rdata")
+load("output/dbhContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlDBH)
 
@@ -929,7 +929,7 @@ put.fig.letter(label=my.label, location= "topleft", font=2)
 ###############################################################
 ####################
 # SSD
-load("output/ssdContLat.Rdata")
+load("output/ssdContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlSSD)
 
@@ -1186,7 +1186,7 @@ my.label <- paste("l", ".", sep="")
 put.fig.letter(label=my.label, location= "topleft", font=2)
 #########################################################################################################################
 # LNC
-load("output/lncContLat.Rdata")
+load("output/lncContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlPerN)
 

@@ -48,6 +48,25 @@ nCNit <- nrow(carbNit)
 
 nit <- trtPheno[complete.cases(trtPheno$per.N),]
 nLNC <- nrow(nit)
+
+temp <- trtPheno[,c("sample","species","site")]
+temp$count <- 1
+noObsTrait <- aggregate(temp["count"], trtPheno[,c("species","site")], FUN = sum)
+
+noObsTrtMin <- min(noObsTrait$count)
+noObsTrtMin <- min(noObsTrait$count)
+
+eTrt <- subset(trtPheno, transect == "1")
+wTrt <- subset(trtPheno, transect == "0")
+noIndivE <- length(unique(eTrt$sample))
+noIndivW<- length(unique(wTrt$sample))
+noIndiv <- length(unique(trtPheno$sample))
+
+pheno$count <- 1
+noObsPheno <- aggregate(pheno["count"], pheno[,c("species","population")], FUN = sum)
+noIndivPheno <- nrow(pheno)
+
+
 # col4fig <- c("mean","sd","25%","50%","75%","Rhat")
 # col4table <- c("mean","sd","2.5%","50%","97.5%","Rhat")
 # 
@@ -109,7 +128,7 @@ nLNC <- nrow(nit)
 # chillCueL <- round(quantile(fit$mu_b_chill1, c(0.05)),1)
 
 
-load("..//output/htContLat.Rdata")
+load("..//output/htContLatHundoLat.Rdata")
 htModelFit <- rstan::extract(mdlHt)
 
 htTran <- as.numeric(round(mean(htModelFit$b_tranE),1))
@@ -159,7 +178,7 @@ htChillMax <- max(htChillSpMean)
 
 ######## Leaf mass area###############################
 
-load("..//output/lmaContLat.Rdata")
+load("..//output/lmaContLatHundoLat.Rdata")
 lmaModelFit <- rstan::extract(mdlLMA)
 
 lmaBFSpMean <- as.numeric(round(mean(lmaModelFit$betaTraitxForce),1))
@@ -208,7 +227,7 @@ lower_lmaLatTran <- format(round(quantile(lmaModelFit$b_tranlat, prob = 0.05),1)
 upper_lmaLatTran <- round(quantile(lmaModelFit$b_tranlat, prob = 0.95),1)
 
 ##### C:N ###############################
-load("..//output/lncContLat.Rdata")
+load("..//output/lncContLatHundoLat.Rdata")
 lncModelFit <- rstan::extract(mdlPerN)
 
 lncBFSpMean <- as.numeric(round(mean(lncModelFit$betaTraitxForce),1))
@@ -264,7 +283,7 @@ upper_lncTran <- round(quantile(lncModelFit$b_tranE, prob = 0.95),1)
 
 
 ##### SSD  ###############################
-load("..//output/ssdContLat.Rdata")
+load("..//output/ssdContLatHundoLat.Rdata")
 ssdModelFit <- rstan::extract(mdlSSD)
 
 ssdBFSpMean <- as.numeric(round(mean(ssdModelFit$betaTraitxForce),1))
@@ -313,7 +332,7 @@ lower_ssdLatTran <- format(round(quantile(ssdModelFit$b_tranlat, prob = 0.05),1)
 upper_ssdLatTran <- round(quantile(ssdModelFit$b_tranlat, prob = 0.95),1)
 
 ########## DBH ###############################
-load("..//output/dbhContLat.Rdata")
+load("..//output/dbhContLatHundoLat.Rdata")
 dbhModelFit <- rstan::extract(mdlDBH)
 
 dbhBFSpMean <- as.numeric(round(mean(dbhModelFit$betaTraitxForce),1))
@@ -360,3 +379,11 @@ dbhChillMax <- max(dbhChillSpMean)
 dbhLatTran <- as.numeric(round(mean(dbhModelFit$b_tranlat),1))
 lower_dbhLatTran <- format(round(quantile(dbhModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
 upper_dbhLatTran <- round(quantile(dbhModelFit$b_tranlat, prob = 0.95),1)
+
+tot <- read.csv("..//..//pheno_bc/input/phenoMini.csv")
+
+#Only want the total number that reached 7:
+below <- subset(tot, bbch.t < 8)
+totalObs <- nrow(below)
+
+totalDays <- max(tot$day)

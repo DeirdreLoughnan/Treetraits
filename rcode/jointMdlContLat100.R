@@ -254,8 +254,7 @@ lma.log <- list(yTraiti = leafMA$lmalog,
 mdlLMA <- stan("stan/lmaDummyIntGrand.stan",
   data = lma.100,
   include = FALSE, pars = c("y_hat"),
-  iter = 4000, chains= 4, warmup = 3000)
-  #control = list(max_treedepth =11)) # may run better with 8000
+  iter = 6000, chains= 4, warmup = 3000,control = list(max_treedepth =12)) # may run better with 8000
 
 
 save(mdlLMA, file="output/lmaContLatHundoLat.Rdata")

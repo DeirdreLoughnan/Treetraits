@@ -29,22 +29,39 @@ trtPheno <- read.csv("input/trtPhenoDummy.csv")
 
 # Ht and DBH and CN natural, LMA and SSD rescaled by 100
 # cues and latitude still z scored by only by 1 sd
-load("output/htContLat6.Rdata")
+load("output/htContLatHundoLat.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLat.Rdata")
+load("output/lmaContLatHundoLat.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 #sumerlma <- summary(mdlLMA)$summary
 
-load("output/dbhContLat6.Rdata")
+load("output/dbhContLatHundoLat.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
-load("output/ssdContLat6.Rdata")
+load("output/ssdContLatHundoLat.Rdata")
 postSSD <- rstan::extract(mdlSSD)
 
-load("output/lncContLat.Rdata")
+load("output/lncContLatHundoLat.Rdata")
 postCN <- rstan::extract(mdlPerN)
+
+# load("output/htContLat6.Rdata")
+# sumerht <- summary(mdlHt)$summary
+# postHt <- rstan::extract(mdlHt)
+# 
+# load("output/lmaContLat.Rdata")
+# postLMA <- rstan::extract(mdlLMA)
+# #sumerlma <- summary(mdlLMA)$summary
+# 
+# load("output/dbhContLat6.Rdata")
+# postDBH <- rstan::extract(mdlDBH)
+# 
+# load("output/ssdContLat6.Rdata")
+# postSSD <- rstan::extract(mdlSSD)
+# 
+# load("output/lncContLat.Rdata")
+# postCN <- rstan::extract(mdlPerN)
 
 # load("output/heightDummyIntGrandZ25.Rdata")
 # sumerht <- summary(mdlHt)$summary
@@ -72,6 +89,7 @@ a_spHt95 <- quantile(postHt$mu_grand, c(0.95))
 a_spHt25 <- quantile(postHt$mu_grand, c(0.25))
 a_spHt75 <- quantile(postHt$mu_grand, c(0.75))
 a_spHt <- cbind(a_spHt, a_spHt5,a_spHt95, a_spHt25,a_spHt75)
+#a_spHt <- a_spHt*100
 
 b_tranHt <- sumHt[grep("b_tranE", rownames(sumHt)), 1]
 b_tranHt5 <- quantile(postHt$b_tranE, c(0.05))
@@ -79,6 +97,7 @@ b_tranHt95 <- quantile(postHt$b_tranE, c(0.95))
 b_tranHt25 <- quantile(postHt$b_tranE, c(0.25))
 b_tranHt75 <- quantile(postHt$b_tranE, c(0.75))
 b_tranHt <- cbind(b_tranHt, b_tranHt5,b_tranHt95, b_tranHt25,b_tranHt75)
+#b_tranHt <- b_tranHt*100
 
 b_tranlatHt <- sumHt[grep("b_tranlat", rownames(sumHt)), 1]
 b_tranlatHt5 <- quantile(postHt$b_tranlat, c(0.05))
@@ -86,7 +105,7 @@ b_tranlatHt95 <- quantile(postHt$b_tranlat, c(0.95))
 b_tranlatHt25 <- quantile(postHt$b_tranlat, c(0.25))
 b_tranlatHt75 <- quantile(postHt$b_tranlat, c(0.75))
 b_tranlatHt <- cbind(b_tranlatHt, b_tranlatHt5,b_tranlatHt95, b_tranlatHt25,b_tranlatHt75)
-
+#b_tranlatHt <- b_tranlatHt*100
 ## Simulate interaction with transect and latitude:
 
 eData <- subset(trtPheno, transect == "1" )
@@ -95,31 +114,30 @@ wData <- subset(trtPheno, transect == "0" )
 # Make the other parameters constant
 
 lati <- seq(40, 60, by = 0.5)
-latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
+#lati <- (lati/100)
 tranW <- 0
 tranE <- 1
 
 # plot first for west coast
-ht_w = a_spHt[1] + b_tranHt[1] * tranW + b_tranlatHt[1] * (tranW*latZ)
-ht_e = a_spHt[1] + b_tranHt[1] * tranE + b_tranlatHt[1] * (tranE*latZ)
+ht_w = a_spHt[1] + b_tranHt[1] * tranW + b_tranlatHt[1] * (tranW*lati)
+ht_e = a_spHt[1] + b_tranHt[1] * tranE + b_tranlatHt[1] * (tranE*lati)
 
-ht_w5 = a_spHt[2] + b_tranHt[2] * tranW + b_tranlatHt[2] * (tranW*latZ)
-ht_e5 = a_spHt[2] + b_tranHt[2] * tranE + b_tranlatHt[2] * (tranE*latZ)
+ht_w5 = a_spHt[2] + b_tranHt[2] * tranW + b_tranlatHt[2] * (tranW*lati)
+ht_e5 = a_spHt[2] + b_tranHt[2] * tranE + b_tranlatHt[2] * (tranE*lati)
 
-ht_w95 = a_spHt[3] + b_tranHt[3] * tranW + b_tranlatHt[3] * (tranW*latZ)
-ht_e95 = a_spHt[3] + b_tranHt[3] * tranE + b_tranlatHt[3] * (tranE*latZ)
+ht_w95 = a_spHt[3] + b_tranHt[3] * tranW + b_tranlatHt[3] * (tranW*lati)
+ht_e95 = a_spHt[3] + b_tranHt[3] * tranE + b_tranlatHt[3] * (tranE*lati)
 
 htEW <- data.frame(htw = ht_w, hte = ht_e,  ht_w5 =ht_w5, ht_w95 = ht_w95, ht_e5 = ht_e5, ht_e95 = ht_e95  )
 
-
 intHt <- ggplot(htEW) +
-  geom_line(aes(y = htw, x = latZ), col = "cyan4", lty = "dashed") +
-  geom_ribbon(data = htEW, aes(ymin = ht_w5, ymax = ht_w95, x= latZ), alpha = 0.2, fill = "cyan4") +
-  geom_line(aes(y = hte, x = latZ), col = "cyan3") + 
-  geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= latZ), alpha = 0.2, fill = "cyan3") + 
-  xlab("Standardized latitude") + ylab("Height (m)") +
-  xlim (min(latZ), max(latZ)) + 
-  ylim (-2,10) + 
+  geom_line(aes(y = htw, x = lati), col = "cyan4", lty = "dashed") +
+  geom_ribbon(data = htEW, aes(ymin = ht_w5, ymax = ht_w95, x= lati), alpha = 0.2, fill = "cyan4") +
+  geom_line(aes(y = hte, x = lati), col = "cyan3") + 
+  geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= lati), alpha = 0.2, fill = "cyan3") + 
+  xlab("Latitude") + ylab("Height (m)") +
+  xlim (min(lati), max(lati)) + 
+  ylim (-20,30) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
@@ -127,7 +145,7 @@ intHt <- ggplot(htEW) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 10, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 30, label = "a)", cex = 10) 
   
 
 ################################################
@@ -136,7 +154,7 @@ intHt <- ggplot(htEW) +
 sumLMA <- summary(mdlLMA)$summary
 # postLMA <- rstan::extract(mdlLMAhundo)
 # lati <- seq(40, 60, by = 0.5)
-# latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
+# lati <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE))
 # tranW <- 0
 # tranE <- 1
 
@@ -169,34 +187,34 @@ wData <- subset(trtPheno, transect == "0" )
 # Make the other parameters constant
 
 # plot first for west coast
-LMA_w = a_spLMA[1] + b_tranLMA[1] * tranW + b_tranlatLMA[1] * (tranW*latZ)
-LMA_e = a_spLMA[1] + b_tranLMA[1] * tranE + b_tranlatLMA[1] * (tranE*latZ)
+LMA_w = a_spLMA[1] + b_tranLMA[1] * tranW + b_tranlatLMA[1] * (tranW*lati)
+LMA_e = a_spLMA[1] + b_tranLMA[1] * tranE + b_tranlatLMA[1] * (tranE*lati)
 
-LMA_w5 = a_spLMA[2] + b_tranLMA[2] * tranW + b_tranlatLMA[2] * (tranW*latZ)
-LMA_e5 = a_spLMA[2] + b_tranLMA[2] * tranE + b_tranlatLMA[2] * (tranE*latZ)
+LMA_w5 = a_spLMA[2] + b_tranLMA[2] * tranW + b_tranlatLMA[2] * (tranW*lati)
+LMA_e5 = a_spLMA[2] + b_tranLMA[2] * tranE + b_tranlatLMA[2] * (tranE*lati)
 
-LMA_w95 = a_spLMA[3] + b_tranLMA[3] * tranW + b_tranlatLMA[3] * (tranW*latZ)
-LMA_e95 = a_spLMA[3] + b_tranLMA[3] * tranE + b_tranlatLMA[3] * (tranE*latZ)
+LMA_w95 = a_spLMA[3] + b_tranLMA[3] * tranW + b_tranlatLMA[3] * (tranW*lati)
+LMA_e95 = a_spLMA[3] + b_tranLMA[3] * tranE + b_tranlatLMA[3] * (tranE*lati)
 
 LMAEW <- data.frame(LMAw = LMA_w, LMAe = LMA_e,  LMA_w5 =LMA_w5, LMA_w95 = LMA_w95, LMA_e5 = LMA_e5, LMA_e95 = LMA_e95  )
 
 
 intLMA <- ggplot(LMAEW) +
-  geom_line(aes(y = (LMAw), x = latZ), col = "darkolivegreen", lty = 2) +
-  geom_ribbon(data = LMAEW, aes(ymin = (LMA_w5), ymax = (LMA_w95), x= latZ), alpha = 0.2, fill = "darkolivegreen") +
-  geom_line(aes(y = (LMAe), x = latZ), col = "darkolivegreen3") +
-  geom_ribbon(data = LMAEW, aes(ymin = (LMA_e5), ymax = (LMA_e95), x= latZ), alpha = 0.2, fill = "darkolivegreen3") +
+  geom_line(aes(y = (LMAw), x = lati), col = "darkolivegreen", lty = 2) +
+  geom_ribbon(data = LMAEW, aes(ymin = (LMA_w5), ymax = (LMA_w95), x= lati), alpha = 0.2, fill = "darkolivegreen") +
+  geom_line(aes(y = (LMAe), x = lati), col = "darkolivegreen3") +
+  geom_ribbon(data = LMAEW, aes(ymin = (LMA_e5), ymax = (LMA_e95), x= lati), alpha = 0.2, fill = "darkolivegreen3") +
   scale_color_manual(values = c("darkolivegreen","darkolivegreen3"), labels = c("Western", "Eastern"), name = "") +
-  xlab("Standardized latitude") + labs(y = bquote('Leaf mass area '~(g/m^2))) +
-  xlim (-1.5,1.5) + 
-  ylim (0,0.1) + 
+  xlab("Latitude") + labs(y = bquote('Leaf mass area '~(g/m^2))) +
+  xlim (min(lati), max(lati)) + 
+  ylim (-0.05,0.2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 0.1, label = "d)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 0.2, label = "d)", cex = 10) 
 ### DBH
 
 
@@ -233,41 +251,41 @@ wData <- subset(trtPheno, transect == "0" )
 # Make the other parameters constant
 
 # lati <- seq(40, 60, by = 0.5)
-# latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+# lati <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
 # tranW <- -0.4406491
 # tranE <- 0.5669498
 
 
 # plot first for west coast
-DBH_w = a_spDBH[1] + b_tranDBH[1] * tranW + b_tranlatDBH[1] * (tranW*latZ)
-DBH_e = a_spDBH[1] + b_tranDBH[1] * tranE + b_tranlatDBH[1] * (tranE*latZ)
+DBH_w = a_spDBH[1] + b_tranDBH[1] * tranW + b_tranlatDBH[1] * (tranW*lati)
+DBH_e = a_spDBH[1] + b_tranDBH[1] * tranE + b_tranlatDBH[1] * (tranE*lati)
 
-DBH_w5 = a_spDBH[2] + b_tranDBH[2] * tranW + b_tranlatDBH[2] * (tranW*latZ)
-DBH_e5 = a_spDBH[2] + b_tranDBH[2] * tranE + b_tranlatDBH[2] * (tranE*latZ)
+DBH_w5 = a_spDBH[2] + b_tranDBH[2] * tranW + b_tranlatDBH[2] * (tranW*lati)
+DBH_e5 = a_spDBH[2] + b_tranDBH[2] * tranE + b_tranlatDBH[2] * (tranE*lati)
 
-DBH_w95 = a_spDBH[3] + b_tranDBH[3] * tranW + b_tranlatDBH[3] * (tranW*latZ)
-DBH_e95 = a_spDBH[3] + b_tranDBH[3] * tranE + b_tranlatDBH[3] * (tranE*latZ)
+DBH_w95 = a_spDBH[3] + b_tranDBH[3] * tranW + b_tranlatDBH[3] * (tranW*lati)
+DBH_e95 = a_spDBH[3] + b_tranDBH[3] * tranE + b_tranlatDBH[3] * (tranE*lati)
 
 DBHEW <- data.frame(DBHw = DBH_w, DBHe = DBH_e,  DBH_w5 =DBH_w5, DBH_w95 = DBH_w95, DBH_e5 = DBH_e5, DBH_e95 = DBH_e95  )
 
 
 intDBH <- ggplot(DBHEW) +
-  geom_line(aes(y = DBHw, x = latZ), col = "goldenrod4", lty =2) +
-  geom_ribbon(data = DBHEW, aes(ymin = DBH_w5, ymax = DBH_w95, x= latZ), alpha = 0.2, fill = "goldenrod4") +
-  geom_line(aes(y = DBHe, x = latZ), col = "goldenrod") +
-  geom_ribbon(data = DBHEW, aes(ymin = DBH_e5, ymax = DBH_e95, x= latZ), alpha = 0.2, fill = "goldenrod") +
+  geom_line(aes(y = DBHw, x = lati), col = "goldenrod4", lty =2) +
+  geom_ribbon(data = DBHEW, aes(ymin = DBH_w5, ymax = DBH_w95, x= lati), alpha = 0.2, fill = "goldenrod4") +
+  geom_line(aes(y = DBHe, x = lati), col = "goldenrod") +
+  geom_ribbon(data = DBHEW, aes(ymin = DBH_e5, ymax = DBH_e95, x= lati), alpha = 0.2, fill = "goldenrod") +
   #scale_color_manual(values = c("goldenrod4","goldenrod"), labels = c("Western", "Eastern"), name = "") +
   scale_linetype_manual(values = c(1,2), labels = c("Western", "Eastern"), name = "") +
-  xlab("Standardized latitude") + ylab("Diameter at breast height (m)") +
-  xlim (-1.5,1.5) + 
-  ylim (-2,17) + 
+  xlab("Latitude") + ylab("Diameter at breast height (m)") +
+  xlim (min(lati), max(lati)) + 
+  ylim (-20,30) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 17, label = "b)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 30, label = "b)", cex = 10) 
 ## C:N
 
 sumCN <- summary(mdlPerN)$summary
@@ -303,39 +321,39 @@ wData <- subset(trtPheno, transect == "0" )
 # Make the other parameters constant
 
 # lati <- seq(40, 60, by = 0.5)
-# latZ <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
+# lati <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
 # tranW <- -0.4406491
 # tranE <- 0.5669498
 
 
 # plot first for west coast
-CN_w = a_spCN[1] + b_tranCN[1] * tranW + b_tranlatCN[1] * (tranW*latZ)
-CN_e = a_spCN[1] + b_tranCN[1] * tranE + b_tranlatCN[1] * (tranE*latZ)
+CN_w = a_spCN[1] + b_tranCN[1] * tranW + b_tranlatCN[1] * (tranW*lati)
+CN_e = a_spCN[1] + b_tranCN[1] * tranE + b_tranlatCN[1] * (tranE*lati)
 
-CN_w5 = a_spCN[2] + b_tranCN[2] * tranW + b_tranlatCN[2] * (tranW*latZ)
-CN_e5 = a_spCN[2] + b_tranCN[2] * tranE + b_tranlatCN[2] * (tranE*latZ)
+CN_w5 = a_spCN[2] + b_tranCN[2] * tranW + b_tranlatCN[2] * (tranW*lati)
+CN_e5 = a_spCN[2] + b_tranCN[2] * tranE + b_tranlatCN[2] * (tranE*lati)
 
-CN_w95 = a_spCN[3] + b_tranCN[3] * tranW + b_tranlatCN[3] * (tranW*latZ)
-CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*latZ)
+CN_w95 = a_spCN[3] + b_tranCN[3] * tranW + b_tranlatCN[3] * (tranW*lati)
+CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*lati)
 
 CNEW <- data.frame(CNw = CN_w, CNe = CN_e,  CN_w5 =CN_w5, CN_w95 = CN_w95, CN_e5 = CN_e5, CN_e95 = CN_e95  )
 
-ggplot(CNEW) +
-  geom_line(aes(y = CNw, x = latZ), color = "purple4", linetype = "dashed") +
-  geom_ribbon(data = CNEW, aes(ymin = CN_w5, ymax = CN_w95, x= latZ), alpha = 0.2, fill = "purple4") +
-  geom_line(aes(y = CNe, x = latZ), col = "purple2") +
-  geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= latZ), alpha = 0.2, fill = "purple2") +
+intNit <- ggplot(CNEW) +
+  geom_line(aes(y = CNw, x = lati), color = "purple4", linetype = "dashed") +
+  geom_ribbon(data = CNEW, aes(ymin = CN_w5, ymax = CN_w95, x= lati), alpha = 0.2, fill = "purple4") +
+  geom_line(aes(y = CNe, x = lati), col = "purple2") +
+  geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= lati), alpha = 0.2, fill = "purple2") +
   # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
-  xlab("Standardized latitude") + ylab("Leaf nitrogen content (%)") +
-  xlim (-1.5,1.5) + 
-  ylim (0,10) + 
+  xlab("Latitude") + ylab("Leaf nitrogen content (%)") +
+  xlim (min(lati), max(lati)) + 
+  ylim (-5,10) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 10, label = "e)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 10, label = "e)", cex = 10) 
 
 
 
@@ -375,36 +393,36 @@ wData <- subset(trtPheno, transect == "0" )
 
 
 # plot first for west coast
-SSD_w = a_spSSD[1] + b_tranSSD[1] * tranW + b_tranlatSSD[1] * (tranW*latZ)
-SSD_e = a_spSSD[1] + b_tranSSD[1] * tranE + b_tranlatSSD[1] * (tranE*latZ)
+SSD_w = a_spSSD[1] + b_tranSSD[1] * tranW + b_tranlatSSD[1] * (tranW*lati)
+SSD_e = a_spSSD[1] + b_tranSSD[1] * tranE + b_tranlatSSD[1] * (tranE*lati)
 
-SSD_w5 = a_spSSD[2] + b_tranSSD[2] * tranW + b_tranlatSSD[2] * (tranW*latZ)
-SSD_e5 = a_spSSD[2] + b_tranSSD[2] * tranE + b_tranlatSSD[2] * (tranE*latZ)
+SSD_w5 = a_spSSD[2] + b_tranSSD[2] * tranW + b_tranlatSSD[2] * (tranW*lati)
+SSD_e5 = a_spSSD[2] + b_tranSSD[2] * tranE + b_tranlatSSD[2] * (tranE*lati)
 
-SSD_w95 = a_spSSD[3] + b_tranSSD[3] * tranW + b_tranlatSSD[3] * (tranW*latZ)
-SSD_e95 = a_spSSD[3] + b_tranSSD[3] * tranE + b_tranlatSSD[3] * (tranE*latZ)
+SSD_w95 = a_spSSD[3] + b_tranSSD[3] * tranW + b_tranlatSSD[3] * (tranW*lati)
+SSD_e95 = a_spSSD[3] + b_tranSSD[3] * tranE + b_tranlatSSD[3] * (tranE*lati)
 
 SSDEW <- data.frame(SSDw = SSD_w, SSDe = SSD_e,  SSD_w5 =SSD_w5, SSD_w95 = SSD_w95, SSD_e5 = SSD_e5, SSD_e95 = SSD_e95  )
 
 
 intSSD <- ggplot(SSDEW) +
-  geom_line(aes(y = (SSDw), x = latZ), color = "maroon4", linetype = "dashed") +
-  geom_ribbon(data = (SSDEW), aes(ymin = (SSD_w5), ymax = (SSD_w95), x= latZ), alpha = 0.2, fill = "maroon4") +
-  geom_line(aes(y = (SSDe), x = latZ), col = "maroon") +
-  geom_ribbon(data = (SSDEW), aes(ymin = (SSD_e5), ymax = (SSD_e95), x= latZ), alpha = 0.2, fill = "maroon") +
-  xlab("Standardized latitude") +  labs(y = bquote('Stem specific density'~(g/cm^2)))  +
-  xlim (-1.5,1.5) + 
- # ylim (0,1) + 
+  geom_line(aes(y = (SSDw), x = lati), color = "maroon4", linetype = "dashed") +
+  geom_ribbon(data = (SSDEW), aes(ymin = (SSD_w5), ymax = (SSD_w95), x= lati), alpha = 0.2, fill = "maroon4") +
+  geom_line(aes(y = (SSDe), x = lati), col = "maroon") +
+  geom_ribbon(data = (SSDEW), aes(ymin = (SSD_e5), ymax = (SSD_e95), x= lati), alpha = 0.2, fill = "maroon") +
+  xlab("Latitude") +  labs(y = bquote('Stem specific density'~(g/cm^2)))  +
+  xlim (min(lati), max(lati)) + 
+  ylim (-2,2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.0,.0),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = -1.4, y = 1, label = "c)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 42, y = 2, label = "c)", cex = 10) 
 
-pdf("figures/intrxnPlots1006.pdf", height =5, width = 25)
-plot_grid( intHt, intDBH, intSSD, intLMA, intCN , ncol = 5, nrow =1,align = "v")
+pdf("figures/intrxnPlotsHundo.pdf", height =5, width = 25)
+plot_grid( intHt, intDBH, intSSD, intLMA, intNit , ncol = 5, nrow =1,align = "v")
 dev.off()
 
 
@@ -413,23 +431,23 @@ dev.off()
 # 
 
 #If we are using the old model, we will use the z-scored values for the parameters
-photo <- -0.5033863 #8 h photo
-siteSM <- 0
-force <- -0.3568628 #5/15 C trt
-chill <- -0.3546922 # low chill
-
-m <- matrix(nrow = 1000, ncol = 47)
-
-for(sp in 1:47){
-  for (it in 1:nrow(m)){
-    m[it,sp] <- post$a_sp[it,sp]+ post$b_site2[it] * siteSM + post$b_site3[it] * siteSM + post$b_site4[it] * siteSM + 
-      post$b_warm[it,sp] * force + post$b_photo[it, sp] * photo + post$b_chill[it,sp] * chill +
-      post$b_inter_wp[it,sp] * (force*photo) + post$b_inter_wc1[it,sp] * (force*chill) + post$b_inter_pc1[it,sp] * (photo*chill) +
-      post$b_inter_s2c1[it,sp] * (chill*siteSM) + post$b_inter_ws2[it,sp] * (force*siteSM) + post$b_inter_ps2[it,sp] * (photo*siteSM) +
-      post$b_inter_s3c1[it,sp] * (chill*siteSM) + post$b_inter_ws3[it,sp] * (force*siteSM) + post$b_inter_ps3[it,sp] * (photo*siteSM) +
-      post$b_inter_s4c1[it,sp] * (chill*siteSM) + post$b_inter_ws4[it,sp] * (force*siteSM) + post$b_inter_ps4[it,sp] * (photo*siteSM)
-  }
-}
+# photo <- -0.5033863 #8 h photo
+# siteSM <- 0
+# force <- -0.3568628 #5/15 C trt
+# chill <- -0.3546922 # low chill
+# 
+# m <- matrix(nrow = 1000, ncol = 47)
+# 
+# for(sp in 1:47){
+#   for (it in 1:nrow(m)){
+#     m[it,sp] <- post$a_sp[it,sp]+ post$b_site2[it] * siteSM + post$b_site3[it] * siteSM + post$b_site4[it] * siteSM + 
+#       post$b_warm[it,sp] * force + post$b_photo[it, sp] * photo + post$b_chill[it,sp] * chill +
+#       post$b_inter_wp[it,sp] * (force*photo) + post$b_inter_wc1[it,sp] * (force*chill) + post$b_inter_pc1[it,sp] * (photo*chill) +
+#       post$b_inter_s2c1[it,sp] * (chill*siteSM) + post$b_inter_ws2[it,sp] * (force*siteSM) + post$b_inter_ps2[it,sp] * (photo*siteSM) +
+#       post$b_inter_s3c1[it,sp] * (chill*siteSM) + post$b_inter_ws3[it,sp] * (force*siteSM) + post$b_inter_ps3[it,sp] * (photo*siteSM) +
+#       post$b_inter_s4c1[it,sp] * (chill*siteSM) + post$b_inter_ws4[it,sp] * (force*siteSM) + post$b_inter_ps4[it,sp] * (photo*siteSM)
+#   }
+# }
 
 ############ SHRUB VS TREE ##############################
 spInfo <- read.csv("input/species_ring.csv")
@@ -645,10 +663,10 @@ ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   #       axis.text.y=element_text(size = 15),
   #       axis.title=element_text(size=  17),
   #       legend.position = "none") +
-  labs( x = "Ring Type", y = "photoing response (days/standardized unit)", main = NA) +
+  labs( x = "Ring Type", y = "Photoperiod response (days/standardized unit)", main = NA) +
   theme(legend.title = element_blank()) 
 
-pdf("figures/ringPorosityHeight1006.pdf", width = 12, height = 4)
+pdf("figures/ringPorosityHeightHundo.pdf", width = 12, height = 4)
 plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
 dev.off()
 
@@ -718,22 +736,22 @@ wData <- subset(trtPheno, transect == "0" )
 # Make the other parameters constant
 
 # plot first for west coast
-LMA_w = a_trtSpLMA + b_tranELMA * tranW + b_tranlatLMA * (tranW*latZ)
-LMA_e = a_trtSpLMA + b_tranELMA * tranE + b_tranlatLMA * (tranE*latZ)
+LMA_w = a_trtSpLMA + b_tranELMA * tranW + b_tranlatLMA * (tranW*lati)
+LMA_e = a_trtSpLMA + b_tranELMA * tranE + b_tranlatLMA * (tranE*lati)
 
-LMA_w5 = mean(a_trtsp5LMA[1]) + b_tran5LMA[1] * tranW + b_tranlat5LMA[1] * (tranW*latZ)
-LMA_e5 = mean(a_trtsp5LMA[1]) + b_tran5LMA[1] * tranE + b_tranlat5LMA[1] * (tranE*latZ)
+LMA_w5 = mean(a_trtsp5LMA[1]) + b_tran5LMA[1] * tranW + b_tranlat5LMA[1] * (tranW*lati)
+LMA_e5 = mean(a_trtsp5LMA[1]) + b_tran5LMA[1] * tranE + b_tranlat5LMA[1] * (tranE*lati)
 
-LMA_w95 = mean(a_trtsp5LMA[2]) + b_tran5LMA[2] * tranW + b_tranlat5LMA[2] * (tranW*latZ)
-LMA_e95 = mean(a_trtsp5LMA[2]) + b_tran5LMA[2] * tranE + b_tranlat5LMA[2] * (tranE*latZ)
+LMA_w95 = mean(a_trtsp5LMA[2]) + b_tran5LMA[2] * tranW + b_tranlat5LMA[2] * (tranW*lati)
+LMA_e95 = mean(a_trtsp5LMA[2]) + b_tran5LMA[2] * tranE + b_tranlat5LMA[2] * (tranE*lati)
 
 intLMA <- data.frame(LMAw = c(LMA_w ),LMAw5 = c(LMA_w5),LMAw95 = c(LMA_w95), LMAe = c(LMA_e), LMAe5 = c(LMA_e5), LMAe95 = c(LMA_e95))
 
 ggplot(intLMA) +
-  geom_line(aes(y = LMAw, x = latZ, col = "cyan4")) +
-  geom_ribbon( aes(ymin = LMAw5, ymax = LMAw95, x= latZ), alpha = 0.2, fill = "cyan4") +
-  geom_line(aes(y = LMAe, x = latZ, col = "cyan3")) + 
-  geom_ribbon(data = LAEW, aes(ymin = ht_e5, ymax = ht_e95, x= latZ), alpha = 0.2, fill = "cyan3") + 
+  geom_line(aes(y = LMAw, x = lati, col = "cyan4")) +
+  geom_ribbon( aes(ymin = LMAw5, ymax = LMAw95, x= lati), alpha = 0.2, fill = "cyan4") +
+  geom_line(aes(y = LMAe, x = lati, col = "cyan3")) + 
+  geom_ribbon(data = LAEW, aes(ymin = ht_e5, ymax = ht_e95, x= lati), alpha = 0.2, fill = "cyan3") + 
   xlab("Standardized latitude") + ylab("Standardized height") +
   xlim (-0.8,0.8) + 
   ylim (-0.5,0.5) + 
@@ -816,8 +834,8 @@ wData <- subset(trtPheno, transect == "0" )
 
 
 # plot first for west coast
-DBH_w = a_trtSpDBH + b_tranEDBH * tranW + b_tranlatDBH * (tranW*latZ)
-DBH_e = a_trtSpDBH + b_tranEDBH * tranE + b_tranlatDBH * (tranE*latZ)
+DBH_w = a_trtSpDBH + b_tranEDBH * tranW + b_tranlatDBH * (tranW*lati)
+DBH_e = a_trtSpDBH + b_tranEDBH * tranE + b_tranlatDBH * (tranE*lati)
 
 par(mfrow = c(1,1))
 plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),
@@ -888,8 +906,8 @@ wData <- subset(trtPheno, transect == "0" )
 
 
 # plot first for west coast
-SSD_w = a_trtSpSSD + b_tranESSD * tranW + b_tranlatSSD * (tranW*latZ)
-SSD_e = a_trtSpSSD + b_tranESSD * tranE + b_tranlatSSD * (tranE*latZ)
+SSD_w = a_trtSpSSD + b_tranESSD * tranW + b_tranlatSSD * (tranW*lati)
+SSD_e = a_trtSpSSD + b_tranESSD * tranE + b_tranlatSSD * (tranE*lati)
 
 par(mfrow = c(1,1))
 plot(0, type = "n", xlim = c(25,60), ylim = c(-100,100),
@@ -959,8 +977,8 @@ wData <- subset(trtPheno, transect == "0" )
 
 
 # plot first for west coast
-CN_w = a_trtSpCN + b_tranECN * tranW + b_tranlatCN * (tranW*latZ)
-CN_e = a_trtSpCN + b_tranECN * tranE + b_tranlatCN * (tranE*latZ)
+CN_w = a_trtSpCN + b_tranECN * tranW + b_tranlatCN * (tranW*lati)
+CN_e = a_trtSpCN + b_tranECN * tranE + b_tranlatCN * (tranE*lati)
 
 par(mfrow = c(1,1))
 plot(0, type = "n", xlim = c(25,60), ylim = c(-10,10),

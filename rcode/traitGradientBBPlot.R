@@ -28,7 +28,7 @@ spInfo <- merge(spInfo, trtMeans, by = "species")
 # sumHt <- summary(mdlHt)$summary
 # postHt <- rstan::extract(mdlHt)
 
-load("output/htContLat6.Rdata")
+load("output/htContLatHundoLat.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
@@ -44,7 +44,7 @@ postHt <- rstan::extract(mdlHt)
 # postSSD <- rstan::extract(mdlSSD)
 # sumSSD<- summary(mdlSSD)$summary
 
-load("output/lncContLat.Rdata")
+load("output/lncContLatHundoLat.Rdata")
 postCN <- rstan::extract(mdlPerN)
 sumCN<- summary(mdlPerN)$summary
 
@@ -131,9 +131,6 @@ spInfo <- cbind(spInfo, a_sp5,b_force5, b_chill5,b_photo5)
 spInfo$force <- b_force
 spInfo$chill <- b_chill
 spInfo$photo <- b_photo
-
-
-
 
 quantile595 <- function(x){
   returnQuanilte <- quantile(x, prob = c(0.05, 0.95, 0.25,0.75))
@@ -244,8 +241,7 @@ names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh",
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtE, col = "black") +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtE, col = "black") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
         axis.text.y=element_text(size = 15),
         axis.title=element_text(size=20)) +
@@ -598,7 +594,7 @@ CNE <- ggplot(meanPtE) +
   ylim (-20,35) +
   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(5,21)) +
   labs( x = "", y = "Day of budburst (days/% LNC)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 10, y = 35, label = "c) Eastern transect - LNC", cex =8) +
+  theme(legend.title = element_blank()) +  annotate("text", x = 11, y = 35, label = "c) Eastern transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -650,7 +646,7 @@ CNW <- ggplot(meanPtW) +
         axis.title=element_text(size=20)) +
   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(8,24)) +
   labs( x = "", y = "Day of budburst (days/% LNC)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 13, y = 35, label = "d) western transect - LNC", cex =8) +
+  theme(legend.title = element_blank()) +  annotate("text", x = 14, y = 35, label = "d) western transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -678,7 +674,7 @@ CNW <- ggplot(meanPtW) +
 #     "intercept" ),
 #     breaks = c("Budburst","BudburstHigh", "Intercept"))
 
-pdf("figures/dotShrubTreeHtCN6.pdf", width = 15, height = 10)
+pdf("figures/dotShrubTreeHtCNHundo.pdf", width = 15, height = 10)
 plot_grid(htE, htW, CNE,CNW, nrow = 2, ncol = 2, align = "v")
 dev.off()
 # 
