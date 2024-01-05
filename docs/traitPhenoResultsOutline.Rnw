@@ -106,11 +106,11 @@ setwd("~/Documents/github/Treetraits/docs")
 \begin{enumerate}
 \item Across populations --- measured diverse assemblage of species across the understory and canopy layer
 \item Selected angiosperm spp that were most abundant in forest communities---using closely related species and congeners between eastern and western communities
-\item Focus on angiosperm spp only---leafout likely under more similar environmental controls than gymnosperm, conifer, species---previous work has shown similar cue responses with phylogeny
+\item Focus on angiosperm spp only---leafout likely under more similar environmental controls than if we also include gymnosperm/confier, species %2024Jan5emw -- and are the trait comparisons maybe better this way? Fewer confounding other traits (I have no idea; ignore me if wrong). 
 \end{enumerate}
 \end{enumerate}
 
-\subsection*{Functional traits}
+\subsection*{Functional traits} %2024Jan5emw -- all reading good, be sure to say 'we' when you write it up versus too much passive voice ... also, could add acknowlesgements now while we're thinking of it to end of ms -- Dan Flynn, Tim, Jehane and maybe any UGs that feature in the field trips? Also all the help here at UBC....
 
 \begin{enumerate}
 \item General sampling info
@@ -196,6 +196,7 @@ setwd("~/Documents/github/Treetraits/docs")
 \end{enumerate}
 
 Trait model: %24Dec2023emw -- math is wrong, if you have a grand mean then you don't have mu in the following normal equation lines, right? ... I am skipping the rest of the math until you cross-check this math against your stan code more. 
+%2024Jan5emw -- getting better, if you print it out on next draft I can mark up small changes. 
 \begin{align}
 \mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{\text{transect}} \times transect  +\beta_{\text{transect} \times \text{latitude}} \times (transect \times latitude)\\
 \alpha_{Sp} &  \sim normal(0, \sigma_{sp}) \nonumber \\ \nonumber
@@ -204,7 +205,19 @@ y_{trait} & \sim normal(\mu_{trait}, \sigma_{trait})\\ \nonumber
 % \mu_{transect} &  \sim normal( \mu_{transect}, \sigma_{\text{transect}}) \nonumber \\
 % \beta_{\text{transect} \times \text{latitude}} &  \sim normal( \mu_{\text{transect} \times \text{latitude}}, \sigma_{\text{transect} \times \text{latitude}}) \nonumber 
 
+\item Explain phenology part of model
+\begin{enumerate}
+ \item Across each spp---get esti of overall effect of each trait on cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$)
+\item and estimate of species-level cue variation not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$) = how well trait effects explain species-level differences
+\item From this we can estimate individual species responses to cues ($C_i$, $F_i$, $P_i$, respectively---$z$-scored)---with residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$)
+\end{enumerate}
 
+\begin{align}
+\mu_{pheno} & = \alpha_{\text{pheno[sp]}}+ \beta_{\text{chill[sp]}} \times C_i + \beta_{\text{force[sp]}}\times F_i + \beta_{\text{photo[sp]}} \times P_i\\
+y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber 
+\end{align}
+
+%2024Jan5emw -- I have moved this down and moved things around so you introduce the terms in order -- I think you need to introduce phenology before these terms
 trait-cue relationship:
 \begin{align}
 \beta_{\text{chill[sp]}} & = \alpha_{\text{chill}[sp]} + \beta_{\text{trait}.\text{chill}} \times \alpha_{\text{trait sp[sp]}} \nonumber \\
@@ -212,18 +225,7 @@ trait-cue relationship:
 \beta_{\text{photo[sp]}} & = \alpha_{\text{photo}[sp]} + \beta_{\text{trait}.\text{photo}} \times \alpha_{\text{trait sp[sp]}} \nonumber 
 \end{align}
 
-\item Explain phenology part of model
-\begin{enumerate}
- \item Across each spp---get esti of overall effect of each trait on cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$)
-\item and estimate of species-level cue variation not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$) = how well trait effects explain species-level differences
-\item From this we can estimate individual species responses to cues ($C_i$, $F_i$, $P_i$, respectively---$z$-scored)---with residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$)
-\item Partial pooling for residual variation across species and variation in cues not attributed to the trait
-\end{enumerate}
-
-\begin{align}
-\mu_{pheno} & = \alpha_{\text{pheno[sp]}}+ \beta_{\text{chill[sp]}} \times C_i + \beta_{\text{force[sp]}}\times F_i + \beta_{\text{photo[sp]}} \times P_i\\
-y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber 
-\end{align}
+Model includes residual variation across species and variation in cues not attributed to the trait (partially pooled):
 
 \begin{align}
 \alpha_{\text{pheno}} \sim normal(\mu_{\alpha_{\text{pheno}}},\sigma_{\alpha_{\text{pheno}}}) \\
@@ -254,7 +256,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \item Three species occurred in both transect
 \item Measured traits of \Sexpr{noIndiv} unique individuals between the two transects: height ($n$ = \Sexpr{nHt}), DBH ($n$ = \Sexpr{nDBH}), SSD ($n$ = \Sexpr{nSSD}), LMA ($n$ = \Sexpr{nLMA}), LNC ($n$ = \Sexpr{nLNC})
 \item Across our two growth chamber studies we made observations of \Sexpr{noIndivPheno}---studies spanning 82 and \Sexpr{totalDays} days for our eastern and western studies respectfully. 
-\item Using a joint modeling approach we then combined our trait data with budburst data from \Sexpr{noIndivPheno} cuttings across the same \Sexpr{nSpp} species sampled in the field. 
+\item Using a joint modeling approach we then combined our trait data with budburst data from \Sexpr{noIndivPheno} cuttings across the same \Sexpr{nSpp} species sampled in the field for traits. 
 \end{enumerate}
 
 %24Dec2023emw  -- reads more like discussion, I would save almost all of this text for the discussion I think. You could instead open with some of the numbers you have in the methods (this will also slim the methods!) -- numbers for each trait, how many species, phenology etc. (or give ranges and refer to a table in supp). Opening results with how much data you have is usually good and you can weave in a few reminders of the methods -- including joint model, populations etc. (for example, In total we collected XX trait data etc... Using a joint modeling approach we then combined them with data from XX cuttings across XX species in a chamber experiment. 
@@ -270,11 +272,12 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 
 \begin{enumerate}
 \item Most of our traits showed negligible trait variation across populations---neither between the two transects (main effect of transect only) or by latitudes within each transect (an interactive effect between transect and latitude) %24Dec2023emw  -- rewrote end less statistically -- 
-\item Leaf mass area differed by latitude within transects (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---eastern species LMA increased with latitude---generally greater than western species---Fig. \ref{fig:tranInt} d
+\item Leaf mass area differed by latitude within transects (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---eastern species LMA increased with latitude---while western species did not---Fig. \ref{fig:tranInt} d %2024Jan5emw -- check my edits at end here 
 \item LNC similarly showed a weak interaction between latitude and transect (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---higher latitude populations in eastern transect had lower LNC than lower latitude populations and western species---Fig. \ref{fig:tranInt} e
 \item But our wood and structural traits showed no differences across populations or transects (Table \ref{tabDBH} - \ref{tabSSD})
 \item Across each of our models---species level differences exceeded population level variation---with the exception of SSD, most trait models showed degress of species level variation ranging from \Sexpr{lncsigmaSp} (UI: \Sexpr{lower_lncsigmaSp}, \Sexpr{upper_lncsigmaSp}) for LNC up to to \Sexpr{dbhsigmaSp} (UI: \Sexpr{lower_dbhsigmaSp}, \Sexpr{upper_dbhsigmaSp}) for DBH %24Dec2023emw -- I would end this section by contrasting population level variation versus species -- you want to remind readers that species differences DWARF population differences before you go ahead and focus on species below. 
 %dlJan4: it isn't clear to me what you have in mind here, would that not require the model to estimate a sigma for the pop variation?
+%2024Jan5emw: I wasn't sure either! Yes, it would be easiest to have a nested model with some sigmas but not the only way ... I think we can say perhaps more: These differences across populations were very small or negligible, especially compared to species-level differences, which varied strongly and up to XX fold (shown for all traits as x-axis in Fig 2). [To get the XX folder, you could contrast point estimates from two species for some trait. Happy to discuss!] 
 \item Fig. \ref{fig:tranInt}
 
 \end{enumerate}
@@ -297,7 +300,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \item LNC had no responses to any of our three cues
 \end{enumerate}
 
-\item Traits varied in whether temperature had the strongest effects---with some traits showing stronger than expected photoperiod cues
+\item Traits varied in whether temperature had the strongest effects---with some traits showing photoperiod cues that had a larger effect than either temperature cue
 \begin{enumerate}
 \item Most models estimated chilling followed by forcing as the strongest cues of budburst
 \item LMA model---estimating photoperiod cues (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that were slightly stronger than forcing cues (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---while effects of chilling were weak (90\% UI crossing zero) (Table \ref{tabLMA}) % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean}) 
@@ -322,6 +325,9 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 
 \end{enumerate}
 
+%2024Jan5emw -- as you think on discussion, I would perhaps open with a sentence or two on how (and why) we think traits and phenology should really matter -- we think phenology within a community is staggering species to given unique temporal niches -- and that staggering means they experience different risk and competitive landscapes, so they should differ in traits. But we found they don't (quick overview of that)... then you might segue into how good your study is (stuff below) to make the point that you likely have a robust null result. Then ruminate on why a little somewhere (in addition to the non-null results you have which you need to discuss).
+% ... but if you have a better idea of an opening go for it! 
+
 \section*{Discussion}
 %24Dec2023emw -- looking good! Please work up edits to the outline here for methods and results and -- if you still have time before I can look at this again -- work on the discussion outline. (And if you still have time you could write up the methods.)
 \begin{enumerate}
@@ -343,7 +349,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//figures/intrxnPlotsHundo.pdf}
-\caption{We found geographic differences for four of our functional traits, with the direction of the relationship varying across traits. Of our traits a. height, b. diameter at base height, c. leaf mass area, and e. leaf nitrogen content showed strong interactions between latitude and transect, while d. stem specific density showed no effects of geography. Dashed lines represent the western transect and solid lines the eastern transect.}
+\caption{We found geographic differences for four of our functional traits, with the direction of the relationship varying across traits. Of our traits a. height, b. diameter at base height, c. leaf mass area, and e. leaf nitrogen content showed strong interactions between latitude and transect, while d. stem specific density showed no effects of geography. Dashed lines represent the western transect and solid lines the eastern transect.} %2024Jan5emw -- I think maybe your western error is super low? This seems odd. Let's discuss in person some time to check together. (I am not worried about it though for moving forward, let's get this written).
 \label{fig:tranInt}
 \end{figure}
 
@@ -365,7 +371,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//figures/ringPorosityHeightHundo.pdf}
-\caption{Despite species wood structures causing differing growth strategies, we did not find this trait to correlate with differences in cue responses across species. Thinner lines represent the 90\% UI and thicker lines the 50\% UI. Here we show the results for height only.}
+\caption{Despite species wood structures causing differing growth strategies, we did not find this trait to correlate with differences in cue responses across species. Thinner lines represent the 90\% UI and thicker lines the 50\% UI. Here we show the results for height only.} %2024Jan5emw -- see XX table for other results?
 \label{fig:ringPorosity}
 \end{figure}
 \newpage
