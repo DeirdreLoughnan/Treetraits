@@ -69,7 +69,6 @@
 \date{\today}
 \author{Deirdre Loughnan$^1$, Faith A M Jones$^1$, and E M Wolkovich$^1$}
 \maketitle 
-
 $^1$ Department of Forest and Conservation, Faculty of Forestry, University of British Columbia, 2424 Main Mall
 Vancouver, BC Canada V6T 1Z4. \\
 
@@ -107,7 +106,7 @@ setwd("~/Documents/github/Treetraits/docs")
 \begin{enumerate}
 \item Across populations --- measured diverse assemblage of species across the understory and canopy layer
 \item Selected angiosperm spp that were most abundant in forest communities---using closely related species and congeners between eastern and western communities
-\item Focus on angiosperm spp only---leafout likely under more similar environmental controls than gymnosperm, conifer, species---previous work (Nacho's) has shown similar cue responses with phylogeny
+\item Focus on angiosperm spp only---leafout likely under more similar environmental controls than gymnosperm, conifer, species---previous work has shown similar cue responses with phylogeny
 \end{enumerate}
 \end{enumerate}
 
@@ -117,16 +116,16 @@ setwd("~/Documents/github/Treetraits/docs")
 \item General sampling info
 \begin{enumerate}
 \item Traits were measured in the summer prior to each growth chamber study.
-\item Eastern transect: traits measured summer 2015---need to look up specific dates
+\item Eastern transect: traits measured summer 2015---May 28 to August 12, 2015 %dlJan4: not sure these are right-can't find daily log in the WDrive folder I have
 \item Western transect: traits measured May 29 to July 30, 2019
 \item For each species present at a populations---measured traits for 1-10 healthy, adult, individuals
 \end{enumerate}
 
 \item Trait sampling --- structural/wood traits
 \begin{enumerate}
-\item Measured a total of five traits: height ($n$ = \Sexpr{nHt}), DBH ($n$ = \Sexpr{nDBH}), SSD ($n$ = \Sexpr{nSSD}), LMA ($n$ = \Sexpr{nLMA}), LNC ($n$ = \Sexpr{nLNC})
-\item Traits were measured according to recommendations of Perez-Harguindeguy2013.
-\item Height was measured using a range finder (XX brand etc.).
+\item Measured a total of five traits: height, DBH, SSD, LMA, LNC
+\item Traits were measured according to methods outlined in  ---Perez-Harguindeguy2013.
+\item Height was measured using a range finder (TruePulse200L).
 \item Diameter at breast height was measured 1.42 m from the ground.
 \item Wood volume was measured within 12 hours of collection --- 10 cm sample taken from tree branches or shrub primary stems --- measured using the water displacement method
 \item Branch segments were dried at 105$^{\circ}$C for 24h and weighted.
@@ -135,16 +134,16 @@ setwd("~/Documents/github/Treetraits/docs")
 \item Trait sampling --- leaf traits
 \begin{enumerate}
 \item Leaf traits were measured for five haphazardly selected, fully expanded, and hardened leaves 
-\item High resolution scans of leaf area taken using Canon flatbed scanner within 12 hours of collection
-\item Leaf area was then quantified using the ImageJ software
+\item High resolution scans of leaf area taken using Canon flatbed scanner (CanoScan Lide 220) within 12 hours of collection
+\item Leaf area was then quantified using the ImageJ software (version X)
 \item Leaves were dried for 48h at 70$^{\circ}$C and weighed using a precision balance.
 \end{enumerate}
 \end{enumerate}
 
 \subsection*{Growth chamber study} %24Dec2023emw -- I would refer to your other chapter for much of this, and try to publish that paper first so you can refer to it when submitting to a journal. This will cut down the methods a good bit.
-%dlDec31: agreed, it would be ideal to submit the pheno paper soon
-% \begin{enumerate}
-% \item General information
+%dlJan4: agreed, it would be ideal to submit the pheno paper soon
+ \begin{enumerate}
+ \item General information
 % \begin{enumerate}
 % \item To collect branch cuttings for growth chamber study --- returned to our highest and lowest latitude populations in each transect
 % \item Eastern transect: Hippolyte and Harvard Forested visited again in 20-28 January for growth chamber study --- study conducted at Arnold Arboretum
@@ -159,7 +158,7 @@ setwd("~/Documents/github/Treetraits/docs")
 \item two levels of forcing—a cool regime of 15:5$^{\circ}$C and a warm regime of 20:10$^{\circ}$C
 \item two photoperiods of either 8 or 12 hours
 \item Observations of budburst stage made every 1-3 days for each sample for several months
-\item For detailed discussion of study sample collection and methods  see Loughnan et al. (2024)
+\item For detailed discussion of study sample collection and methods  see Loughnan et al. (in prep)
 \end{enumerate}
 
 % \item Data collection --- BBCH
@@ -169,7 +168,7 @@ setwd("~/Documents/github/Treetraits/docs")
 % \item stages were recorded up to full leaf expansion --- limited our analysis to budburst 
 % \item Eastern study lasted for 82 days, 19320 observations---add Sexpr obj
 % \item Western study lasted for 113 days, 47844 observations
-% \end{enumerate}
+ \end{enumerate}
 
 
 \subsection*{Statistical Anlaysis}
@@ -186,7 +185,6 @@ setwd("~/Documents/github/Treetraits/docs")
 \begin{enumerate}
 \item hierarchical linear model---partitioning variation of individual observations (\emph{i}) of a given trait value ($y_{\text{trait}[i]}$) to the effects of species (\emph{sp id}), and population-level differences arising from transects (\emph{transect id}) or the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and residual variation or 'measurement error' ($\sigma_{\text{trait}}$)
 \item Transect included as a categorical variable and latitude as a continuous variable  
-\item Latitude values z-scored %24Dec2023emw -- weird choice -- why? I guess okay, but be prepared to explain why ONLY this was z-scored. I would probably combine this and the below in a sentence saying you worked mainly in natural units, but made several small changes for the model numerical stability. You could ask Mike his advice on how to explain/phrase when he visits. 
 \item Most traits were modeled using their natural units---except LMA was rescaled by 100
 \end{enumerate}
 
@@ -199,11 +197,13 @@ setwd("~/Documents/github/Treetraits/docs")
 
 Trait model: %24Dec2023emw -- math is wrong, if you have a grand mean then you don't have mu in the following normal equation lines, right? ... I am skipping the rest of the math until you cross-check this math against your stan code more. 
 \begin{align}
-\mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{\text{transect}} +\beta_{\text{transect} \times \text{latitude}} \\
-\mu_{Sp} &  \sim normal(0, \sigma_{sp}) \nonumber \\
+\mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{\text{transect}} \times transect  +\beta_{\text{transect} \times \text{latitude}} \times (transect \times latitude)\\
+\alpha_{Sp} &  \sim normal(0, \sigma_{sp}) \nonumber \\ \nonumber
+y_{trait} & \sim normal(\mu_{trait}, \sigma_{trait})\\ \nonumber
+\end{align}
 % \mu_{transect} &  \sim normal( \mu_{transect}, \sigma_{\text{transect}}) \nonumber \\
 % \beta_{\text{transect} \times \text{latitude}} &  \sim normal( \mu_{\text{transect} \times \text{latitude}}, \sigma_{\text{transect} \times \text{latitude}}) \nonumber 
-\end{align}
+
 
 trait-cue relationship:
 \begin{align}
@@ -216,7 +216,7 @@ trait-cue relationship:
 \begin{enumerate}
  \item Across each spp---get esti of overall effect of each trait on cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$)
 \item and estimate of species-level cue variation not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$) = how well trait effects explain species-level differences
-\item From this we can estimate individual species responses to cues ($C_i$, $F_i$, $P_i$, respectively---z-scored)---with residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$)
+\item From this we can estimate individual species responses to cues ($C_i$, $F_i$, $P_i$, respectively---$z$-scored)---with residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$)
 \item Partial pooling for residual variation across species and variation in cues not attributed to the trait
 \end{enumerate}
 
@@ -237,7 +237,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \item weakly informative priors
 \item validated model priors using prior predictive checks
 \item model was coded in the Stan programming language and fit using the rstan package cite rstan2018
-\item Four chains (4000-6000 total sampling iterations), and all models met basic diagnostic checks, including no divergences, high effective sample size (\emph{$n_{eff}$}), and $\hat{R}$ close to 1---LMA model still has low ESS---issue with neff---otherwise this is true
+\item Four chains (6000-8000 total sampling iterations), and all models met basic diagnostic checks, including no divergences, high effective sample size (\emph{$n_{eff}$}), and $\hat{R}$ close to 1---LMA model still has low ESS---issue with neff---otherwise this is true
 \item 90\% UI given in text
 
 \end{enumerate} 
@@ -268,20 +268,15 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 % SSD: no population and latxtran effect (95% UI crosses zero)
 % LNC strong latxtran interaction
 
-%dlDec20: the height result seems strange to me, that the model would estimate greater height for the west coast that has so many more shrubs, both have left skewed height distribution, but the west coast does have some very tall trees
 \begin{enumerate}
-\item Most of our had negligible trait variation across populations---neither between the two transects (main effect of transect only) or by latitudes within each transect (an interactive effect between transect and latitude) %24Dec2023emw  -- rewrote end less statistically -- 
-\item Leaf mass area differed by latitude within transects (\Sexpr{lmaTranLat}, UI: \Sexpr{lower_lmaTran},\Sexpr{upper_lmaTran})---eastern species LMA increased with latitude---generally greater than western species
-\item LNC similarly showed a weak interaction between latitude and transect (\Sexpr{lmaTranLat}, UI: \Sexpr{lower_lmaTran},\Sexpr{upper_lmaTran})---higher latitude populations in eastern transect had lower LNC than lower latitude populations and western species %24Dec2023emw  -- where is taller? And what is this weak effect? Please give all the numbers for stats you're reporting ... and please adjust the rest below so you're consistent in phrasing and giving directionality and all stats. (This also makes it hard to address your question, but be sure you are taking into account all transect and latitude effects when you try to interpret this effect. )
+\item Most of our traits showed negligible trait variation across populations---neither between the two transects (main effect of transect only) or by latitudes within each transect (an interactive effect between transect and latitude) %24Dec2023emw  -- rewrote end less statistically -- 
+\item Leaf mass area differed by latitude within transects (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---eastern species LMA increased with latitude---generally greater than western species---Fig. \ref{fig:tranInt} d
+\item LNC similarly showed a weak interaction between latitude and transect (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---higher latitude populations in eastern transect had lower LNC than lower latitude populations and western species---Fig. \ref{fig:tranInt} e
 \item But our wood and structural traits showed no differences across populations or transects (Table \ref{tabDBH} - \ref{tabSSD})
-\item Across each of our models---species level differences exceeded population level variation---reference muSp? 
+\item Across each of our models---species level differences exceeded population level variation---with the exception of SSD, most trait models showed degress of species level variation ranging from \Sexpr{lncsigmaSp} (UI: \Sexpr{lower_lncsigmaSp}, \Sexpr{upper_lncsigmaSp}) for LNC up to to \Sexpr{dbhsigmaSp} (UI: \Sexpr{lower_dbhsigmaSp}, \Sexpr{upper_dbhsigmaSp}) for DBH %24Dec2023emw -- I would end this section by contrasting population level variation versus species -- you want to remind readers that species differences DWARF population differences before you go ahead and focus on species below. 
+%dlJan4: it isn't clear to me what you have in mind here, would that not require the model to estimate a sigma for the pop variation?
 \item Fig. \ref{fig:tranInt}
 
-% DBH (\Sexpr{dbhLatTran}, UI: \Sexpr{lower_dbhLatTran},\Sexpr{upper_dbhLatTran}), and LMA (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---strong interactions between latitude and transect
-% \item Tree DBH and LMA both increased with latitude
-% \item LNC differed between the two transects (\Sexpr{lncTran}, UI: \Sexpr{lower_lncTran},\Sexpr{upper_lncTran})---greater in western transect
-% \item But no population-level variation in SSD
-\item Fig. \ref{fig:tranInt} %24Dec2023emw -- I would end this section by contrasting population level variation versus species -- you want to remind readers that species differences DWARF population differences before you go ahead and focus on species below. 
 \end{enumerate}
 
 %2. What other functional traits relate to budburst phenology in temperate woody species?
@@ -289,7 +284,7 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \item Only a subset of our traits related to at least one budburst cue---but responses were generally weak
 \begin{enumerate}
 \item Of our three cues---photoperiod strongest relationship with other traits
-\item Our two structural traits = similar cue relationships---taller plants with greater DBH = stronger photoperiod responses = earlier bb under longer daylengths (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean} for height and (\Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhMuPSpMean}, \Sexpr{upper_dbhMuPSpMean } for DBH) 
+\item Our two structural traits = similar cue relationships---taller plants with greater DBH = stronger photoperiod responses = earlier bb under longer daylengths (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean} for height and \Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhMuPSpMean}, \Sexpr{upper_dbhMuPSpMean } for DBH) 
 % \item While we also found taller trees with large DBH to weaker forcing responses---the strength of these relationships were very weak
 \item No relationship between cues and SSD (Table \ref{tabSSD})
 \item We also did not find a relationship between between wood ring porosity with cues---see similar cue estimates across each of the four ring types \ref{fig:ringPorosity}.
@@ -302,12 +297,13 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 \item LNC had no responses to any of our three cues
 \end{enumerate}
 
-\item Regardless of trait effects, we found temperature effects to be stronger than photoperiod on budburst 
+\item Traits varied in whether temperature had the strongest effects---with some traits showing stronger than expected photoperiod cues
 \begin{enumerate}
-\item Most models estimated chilling followed by forcing as the strongest cues of budburst---but we did find unique cue responses in some trait models
-\item LMA model---estimating photoperiod cues (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that were slightly stronger than forcing cues (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---chilling effects were weak (90\% UI crossing zero) (Table \ref{tabLMA}) % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean}) 
-\item Estimates of photoperiod effects on budburst were also trait specific---LNC (Table \ref{tabLNC}) and SSD \ref{tabSSD} estimated weak photoperiod effects on budburst (90\% UI crossing zero)
-\item 
+\item Most models estimated chilling followed by forcing as the strongest cues of budburst
+\item LMA model---estimating photoperiod cues (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that were slightly stronger than forcing cues (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---while effects of chilling were weak (90\% UI crossing zero) (Table \ref{tabLMA}) % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean}) 
+\item In contrast---LNC (Table \ref{tabLNC}) and SSD models (Table  \ref{tabSSD}) both showed weak photoperiod effects on budburst (90\% UI crossing zero)
+\item By including additional traits in modeling cue responses---found the relative importance of different cues in shaping budburst varied substantially
+\item This---paired with strong species-level variation---will lead to varying estimated responses of species relative budburst dates across the different trait models
 %24Dec2023emw -- I think you probably need a sentence reminding folks that the cues lead to budburst (see comments above) and that the budburst order can vary by trait in this model (and why) for them to get this next part below... 
 %24Dec2023emw -- also, you should adjust this to remind readers that these cues drive budburst, either at the start or end (end would flow better to next paragraph). 
 \item ref Fig. \ref{fig:muCuePlot} and Fig. \ref{fig:muCueTraitPlot}
@@ -315,9 +311,9 @@ y_{\text{pheno[i]}} & \sim normal( \mu_{pheno}, \sigma_{\text{pheno}}) \nonumber
 
 % How do shrub and tree species differ in their cue-trait relationships?
 %24Dec2023emw -- I tried moving this up ... I was thinking it would work better since it links to shrubs, tree etc. but then I got an idea of your ordering and moved it back down. I think your ordering is good, but you need to adjust the text to make it work. I think you likely need to transition better from your last point above to guide the reader to understand the below; remember that it will be really unnatural to most.  
-\item Including trait effects provides novel insights into how they relate to phenology and cues %24Dec2023emw -- This one line reads more discussion-y, so I think you need a new topic sentence for the points below (which seem good for the results). 
+\item Including the effects of multiple traits provides novel insights into potential tradeoffs between growth and environmental cues %24Dec2023emw -- This one line reads more discussion-y, so I think you need a new topic sentence for the points below (which seem good for the results). 
 \begin{enumerate}
-\item Estimates bb using our model parameters show clear differences in bb timing between tree and shrub spp for some traits but not all (Fig. \ref{fig:bbShrubTree})
+\item Estimates of bb using our model parameters show clear differences in species timing between trees and shrubs for some traits but not all (Fig. \ref{fig:bbShrubTree})
 \item Height showed strong correlations between bb timing and trait values---shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
 \item But this was not the case for leaf traits---LNC showed no distinct separation between species functional groups (Fig. \ref{fig:bbShrubTree})
 %\item But species-level effects vary across traits = unique effects on cue responses---estimated order of spp bb order differs between the two models
@@ -436,7 +432,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4,  upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues z-scored to allow comparisons across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues $z$-scored to allow comparisons across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 
 
 @
@@ -480,7 +476,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues z-scored to allow comparisons across cues.",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues $z$-scored to allow comparisons across cues.",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
@@ -522,7 +518,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues z-scored to allow comparisons across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues $z$-scored to allow comparisons across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableLMA, echo=FALSE , results= tex >>=
@@ -563,7 +559,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues z-scored to allow comparisons across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues $z$-scored to allow comparisons across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableCN, echo=FALSE , results= tex >>=
@@ -604,7 +600,7 @@ upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxn
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues z-scored to allow comparisons across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in interaction term with transect. The model includes photoperiod and forcing as continuous variables, with all three cues $z$-scored to allow comparisons across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 \end{document}

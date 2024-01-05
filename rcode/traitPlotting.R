@@ -15,6 +15,7 @@ library(reshape2)
 library(cowplot)
 require(dplyr)
 require(plotrix)
+require(ggplot2)
 
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/Treetraits") 
