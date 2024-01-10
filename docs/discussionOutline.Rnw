@@ -1,0 +1,126 @@
+\documentclass{article}
+\usepackage[small]{caption}
+
+\usepackage{xr-hyper} %refer to Fig.s in another document
+\usepackage{hyperref}
+
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+
+% optional: muck with spacing
+\topmargin -1.5cm        
+\oddsidemargin 0.5cm   
+\evensidemargin 0.5cm  % same as odd side margin but for left-hand pages
+\textwidth 15.59cm
+\textheight 21.94cm 
+% \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
+\parindent 0pt		  % sets leading space for paragraphs
+% optional: cute, fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LO]{Loughnan et al. 2023}
+\fancyhead[RO]{Temporal Ecology Lab}
+% more optionals! %
+
+%\graphicspath{ {./figures/} }% tell latex where to find photos 
+\externaldocument[supp-]{bcTraitSupp}
+\begin{document}
+%\renewcommand{\bibname}{References}%names reference list 
+
+\SweaveOpts{concordance=TRUE} % For RStudio hiccups
+
+%dlDec20: Journal ideas
+% PNAS
+% New Phytoloigst
+% GCB
+% Journal of ecology
+% Ecology letters
+
+%dlJan8: alternate title ideas: 
+% a) Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst --- too bold not very representative
+% b) Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature
+% c) Photoperiod more than temperature cues plant trait effects on phenologies
+% d) Photoperiod more than temperature cues plant trait relative to phenologies %relationships with phenologies
+% d) Tradeoffs between tree traits predict phenological sensitivity to daylength more than temperature
+
+\title{Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature} 
+\date{\today}
+\author{}
+\maketitle 
+
+\section*{Discussion}
+\begin{enumerate}
+\item General summary of what we did
+\begin{enumerate}
+\item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions.
+\item Includes plant communities in eastern and western deciduous forests of North America
+\item Samples collected from multiple populations---modelling approach that accounts for variation across populations and transects
+\item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing
+\item Taking a community-level approach---with woody tree and shrub species = different growth strategies and presumably suites of traits
+\end{enumerate}
+
+\item Population level variation:
+\begin{enumerate}
+\item generally traits did not change across population or with latitude
+\item Only leaf traits varied spatially---patterns are in line with what you would predict given the differences in shrub vs tree spp in our transects
+\item Predicted shrubs = acquisitive growth strategies = low LMA and high LNC
+\item Western pop = more shrubs = did have low LMA and high LNC relative to eastern transect
+\end{enumerate}
+
+\item Phenology in context of LES
+\begin{enumerate}
+\item Summarize whether fits with acquisitive-conservative predictions
+\begin{enumerate}
+\item Partial support whether phenology = the same acquisitive to conservative gradient in growth commonly found for other traits
+\item Predicted all traits to correlate with phenological cues = budburst timing---but found relationships with only one of our three cues
+\item Ht and DBH both in line without prediction that tall, larger trees would have stronger photoperiod cues
+\item But LMA showed opposite response to photoperiod than predicted---low LMA (acquisitive) spp more responsive to photoperiod
+\end{enumerate}
+
+\item Interesting similarities with traitors
+\begin{enumerate}
+\item Traits have many functions---mitigate abiotic and biotic factors
+\item While our study at local level---global meta-analysis of trait relationships with budburst cues = similar results
+\item Found similar unexpected responses in leaf traits---suggests could be alternate underlying mechanisms shaping how species respond to photoperiod cues
+\item But also found strong temperature cues for most traits---not found in our analysis of North American forests
+\end{enumerate}
+\end{enumerate}
+
+\item Trade-offs between traits and cues
+\begin{enumerate}
+\item Individuals temporal niche = result of numerous and likely complex interactions across abiotic and biotic factors
+\item Our results suggest focusing on single traits---fails to account for interactions between other traits and cues
+\item Decades of research on budburst cues = primarily driven by temperature cues---but only photoperiod related to other traits
+\end{enumerate}
+
+\item Suggests may be other physiological constraints or trade-offs selecting for other traits and shaping species phenologies 
+\begin{enumerate}
+\item Temperature---generally thought of as a strong environmental cue---but might not be strongest selective pressure in temperate forests
+\item Soil moisture = known to select for other types of tree phenology---radial growth and shoot elongation
+\item LMA can also vary with soil moisture---to reduce evaporation plants can reduce leaf area = high LMA in dry conditions (de la Riva, 2015)---could be driving the unexpected trend in LMA
+\item Later in the spring---longer photoperiods---less water high LMA would be favorable
+\item To gain a holistic understanding of species growth strategies and phenotypes require consideration of additional cues
+\end{enumerate}
+
+\item Impacts of community dynamics and forecasting
+\begin{enumerate}
+\item Community dynamics with climate change
+\begin{enumerate}
+\item Results = novel insights on how other traits impact phenologial sensitivities to environmental cues
+\item Relationships between budburst and photoperiod could limit the extent of spp advances in spring
+\item Photoperiod is fixed---unlike temperature cues = increasing with climate change---species ability to track temperature could be constrained
+\end{enumerate}
+
+\item Forecasting future forests 
+\begin{enumerate}
+\item Our study is one of the first to model the relationship between phenology and other traits---but results simply tell us the associations---need to understand mechanism
+\item Phenology---cited as finger print of climate change---but other traits have been noted to change as well
+\item trait literature = explored how traits shift across environmental gradients---temp or precip---denoting trends leaf area and height
+\item Important we continue to synthesize across phenology and trait research---better forecast the future impacts of climate change on communities
+\end{enumerate}
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
