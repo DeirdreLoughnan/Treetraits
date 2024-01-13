@@ -112,31 +112,10 @@ For our two leaf traits, we haphazardly selected five, fully expanded, and harde
 \subsection*{Growth chamber study} %24Dec2023emw -- I would refer to your other chapter for much of this, and try to publish that paper first so you can refer to it when submitting to a journal. This will cut down the methods a good bit.
 %dlJan4: agreed, it would be ideal to submit the pheno paper soon
 
-\item For growth chamber study---collected branch cuttings from our highest and lowest latitude populations in each transect
-\item For both growth chamber studies --- 8 distinct treatments:
-\item two levels of chilling --- no additional chilling or 30 days at 4$^{\circ}$C = eastern study, and 30 days or 70 days of chilling at 4$^{\circ}$C for our western study --- all dark
-\item two levels of forcing—a cool regime of 15:5$^{\circ}$C and a warm regime of 20:10$^{\circ}$C
-\item two photoperiods of either 8 or 12 hours
-\item Observations of budburst stage made every 1-3 days for each sample for several months
-\item For detailed discussion of study sample collection and methods  see Loughnan et al. (in prep)
-\end{enumerate}
-
-% \item Data collection --- BBCH
-% \begin{enumerate}
-% \item Phenological stages were based on BBCH scale adapted for our specific species
-% \item Observations made every 1-3 days for each sample
-% \item stages were recorded up to full leaf expansion --- limited our analysis to budburst 
-% \item Eastern study lasted for 82 days, 19320 observations---add Sexpr obj
-% \item Western study lasted for 113 days, 47844 observations
- \end{enumerate}
-
+For our growth chamber study, we collected branch cuttings from our highest and lowest latitude populations in each transect. With each study, we included two temperature treatments and daylength, for a total of eight distinct treatments. Treaments included two levels of chilling---with our eastern study having no additional chilling or 30 days at 4$^{\circ}$C, and 30 days or 70 days of chilling at 4$^{\circ}$C for our western study, under dark conditions. A forcing treament included either a cool regime of 15:5$^{\circ}$C or a warm regime of 20:10$^{\circ}$C, and finally, photoperiods of either 8 or 12 hours. We recorded budburst stages of each sample every 1-3 days for approximately x-x months. For a more detailed discussion of study sample collection and methods see \citet[][]{LoughnanInPrep}. 
 
 \subsection*{Statistical Anlaysis}
-
-\begin{enumerate}
-\item Introduce approach and why it is useful:
-\begin{enumerate}
-\item Our analysis combined the trait data with the budburst data from the growth chamber study
+Our analysis combined the trait data with the budburst data from the growth chamber study
 \item Built joint model for each trait---directly models the relationship between leaf and structural traits and budburst 
 \item Approach carries through uncertainty between trait and phenology data---combines observational trait data with experimental phenology data
 \end{enumerate}
