@@ -51,7 +51,7 @@
 
 \section*{Discussion}
 \begin{enumerate}
-\item General summary of what we FOUND (with some of what we did) % emwJan11 -- you should think more of openings being 'general summary of what you FOUND' ... you have one paragraph to draw readers into your discussion, so give them some exciting findings and ideally context. 
+\item  General summary of what we FOUND (with some of what we did) % emwJan11 -- you should think more of openings being 'general summary of what you FOUND' ... you have one paragraph to draw readers into your discussion, so give them some exciting findings and ideally context. 
 \begin{enumerate}
 \item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions found only THREE? (out of X) traits showed a relationship with phenological traits, with two of those fitting our hypothesized aquis to cons paradigm in the spring. 
 \item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing suggested photoperiod may be most important to trait-phenology relationships .. 
