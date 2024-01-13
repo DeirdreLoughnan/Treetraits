@@ -63,7 +63,7 @@
 \item Population level variation:
 \begin{enumerate}
 \item generally traits did not change across population or with latitude
-\item Only leaf traits varied spatially---patterns are in line with what you would predict given the differences in shrub vs tree spp in our transects
+\item Only leaf traits varied with transect---patterns are in line with what you would predict given the differences in shrub vs tree spp in our transects
 \item Predicted shrubs = acquisitive growth strategies = low LMA and high LNC
 \item Western pop = more shrubs = did have low LMA and high LNC relative to eastern transect
 \end{enumerate}
@@ -82,12 +82,13 @@
 \begin{enumerate}
 \item Traits have many functions---mitigate abiotic and biotic factors
 \item While our study at local level---global meta-analysis of trait relationships with budburst cues = similar results
-\item Found similar unexpected responses in leaf traits---suggests could be alternate underlying mechanisms shaping how species respond to photoperiod cues
+\item Found similar unexpected responses in leaf traits---where high specific leaf area (the inverse of LMA) exhibited strong responses to photoperiod---suggests could be alternate underlying mechanisms shaping how species respond to photoperiod cues
 \item But also found strong temperature cues for most traits---not found in our analysis of North American forests
 \end{enumerate}
 \end{enumerate}
 
-\item Trade-offs between traits and cues
+\subsection*{How traits shape species temporal niches}
+\item Correlations between traits and cues
 \begin{enumerate}
 \item Individuals temporal niche = result of numerous and likely complex interactions across abiotic and biotic factors
 \item Our results suggest focusing on single traits---fails to account for interactions between other traits and cues
@@ -103,11 +104,13 @@
 \item To gain a holistic understanding of species growth strategies and phenotypes require consideration of additional cues
 \end{enumerate}
 
+
+\subsection*{Functional traits importance to predicting cliamte change responses}
 \item Impacts of community dynamics and forecasting
 \begin{enumerate}
 \item Community dynamics with climate change
 \begin{enumerate}
-\item Results = novel insights on how other traits impact phenologial sensitivities to environmental cues
+\item Results = novel insights on how other traits impact phenological sensitivities to environmental cues
 \item Relationships between budburst and photoperiod could limit the extent of spp advances in spring
 \item Photoperiod is fixed---unlike temperature cues = increasing with climate change---species ability to track temperature could be constrained
 \end{enumerate}
@@ -116,6 +119,7 @@
 \begin{enumerate}
 \item Our study is one of the first to model the relationship between phenology and other traits---but results simply tell us the associations---need to understand mechanism
 \item Phenology---cited as finger print of climate change---but other traits have been noted to change as well
+\item Across temperature and precipitation gradients---leaf size and shape also change---spp shift to conserve water and mitigate effects of transpiration with high high temperatures---cite de le Riva 2016 as example
 \item trait literature = explored how traits shift across environmental gradients---temp or precip---denoting trends leaf area and height
 \item Important we continue to synthesize across phenology and trait research---better forecast the future impacts of climate change on communities
 \end{enumerate}
