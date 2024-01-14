@@ -53,10 +53,11 @@
 \begin{enumerate}
 \item  General summary of what we FOUND (with some of what we did) % emwJan11 -- you should think more of openings being 'general summary of what you FOUND' ... you have one paragraph to draw readers into your discussion, so give them some exciting findings and ideally context. 
 \begin{enumerate}
-\item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions found only THREE? (out of X) traits showed a relationship with phenological traits, with two of those fitting our hypothesized aquis to cons paradigm in the spring. 
+\item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions
+\item We found only three (out of six) traits showed a relationship with phenological traits, with two of those fitting our hypothesized aquis to cons paradigm in the spring. 
 \item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing suggested photoperiod may be most important to trait-phenology relationships .. 
 \item Includes plant communities in eastern and western deciduous forests of North America, and samples collected from multiple populations---modelling approach that accounts for variation across populations and transects
-\item We found, however, generally low population-level variation in traits---usually even across the different eastern and western deciduous forests of North America, which was likely driven by species-level variation in traits, which was much higher % I think you could just end this here and transition onward.
+\item We found, however, generally low population-level variation in traits---usually even across the different eastern and western deciduous forests of North America, which was likely driven by species-level variation in traits % I think you could just end this here and transition onward.
 % \item Taking a community-level approach---with woody tree and shrub species = different growth strategies and presumably suites of traits
 \end{enumerate}
 
@@ -78,11 +79,14 @@
 \item But LMA showed opposite response to photoperiod than predicted---low LMA (acquisitive) spp more responsive to photoperiod
 \end{enumerate}
 
-\item Interesting similarities with traitors
+\item Interesting similarities with previous studies
+%dlJan13: I am treating our study as regional
 \begin{enumerate}
 \item Traits have many functions---mitigate abiotic and biotic factors
-\item While our study at local level---global meta-analysis of trait relationships with budburst cues = similar results
-\item Found similar unexpected responses in leaf traits---where high specific leaf area (the inverse of LMA) exhibited strong responses to photoperiod---suggests could be alternate underlying mechanisms shaping how species respond to photoperiod cues
+\item But trait research has found considerable variation in trait phenotypes across spatial scales (cite Gross 2000, Flecker and Jones 2003)---different responses for different traits 
+\item In comparing plant traits across spatial scales, previous studies have found little variation across regional scales (comparing populations or sites) and more within-community variability (Messier et al 2010, Kang et al. 2014, Standen et al. 2023)
+\item But in comparing our results with a global meta-analysis of trait relationships with budburst cues = similar results for some traits
+\item Found similar unexpected responses in leaf traits---high specific leaf area (the inverse of LMA) exhibited strong responses to photoperiod---suggests could be alternate underlying mechanisms shaping how species respond to photoperiod cues
 \item But also found strong temperature cues for most traits---not found in our analysis of North American forests
 \end{enumerate}
 \end{enumerate}
@@ -105,7 +109,7 @@
 \end{enumerate}
 
 
-\subsection*{Functional traits importance to predicting cliamte change responses}
+\subsection*{Using functional traits to predict climate change responses}
 \item Impacts of community dynamics and forecasting
 \begin{enumerate}
 \item Community dynamics with climate change
