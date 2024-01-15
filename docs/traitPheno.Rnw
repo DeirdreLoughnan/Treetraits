@@ -151,7 +151,7 @@ Model includes residual variation across species and variation in cues not attri
 \alpha_{\text{photo}} \sim normal(\mu_{\alpha_{\text{photo}}},\sigma_{\alpha_{\text{photo}}}) \nonumber
 \end{align}
 
-For each individually modeled trait, we used weakly informative priors unique to each trait. We validated each models priors using prior predictive checks. We coded our models in the Stan programming language and fit them using the rstan package. Each model had four chains ran for 6000-8000 total sampling iterations. All our models met basic diagnostic checks, including no divergences, high effective sample sizes (\emph{$n_{eff}$}) that exceeded 10\% of the number of iterations, and $\hat{R}$ values close to 1. Our model estimates are reported as the mean values, with the 90\% uncertainty interval. Estimates are given to one decimal place, as this level of precision relects the level we can infer from our dataset \citep{GemanROS}.
+For each individually modeled trait, we used weakly informative priors unique to each trait. We validated each models priors using prior predictive checks. We coded our models in the Stan programming language and fit them using the rstan package. Each model had four chains ran for 6000-8000 total sampling iterations. All our models met basic diagnostic checks, including no divergences, high effective sample sizes (\emph{$n_{eff}$}) that exceeded 10\% of the number of iterations, and $\hat{R}$ values close to 1. Our model estimates are reported as the mean values, with the 90\% uncertainty interval. Estimates are given to one decimal place, as this level of precision reflects the level we can infer from our dataset \citep{GelmanROS}.
 
 \section*{Results}
 
@@ -168,44 +168,30 @@ Only a subset of our traits related to at least one budburst cue, but responses 
 
 Of our two leaf traits, only one showed a moderate relationship with cues. We found leaf mass area to relate to photoperiod, with low LMA species advancing their budburst timing with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}). But we found no relationship between cues and LNC.
 
-Which cues had the strongest effects on budburst varied across our trait models, with some models showing stronger responses to photoperiod than temperature. For most of our trait models, chilling followed by forcing, were the strongest cues of budburst. But in accounting for the relationship between LMA and cues, our model estimated stronger responses to photoperiod (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that than forcing (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---while effects of chilling were weak (90\% UI crossing zero) (Table \ref{tabLMA}). % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean}) 
-\item In contrast---LNC (Table \ref{tabLNC}) and SSD models (Table  \ref{tabSSD}) both showed weak photoperiod effects on budburst (90\% UI crossing zero)
-\item By including additional traits in modeling cue responses---found the relative importance of different cues in shaping budburst varied substantially
-\item This---paired with strong species-level variation---will lead to varying estimated responses of species relative budburst dates across the different trait models
-%24Dec2023emw -- I think you probably need a sentence reminding folks that the cues lead to budburst (see comments above) and that the budburst order can vary by trait in this model (and why) for them to get this next part below... 
-%24Dec2023emw -- also, you should adjust this to remind readers that these cues drive budburst, either at the start or end (end would flow better to next paragraph). 
-\item ref Fig. \ref{fig:muCuePlot} and Fig. \ref{fig:muCueTraitPlot}
-\end{enumerate}
+Which cues had the strongest effects on budburst varied across our trait models, with some models showing stronger responses to photoperiod than temperature (Fig. \ref{fig:muCuePlot}). For most of our trait models, chilling followed by forcing, were the strongest cues of budburst (Fig. \ref{fig:muCuePlot}). But in accounting for the relationship between LMA and cues, our model estimated stronger responses to photoperiod (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that than forcing (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---while effects of chilling were weak (90\% UI crossing zero) (Table \ref{tabLMA}). % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean})
+In contrast, our LNC (Table \ref{tabLNC}) and SSD models (Table  \ref{tabSSD}) both showed weak photoperiod effects on budburst (90\% UI crossing zero). These finding suggest that additional traits alter the effects and relative importance of cues on budburst (Fig. \ref{fig:muCueTraitPlot}). This---paired with strong species-level variation---may cause variation in the estimated responses of species relative budburst dates across the different trait models.
 
 % How do shrub and tree species differ in their cue-trait relationships?
 %24Dec2023emw -- I tried moving this up ... I was thinking it would work better since it links to shrubs, tree etc. but then I got an idea of your ordering and moved it back down. I think your ordering is good, but you need to adjust the text to make it work. I think you likely need to transition better from your last point above to guide the reader to understand the below; remember that it will be really unnatural to most.  
-\item Including the effects of multiple traits provides novel insights into potential tradeoffs between growth and environmental cues %24Dec2023emw -- This one line reads more discussion-y, so I think you need a new topic sentence for the points below (which seem good for the results). 
-\begin{enumerate}
-\item Estimates of bb using our model parameters show clear differences in species timing between trees and shrubs for some traits but not all (Fig. \ref{fig:bbShrubTree})
-\item Height showed strong correlations between bb timing and trait values---shrub spp were estimated to bb earlier---especially under stronger cues---tree spp were later
-\item But this was not the case for leaf traits---LNC showed no distinct separation between species functional groups (Fig. \ref{fig:bbShrubTree})
+By synthesizing the effects of multiple traits across species, our results allow us to make generalizations across groups of species. Estimates of budburst using our model parameters show clear differences in species timing between trees and shrubs for some traits but not all (Fig. \ref{fig:bbShrubTree}). We found height to have strong correlations between budburst timing and trait values, with earlier estimates of budbust for shrubs---especially under stronger cues---and later budburst estimates for trees (Fig. \ref{fig:bbShrubTree}). Diameter at breast height showed similar trends, but this was not the case for our two leaf traits. Leaf nitrogen content, for example, showed no distinct separation between shrub and tree functional groups (Fig. \ref{fig:bbShrubTree}).
 %\item But species-level effects vary across traits = unique effects on cue responses---estimated order of spp bb order differs between the two models
-\end{enumerate}
-
-
-\end{enumerate}
 
 %2024Jan5emw -- as you think on discussion, I would perhaps open with a sentence or two on how (and why) we think traits and phenology should really matter -- we think phenology within a community is staggering species to given unique temporal niches -- and that staggering means they experience different risk and competitive landscapes, so they should differ in traits. But we found they don't (quick overview of that)... then you might segue into how good your study is (stuff below) to make the point that you likely have a robust null result. Then ruminate on why a little somewhere (in addition to the non-null results you have which you need to discuss).
 % ... but if you have a better idea of an opening go for it! 
-
-\section*{Discussion}
-%24Dec2023emw -- looking good! Please work up edits to the outline here for methods and results and -- if you still have time before I can look at this again -- work on the discussion outline. (And if you still have time you could write up the methods.)
-\begin{enumerate}
-\item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions.
-\begin{enumerate}
-\item Includes plant communities in eastern and western deciduous forests of North America
-\item Samples collected from multiple populations---modelling approach that accounts for variation across populations and transects
-\item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing
-\item Taking a community-level approach---with woody tree and shrub species = different growth strategies and presumably suites of traits
-\end{enumerate}
-
-\item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work.
-\end{enumerate}
+% 
+% \section*{Discussion}
+% %24Dec2023emw -- looking good! Please work up edits to the outline here for methods and results and -- if you still have time before I can look at this again -- work on the discussion outline. (And if you still have time you could write up the methods.)
+% \begin{enumerate}
+% \item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions.
+% \begin{enumerate}
+% \item Includes plant communities in eastern and western deciduous forests of North America
+% \item Samples collected from multiple populations---modelling approach that accounts for variation across populations and transects
+% \item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing
+% \item Taking a community-level approach---with woody tree and shrub species = different growth strategies and presumably suites of traits
+% \end{enumerate}
+% 
+% \item Regardless of trait effects---our joint modeling approach still estimated phenological cue responses in line with previous work.
+% \end{enumerate}
 
 \clearpage
 
