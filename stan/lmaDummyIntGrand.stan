@@ -94,7 +94,7 @@ model{
   // Traits
   muSp ~ normal(0, sigma_sp);
   b_tranlat ~ normal(0,5);
-  mu_grand ~ normal(0,5); #try 0, 0.1
+  mu_grand ~ normal(0,10); #try 0, 0.1
   //mu_grand ~ normal(10,5);
   b_tranE ~ normal(0,5);
   

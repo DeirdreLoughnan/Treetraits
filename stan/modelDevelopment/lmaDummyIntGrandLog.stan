@@ -90,22 +90,21 @@ transformed parameters{
   
 }
 
-
 model{
   // Traits
   muSp ~ normal(0, sigma_sp);
-  b_tranlat ~ normal(0, 5);
-  mu_grand ~ normal(0.5, 5);
+  b_tranlat ~ normal(0,0.1);
+  mu_grand ~ normal(-1,1); #try 0, 0.1
   //mu_grand ~ normal(10,5);
-  b_tranE ~ normal(0, 1);
+  b_tranE ~ normal(0,0.1);
   
  // mu_tranlat ~ normal(0,10);
  // sigma_tranlat ~ normal(0,10);
   
   //// priors
  // mu_grand ~ normal(10,10);
-  sigma_sp ~ normal(0, 5);
-  sigma_traity ~ normal(0, 5);
+  sigma_sp ~ normal(0.5,1); # try (0,0.01)
+  sigma_traity ~ normal(0.5, 0.1);
   
   yTraiti ~ normal(y_hat, sigma_traity);
  
@@ -125,18 +124,18 @@ model{
 
   sigmapheno_y ~ normal(10,5);
 
-  muForceSp ~ normal(-10,5);
+  muForceSp ~ normal(-15,10);
   sigmaForceSp ~ normal(5,5);
 
-  muChillSp ~ normal(-10,5);
+  muChillSp ~ normal(-15,10);
   sigmaChillSp ~ normal(5,5);
 
-  muPhotoSp ~ normal(-5,5);
+  muPhotoSp ~ normal(-15,10);
   sigmaPhotoSp ~ normal(5,5);
 
-  betaTraitxForce ~ normal(0,25);
-  betaTraitxPhoto ~ normal(0,25);
-  betaTraitxChill ~ normal(0,25);
+  betaTraitxForce ~ normal(0,1);
+  betaTraitxPhoto ~ normal(0,1);
+  betaTraitxChill ~ normal(0,1);
 
 }
 
