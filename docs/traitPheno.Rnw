@@ -95,7 +95,7 @@ setwd("~/Documents/github/Treetraits/docs")
 \section*{Materials and Methods}
 \subsection*{Field sampling} 
 
-We combined \emph{in situ} trait data with budburst data from two growth chamber cutting experiments conducted across eastern and western deciduous forests in North America. We collected both the trait and budburst data from populations that span latitudinal gradient of 4-6$^{\circ}$ for eastern and western communities respectively. Our trait measurements were taken across eight poulations, of which there were four eastern populations --- Harvard Forest, Massachusetts, USA (42.55$^{\circ}$N, 72.20$^{\circ}$W), White Mountains, , USA (44.11$^{\circ}$N, XXX$^{\circ}$W)), Second College Grant, , USA (44.79$^{\circ}$N, XXX$^{\circ}$W), and St. Hippolyte, Quebec, Canada (45.98$^{\circ}$N, 74.01$^{\circ}$W) and four western population---E.C. Manning Park (49.06$^{\circ}$N, 120.78$^{\circ}$W), Sun Peaks (50.88$^{\circ}$N, 119.89^{\circ}$W), Alex Fraser Research Forest (52.14$^{\circ}$N, 122.14$^{\circ}$W), and Smithers, British Columbia (BC), Canada (54.78$^{\circ}$N, 127.17$^{\circ}$W). For the growth chamber studies, cuttings were collected from the most southern and northern populations in each transect ($n_{pop}$=4).
+We combined \emph{in situ} trait data with budburst data from two growth chamber cutting experiments conducted across eastern and western deciduous forests in North America. We collected both the trait and budburst data from populations that span latitudinal gradient of 4-6$^{\circ}$ for eastern and western communities respectively. Our trait measurements were taken across eight populations, of which there were four eastern populations --- Harvard Forest, Massachusetts, USA (42.55$^{\circ}$N, 72.20$^{\circ}$W), White Mountains, , USA (44.11$^{\circ}$N, XXX$^{\circ}$W)), Second College Grant, , USA (44.79$^{\circ}$N, XXX$^{\circ}$W), and St. Hippolyte, Quebec, Canada (45.98$^{\circ}$N, 74.01$^{\circ}$W) and four western population---E.C. Manning Park (49.06$^{\circ}$N, 120.78$^{\circ}$W), Sun Peaks (50.88$^{\circ}$N, 119.89$^{\circ}$W), Alex Fraser Research Forest (52.14$^{\circ}$N, 122.14$^{\circ}$W), and Smithers, British Columbia (BC), Canada (54.78$^{\circ}$N, 127.17$^{\circ}$W). For the growth chamber studies, cuttings were collected from the most southern and northern populations in each transect ($n_{pop}$=4).
 
 Across all eight populations, we measured a diverse assemblage of species from the understory and canopy layers. We selected the angiosperm species that were most abundant in our forest communities, with an aim to maximize the number of closely related species and congeners between our eastern and western communities. We focused on angiosperm species only, as these species are more likely to have similar environmental controls to their leafout phenology, to provide better traits comparisons that would be possibel if including gymnosperm species.  %2024Jan5emw -- and are the trait comparisons maybe better this way? Fewer confounding other traits (I have no idea; ignore me if wrong). 
 %2023Jan10dl---good point comparing LMA and LNC of leaves vs needles would be odd
@@ -104,38 +104,21 @@ Across all eight populations, we measured a diverse assemblage of species from t
 
 We measured all traits in the summer prior to each growth chamber study. For our eastern transect, traits were measured from May 28 to August 12, 2015, and from May 29 to July 30, 2019 for our western transect. At each population, we measured a total of six traits: height, diameter at breast height (DBH), stem specific density (SSD), type of ring porosity, leaf mass area (LMA), and the percent leaf nitrogen content (LNC). Each trait was measured for each species present at a populations, resulting in us measuring 1-10 healthy, adult, individuals per species at each population. 
 
-We measured traits in accordance to the methods discusseed by \citet[][]{Perez-Harguindeguy2013}. We calculated tree height using trigonometric methods, using a TruePulse 200L rangefinder and measured DBH 1.42m from the ground. For shrub heights, we measured the distance from the ground to the height of the top foliage and measured stem diameters at approximately 1 cm above the ground level. To measure stem specific density, we collected a 10cm sample, taken close to the base of the stem. All samples were kept cool and we measured wood volume using the water displacement method within 12 hours of sample collection. We dried our stem samples upon returning from the field at 105$^\circ$C for 24h before being immediately weighed. Stem specific density was calculated as the mass of the sample over its volume. Using the WSL xylem database, we recorded the type of ring porosity for X\% of our species.\\
+We measured traits in accordance to the methods discusseed by \citet[][]{Perez-Harguindeguy2013}. We calculated tree height using trigonometric methods, using a TruePulse 200L rangefinder and measured DBH 1.42m from the ground. For shrub heights, we measured the distance from the ground to the height of the top foliage and measured stem diameters at approximately 1 cm above the ground level. To measure stem specific density, we collected a 10cm sample, taken close to the base of the stem. All samples were kept cool and we measured wood volume using the water displacement method within 12 hours of sample collection. We dried our stem samples upon returning from the field at 105$^\circ$C for 24h before being immediately weighed. Stem specific density was calculated as the mass of the sample over its volume. Using the WSL xylem database, we recorded the type of ring porosity for \Sexpr{perTreeRing}\% of our species.\\
 
-For our two leaf traits, we haphazardly selected five, fully expanded, and hardened leaves. We kept leaves cool during sampling and for each leaf, we took high resolution scans using a Canon flatbed scanner (CanoScan Lide 220) within 12 hours of collection. We estimated leaf area using the ImageJ software (version X). Upon returning from the field, we dried the leaves for 48h at 70$^{\circ} and weighed each leaf using a precision balance. Leaf mass area was calculated as the ratio of the leaf mass over it's area.
+For our two leaf traits, we haphazardly selected five, fully expanded, and hardened leaves. We kept leaves cool during sampling and for each leaf, we took high resolution scans using a Canon flatbed scanner (CanoScan Lide 220) within 12 hours of collection. We estimated leaf area using the ImageJ software (version X). Upon returning from the field, we dried the leaves for 48h at 70$^{\circ}$ and weighed each leaf using a precision balance. Leaf mass area was calculated as the ratio of the leaf mass over it's area.
 
 
 \subsection*{Growth chamber study} %24Dec2023emw -- I would refer to your other chapter for much of this, and try to publish that paper first so you can refer to it when submitting to a journal. This will cut down the methods a good bit.
 %dlJan4: agreed, it would be ideal to submit the pheno paper soon
 
-For our growth chamber study, we collected branch cuttings from our highest and lowest latitude populations in each transect. With each study, we included two temperature treatments and daylength, for a total of eight distinct treatments. Treaments included two levels of chilling---with our eastern study having no additional chilling or 30 days at 4$^{\circ}$C, and 30 days or 70 days of chilling at 4$^{\circ}$C for our western study, under dark conditions. A forcing treament included either a cool regime of 15:5$^{\circ}$C or a warm regime of 20:10$^{\circ}$C, and finally, photoperiods of either 8 or 12 hours. We recorded budburst stages of each sample every 1-3 days for approximately x-x months. For a more detailed discussion of study sample collection and methods see \citet[][]{LoughnanInPrep}. 
+For our growth chamber study, we collected branch cuttings from our highest and lowest latitude populations in each transect. With each study, we included two temperature treatments and daylength, for a total of eight distinct treatments. Treatments included two levels of chilling---with our eastern study having no additional chilling or 30 days at 4$^{\circ}$C, and 30 days or 70 days of chilling at 4$^{\circ}$C for our western study, under dark conditions. A forcing treatment included either a cool regime of 15:5$^{\circ}$C or a warm regime of 20:10$^{\circ}$C, and finally, photoperiods of either 8 or 12 hours. We recorded budburst stages of each sample every 1-3 days for up to four months. For a more detailed discussion of study sample collection and methods see \citet[][]{LoughnanInPrep}. 
 
 \subsection*{Statistical Anlaysis}
-Our analysis combined the trait data with the budburst data from the growth chamber study
-\item Built joint model for each trait---directly models the relationship between leaf and structural traits and budburst 
-\item Approach carries through uncertainty between trait and phenology data---combines observational trait data with experimental phenology data
-\end{enumerate}
+Our analysis combined the trait data with the budburst data from the growth chamber study. For each trait, we developed a joint Bayesian model, in which the relationship between traits and cues is used to estimate budburst. This statistical approach improves upon previous analyses of multiple traits, as it allows us to carry through uncertainty between trait and phenology data---combining observational trait data with phenology data from a controlled environment study.
 
-\item Begin to describe the model:
-\begin{enumerate}
-\item hierarchical linear model---partitioning variation of individual observations (\emph{i}) of a given trait value ($y_{\text{trait}[i]}$) to the effects of species (\emph{sp id}), and population-level differences arising from transects (\emph{transect id}) or the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and residual variation or 'measurement error' ($\sigma_{\text{trait}}$)
-\item Transect included as a categorical variable and latitude as a continuous variable  
-\item Most traits were modeled using their natural units---except LMA was rescaled by 100
-\end{enumerate}
+Our joint model consists of two parts. The first is a hierarchical linear model, in which we have partitioned the variation of individual observations (\emph{i}) of a given trait value ($y_{\text{trait}[i]}$) to account for the effects of species (\emph{sp id}), population-level differences arising from transects (\emph{transect id}), as well as the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and finally, residual variation or 'measurement error' ($\sigma_{\text{trait}}$). We included transect as a categorical variable and latitude as a continuous variable. A model of this parameterization was ran individually for each of our field collected traits (height, DBH, SSD, LMA, LNC). These traits were modeled using their natural units, with the except of LMA, which was rescaled by 100. Comparisons across species ring-porosity were made using the posterior estimates of our height model, allowing us to best account for inherent differences in species wood anatomy and growth form.
 
-\item describe trait part of model
-\begin{enumerate}
-\item Model gives unique estimates for each species and species-level variance ($\alpha_{\text{sp[sp id]}}$)---partial pooling---controls for variation in the number of trait estimates per spp and trait variability 
-\item Estimate for differences between transect ($\beta_{transect}$) and the interaction between transects and latitude ($\beta_{transect \times latitude}$) 
-\item These species-level estimates of traits become predictors of species-level estimates of each cue--- ($\beta_{\text{force[sp]}}$, $\beta_{\text{chill[sp]}}$, $\beta_{\text{photo[sp]}}$) 
-\end{enumerate}
-
-Trait model: %24Dec2023emw -- math is wrong, if you have a grand mean then you don't have mu in the following normal equation lines, right? ... I am skipping the rest of the math until you cross-check this math against your stan code more. 
-%2024Jan5emw -- getting better, if you print it out on next draft I can mark up small changes. 
 \begin{align}
 \mu_{trait} & = \alpha_{\text{grand trait}} + \alpha_{\text{sp[sp id]}} + \beta_{\text{transect}} \times transect  +\beta_{\text{transect} \times \text{latitude}} \times (transect \times latitude)\\
 \alpha_{Sp} &  \sim normal(0, \sigma_{sp}) \nonumber \\ \nonumber
@@ -144,12 +127,7 @@ y_{trait} & \sim normal(\mu_{trait}, \sigma_{trait})\\ \nonumber
 % \mu_{transect} &  \sim normal( \mu_{transect}, \sigma_{\text{transect}}) \nonumber \\
 % \beta_{\text{transect} \times \text{latitude}} &  \sim normal( \mu_{\text{transect} \times \text{latitude}}, \sigma_{\text{transect} \times \text{latitude}}) \nonumber 
 
-\item Explain phenology part of model
-\begin{enumerate}
- \item Across each spp---get esti of overall effect of each trait on cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$)
-\item and estimate of species-level cue variation not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$) = how well trait effects explain species-level differences
-\item From this we can estimate individual species responses to cues ($C_i$, $F_i$, $P_i$, respectively---$z$-scored)---with residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$)
-\end{enumerate}
+The second part of our joint model models the relationship between traits and phenological cues, estimating their effects on budburst. In this portion of the model, we used partial pooling to uniquely estimate species-level variance ($\alpha_{\text{sp[sp id]}}$)---which controls for variation in the number of trait estimates per species and trait variability---which are then used as predictors of species-level estimates of each cue ($\beta_{\text{force[sp]}}$, $\beta_{\text{chill[sp]}}$, $\beta_{\text{photo[sp]}}$). In addition to the species-level estimates, our model also estimates the overall effect of each trait on each cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$). From this we can estimate how well trait effects explain species-level differences by estimating the the species-level cue variation not explained by traits ($\alpha_{\text{chill}[sp]} $, $\alpha_{\text{force}[sp]}$, $\alpha_{\text{photo}[sp]}$) and individual species responses to cues ($C_i$, $F_i$, $P_i$, respectively). Finally, our model estimates the residual variation across species ($\alpha_{\text{pheno[sp]}}$) and observations ($\sigma_{\text{pheno}}$). Chilling was included as chill portions, and both forcing and photoperiod as continuous variable, with all cues standardized by $z$-scoring each cue to allow comparisons (see \citet[][]{LoughnanInPrep} for more details). 
 
 \begin{align}
 \mu_{pheno} & = \alpha_{\text{pheno[sp]}}+ \beta_{\text{chill[sp]}} \times C_i + \beta_{\text{force[sp]}}\times F_i + \beta_{\text{photo[sp]}} \times P_i\\
@@ -173,76 +151,24 @@ Model includes residual variation across species and variation in cues not attri
 \alpha_{\text{photo}} \sim normal(\mu_{\alpha_{\text{photo}}},\sigma_{\alpha_{\text{photo}}}) \nonumber
 \end{align}
 
-\item General info about model checks etc.:
-\begin{enumerate}
-\item weakly informative priors
-\item validated model priors using prior predictive checks
-\item model was coded in the Stan programming language and fit using the rstan package cite rstan2018
-\item Four chains (6000-8000 total sampling iterations), and all models met basic diagnostic checks, including no divergences, high effective sample size (\emph{$n_{eff}$}), and $\hat{R}$ close to 1---LMA model still has low ESS---issue with neff---otherwise this is true
-\item 90\% UI given in text
-
-\end{enumerate} 
-\end{enumerate} 
+For each individually modeled trait, we used weakly informative priors unique to each trait. We validated each models priors using prior predictive checks. We coded our models in the Stan programming language and fit them using the rstan package. Each model had four chains ran for 6000-8000 total sampling iterations. All our models met basic diagnostic checks, including no divergences, high effective sample sizes (\emph{$n_{eff}$}) that exceeded 10\% of the number of iterations, and $\hat{R}$ values close to 1. Our model estimates are reported as the mean values, with the 90\% uncertainty interval. Estimates are given to one decimal place, as this level of precision relects the level we can infer from our dataset \citep{GemanROS}.
 
 \section*{Results}
 
-\begin{enumerate}
-\item General info about study---numbers from methods
-\begin{enumerate} 
-\item Across populations --- measured \Sexpr{nSpp} species --- \Sexpr{nSppE} eastern transect and \Sexpr{nSppW} western transect
-\item Eastern transect: \Sexpr{nSppES} shrubs and \Sexpr{nSppET} trees
-\item Western transect: \Sexpr{nSppWS} shrubs and \Sexpr{nSppWT} trees
-\item Three species occurred in both transect
-\item Measured traits of \Sexpr{noIndiv} unique individuals between the two transects: height ($n$ = \Sexpr{nHt}), DBH ($n$ = \Sexpr{nDBH}), SSD ($n$ = \Sexpr{nSSD}), LMA ($n$ = \Sexpr{nLMA}), LNC ($n$ = \Sexpr{nLNC})
-\item Across our two growth chamber studies we made observations of \Sexpr{noIndivPheno}---studies spanning 82 and \Sexpr{totalDays} days for our eastern and western studies respectfully. 
-\item Using a joint modeling approach we then combined our trait data with budburst data from \Sexpr{noIndivPheno} cuttings across the same \Sexpr{nSpp} species sampled in the field for traits. 
-\end{enumerate}
-
-%24Dec2023emw  -- reads more like discussion, I would save almost all of this text for the discussion I think. You could instead open with some of the numbers you have in the methods (this will also slim the methods!) -- numbers for each trait, how many species, phenology etc. (or give ranges and refer to a table in supp). Opening results with how much data you have is usually good and you can weave in a few reminders of the methods -- including joint model, populations etc. (for example, In total we collected XX trait data etc... Using a joint modeling approach we then combined them with data from XX cuttings across XX species in a chamber experiment. 
-
+Across our eight populations, we measured \Sexpr{nSpp} species of which \Sexpr{nSppE} were in our eastern transect and \Sexpr{nSppW} within our western transect. The species found in both transects include species dominant in both the understory and canopy layer, in our eastern communities we sampled \Sexpr{nSppES} shrubs and \Sexpr{nSppET} trees, while we sampled \Sexpr{nSppWS} shrubs and \Sexpr{nSppWT} trees in our western communities, and three species occurred in both transects. In total we measured traits of \Sexpr{noIndiv} unique individuals between the two transects across our six traits: height ($n$ = \Sexpr{nHt}), DBH ($n$ = \Sexpr{nDBH}), SSD ($n$ = \Sexpr{nSSD}), LMA ($n$ = \Sexpr{nLMA}), LNC ($n$ = \Sexpr{nLNC}, ring porosity ($n$= \Sexpr{nRing})). Across our two growth chamber studies, we made observations of \Sexpr{noIndivPheno}, with studies spanning 82 and \Sexpr{totalDays} days for our eastern and western studies respectfully. Using our joint modeling approach, we were able to combine our trait data with budburst data from \Sexpr{noIndivPheno} cuttings across the same \Sexpr{nSpp} species we sampled the traits of in the field. 
 
 % 1. Do phenological cue-trait relationships change across transects? Populations?
-\item Most traits did not differ with population or latitude
-% Ht:  population effect (-ve) but latxtran effect crosses zero (95% UI)
-% LMA:  strong latxtran interaction and pop effect both +ve
-% DBH: population effect (-ve) but -ve latxtran effect  (95% UI crosses zero)
-% SSD: no population and latxtran effect (95% UI crosses zero)
-% LNC strong latxtran interaction
-
-\begin{enumerate}
-\item Most of our traits showed negligible trait variation across populations---neither between the two transects (main effect of transect only) or by latitudes within each transect (an interactive effect between transect and latitude) %24Dec2023emw  -- rewrote end less statistically -- 
-\item Leaf mass area differed by latitude within transects (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---eastern species LMA increased with latitude---while western species did not---Fig. \ref{fig:tranInt} d %2024Jan5emw -- check my edits at end here 
-\item LNC similarly showed a weak interaction between latitude and transect (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---higher latitude populations in eastern transect had lower LNC than lower latitude populations and western species---Fig. \ref{fig:tranInt} e
-\item But our wood and structural traits showed no differences across populations or transects (Table \ref{tabDBH} - \ref{tabSSD})
-\item Across each of our models---species level differences exceeded population level variation---with the exception of SSD, most trait models showed degress of species level variation ranging from \Sexpr{lncsigmaSp} (UI: \Sexpr{lower_lncsigmaSp}, \Sexpr{upper_lncsigmaSp}) for LNC up to to \Sexpr{dbhsigmaSp} (UI: \Sexpr{lower_dbhsigmaSp}, \Sexpr{upper_dbhsigmaSp}) for DBH %24Dec2023emw -- I would end this section by contrasting population level variation versus species -- you want to remind readers that species differences DWARF population differences before you go ahead and focus on species below. 
-%dlJan4: it isn't clear to me what you have in mind here, would that not require the model to estimate a sigma for the pop variation?
+Most of our traits showed negligible trait variation across populations, both in terms of differences between the two transects (main effect of transect only) or by latitudes within each transect (an interactive effect between transect and latitude). Only leaf mass area (LMA) differed by latitude within transects (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---with the LMA of eastern species increasing with latitude---but not western species (Fig. \ref{fig:tranInt} d). Similarly, leaf nitrogen content (LNC) showed a weak interaction between latitude and transect (\Sexpr{lmaLatTran}, UI: \Sexpr{lower_lmaLatTran},\Sexpr{upper_lmaLatTran})---with higher latitude populations in eastern transect having lower LNC than lower latitude populations and western species (Fig. \ref{fig:tranInt}e). Our wood and structural traits, however, showed no differences across populations or transects (Table \ref{tabDBH} - \ref{tabSSD}). The differences we found across populations were small to negligible, especially in comparison to species-level differences, which varied considerably and up to XX fold (Fig. \ref{fig:traitSlopes}.
+% Across each of our models---species level differences exceeded population level variation---with the exception of SSD, most trait models showed degrees of species level variation ranging from \Sexpr{lncsigmaSp} (UI: \Sexpr{lower_lncsigmaSp}, \Sexpr{upper_lncsigmaSp}) for LNC up to to \Sexpr{dbhsigmaSp} (UI: \Sexpr{lower_dbhsigmaSp}, \Sexpr{upper_dbhsigmaSp}) for DBH %24Dec2023emw -- I would end this section by contrasting population level variation versus species -- you want to remind readers that species differences DWARF population differences before you go ahead and focus on species below. 
 %2024Jan5emw: I wasn't sure either! Yes, it would be easiest to have a nested model with some sigmas but not the only way ... I think we can say perhaps more: These differences across populations were very small or negligible, especially compared to species-level differences, which varied strongly and up to XX fold (shown for all traits as x-axis in Fig 2). [To get the XX folder, you could contrast point estimates from two species for some trait. Happy to discuss!] 
-\item Fig. \ref{fig:tranInt}
-
-\end{enumerate}
 
 %2. What other functional traits relate to budburst phenology in temperate woody species?
 % Multiple paragraphs --- discuss ht and DBH and SSD and then leaf traits %24Dec2023emw  -- I like the organized grouping of traits like this!
-\item Only a subset of our traits related to at least one budburst cue---but responses were generally weak
-\begin{enumerate}
-\item Of our three cues---photoperiod strongest relationship with other traits
-\item Our two structural traits = similar cue relationships---taller plants with greater DBH = stronger photoperiod responses = earlier bb under longer daylengths (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean} for height and \Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhMuPSpMean}, \Sexpr{upper_dbhMuPSpMean } for DBH) 
-% \item While we also found taller trees with large DBH to weaker forcing responses---the strength of these relationships were very weak
-\item No relationship between cues and SSD (Table \ref{tabSSD})
-\item We also did not find a relationship between between wood ring porosity with cues---see similar cue estimates across each of the four ring types \ref{fig:ringPorosity}.
-\end{enumerate}
+Only a subset of our traits related to at least one budburst cue, but responses were generally weak. Of our three cues, only photoperiod had relationships with other traits (Fig. ). We found similar cue relationships for our two structural traits, finding taller plants with greater DBH to exhibit stronger photoperiod responses, producing earlier estimates of budburst under longer daylengths (\Sexpr{htMuPSpMean}, UI: \Sexpr{lower_htMuPSpMean}, \Sexpr{upper_htMuPSpMean} for height and \Sexpr{dbhMuPSpMean}, UI: \Sexpr{lower_dbhMuPSpMean}, \Sexpr{upper_dbhMuPSpMean } for DBH). We, however, found no relationship between cues and SSD (Table \ref{tabSSD}) or between cues and species different types of wood porosity \ref{fig:ringPorosity}.
 
-\item Only one of our two leaf traits showed moderate responses to photoperiod.
-%24Dec2023emw -- try to clean up and remove too many different versions of 'cues' now if possible. Remember you can use the cues themselves (chilling, forcing photoperiod) or just 'cues' or 'treatments' or such. Check figure legends for this too. 
-\begin{enumerate}
-\item LMA showed a moderate response to photoperiod with low LMA species advancing in bb with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean})
-\item LNC had no responses to any of our three cues
-\end{enumerate}
+Of our two leaf traits, only one showed a moderate relationship with cues. We found leaf mass area to relate to photoperiod, with low LMA species advancing their budburst timing with longer photoperiods (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}). But we found no relationship between cues and LNC.
 
-\item Traits varied in whether temperature had the strongest effects---with some traits showing photoperiod cues that had a larger effect than either temperature cue
-\begin{enumerate}
-\item Most models estimated chilling followed by forcing as the strongest cues of budburst
-\item LMA model---estimating photoperiod cues (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that were slightly stronger than forcing cues (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---while effects of chilling were weak (90\% UI crossing zero) (Table \ref{tabLMA}) % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean}) 
+Which cues had the strongest effects on budburst varied across our trait models, with some models showing stronger responses to photoperiod than temperature. For most of our trait models, chilling followed by forcing, were the strongest cues of budburst. But in accounting for the relationship between LMA and cues, our model estimated stronger responses to photoperiod (\Sexpr{lmaMuPSpMean}, UI: \Sexpr{lower_lmaMuPSpMean}, \Sexpr{upper_lmaMuPSpMean}) that than forcing (\Sexpr{lmaMuFSpMean}, UI: \Sexpr{lower_lmaMuFSpMean}, \Sexpr{upper_lmaMuFSpMean})---while effects of chilling were weak (90\% UI crossing zero) (Table \ref{tabLMA}). % (\Sexpr{lmaMuCSpMean}, UI: \Sexpr{lower_lmaMuCSpMean}, \Sexpr{upper_lmaMuCSpMean}) 
 \item In contrast---LNC (Table \ref{tabLNC}) and SSD models (Table  \ref{tabSSD}) both showed weak photoperiod effects on budburst (90\% UI crossing zero)
 \item By including additional traits in modeling cue responses---found the relative importance of different cues in shaping budburst varied substantially
 \item This---paired with strong species-level variation---will lead to varying estimated responses of species relative budburst dates across the different trait models

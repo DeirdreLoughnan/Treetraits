@@ -9,6 +9,8 @@ library(reshape2)
 ########## General values ###############################
 spInfo <- read.csv("..//input/species_ring.csv")
 
+perTreeRing <- round((nrow(subset(spInfo, X != ""))/47)*100,1)
+nRing <- nrow(subset(spInfo, X != ""))
 spInfoE <- subset(spInfo, transect != "west")
 spInfoW <- subset(spInfo, transect != "east")
 
