@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage[small]{caption}
+
+\usepackage{xr-hyper} %refer to Fig.s in another document
+\usepackage{hyperref}
+
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+
+% optional: muck with spacing
+\topmargin -1.5cm        
+\oddsidemargin 0.5cm   
+\evensidemargin 0.5cm  % same as odd side margin but for left-hand pages
+\textwidth 15.59cm
+\textheight 21.94cm 
+% \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
+\parindent 0pt		  % sets leading space for paragraphs
+% optional: cute, fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LO]{Loughnan et al. 2023}
+\fancyhead[RO]{Temporal Ecology Lab}
+% more optionals! %
+
+%\graphicspath{ {./figures/} }% tell latex where to find photos 
+\externaldocument[supp-]{bcTraitSupp}
+\begin{document}
+%\renewcommand{\bibname}{References}%names reference list 
+
+\SweaveOpts{concordance=TRUE} % For RStudio hiccups
+
+%dlDec20: Journal ideas
+% PNAS
+% New Phytoloigst
+% GCB
+% Journal of ecology
+% Ecology letters
+
+%dlJan8: alternate title ideas: 
+% a) Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst --- too bold not very representative
+% b) Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature
+% c) Photoperiod more than temperature cues plant trait effects on phenologies
+% d) Photoperiod more than temperature cues plant trait relative to phenologies %relationships with phenologies
+% d) Tradeoffs between tree traits predict phenological sensitivity to daylength more than temperature
+
+\title{Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature} 
+\date{\today}
+\author{}
+\maketitle 
+
+\section*{Introduction}
+
+\begin{enumerate}
+\item General intro---climate change changing ecological communities
+\begin{enumerate}
+\item Climate change---evident in the changes in species 
+\item Includes changes in species phenologies---timing of life history events---most species advancing
+\item But across species see high variability in phenological responses---poor understanding of the physiological or environmental factors causing this variation
+\item Phenology is just one of many traits shaped by environmental cues---relatively poor understanding of the complexity and interdependencies between phenology and other traits
+\item Identifying the mechanisms driving this variation = important if we are to accurately predict future changes in community composition, including species invasions, range expansions. 
+\end{enumerate}
+
+\item Traits---what shapes them?
+\begin{enumerate}
+\item To understand trait variation---must understand the drivers at both the proximate and ultimate scales
+\item Proximate drivers = environmental factors---temperature, soil moisture, daylength
+\item E.g. cooler temperature cues can delay timing of species growth and select for larger body size (Bergmann's rule)
+\item But environmental factors also change within a growing season---for example can impose greater abiotic stress early in the season = high risks frost events versus the greater biotic stress later in the season = high competition
+\item these ultimate drivers = how species niches shape species assemblages and community dynamics'
+\item Collectively---these drivers shape species overall phenotypes
+\end{enumerate}
+
+\item Functional trait ecology and LES?
+\begin{enumerate}
+\item Species phenotypes correlate with their growth strategies and responses to environments 
+\item The consistency in these relationships across communities allowed the quantification of certain traits to = inferences of growth strategies/community processes to be made independently of species identity (McGill2006)
+\item Plants = development of the leaf economic spectrum---trait values = distinct gradients that range from acquisitive growth strategies---cheaper tissue and faster growth---to conservative strategies---invest in long-lived tissue but slower growth rates
+\item These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions
+\end{enumerate}
+
+\item Limitations if LES
+\begin{enumerate}
+\item Drawing on these relationships---can better understand how plant communities assemble and the promote species coexistence
+\item But general focus on community level responses---ie use of metrics of functional diversity or community weighted means (eg Diaz2013)---fails to account for causes of trait variation
+\item Highly variable nature of phenology = given as the reason it is excluded from these functional trait frameworks
+\item Phenological variation likely to correlate with other functional traits and be driven by the same cues that promote acquisitive versus conservative growth strategies.
+\item But still considerable variation in traits and phenology not explained by environmental cues alone
+\end{enumerate}
+
+\item But other sources of variation = geography 
+\begin{enumerate}
+\item In addition to spp level variation---expect to see variation between populations
+\item Latitudinal gradients---differences in daylength and temperature
+\item Traits may also vary in response to biotic interactions weaker at higher latitude---longer colder winters lead to reduced herbivore pressures
+\item Differences in competition and species assemblages = further potential to drive local adaptation in traits
+\end{enumerate}
+
+\item Introduce tree budburst as a system
+\begin{enumerate}
+\item Here we use spring budburst in woody plants to study the relationship between cues and traits
+\item Spring conditions can create strong abiotic and biotic gradients----abiotic: frost risk, nutrient availability, and light levels---biotic: decreasing herbivore apparency, increasing competition
+\item Predict these trade-offs between early and late season conditions will correlate with other traits
+\item Early species = bb before canopy closure = acquisitive growth = shorter, small DBH, low SSD, low LMA, high LNC
+\item Late species = canopy species = conservative growth = tall trees with large DBH, high SSD, high LMA, low LNC
+\item Good understanding of budburst cues---but not whether their strength is mitigated by other traits
+\end{enumerate}
+
+\item What we did in this study:
+\begin{enumerate}
+\item Our aim = combine the decades of research on bb phenology with = trait literature = understand how other traits relate to environmental cues that drive phenology
+\item Combined measures of individuals traits with their observed bb in a controlled environment experiment
+\item Take a community-wide approach---understory and canopy species---that dominate deciduous forest communities in North America
+\item Measuring six leaf and structural traits and three budburst cues---tested for spatial variation in traits and their correlation with budburst cues---chilling, forcing, photoperiod
+\item Using joint-modeling approach---can use trait values to partition phenological responses to cues and from species level differences---potential to predict species growth strategies and phenological responses
+\end{enumerate}
+
+\end{enumerate}
+\end{document}
+
+%Intro inspiration:
+
+% Functional trait ecology found relationships between traits and environmental gradients — strength of which varies with spatial scales — Palmer 1988, Gross 2000, Wright, Flecker and Jones 2003
+% 
+% McGill et al 2006; Westoby and Wright 2006- traits allow draw inferences across communities with diff spp
+% 
+% Shipley et al 2006- SLA tradeoff photosynthesis and structural tissue in terms of resource allocation
+% 
+% Use of plot-level CWM = introduces scale dependent error—more accurate for larger spatial scales than local - Cordlandwehr et al 2013, Kazakou et al. 2014
+% 
+% Might assume that leaf and wood economics should be the same—whole individual level—Grime 1977, Westoby 2022
+% Baralotol et al. 2010, Ordonez et al 2010—these are decoupled
+% 
+% Poorter et al 2008—stem traits are better than leaf traits for predicting plant performance ie ssd better than sea
+% 
+% SLA and leaf traits may = fine-scale niche differentiation—Ackerley et al 2006—responding to miccliamte diff and light—intra-specific variation for species co-existence 
+% 
+% Previous studies= variability in traits depend on type of trait and spatial scale
+% -Messier et al 2010
+% 
+% Baraloto et al 2010: Ordonez et al 2010: wood and leaf traits are decoupled
+% — traits shaped by selection at different scales — leaves = local scales—micro heterogeneity in plots—eg light Messier et al 2010, Paine 2011
+% —Kang et al:wood triats= macroclimate — hydraulic and nutrients conditions—Ordonez et al 2010, Poorter et al 2010
