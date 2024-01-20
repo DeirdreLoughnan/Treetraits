@@ -168,74 +168,45 @@ In synthesizing the effects of multiple traits across species, our results can b
 \section*{Discussion}
 
  % emwJan11 -- you should think more of openings being 'general summary of what you FOUND' ... you have one paragraph to draw readers into your discussion, so give them some exciting findings and ideally context. 
-Our study is one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions. Of the six traits we studied, we found only three triats to relate with phenological cues. But only two of those traits fit within our hypothesized paradigm of acquisitive to conservative growth strategies in the spring. Using our joint modeling appraoch, we were able to estimate how other traits interact with cues to shape species budburst timing. Contrary to our expectations our model suggested photoperiod may be the most important cue in trait-phneology relationships. Im testing these relationships in forest communities across eastern and western North America, our modeling approach was also able to account for variation across populations and transects. However, we found low population-level variation across most of our traits and in comparing our eastern and western communities, despite the considerable species-level variation in traits. 
+Our study is one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions. Of the six traits we studied, we found only three traits to relate with phenological cues. But only two of those traits fit within our hypothesized paradigm of acquisitive to conservative growth strategies in the spring. Using our joint modeling approach, we were also able to estimate how these traits interact with cues to shape species budburst timing, but contrary to our expectations our model suggested photoperiod may be the most important cue in trait-phenology relationships. In general, these patterns were consistent across vary latitudes and between our eastern and western transects, despite the considerable differences in community composition and species-level variation. Collectively our results provide new insights into the complex mechanisms that underlie the relationships between phenotypes and environmental cue and challenge our existing understanding of these processes.
 
-Across our eight forest populations, we generally found traits did not change across our two transects or with latitude. Only leaf traits varied with transect---patterns are in line with what you would predict given the differences in shrub vs tree spp in our transects
-\item Predicted shrubs = acquisitive growth strategies = low LMA and high LNC
-\item Western pop = more shrubs = did have low LMA and high LNC relative to eastern transect
-\end{enumerate}
+Across our eight forest populations, only our two leaf traits varied between our two transects or with latitude. Overall these patterns of variation were in line with our predictions, based on the transect differences in species composition. Since our western community consists of a greater number of shrub species, we predicted our these populations to express more acquisitive growth strategies on average. This is in line with the lower LMA and high LNC we observed in our western transect. As a result of these trait differences, our western deciduous forests are likely to differ in their higher order processes and community assembly.
 
-\item Phenology in context of LES
-\begin{enumerate}
-\item Summarize whether fits with acquisitive-conservative predictions
-\begin{enumerate}
-\item Partial support whether phenology = the same acquisitive to conservative gradient in growth commonly found for other traits
-\item Predicted all traits to correlate with phenological cues = budburst timing---but found relationships with only one of our three cues
-\item Ht and DBH both in line without prediction that tall, larger trees would have stronger photoperiod cues
-\item But LMA showed opposite response to photoperiod than predicted---low LMA (acquisitive) spp more responsive to photoperiod
-\end{enumerate}
+%\item Phenology in context of LES
+%\item Summarize whether fits with acquisitive-conservative predictions
+While the strong differences in our communities assemblages explained some of the trait variation we observed spatially, at the species-level, the relationships between traits and budburst cues only partially supported our predictions for how phenology relates to species overall growth strategies. Only three of our six traits depicted cue responses that followed our predicted correlation with the variation in other traits across a gradient of acquisitive to conservative growth. While we predicted species with acquisitive traits---particularly large trees with high stem densities, and leaves with high LMA, and low LNC---to have weak temperature and daylength cues, we only found traits to correlate with the effects of photoperiod on budburst. While tall trees with large DBH did have stronger photoperiod responses, with earlier budburst in response to longer daylengths, but showed no relation to chilling or forcing cues. The relationship between LMA and budburst cues, however, was opposite to our expectations, with species with low LMA having strong photoperiod responses and budbursting earlier under long daylengths. These results provide new insight into potential tradeoffs in how varying physiological processes shape species phenotypes and growth. 
 
 \item Interesting similarities with previous studies
 %dlJan13: I am treating our study as regional
-\begin{enumerate}
 \item Traits have many functions---mitigate abiotic and biotic factors
 \item But trait research has found considerable variation in trait phenotypes across spatial scales (cite Gross 2000, Flecker and Jones 2003)---different responses for different traits 
 \item In comparing plant traits across spatial scales, previous studies have found little variation across regional scales (comparing populations or sites) and more within-community variability (Messier et al 2010, Kang et al. 2014, Standen et al. 2023)
 \item But in comparing our results with a global meta-analysis of trait relationships with budburst cues = similar results for some traits
 \item Found similar unexpected responses in leaf traits---high specific leaf area (the inverse of LMA) exhibited strong responses to photoperiod---suggests could be alternate underlying mechanisms shaping how species respond to photoperiod cues
 \item But also found strong temperature cues for most traits---not found in our analysis of North American forests
-\end{enumerate}
-\end{enumerate}
 
 \subsection*{How traits shape species temporal niches}
-\item Correlations between traits and cues
-\begin{enumerate}
+%\item Correlations between traits and cues
 \item Individuals temporal niche = result of numerous and likely complex interactions across abiotic and biotic factors
 \item Our results suggest focusing on single traits---fails to account for interactions between other traits and cues
 \item Decades of research on budburst cues = primarily driven by temperature cues---but only photoperiod related to other traits
-\end{enumerate}
 
 \item Suggests may be other physiological constraints or trade-offs selecting for other traits and shaping species phenologies 
-\begin{enumerate}
 \item Temperature---generally thought of as a strong environmental cue---but might not be strongest selective pressure in temperate forests
 \item Soil moisture = known to select for other types of tree phenology---radial growth and shoot elongation
 \item LMA can also vary with soil moisture---to reduce evaporation plants can reduce leaf area = high LMA in dry conditions (de la Riva, 2015)---could be driving the unexpected trend in LMA
 \item Later in the spring---longer photoperiods---less water high LMA would be favorable
 \item To gain a holistic understanding of species growth strategies and phenotypes require consideration of additional cues
-\end{enumerate}
+
 
 
 \subsection*{Using functional traits to predict climate change responses}
-\item Impacts of community dynamics and forecasting
-\begin{enumerate}
-\item Community dynamics with climate change
-\begin{enumerate}
 \item Results = novel insights on how other traits impact phenological sensitivities to environmental cues
 \item Relationships between budburst and photoperiod could limit the extent of spp advances in spring
 \item Photoperiod is fixed---unlike temperature cues = increasing with climate change---species ability to track temperature could be constrained
-\end{enumerate}
 
-\item Forecasting future forests 
-\begin{enumerate}
-\item Our study is one of the first to model the relationship between phenology and other traits---but results simply tell us the associations---need to understand mechanism
-\item Phenology---cited as finger print of climate change---but other traits have been noted to change as well
-\item Across temperature and precipitation gradients---leaf size and shape also change---spp shift to conserve water and mitigate effects of transpiration with high high temperatures---cite de le Riva 2016 as example
-\item trait literature = explored how traits shift across environmental gradients---temp or precip---denoting trends leaf area and height
-\item Important we continue to synthesize across phenology and trait research---better forecast the future impacts of climate change on communities
-\end{enumerate}
-\end{enumerate}
+Our study is one of the first to jointly model the relationship between phenology and other commonly measured traits. But our results simply tell us the associations between cues and traits, and not the understand mechanism per se. While phenological traits are often cited as the finger print of climate change, our results suggest, other traits may mediate phenological responses to environmental cues. To accurately forecast future changes in phenology, we may need to account for the response of other traits to climate change. Across temperature and precipitation gradients leaf size and shape also change, as species shift to conserve water and mitigate effects of transpiration under temperatures \citep{deleRiva2016}. These changes have the potential to impact species photosynthesis and photoperiod responses. While phenological research has focused on forecasting phenological responses to temperature, the selection by other traits for photoperiod cues may limit species potential to phenologically track temperature changes. It is therefore critical that we continue to take a more holistic approach to studying the relationships between phenology and traits to accurately forecast the future impacts of climate change on communities.
 
-\end{enumerate}
 
 \clearpage
 
