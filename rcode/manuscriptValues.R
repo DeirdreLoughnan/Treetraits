@@ -131,7 +131,11 @@ noIndivPheno <- nrow(pheno)
 
 
 load("..//output/htContLatHundoLat.Rdata")
+
 htModelFit <- rstan::extract(mdlHt)
+muSp <- data.frame(htModelFit$mu_grand_sp)
+muSpMean <- colMeans(muSp)
+htFold <- round(max(muSpMean)/min(muSpMean),0)
 
 htTran <- as.numeric(round(mean(htModelFit$b_tranE),1))
 lower_htTran <- format(round(quantile(htModelFit$b_tranE, prob = 0.05),1), nsmall =1)
@@ -185,6 +189,9 @@ upper_htsigmaSp <- round(quantile(htModelFit$sigma_sp, prob = 0.95),1)
 
 load("..//output/lmaContLatHundoLat.Rdata")
 lmaModelFit <- rstan::extract(mdlLMA)
+muSp <- data.frame(lmaModelFit$mu_grand_sp)
+muSpMean <- colMeans(muSp)/100
+lmaFold <- round(max(muSpMean)/min(muSpMean),0)
 
 lmaBFSpMean <- as.numeric(round(mean(lmaModelFit$betaTraitxForce),1))
 lower_lmaBFSpMean <- format(round(quantile(lmaModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
@@ -237,6 +244,9 @@ upper_lmasigmaSp <- round(quantile(lmaModelFit$sigma_sp, prob = 0.95),1)
 ##### C:N ###############################
 load("..//output/lncContLatHundoLat.Rdata")
 lncModelFit <- rstan::extract(mdlPerN)
+muSp <- data.frame(lncModelFit$mu_grand_sp)
+muSpMean <- colMeans(muSp)
+lncFold <- round(max(muSpMean)/min(muSpMean),0)
 
 lncBFSpMean <- as.numeric(round(mean(lncModelFit$betaTraitxForce),1))
 lower_lncBFSpMean <- format(round(quantile(lncModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
@@ -295,6 +305,9 @@ upper_lncsigmaSp <- round(quantile(lncModelFit$sigma_sp, prob = 0.95),1)
 ##### SSD  ###############################
 load("..//output/ssdContLatHundoLat.Rdata")
 ssdModelFit <- rstan::extract(mdlSSD)
+muSp <- data.frame(ssdModelFit$mu_grand_sp)
+muSpMean <- colMeans(muSp)
+ssdFold <- round(max(muSpMean)/min(muSpMean),0)
 
 ssdBFSpMean <- as.numeric(round(mean(ssdModelFit$betaTraitxForce),1))
 lower_ssdBFSpMean <- format(round(quantile(ssdModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
@@ -347,6 +360,9 @@ upper_ssdsigmaSp <- round(quantile(ssdModelFit$sigma_sp, prob = 0.95),1)
 ########## DBH ###############################
 load("..//output/dbhContLatHundoLat.Rdata")
 dbhModelFit <- rstan::extract(mdlDBH)
+muSp <- data.frame(dbhModelFit$mu_grand_sp)
+muSpMean <- colMeans(muSp)
+dbhFold <- round(max(muSpMean)/min(muSpMean),0)
 
 dbhBFSpMean <- as.numeric(round(mean(dbhModelFit$betaTraitxForce),1))
 lower_dbhBFSpMean <- format(round(quantile(dbhModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)

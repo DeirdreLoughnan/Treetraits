@@ -164,23 +164,13 @@ In synthesizing the effects of multiple traits across species, our results can b
 
 %2024Jan5emw -- as you think on discussion, I would perhaps open with a sentence or two on how (and why) we think traits and phenology should really matter -- we think phenology within a community is staggering species to given unique temporal niches -- and that staggering means they experience different risk and competitive landscapes, so they should differ in traits. But we found they don't (quick overview of that)... then you might segue into how good your study is (stuff below) to make the point that you likely have a robust null result. Then ruminate on why a little somewhere (in addition to the non-null results you have which you need to discuss).
 % ... but if you have a better idea of an opening go for it! 
-% 
-\section*{Discussion}
-\begin{enumerate}
-\item  General summary of what we FOUND (with some of what we did) % emwJan11 -- you should think more of openings being 'general summary of what you FOUND' ... you have one paragraph to draw readers into your discussion, so give them some exciting findings and ideally context. 
-\begin{enumerate}
-\item Our study = one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions
-\item We found only three (out of six) traits showed a relationship with phenological traits, with two of those fitting our hypothesized aquis to cons paradigm in the spring. 
-\item Joint modelling approach = use sp-level estimates for traits to understand phenological cue responses and budburst timing suggested photoperiod may be most important to trait-phenology relationships .. 
-\item Includes plant communities in eastern and western deciduous forests of North America, and samples collected from multiple populations---modelling approach that accounts for variation across populations and transects
-\item We found, however, generally low population-level variation in traits---usually even across the different eastern and western deciduous forests of North America, which was likely driven by species-level variation in traits % I think you could just end this here and transition onward.
-% \item Taking a community-level approach---with woody tree and shrub species = different growth strategies and presumably suites of traits
-\end{enumerate}
 
-\item Population level variation:
-\begin{enumerate}
-\item generally traits did not change across population or with latitude
-\item Only leaf traits varied with transect---patterns are in line with what you would predict given the differences in shrub vs tree spp in our transects
+\section*{Discussion}
+
+ % emwJan11 -- you should think more of openings being 'general summary of what you FOUND' ... you have one paragraph to draw readers into your discussion, so give them some exciting findings and ideally context. 
+Our study is one of the first to combine trait data with phenological cue responses for the same individuals and across species distributions. Of the six traits we studied, we found only three triats to relate with phenological cues. But only two of those traits fit within our hypothesized paradigm of acquisitive to conservative growth strategies in the spring. Using our joint modeling appraoch, we were able to estimate how other traits interact with cues to shape species budburst timing. Contrary to our expectations our model suggested photoperiod may be the most important cue in trait-phneology relationships. Im testing these relationships in forest communities across eastern and western North America, our modeling approach was also able to account for variation across populations and transects. However, we found low population-level variation across most of our traits and in comparing our eastern and western communities, despite the considerable species-level variation in traits. 
+
+Across our eight forest populations, we generally found traits did not change across our two transects or with latitude. Only leaf traits varied with transect---patterns are in line with what you would predict given the differences in shrub vs tree spp in our transects
 \item Predicted shrubs = acquisitive growth strategies = low LMA and high LNC
 \item Western pop = more shrubs = did have low LMA and high LNC relative to eastern transect
 \end{enumerate}
