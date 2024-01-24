@@ -92,20 +92,11 @@ Phenology is just one of many traits that are shaped by environmental cues. Our 
 
 To understand trait variation, we must identify the key drivers at both the proximate and ultimate scale. Proximate phenological drivers include local environmental factors, such as temperature, soil moisture, and daylength. At the proximate scale, cooler temperatures can delay the timing of species growth and select for larger body size in some animals (cite Bergmans rule?). But at the ultimate scale, environmental factors also change over other spatial and temporal scales.  Within a growing season, this can impose greater abiotic stress early in the season through high risks of frost events, while greater biotic stress later in the season can produce a more competitive environment, ultimately driving species differences. These ultimate drivers determine how species responses to environmental cues and biotic interactions shape their ecological niche and ultimately the local species assemblage and community dynamics. Collectively these proximate and ultimate drivers acting on a given species are what shape their overall phenotype. 
 
-Species phenotypes  correlate with their growth strategies and responses to environments 
-\item The consistency in these relationships across communities allowed the quantification of certain traits to = inferences of growth strategies/community processes to be made independently of species identity (McGill2006)
-\item Plants = development of the leaf economic spectrum---trait values = distinct gradients that range from acquisitive growth strategies---cheaper tissue and faster growth---to conservative strategies---invest in long-lived tissue but slower growth rates
-\item These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions
-\end{enumerate}
+Decades of trait ecology has illustrated the ways in which species phenotypes correlate with their growth strategies and responses to environments. The consistency in these relationships across communities allowed the quantification of certain traits to provide inferences of growth strategies and community processes, independent of species identity \citep{McGill2006}. In plants this has led to the development of the leaf economic spectrum. Under this framework, trait values are shown to follow distinct gradients that range from acquisitive growth strategies---with plants producing cheaper tissue and overall faster growth---to conservative strategies---under which species invest resources in long-lived tissue but grow at slower rates \citep{Wright2004,Diaz2016}. These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions, but provide considerable insights into the mechanisms shaping plant communities globally.
 
-\item Limitations if LES
-\begin{enumerate}
-\item Drawing on these relationships---can better understand how plant communities assemble and the promote species coexistence
-\item But general focus on community level responses---ie use of metrics of functional diversity or community weighted means (eg Diaz2013)---fails to account for causes of trait variation
+Drawing on the relationships between traits and species growth strategies, we can further our understanding of how plant communities assemble and the promote species coexistence. To date, many of of these studies have focused on community-level responses, using metrics of functional diversity or community weighted means \citep{Diaz2013}. But these methods fail to account for the high degrees of intraspecific variation that have been recorded across traits \citep{Albert} and are limited in their ability to account for the diversity of factors that lead to trait variation. To best understand the processes that define speices growth strategies and ecological niche, we much account for variation at multiple scales and use analytical methods that can accurately partition variance across its multiple sources. 
 
-
-\item Highly variable nature of phenology = given as the reason it is excluded from these functional trait frameworks
-\item Phenological variation likely to correlate with other functional traits and be driven by the same cues that promote acquisitive versus conservative growth strategies.
+Phenology itself is considered a highly variable trait. It is its variable nature that is of given as the reason it is excluded from these functional trait frameworks. But phenological variation likely to correlate with other functional traits and be driven by the same cues that promote acquisitive versus conservative growth strategies.
 \item But still considerable variation in traits and phenology not explained by environmental cues alone
 \end{enumerate}
 
