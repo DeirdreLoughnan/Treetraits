@@ -146,7 +146,7 @@ intHt <- ggplot(htEW) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 30, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 30, label = "a)", cex = 10) 
   
 
 ################################################
@@ -215,7 +215,7 @@ intLMA <- ggplot(LMAEW) +
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 0.2, label = "d)", cex = 10) 
+  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 0.2, label = "d)", cex = 10) 
 ### DBH
 
 
@@ -286,7 +286,7 @@ intDBH <- ggplot(DBHEW) +
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 30, label = "b)", cex = 10) 
+  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 30, label = "b)", cex = 10) 
 ## C:N
 
 sumCN <- summary(mdlPerN)$summary
@@ -337,12 +337,38 @@ CN_e5 = a_spCN[2] + b_tranCN[2] * tranE + b_tranlatCN[2] * (tranE*lati)
 CN_w95 = a_spCN[3] + b_tranCN[3] * tranW + b_tranlatCN[3] * (tranW*lati)
 CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*lati)
 
-CNEW <- data.frame(CNw = CN_w, CNe = CN_e,  CN_w5 =CN_w5, CN_w95 = CN_w95, CN_e5 = CN_e5, CN_e95 = CN_e95  )
+CNE <- data.frame(CNw = CN_w, CN_w5 =CN_w5, CN_w95 = CN_w95  )
+CNE$Tran <- "E"
+names(CNE) <- c("cn", "cn5", "cn95","tran" )
+CNW <- data.frame(CNe = CN_e, CN_e5 = CN_e5, CN_e95 = CN_e95  )
+CNW$Tran <- "W"
+names(CNW) <- c("cn", "cn5", "cn95","tran" )
 
+
+CNEW <- rbind(CNE, CNW)
+CNEW$lati <- lati
 intNit <- ggplot(CNEW) +
-  geom_line(aes(y = CNw, x = lati), color = "purple4", linetype = "dashed") +
-  geom_ribbon(data = CNEW, aes(ymin = CN_w5, ymax = CN_w95, x= lati), alpha = 0.2, fill = "purple4") +
-  geom_line(aes(y = CNe, x = lati), col = "purple2") +
+  geom_line(aes(y = cn, x = lati, color = tran, linetype = tran)) +
+  geom_ribbon(data = CNEW, aes(ymin = cn5, ymax = cn95, x= lati, linetype = tran, fill = tran), alpha = 0.2) +
+  #geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= lati), alpha = 0.2, fill = "purple2") +
+  # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
+  xlab("Latitude") + ylab("Leaf nitrogen content (%)") +
+  xlim (min(lati), max(lati)) + 
+  ylim (-5,10) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.title=element_blank(), legend.position=c(.8,.85), legend.text = element_text(size =15)) +
+  scale_linetype_manual(values=c("Eastern" =1, "Western" =2)) +
+ scale_color_manual(values = c("Eastern"="purple4", "Western"="purple2"))+
+  scale_fill_manual(values = c("Eastern"="purple4","Western"="purple2"))
+    
+    
+CNEW <- rbind(CNE, CNW)
+CNEW$lati <- lati
+intNit <- ggplot(CNEW) +
+  geom_line(aes(y = cn, x = lati, color = "purple4", linetype = tran)) +
+  geom_ribbon(data = CNEW, aes(ymin = cn5, ymax = cn95, x= lati, linetype =), alpha = 0.2, fill = "purple4") +
   geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= lati), alpha = 0.2, fill = "purple2") +
   # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
   xlab("Latitude") + ylab("Leaf nitrogen content (%)") +
@@ -352,9 +378,17 @@ intNit <- ggplot(CNEW) +
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
-  #scale_fill_manual( labels = c("Low force", "High force")) +
-  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 10, label = "e)", cex = 10) 
+  + 
+  scale_color_manual(values = c("bb_hpsite1"="forestgreen",
+    "bb_lpsite1"="palegreen3",
+    "bb_hpsite2"= "forestgreen",
+    "bb_lpsite2"="palegreen3",
+    "bb_hpsite3" ="darkorchid4",
+    "bb_lpsite3"="darkorchid1",
+    "bb_hpsite4"="darkorchid4",
+    "bb_lpsite4"="darkorchid1"),
+    breaks = c("bb_hpsite1","bb_lpsite3"), label = c("High", "Low")+
+  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 10, label = "e)", cex = 10) 
 
 
 
@@ -420,7 +454,27 @@ intSSD <- ggplot(SSDEW) +
   theme(legend.key=element_blank(), legend.position=c(.0,.0),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 42, y = 2, label = "c)", cex = 10) 
+  theme(legend.title = element_blank()) #+  annotate("text", x = 42, y = 2, label = "c)", cex = 10) 
+
+pdf("figures/intrxnPlotsHundoa.pdf", height =5, width = 5)
+intHt
+dev.off()
+
+pdf("figures/intrxnPlotsHundob.pdf", height =5, width = 5)
+intDBH
+dev.off()
+
+pdf("figures/intrxnPlotsHundoc.pdf", height =5, width = 5)
+intSSD
+dev.off()
+
+pdf("figures/intrxnPlotsHundod.pdf", height =5, width = 5)
+intLMA
+dev.off()
+
+pdf("figures/intrxnPlotsHundoedfd.pdf", height =5, width = 5)
+intNit
+dev.off()
 
 pdf("figures/intrxnPlotsHundo.pdf", height =5, width = 25)
 plot_grid( intHt, intDBH, intSSD, intLMA, intNit , ncol = 5, nrow =1,align = "v")
@@ -573,7 +627,7 @@ ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType)) +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "cyan4") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + labs( x = "Ring Type", y = "Chilling response (days/m height)", main = NA) +
-   theme(legend.title = element_blank()) +  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
+   theme(legend.title = element_blank()) #+  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
 # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
 #       axis.text.y=element_text(size = 15),
 #       axis.title=element_text(size=  17),
@@ -604,9 +658,6 @@ meanforce2 <- merge(meanforce2, meanError25, by = c("ringType"))
 meanforce2 <- merge(meanforce2, meanError75, by = c("ringType"))
 meanforce2 <- merge(meanforce2, meanError95, by = c("ringType"))
 
-# require(dplyr)
-# longCues %>% group_by(species.name) %>%
-#   summarise(p90 = quantile(betaCueSp, probs=0.9, na.rm=TRUE))
 meanforce2 <- subset(meanforce2, ringType !="")
 
 ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
@@ -616,11 +667,7 @@ ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "goldenrod") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +  
-  annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
-  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-  #       axis.text.y=element_text(size = 15),
-  #       axis.title=element_text(size=  17),
-  #       legend.position = "none") +
+ # annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
   labs( x = "Ring Type", y = "Forceing response (days/standardized unit)", main = NA) +
   theme(legend.title = element_blank())
 
@@ -659,13 +706,22 @@ ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
-  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-  #       axis.text.y=element_text(size = 15),
-  #       axis.title=element_text(size=  17),
-  #       legend.position = "none") +
+  #annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
   labs( x = "Ring Type", y = "Photoperiod response (days/standardized unit)", main = NA) +
   theme(legend.title = element_blank()) 
+
+pdf("figures/ringPorosityHeightHundoa.pdf", width = 4, height = 4)
+ringChill
+dev.off()
+
+pdf("figures/ringPorosityHeightHundob.pdf", width = 4, height = 4)
+ringForce
+dev.off()
+
+pdf("figures/ringPorosityHeightHundoc.pdf", width = 4, height = 4)
+ringPhoto
+dev.off()
+
 
 pdf("figures/ringPorosityHeightHundo.pdf", width = 12, height = 4)
 plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
