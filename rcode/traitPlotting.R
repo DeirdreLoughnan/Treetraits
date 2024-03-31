@@ -338,10 +338,10 @@ CN_w95 = a_spCN[3] + b_tranCN[3] * tranW + b_tranlatCN[3] * (tranW*lati)
 CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*lati)
 
 CNE <- data.frame(CNw = CN_w, CN_w5 =CN_w5, CN_w95 = CN_w95  )
-CNE$Tran <- "E"
+CNE$Tran <- "Eastern"
 names(CNE) <- c("cn", "cn5", "cn95","tran" )
 CNW <- data.frame(CNe = CN_e, CN_e5 = CN_e5, CN_e95 = CN_e95  )
-CNW$Tran <- "W"
+CNW$Tran <- "Western"
 names(CNW) <- c("cn", "cn5", "cn95","tran" )
 
 
@@ -363,34 +363,6 @@ intNit <- ggplot(CNEW) +
  scale_color_manual(values = c("Eastern"="purple4", "Western"="purple2"))+
   scale_fill_manual(values = c("Eastern"="purple4","Western"="purple2"))
     
-    
-CNEW <- rbind(CNE, CNW)
-CNEW$lati <- lati
-intNit <- ggplot(CNEW) +
-  geom_line(aes(y = cn, x = lati, color = "purple4", linetype = tran)) +
-  geom_ribbon(data = CNEW, aes(ymin = cn5, ymax = cn95, x= lati, linetype =), alpha = 0.2, fill = "purple4") +
-  geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= lati), alpha = 0.2, fill = "purple2") +
-  # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
-  xlab("Latitude") + ylab("Leaf nitrogen content (%)") +
-  xlim (min(lati), max(lati)) + 
-  ylim (-5,10) + 
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"),
-    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
-  theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
-  + 
-  scale_color_manual(values = c("bb_hpsite1"="forestgreen",
-    "bb_lpsite1"="palegreen3",
-    "bb_hpsite2"= "forestgreen",
-    "bb_lpsite2"="palegreen3",
-    "bb_hpsite3" ="darkorchid4",
-    "bb_lpsite3"="darkorchid1",
-    "bb_hpsite4"="darkorchid4",
-    "bb_lpsite4"="darkorchid1"),
-    breaks = c("bb_hpsite1","bb_lpsite3"), label = c("High", "Low")+
-  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 10, label = "e)", cex = 10) 
-
-
 
 sumSSD <- summary(mdlSSD)$summary
 
@@ -626,8 +598,10 @@ ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType)) +
   geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "cyan4") +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "cyan4") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + labs( x = "Ring Type", y = "Chilling response (days/m height)", main = NA) +
-   theme(legend.title = element_blank()) #+  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none")  + labs( x = "Ring Type", y = "Height chilling response (days/m)", main = NA) +
+  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
+ #+  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
+ringChill
 # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
 #       axis.text.y=element_text(size = 15),
 #       axis.title=element_text(size=  17),
@@ -668,8 +642,8 @@ ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +  
  # annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
-  labs( x = "Ring Type", y = "Forceing response (days/standardized unit)", main = NA) +
-  theme(legend.title = element_blank())
+  labs( x = "Ring Type", y = "Height forcing response (days/m)", main = NA) +
+  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
 
 longphoto <- merge(longPhoto, spInfo, by = "species.name")
 
@@ -707,18 +681,18 @@ ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   #annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
-  labs( x = "Ring Type", y = "Photoperiod response (days/standardized unit)", main = NA) +
-  theme(legend.title = element_blank()) 
+  labs( x = "Ring Type", y = "Height photoperiod response (days/m)", main = NA) +
+  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
 
-pdf("figures/ringPorosityHeightHundoa.pdf", width = 4, height = 4)
+pdf("figures/ringPorosityHeightHundoa.pdf", width = 6, height = 8)
 ringChill
 dev.off()
 
-pdf("figures/ringPorosityHeightHundob.pdf", width = 4, height = 4)
+pdf("figures/ringPorosityHeightHundob.pdf", width = 6, height = 8)
 ringForce
 dev.off()
 
-pdf("figures/ringPorosityHeightHundoc.pdf", width = 4, height = 4)
+pdf("figures/ringPorosityHeightHundoc.pdf", width = 6, height = 8)
 ringPhoto
 dev.off()
 

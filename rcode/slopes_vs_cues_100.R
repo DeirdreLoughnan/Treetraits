@@ -270,37 +270,37 @@ arrows(
 )
 
 ## Add Alnus and Oak 
-arrows(
-  mg_df_east["X28","muSpMean"], # x mean
-  bfs_df_east["X28","force25"], # y 25
-  mg_df_east["X28","muSpMean"],
-  bfs_df_east["X28","force75"],
-  length = 0, col= "purple", lwd = 2
-)
-
-arrows(
-  mg_df_east["X28","trait25"], # x mean
-  bfs_df_east["X28","betaForceSpMean"], # y 25
-  mg_df_east["X28","trait75"], # x mean
-  bfs_df_east["X28","betaForceSpMean"],
-  length = 0, col = "purple", lwd = 2
-)
-
-arrows(
-  mg_df_west["X6","muSpMean"], # x mean
-  bfs_df_west["X6","force25"], # y 25
-  mg_df_west["X6","muSpMean"],
-  bfs_df_west["X6","force75"],
-  length = 0, col= "gold", lwd = 2
-)
-
-arrows(
-  mg_df_west["X6","trait25"], # x mean
-  bfs_df_west["X6","betaForceSpMean"], # y 25
-  mg_df_west["X6","trait75"], # x mean
-  bfs_df_west["X6","betaForceSpMean"],
-  length = 0, col ="gold", lwd = 2
-)
+# arrows(
+#   mg_df_east["X28","muSpMean"], # x mean
+#   bfs_df_east["X28","force25"], # y 25
+#   mg_df_east["X28","muSpMean"],
+#   bfs_df_east["X28","force75"],
+#   length = 0, col= "purple", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_east["X28","trait25"], # x mean
+#   bfs_df_east["X28","betaForceSpMean"], # y 25
+#   mg_df_east["X28","trait75"], # x mean
+#   bfs_df_east["X28","betaForceSpMean"],
+#   length = 0, col = "purple", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_west["X6","muSpMean"], # x mean
+#   bfs_df_west["X6","force25"], # y 25
+#   mg_df_west["X6","muSpMean"],
+#   bfs_df_west["X6","force75"],
+#   length = 0, col= "gold", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_west["X6","trait25"], # x mean
+#   bfs_df_west["X6","betaForceSpMean"], # y 25
+#   mg_df_west["X6","trait75"], # x mean
+#   bfs_df_west["X6","betaForceSpMean"],
+#   length = 0, col ="gold", lwd = 2
+# )
 
 
 #my.label <- paste("a", ".", sep="")
@@ -384,37 +384,37 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-arrows(
-  mg_df_east["X28","muSpMean"], # x mean
-  bcs_df_east["X28","chill25"], # y 25
-  mg_df_east["X28","muSpMean"],
-  bcs_df_east["X28","chill75"],
-  length = 0, col= "purple", lwd = 2
-)
-
-arrows(
-  mg_df_east["X28","trait25"], # x mean
-  bcs_df_east["X28","betaChillSpMean"], # y 25
-  mg_df_east["X28","trait75"], # x mean
-  bcs_df_east["X28","betaChillSpMean"],
-  length = 0, col = "purple", lwd = 2
-)
-
-arrows(
-  mg_df_west["X6","muSpMean"], # x mean
-  bcs_df_west["X6","chill25"], # y 25
-  mg_df_west["X6","muSpMean"],
-  bcs_df_west["X6","chill75"],
-  length = 0, col= "gold", lwd = 2
-)
-
-arrows(
-  mg_df_west["X6","trait25"], # x mean
-  bcs_df_west["X6","betaChillSpMean"], # y 25
-  mg_df_west["X6","trait75"], # x mean
-  bcs_df_west["X6","betaChillSpMean"],
-  length = 0, col ="gold", lwd = 2
-)
+# arrows(
+#   mg_df_east["X28","muSpMean"], # x mean
+#   bcs_df_east["X28","chill25"], # y 25
+#   mg_df_east["X28","muSpMean"],
+#   bcs_df_east["X28","chill75"],
+#   length = 0, col= "purple", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_east["X28","trait25"], # x mean
+#   bcs_df_east["X28","betaChillSpMean"], # y 25
+#   mg_df_east["X28","trait75"], # x mean
+#   bcs_df_east["X28","betaChillSpMean"],
+#   length = 0, col = "purple", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_west["X6","muSpMean"], # x mean
+#   bcs_df_west["X6","chill25"], # y 25
+#   mg_df_west["X6","muSpMean"],
+#   bcs_df_west["X6","chill75"],
+#   length = 0, col= "gold", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_west["X6","trait25"], # x mean
+#   bcs_df_west["X6","betaChillSpMean"], # y 25
+#   mg_df_west["X6","trait75"], # x mean
+#   bcs_df_west["X6","betaChillSpMean"],
+#   length = 0, col ="gold", lwd = 2
+# )
 
 
 #my.label <- p
@@ -497,37 +497,37 @@ arrows(
 )
 
 
-arrows(
-  mg_df_west["X6","muSpMean"], # x mean
-  bps_df_west["X6","photo25"], # y 25
-  mg_df_west["X6","muSpMean"],
-  bps_df_west["X6","photo75"],
-  length = 0, col= "gold", lwd = 2
-)
-
-arrows(
-  mg_df_west["X6","trait25"], # x mean
-  bps_df_west["X6","betaPhotoSpMean"], # y 25
-  mg_df_west["X6","trait75"], # x mean
-  bps_df_west["X6","betaPhotoSpMean"],
-  length = 0, col = "gold", lwd = 2
-)
-
-arrows(
-  mg_df_east["X28","muSpMean"], # x mean
-  bps_df_east["X28","photo25"], # y 25
-  mg_df_east["X28","muSpMean"],
-  bps_df_east["X28","photo75"],
-  length = 0, col= "purple", lwd = 2
-)
-
-arrows(
-  mg_df_east["X28","trait25"], # x mean
-  bps_df_east["X28","betaPhotoSpMean"], # y 25
-  mg_df_east["X28","trait75"], # x mean
-  bps_df_east["X28","betaPhotoSpMean"],
-  length = 0, col = "purple", lwd = 2
-)
+# arrows(
+#   mg_df_west["X6","muSpMean"], # x mean
+#   bps_df_west["X6","photo25"], # y 25
+#   mg_df_west["X6","muSpMean"],
+#   bps_df_west["X6","photo75"],
+#   length = 0, col= "gold", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_west["X6","trait25"], # x mean
+#   bps_df_west["X6","betaPhotoSpMean"], # y 25
+#   mg_df_west["X6","trait75"], # x mean
+#   bps_df_west["X6","betaPhotoSpMean"],
+#   length = 0, col = "gold", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_east["X28","muSpMean"], # x mean
+#   bps_df_east["X28","photo25"], # y 25
+#   mg_df_east["X28","muSpMean"],
+#   bps_df_east["X28","photo75"],
+#   length = 0, col= "purple", lwd = 2
+# )
+# 
+# arrows(
+#   mg_df_east["X28","trait25"], # x mean
+#   bps_df_east["X28","betaPhotoSpMean"], # y 25
+#   mg_df_east["X28","trait75"], # x mean
+#   bps_df_east["X28","betaPhotoSpMean"],
+#   length = 0, col = "purple", lwd = 2
+# )
 
 #my.label <- p
 # my.label <- paste("c", ".", sep="")
@@ -592,7 +592,7 @@ plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "LMA, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085))
+  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp)
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -670,7 +670,7 @@ plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "LMA, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085))
+  abline(a = apoly[j,], b = bpolly[j,], col = col1.sp)
 }# for(j in 1:length(muChillSp[,1])){
 #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 # }
@@ -745,7 +745,7 @@ plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_d
 
 mtext(side = 3, text = "LMA, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085))
+  abline(a = apoly[j,], b = bpolly[j,], col= col4.sp)
 }
 # for(j in 1:length(muPhotoSp[,1])){
 #   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
@@ -850,7 +850,7 @@ plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "DBH, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085))
+  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp)
 }
 # for(j in 1:length(muForceSp[,1])){
 #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
@@ -929,7 +929,7 @@ plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_d
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "DBH, Chilling", adj = 0, cex = 1.25)
-for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= col1.sp) 
   }
 # for(j in 1:length(muChillSp[,1])){
 #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
@@ -1006,7 +1006,7 @@ plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_d
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "DBH, Photoperiod", adj = 0, cex = 1.25)  
-for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= col4.sp) 
 }
 
 # for(j in 1:length(muPhotoSp[,1])){
@@ -1112,7 +1112,7 @@ plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_d
 mtext(side = 3, text = "SSD, Forcing", adj = 0, cex = 1.25)
 
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp) 
 }
 
 # for(j in 1:length(muForceSp[,1])){
@@ -1194,7 +1194,7 @@ plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "SSD, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+  abline(a = apoly[j,], b = bpolly[j,], col= col1.sp) 
 }
 
 # for(j in 1:length(muChillSp[,1])){
@@ -1273,7 +1273,7 @@ plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "SSD, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+  abline(a = apoly[j,], b = bpolly[j,], col=col4.sp) 
 }
 
 # for(j in 1:length(muPhotoSp[,1])){
@@ -1377,7 +1377,7 @@ plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "LNC, Forcing", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp) 
 }
 
 # for(j in 1:length(muForceSp[,1])){
@@ -1458,7 +1458,7 @@ plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_d
 # min and max defined by quantiles
 mtext(side = 3, text = "LNC, Chilling", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+  abline(a = apoly[j,], b = bpolly[j,], col= col1.sp) 
 }
 
 # for(j in 1:length(muChillSp[,1])){
@@ -1531,12 +1531,12 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
 pdf("figures/cuetraitHundoo.pdf", height = 4, width = 5)
 par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.5) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Trait value", cex.lab = 1.4) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "LNC, Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=alpha("#73d2de", 0.085)) 
+  abline(a = apoly[j,], b = bpolly[j,], col=col4.sp) 
 }
 
 # for(j in 1:length(muPhotoSp[,1])){
@@ -1578,6 +1578,6 @@ arrows(
 )
 
 
-my.label <- paste("o", ".", sep="")
-put.fig.letter(label=my.label, location= "topleft", font=2)
+# my.label <- paste("o", ".", sep="")
+# put.fig.letter(label=my.label, location= "topleft", font=2)
 dev.off()
