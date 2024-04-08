@@ -247,14 +247,14 @@ names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh",
         axis.title=element_text(size=20)) +
    ylim (-20,35) +
   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(7,28)) +
-  labs( x = "", y = "Day of budburst (days/m height)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 15, y = 35, label = "a) Eastern transect - height", cex =8) +
+  labs( x = "", y = "Day of budburst", main = NA) +
+  theme(legend.title = element_blank()) + # annotate("text", x = 15, y = 35, label = "a) Eastern transect - height", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
                                    "intercept" ),
                         breaks = c("Budburst","BudburstHigh", "Intercept"))
-
+htE
 # htOrderE <- ggplot(meanPtE) +
 #    geom_point(aes(y= Budburst, x = ht, shape = "Budburst", col=type ), size = 5) +
 #    geom_point(aes(y= BudburstHigh, x = ht, shape = "BudburstHigh", col=type), size = 5) +
@@ -321,14 +321,14 @@ htW <- ggplot(meanPtW) +
         axis.title=element_text(size=20)) +
   ylim (-20,35) +
   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(7,30)) +
-  labs( x = "", y = "Day of budburst (days/m height)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 16, y = 35, label = "b) Western transect - height", cex =8) +
+  labs( x = "", y = "Day of budburst", main = NA) +
+  theme(legend.title = element_blank()) +#  annotate("text", x = 16, y = 35, label = "b) Western transect - height", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
                                    "intercept" ),
                         breaks = c("Budburst","BudburstHigh", "Intercept"))
-
+htW
 # htOrderW <- ggplot(meanPtW) +
 #   geom_point(aes(y= Budburst, x = ht, shape = "Budburst", col=type ), size = 5) +
 #   geom_point(aes(y= BudburstHigh, x = ht, shape = "BudburstHigh", col=type), size = 5) +
@@ -593,8 +593,8 @@ CNE <- ggplot(meanPtE) +
         axis.title=element_text(size=20)) +
   ylim (-20,35) +
   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(5,21)) +
-  labs( x = "", y = "Day of budburst (days/% LNC)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 11, y = 35, label = "c) Eastern transect - LNC", cex =8) +
+  labs( x = "", y = "Day of budburst", main = NA) +
+  theme(legend.title = element_blank()) +#  annotate("text", x = 11, y = 35, label = "c) Eastern transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -645,8 +645,8 @@ CNW <- ggplot(meanPtW) +
         axis.text.y=element_text(size = 15),
         axis.title=element_text(size=20)) +
   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(8,24)) +
-  labs( x = "", y = "Day of budburst (days/% LNC)", main = NA) +
-  theme(legend.title = element_blank()) +  annotate("text", x = 14, y = 35, label = "d) western transect - LNC", cex =8) +
+  labs( x = "", y = "Day of budburst", main = NA) +
+  theme(legend.title = element_blank()) +#  annotate("text", x = 14, y = 35, label = "d) western transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -673,6 +673,21 @@ CNW <- ggplot(meanPtW) +
 #     "high cue",
 #     "intercept" ),
 #     breaks = c("Budburst","BudburstHigh", "Intercept"))
+pdf("figures/dotShrubTreeHtCNHundoa.pdf", width = 7, height = 5)
+htE
+dev.off()
+
+pdf("figures/dotShrubTreeHtCNHundob.pdf", width = 7, height = 5)
+htW
+dev.off()
+
+pdf("figures/dotShrubTreeHtCNHundoc.pdf", width = 7, height = 5)
+CNE
+dev.off()
+
+pdf("figures/dotShrubTreeHtCNHundod.pdf", width = 7, height = 5)
+CNW
+dev.off()
 
 pdf("figures/dotShrubTreeHtCNHundo.pdf", width = 15, height = 10)
 plot_grid(htE, htW, CNE,CNW, nrow = 2, ncol = 2, align = "v")

@@ -417,7 +417,7 @@ intSSD <- ggplot(SSDEW) +
   geom_ribbon(data = (SSDEW), aes(ymin = (SSD_w5), ymax = (SSD_w95), x= lati), alpha = 0.2, fill = "maroon4") +
   geom_line(aes(y = (SSDe), x = lati), col = "maroon") +
   geom_ribbon(data = (SSDEW), aes(ymin = (SSD_e5), ymax = (SSD_e95), x= lati), alpha = 0.2, fill = "maroon") +
-  xlab("Latitude") +  labs(y = bquote('Stem specific density'~(g/cm^2)))  +
+  xlab("Latitude") +  labs(y = bquote('Wood specific density'~(g/cm^2)))  +
   xlim (min(lati), max(lati)) + 
   ylim (-2,2) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -598,7 +598,7 @@ ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType)) +
   geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "cyan4") +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "cyan4") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none")  + labs( x = "Ring Type", y = "Height chilling response (days/m)", main = NA) +
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none")  + labs( x = "Pore distribution type", y = "Height chilling response (days/m)", main = NA) +
   theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
  #+  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
 ringChill
@@ -642,7 +642,7 @@ ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +  
  # annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
-  labs( x = "Ring Type", y = "Height forcing response (days/m)", main = NA) +
+  labs( x = "Pore distribution type", y = "Height forcing response (days/m)", main = NA) +
   theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
 
 longphoto <- merge(longPhoto, spInfo, by = "species.name")
@@ -681,7 +681,7 @@ ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   #annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
-  labs( x = "Ring Type", y = "Height photoperiod response (days/m)", main = NA) +
+  labs( x = "Pore distribution type", y = "Height photoperiod response (days/m)", main = NA) +
   theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
 
 pdf("figures/ringPorosityHeightHundoa.pdf", width = 6, height = 8)

@@ -96,16 +96,16 @@ names(muPhotoHt) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cu
 
 cueHt <- rbind(muForceHt,muChillHt,muPhotoHt)
 
-cueHeightPlot <- ggplot(cueHt,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "cyan4") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-35,5)+
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "cyan4") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -30, y = 3.4, label = "a) Height", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueHeightPlot <- ggplot(cueHt,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "cyan4") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-35,5)+
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "cyan4") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Change in budburst day", y = "", main = NA) #+  annotate("text", x = -30, y = 3.4, label = "a) Height", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 muForceLMA = mean((sumLMA[grep("muForceSp", rownames(sumLMA)), 1]))
@@ -137,17 +137,17 @@ names(muPhotoLMA) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","c
 
 cueLMA <- rbind(muForceLMA,muChillLMA,muPhotoLMA)
 
-cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "darkolivegreen") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-35,5)+
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -30, y = 3.4, label = "d) LMA", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "darkolivegreen") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-35,5)+
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -30, y = 3.4, label = "d) LMA", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 
@@ -180,17 +180,17 @@ names(muPhotoDBH) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","c
 
 cueDBH <- rbind(muForceDBH,muChillDBH,muPhotoDBH)
 
-cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "goldenrod") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-35,5)+
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "goldenrod") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "b) DBH", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "goldenrod") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-35,5)+
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "goldenrod") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "b) DBH", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 muForceCN = mean((sumCN[grep("muForceSp", rownames(sumCN)), 1]))
@@ -222,21 +222,21 @@ names(muPhotoCN) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","cu
 
 cueCN <- rbind(muForceCN,muChillCN,muPhotoCN)
 
-cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "purple4") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-35,5)+
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "purple4") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-  #       axis.text.y=element_text(size = 15),
-  #       axis.title=element_text(size=  17),
-  #       legend.position = "none") +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11.3, y = 3.4, label = "e) C:N", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "purple4") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-35,5)+
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "purple4") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+#   #       axis.text.y=element_text(size = 15),
+#   #       axis.title=element_text(size=  17),
+#   #       legend.position = "none") +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11.3, y = 3.4, label = "e) C:N", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 
@@ -269,18 +269,18 @@ names(muPhotoSSD) <- c("mean", "five", "nintyFive","twentyFive","seventyFive","c
 
 cueSSD <- rbind(muForceSSD,muChillSSD,muPhotoSSD)
 
-cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "maroon") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-35,5)+
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "maroon") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -30, y = 3.4, label = "c) SSD", cex = 10) +
-  theme(legend.title = element_blank()) 
-# 
+# cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "maroon") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-35,5)+
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "maroon") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#    theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -30, y = 3.4, label = "c) SSD", cex = 10) +
+#   theme(legend.title = element_blank()) 
+# # 
 # pdf("figures/muCuePlotsHundo.pdf", height =5, width = 25)
 # plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1,align = "v")
 # dev.off()
@@ -317,16 +317,16 @@ names(betaTraitxPhotoHt) <- c("mean", "five", "nintyFive","twentyFive","seventyF
 
 cueTraitHt <- rbind(betaTraitxForceHt,betaTraitxChillHt,betaTraitxPhotoHt)
 
-cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "cyan4") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-15,40) +
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "cyan4") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated cue response in budburst days", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "a) Height", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "cyan4") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-15,40) +
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "cyan4") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated cue response in budburst days", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "a) Height", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 betaTraitxForceLMA = mean((sumLMA[grep("betaTraitxForce", rownames(sumLMA)), 1]))
@@ -362,17 +362,17 @@ names(betaTraitxPhotoLMA) <- c("mean", "five", "nintyFive","twentyFive","seventy
 
 cueTraitLMA <- rbind(betaTraitxForceLMA,betaTraitxChillLMA,betaTraitxPhotoLMA)
 
-cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "darkolivegreen") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-1,1) +
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -8, y = 3.4, label = "d) LMA", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "darkolivegreen") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-1,1) +
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "darkolivegreen") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -8, y = 3.4, label = "d) LMA", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 
@@ -405,17 +405,17 @@ names(betaTraitxPhotoDBH) <- c("mean", "five", "nintyFive","twentyFive","seventy
 
 cueTraitDBH <- rbind(betaTraitxForceDBH,betaTraitxChillDBH,betaTraitxPhotoDBH)
 
-cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "goldenrod") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-15,40) +
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "goldenrod") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "b) DBH", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "goldenrod") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-15,40) +
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "goldenrod") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "b) DBH", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 betaTraitxForceCN = mean((sumCN[grep("betaTraitxForce", rownames(sumCN)), 1]))
@@ -447,21 +447,21 @@ names(betaTraitxPhotoCN) <- c("mean", "five", "nintyFive","twentyFive","seventyF
 
 cueTraitCN <- rbind(betaTraitxForceCN,betaTraitxChillCN,betaTraitxPhotoCN)
 
-cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "purple4") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-15,40) +
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "purple4") +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
-  #       axis.text.y=element_text(size = 15),
-  #       axis.title=element_text(size=  17),
-  #       legend.position = "none") +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "e) C:N", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "purple4") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-15,40) +
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "purple4") +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
+#   #       axis.text.y=element_text(size = 15),
+#   #       axis.title=element_text(size=  17),
+#   #       legend.position = "none") +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "e) C:N", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 ########################################################################
 
@@ -494,17 +494,17 @@ names(betaTraitxPhotoSSD) <- c("mean", "five", "nintyFive","twentyFive","seventy
 
 cueTraitSSD <- rbind(betaTraitxForceSSD,betaTraitxChillSSD,betaTraitxPhotoSSD)
 
-cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
-  geom_point(size = 7, color = "maroon") +
-  geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-15,40) +
-  geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, color = "maroon", width = 0) +
-  #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
-  labs( x = "Estimated change in budburst day", y = "", main = NA) +  annotate("text", x = -11, y = 3.4, label = "c) SSD", cex = 10) +
-  theme(legend.title = element_blank()) 
+# cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
+#   geom_point(size = 7, color = "maroon") +
+#   geom_vline(xintercept = 0, linetype='dashed') +
+#   xlim (-15,40) +
+#   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, color = "maroon", width = 0) +
+#   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+#   theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15)) +
+#   labs( x = "Estimated change in budburst day", y = "", main = NA) +  #annotate("text", x = -11, y = 3.4, label = "c) SSD", cex = 10) +
+#   theme(legend.title = element_blank()) 
 
 
 #####
@@ -515,8 +515,10 @@ cueHeightPlot <- ggplot(cueHt,aes(y= cue, x = mean), size = 7) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "cyan4") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size = 30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -16, y = 3.4, label = "a) Height", cex = 10) + scale_y_discrete(limits=rev) +
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + 
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in budburst day", y = "", main = NA) +  annotate("text", x = -20, y = 3.4, label = "Height", cex = 10) + 
+  scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
 
 cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
@@ -527,8 +529,9 @@ cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size = 30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -19, y = 3.4, label = "d) LMA", cex = 10) + scale_y_discrete(limits=rev) +
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in budburst day", y = "", main = NA) +  annotate("text", x = -22, y = 3.4, label = "LMA", cex = 10) + 
+  scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
 
 cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
@@ -539,8 +542,9 @@ cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size = 30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -19, y = 3.4, label = "b) DBH", cex = 10) + scale_y_discrete(limits=rev) +
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -22, y = 3.4, label = "DBH", cex = 10) + 
+  scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
 
 cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
@@ -551,8 +555,9 @@ cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) + scale_y_discrete(limits=rev) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -19, y = 3.4, label = "e) LNC", cex = 10) +
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  scale_y_discrete(limits=rev) +
+  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -22, y = 3.4, label = "LNC", cex = 10) +
   theme(legend.title = element_blank()) 
 
 
@@ -564,9 +569,26 @@ cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "Change in budburst day     ", y = "", main = NA) +  annotate("text", x = -19, y = 3.4, label = "c) SSD", cex = 10) + scale_y_discrete(limits=rev) +
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -22, y = 3.4, label = "WSD", cex = 10) +
+  scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
+
+pdf("figures/muCuePlotsHundoa.pdf", height =5, width = 7)
+cueHeightPlot
+dev.off()
+pdf("figures/muCuePlotsHundob.pdf", height =5, width = 7)
+cueDBHPlot
+dev.off()
+pdf("figures/muCuePlotsHundoc.pdf", height =5, width = 7)
+cueSSDPlot
+dev.off()
+pdf("figures/muCuePlotsHundod.pdf", height =5, width = 7)
+cueLMAPlot
+dev.off()
+pdf("figures/muCuePlotsHundoe.pdf", height =5, width = 7)
+cueCNPlot 
+dev.off()
 
 pdf("figures/muCuePlotsHundo.pdf", height =5, width = 25)
 plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1 ,align = "v", rel_widths = c(0.9,0.9,1,0.9,0.9))
@@ -580,9 +602,10 @@ cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "cyan4") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -0.4, y = 3.4, label = "a) Height", cex = 10) + scale_y_discrete(limits=rev) +
-  theme(legend.title = element_blank()) 
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -0.75, y = 3.4, label = "Height", cex = 10) + 
+  scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "darkolivegreen") +
@@ -592,9 +615,9 @@ cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -2, y = 3.4, label = "d) LMA", cex = 10) + scale_y_discrete(limits=rev) +
-  theme(legend.title = element_blank()) 
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -4, y = 3.4, label = "LMA", cex = 10) + 
+  scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 ##
 cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
@@ -605,9 +628,9 @@ cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -0.5, y = 3.4, label = "b) DBH", cex = 10) + scale_y_discrete(limits=rev) +
-  theme(legend.title = element_blank()) 
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in cue", y = "", main = NA) + annotate("text", x = -0.75, y = 3.4, label = "DBH", cex = 10) + 
+  scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "purple4") +
@@ -617,9 +640,9 @@ cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=17), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "", y = "", main = NA) +  annotate("text", x = -2, y = 3.4, label = "e) LNC", cex = 10) + scale_y_discrete(limits=rev) +
-  theme(legend.title = element_blank()) 
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -4, y = 3.4, label = "LNC", cex = 10) + 
+  scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "maroon") +
@@ -629,8 +652,29 @@ cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title = element_text( size=30), axis.text.y=element_text(size = 15), axis.text.x=element_text(size = 15)) +
-  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -5, y = 3.4, label = "c) SSD", cex = 10) + scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -15, y = 3.4, label = "WSD", cex = 10) + 
+  scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
+
+pdf("figures/muCueTraitPlotsHundoa.pdf", height =5, width = 7)
+cueTraitHeightPlot
+dev.off()
+
+pdf("figures/muCueTraitPlotsHundob.pdf", height =5, width = 7)
+cueTraitDBHPlot
+dev.off()
+
+pdf("figures/muCueTraitPlotsHundoc.pdf", height =5, width = 7)
+cueTraitSSDPlot
+dev.off()
+
+pdf("figures/muCueTraitPlotsHundod.pdf", height =5, width = 7)
+cueTraitLMAPlot
+dev.off()
+
+pdf("figures/muCueTraitPlotsHundoe.pdf", height =5, width = 7)
+cueTraitCNPlot
+dev.off()
 
 pdf("figures/muCueTraitPlotsHundo.pdf", height =5, width = 25)
 plot_grid( cueTraitHeightPlot,cueTraitDBHPlot,cueTraitSSDPlot,cueTraitLMAPlot,cueTraitCNPlot , ncol = 5, nrow =1,align = "hv")
