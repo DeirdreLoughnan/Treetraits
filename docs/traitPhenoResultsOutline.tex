@@ -1,0 +1,77 @@
+%%% start preambling . . .  %%%
+\documentclass{article}
+
+% required 
+\usepackage[hyphens]{url} % this wraps my URL versus letting it spill across the page, a bad habit LaTeX has
+
+\usepackage{Sweave}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage[utf8]{inputenc} % allow funny letters in citations 
+\usepackage[nottoc]{tocbibind} %should add References to the table of contents?
+\usepackage{amsmath} % making nice equations 
+\usepackage{listings} % add in stan code
+\usepackage{xcolor}
+\usepackage{capt-of}%allows me to set a caption for code in appendix 
+\usepackage[export]{adjustbox} % adding a box around a map
+\usepackage{lineno}
+\linenumbers
+% recommended! Uncomment the below line and change the path for your computer!
+% \SweaveOpts{prefix.string=/Users/Lizzie/Documents/git/teaching/demoSweave/Fig.s/demoFig, eps=FALSE} 
+%put your Fig.s in one place! Also, note that here 'Fig.s' is the folder and 'demoFig' is what each 
+% Fig. produced will be titled plus its number or label (e.g., demoFig-nqpbetter.pdf')
+% make your captioning look better
+\usepackage[small]{caption}
+
+\usepackage{xr-hyper} %refer to Fig.s in another document
+\usepackage{hyperref}
+
+\setlength{\captionmargin}{30pt}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{10pt}
+
+% optional: muck with spacing
+\topmargin -1.5cm        
+\oddsidemargin 0.5cm   
+\evensidemargin 0.5cm  % same as oddsidemargin but for left-hand pages
+\textwidth 15.59cm
+\textheight 21.94cm 
+% \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
+\parindent 0pt		  % sets leading space for paragraphs
+% optional: cute, fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[LO]{Loughnan et al. 2023}
+\fancyhead[RO]{Temporal Ecology Lab}
+% more optionals! %
+
+%\graphicspath{ {./DoseResponse_WriteupImages/} }% tell latex where to find photos 
+\externaldocument[supp-]{Traitors_Manuscript_supp}
+
+%%% end preambling. %%%
+
+\begin{document}
+
+%\renewcommand{\refname}{\CHead{}}%not sure what this was supposed to do 
+\renewcommand{\bibname}{References}%names reference list 
+
+\input{traitPhenoResultsOutline-concordance} % For RStudio hiccups
+
+%Title ideas:
+% old title: Phenological cue use varies with functional traits in North American woody plant communities
+% Cues shaping woody plant temporal niche differs from cues driving species overall trait phenotype 
+% ....need more
+
+\title{Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst} %24Dec2023emw -- I really like the bold title! But it sounds so specific that it would likely limit where you could get the paper into review (... and it took me a lot of re-reading it to understand what you might mean. I am not sure we actually test this latter point, do we?). Maybe: Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature [Sounds weird, but something to work on -- maybe committee will have ideas.]
+\date{\today}
+\author{Deirdre Loughnan$^1$, Faith A M Jones$^1$, and E M Wolkovich$^1$}
+\maketitle 
+$^1$ Department of Forest and Conservation, Faculty of Forestry, University of British Columbia, 2424 Main Mall
+Vancouver, BC Canada V6T 1Z4. \\
+
+
+Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
+
