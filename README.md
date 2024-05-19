@@ -1,4 +1,4 @@
-## Chapter 3:
+
 ## **Climate or traits: understanding the drivers of spring phenology in temperate woody species**
 
 By: Deirdre Loughnan
@@ -11,12 +11,14 @@ All leaf scans
 
 ### analyses
 
-Currently analyses performed as part of FRST 507
+Analysis folder:
+rcode folder: all rcode used to analyze this dataset
+stan: all stan code used to analyze this dataset
 
 ### data
 
 Raw data files for:
-- leaf mass & area
+- leaf mass and area
 - height, DBH, stem volume, stem weight
 
 ### docs
