@@ -2,7 +2,7 @@
 #The plot is to check the relationship bewteen model predicted day of year and the intercept day of year for each species (alphaPhenoSp)
 
 rm(list = ls())
-dd
+
 ## Load libraries
 library(rstan)
 library(ggplot2)
