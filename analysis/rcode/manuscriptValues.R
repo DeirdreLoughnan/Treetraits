@@ -7,7 +7,7 @@ library(reshape2)
 
 
 ########## General values ###############################
-spInfo <- read.csv("..//input/species_ring.csv")
+spInfo <- read.csv("..//analysis/input/species_ring.csv")
 
 perTreeRing <- round((nrow(subset(spInfo, X != ""))/47)*100,1)
 nRing <- nrow(subset(spInfo, X != ""))
@@ -29,9 +29,9 @@ nSppET <- length(unique(spInfoETree$species.name))
 nSppWT <- length(unique(spInfoWTree$species.name))
 
 
-pheno <- read.csv("..//input/phenoDataWChill.csv")
+pheno <- read.csv("..//analysis/input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
-trtPheno <- read.csv("..//input/trtPhenoDummy.csv")
+trtPheno <- read.csv("..//analysis/input/trtPhenoDummy.csv")
 
 height <- trtPheno[complete.cases(trtPheno$ht),]
 nHt <- nrow(height)
@@ -130,7 +130,7 @@ noIndivPheno <- nrow(pheno)
 # chillCueL <- round(quantile(fit$mu_b_chill1, c(0.05)),1)
 
 
-load("..//output/htContLatHundoLat.Rdata")
+load("..//analysis/output/htContLatHundoLat.Rdata")
 
 htModelFit <- rstan::extract(mdlHt)
 muSp <- data.frame(htModelFit$mu_grand_sp)
@@ -187,7 +187,7 @@ lower_htsigmaSp <- format(round(quantile(htModelFit$sigma_sp, prob = 0.05),1), n
 upper_htsigmaSp <- round(quantile(htModelFit$sigma_sp, prob = 0.95),1)
 ######## Leaf mass area###############################
 
-load("..//output/lmaContLatHundoLat.Rdata")
+load("..//analysis/output/lmaContLatHundoLat.Rdata")
 lmaModelFit <- rstan::extract(mdlLMA)
 muSp <- data.frame(lmaModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)/100
@@ -242,7 +242,8 @@ lmasigmaSp <- as.numeric(round(mean(lmaModelFit$sigma_sp),1))
 lower_lmasigmaSp <- format(round(quantile(lmaModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_lmasigmaSp <- round(quantile(lmaModelFit$sigma_sp, prob = 0.95),1)
 ##### C:N ###############################
-load("..//output/lncContLatHundoLat.Rdata")
+
+load("..//analysis/output/lncContLatHundoLat.Rdata")
 lncModelFit <- rstan::extract(mdlPerN)
 muSp <- data.frame(lncModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -303,7 +304,7 @@ lncsigmaSp <- as.numeric(round(mean(lncModelFit$sigma_sp),1))
 lower_lncsigmaSp <- format(round(quantile(lncModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_lncsigmaSp <- round(quantile(lncModelFit$sigma_sp, prob = 0.95),1)
 ##### SSD  ###############################
-load("..//output/ssdContLatHundoLat.Rdata")
+load("..//analysis/output/ssdContLatHundoLat.Rdata")
 ssdModelFit <- rstan::extract(mdlSSD)
 muSp <- data.frame(ssdModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -358,7 +359,7 @@ ssdsigmaSp <- as.numeric(round(mean(ssdModelFit$sigma_sp),1))
 lower_ssdsigmaSp <- format(round(quantile(ssdModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_ssdsigmaSp <- round(quantile(ssdModelFit$sigma_sp, prob = 0.95),1)
 ########## DBH ###############################
-load("..//output/dbhContLatHundoLat.Rdata")
+load("..//analysis/output/dbhContLatHundoLat.Rdata")
 dbhModelFit <- rstan::extract(mdlDBH)
 muSp <- data.frame(dbhModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -413,7 +414,7 @@ dbhsigmaSp <- as.numeric(round(mean(dbhModelFit$sigma_sp),1))
 lower_dbhsigmaSp <- format(round(quantile(dbhModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_dbhsigmaSp <- round(quantile(dbhModelFit$sigma_sp, prob = 0.95),1)
 
-tot <- read.csv("..//..//pheno_bc/input/phenoMini.csv")
+tot <- read.csv("..//analysis/input/phenoMini.csv")
 
 #Only want the total number that reached 7:
 below <- subset(tot, bbch.t < 8)
