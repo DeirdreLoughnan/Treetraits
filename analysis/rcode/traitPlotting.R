@@ -20,66 +20,32 @@ require(ggplot2)
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/Treetraits") 
 }  else{
-  setwd("/home/deirdre/Treetraits") # for midge
+  setwd("~/Documents/github/Treetraits") # for midge
 }
 
-spInfo <- read.csv("input/species_ring.csv")
- pheno <- read.csv("input/phenoDataWChill.csv")
+spInfo <- read.csv("analysis/input/species_ring.csv")
+ pheno <- read.csv("analysis/input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
-trtPheno <- read.csv("input/trtPhenoDummy.csv")
+trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
 
 # Ht and DBH and CN natural, LMA and SSD rescaled by 100
 # cues and latitude still z scored by only by 1 sd
-load("output/htContLatHundoLat.Rdata")
+load("analysis/output/htContLatHundoLatFinal.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLatHundoLat.Rdata")
+load("analysis/output/lmaContLatHundoLatFinal.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 #sumerlma <- summary(mdlLMA)$summary
 
-load("output/dbhContLatHundoLat.Rdata")
+load("analysis/output/dbhContLatHundoLatFinal.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
-load("output/ssdContLatHundoLat.Rdata")
-postSSD <- rstan::extract(mdlSSD)
+load("analysis/output/ssdContLatHundoLatFinal.Rdata")
+postSSD <- rstan::extract(mdlSSD6)
 
-load("output/lncContLatHundoLat.Rdata")
+load("analysis/output/lncContLatHundoLatFinal.Rdata")
 postCN <- rstan::extract(mdlPerN)
-
-# load("output/htContLat6.Rdata")
-# sumerht <- summary(mdlHt)$summary
-# postHt <- rstan::extract(mdlHt)
-# 
-# load("output/lmaContLat.Rdata")
-# postLMA <- rstan::extract(mdlLMA)
-# #sumerlma <- summary(mdlLMA)$summary
-# 
-# load("output/dbhContLat6.Rdata")
-# postDBH <- rstan::extract(mdlDBH)
-# 
-# load("output/ssdContLat6.Rdata")
-# postSSD <- rstan::extract(mdlSSD)
-# 
-# load("output/lncContLat.Rdata")
-# postCN <- rstan::extract(mdlPerN)
-
-# load("output/heightDummyIntGrandZ25.Rdata")
-# sumerht <- summary(mdlHt)$summary
-# postHt <- rstan::extract(mdlHt)
-# 
-# load("output/lmaDummyIntGrandZ25.Rdata")
-# postLMA <- rstan::extract(mdlLMA)
-# sm.sum <- summary(mdlLMA)$summary
-# 
-# load("output/dbhDummyIntGrandZ25.Rdata")
-# postDBH <- rstan::extract(mdlDBH)
-# 
-# load("output/ssdDummyIntGrandZ25.Rdata")
-# postSSD <- rstan::extract(mdlSSD)
-# 
-# load("output/cnDummyIntGrandZ25.Rdata")
-# postCN <- rstan::extract(mdl)
 
 # How do transect effects differ?
 sumHt <- summary(mdlHt)$summary
@@ -138,7 +104,7 @@ intHt <- ggplot(htEW) +
   geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= lati), alpha = 0.2, fill = "cyan3") + 
   xlab("Latitude") + ylab("Height (m)") +
   xlim (min(lati), max(lati)) + 
-  ylim (-20,30) + 
+  ylim (-70,70) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
@@ -146,7 +112,7 @@ intHt <- ggplot(htEW) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 30, label = "a)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "a)", cex = 10) 
   
 
 ################################################
@@ -208,14 +174,14 @@ intLMA <- ggplot(LMAEW) +
   scale_color_manual(values = c("darkolivegreen","darkolivegreen3"), labels = c("Western", "Eastern"), name = "") +
   xlab("Latitude") + labs(y = bquote('Leaf mass area '~(g/m^2))) +
   xlim (min(lati), max(lati)) + 
-  ylim (-0.05,0.2) + 
+  ylim (-0.4,0.4) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 0.2, label = "d)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 0.4, label = "d)", cex = 10) 
 ### DBH
 
 
@@ -279,14 +245,14 @@ intDBH <- ggplot(DBHEW) +
   scale_linetype_manual(values = c(1,2), labels = c("Western", "Eastern"), name = "") +
   xlab("Latitude") + ylab("Diameter at breast height (m)") +
   xlim (min(lati), max(lati)) + 
-  ylim (-20,30) + 
+  ylim (-70,70) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.8,.85),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) #+  annotate("text", x = 41, y = 30, label = "b)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "b)", cex = 10) 
 ## C:N
 
 sumCN <- summary(mdlPerN)$summary
@@ -312,21 +278,6 @@ b_tranlatCN25 <- quantile(postCN$b_tranlat, c(0.25))
 b_tranlatCN75 <- quantile(postCN$b_tranlat, c(0.75))
 b_tranlatCN <- cbind(b_tranlatCN, b_tranlatCN5,b_tranlatCN95, b_tranlatCN25,b_tranlatCN75)
 
-
-
-## Simulate interaction with transect and latitude:
-
-eData <- subset(trtPheno, transect == "1" )
-wData <- subset(trtPheno, transect == "0" )
-
-# Make the other parameters constant
-
-# lati <- seq(40, 60, by = 0.5)
-# lati <- (lati-mean(lati,na.rm=TRUE))/(sd(lati,na.rm=TRUE)*2)
-# tranW <- -0.4406491
-# tranE <- 0.5669498
-
-
 # plot first for west coast
 CN_w = a_spCN[1] + b_tranCN[1] * tranW + b_tranlatCN[1] * (tranW*lati)
 CN_e = a_spCN[1] + b_tranCN[1] * tranE + b_tranlatCN[1] * (tranE*lati)
@@ -337,34 +288,26 @@ CN_e5 = a_spCN[2] + b_tranCN[2] * tranE + b_tranlatCN[2] * (tranE*lati)
 CN_w95 = a_spCN[3] + b_tranCN[3] * tranW + b_tranlatCN[3] * (tranW*lati)
 CN_e95 = a_spCN[3] + b_tranCN[3] * tranE + b_tranlatCN[3] * (tranE*lati)
 
-CNE <- data.frame(CNw = CN_w, CN_w5 =CN_w5, CN_w95 = CN_w95  )
-CNE$Tran <- "Eastern"
-names(CNE) <- c("cn", "cn5", "cn95","tran" )
-CNW <- data.frame(CNe = CN_e, CN_e5 = CN_e5, CN_e95 = CN_e95  )
-CNW$Tran <- "Western"
-names(CNW) <- c("cn", "cn5", "cn95","tran" )
+CNEW <- data.frame(CNw = CN_w, CN_w5 =CN_w5, CN_w95 = CN_w95, CNe = CN_e, CN_e5 = CN_e5, CN_e95 = CN_e95 )
 
-
-CNEW <- rbind(CNE, CNW)
-CNEW$lati <- lati
 intNit <- ggplot(CNEW) +
-  geom_line(aes(y = cn, x = lati, color = tran, linetype = tran)) +
-  geom_ribbon(data = CNEW, aes(ymin = cn5, ymax = cn95, x= lati, linetype = tran, fill = tran), alpha = 0.2) +
-  #geom_ribbon(data = CNEW, aes(ymin = CN_e5, ymax = CN_e95, x= lati), alpha = 0.2, fill = "purple2") +
-  # scale_color_manual(values = c("purple2","purple4"), labels = c("Eastern", "Western"), name = "") +
+  geom_line(aes(y = (CNw), x = lati), col = "purple4", lty = 2) +
+  geom_ribbon(data = CNEW, aes(ymin = (CN_w5), ymax = (CN_w95), x= lati), alpha = 0.2, fill = "purple4") +
+  geom_line(aes(y = (CNe), x = lati), col = "purple2") +
+  geom_ribbon(data = CNEW, aes(ymin = (CN_e5), ymax = (CN_e95), x= lati), alpha = 0.2, fill = "purple2") +
   xlab("Latitude") + ylab("Leaf nitrogen content (%)") +
   xlim (min(lati), max(lati)) + 
-  ylim (-5,10) + 
+  ylim (-70,70) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"),
-    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
-  theme(legend.title=element_blank(), legend.position=c(.8,.85), legend.text = element_text(size =15)) +
-  scale_linetype_manual(values=c("Eastern" =1, "Western" =2)) +
- scale_color_manual(values = c("Eastern"="purple4", "Western"="purple2"))+
-  scale_fill_manual(values = c("Eastern"="purple4","Western"="purple2"))
-    
+        panel.background = element_blank(), axis.line = element_line(colour = "black"),
+        axis.text = element_text(size = 15), axis.title = element_text(size = 20)) +
+  theme(legend.position=c(45, 20),legend.text = element_text(size = 15))  +
+  scale_fill_manual( labels = c("Low force", "High force")) +
+  scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "e)", cex = 10) 
+  intNit  
 
-sumSSD <- summary(mdlSSD)$summary
+sumSSD <- summary(mdlSSD6)$summary
 
 a_spSSD = mean((sumSSD[grep("mu_grand_sp", rownames(sumSSD)), 1]))
 a_spSSD5 <- quantile(postSSD$mu_grand_sp, c(0.05))
@@ -419,36 +362,36 @@ intSSD <- ggplot(SSDEW) +
   geom_ribbon(data = (SSDEW), aes(ymin = (SSD_e5), ymax = (SSD_e95), x= lati), alpha = 0.2, fill = "maroon") +
   xlab("Latitude") +  labs(y = bquote('Wood specific density'~(g/cm^2)))  +
   xlim (min(lati), max(lati)) + 
-  ylim (-2,2) + 
+  ylim (-7,7) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"),
     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
   theme(legend.key=element_blank(), legend.position=c(.0,.0),legend.text = element_text(size = 15)) +
   #scale_fill_manual( labels = c("Low force", "High force")) +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) #+  annotate("text", x = 42, y = 2, label = "c)", cex = 10) 
+  theme(legend.title = element_blank()) +  annotate("text", x = 42, y = 7, label = "c)", cex = 10) 
 
-pdf("figures/intrxnPlotsHundoa.pdf", height =5, width = 5)
-intHt
-dev.off()
+# pdf("figures/intrxnPlotsHundoa.pdf", height =5, width = 5)
+# intHt
+# dev.off()
+# 
+# pdf("figures/intrxnPlotsHundob.pdf", height =5, width = 5)
+# intDBH
+# dev.off()
+# 
+# pdf("figures/intrxnPlotsHundoc.pdf", height =5, width = 5)
+# intSSD
+# dev.off()
+# 
+# pdf("figures/intrxnPlotsHundod.pdf", height =5, width = 5)
+# intLMA
+# dev.off()
+# 
+# pdf("figures/intrxnPlotsHundoedfd.pdf", height =5, width = 5)
+# intNit
+# dev.off()
 
-pdf("figures/intrxnPlotsHundob.pdf", height =5, width = 5)
-intDBH
-dev.off()
-
-pdf("figures/intrxnPlotsHundoc.pdf", height =5, width = 5)
-intSSD
-dev.off()
-
-pdf("figures/intrxnPlotsHundod.pdf", height =5, width = 5)
-intLMA
-dev.off()
-
-pdf("figures/intrxnPlotsHundoedfd.pdf", height =5, width = 5)
-intNit
-dev.off()
-
-pdf("figures/intrxnPlotsHundo.pdf", height =5, width = 25)
+pdf("analysis/figures/intrxnPlotsHundo.pdf", height =5, width = 25)
 plot_grid( intHt, intDBH, intSSD, intLMA, intNit , ncol = 5, nrow =1,align = "v")
 dev.off()
 
@@ -477,7 +420,7 @@ dev.off()
 # }
 
 ############ SHRUB VS TREE ##############################
-spInfo <- read.csv("input/species_ring.csv")
+spInfo <- read.csv("analysis/input/species_ring.csv")
 colnames(spInfo)[colnames(spInfo) == "X"] <- "ringType"
 
 spInfo <- spInfo[, 1:5]
@@ -595,12 +538,16 @@ meanChill2 <- subset(meanChill2, ringType !="")
 ringChill <- ggplot(meanChill2,aes(y= betaCueSp, x = ringType)) +
   geom_point(size = 7,  color = "cyan4") +
   ylim (-30,3) +
-  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "cyan4") +
-  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "cyan4") +
+  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), 
+                width= 0, linewidth = 0.5, color = "cyan4") +
+  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), 
+                width= 0, linewidth = 1.5, color = "cyan4") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none")  + labs( x = "Pore distribution type", y = "Height chilling response (days/m)", main = NA) +
-  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
- #+  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
+        panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none")  + 
+  labs( x = "Pore distribution type", y = "Chilling response (days/m)", main = NA) +
+  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), 
+        axis.text.y = element_text(size = 18), axis.title = element_text(size = 20)) +  
+  annotate("text", x = 0.75, y = 3, label = "a)", cex = 10) 
 ringChill
 # theme(axis.text.x = element_text( size=17,angle = 78,  hjust=1),
 #       axis.text.y=element_text(size = 15),
@@ -641,9 +588,10 @@ ringForce <- ggplot(meanforce2,aes(y= betaCueSp, x = ringType), size = 7) +
   geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "goldenrod") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +  
- # annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
-  labs( x = "Pore distribution type", y = "Height forcing response (days/m)", main = NA) +
-  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
+  annotate("text", x = 0.75, y = 3, label = "b)", cex = 10) +
+  labs( x = "Pore distribution type", y = "Forcing response (days/m)", main = NA) +
+  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), 
+        axis.text.y = element_text(size = 18), axis.title = element_text(size = 20)) 
 
 longphoto <- merge(longPhoto, spInfo, by = "species.name")
 
@@ -676,28 +624,29 @@ meanphoto2 <- subset(meanphoto2, ringType !="")
 ringPhoto <- ggplot(meanphoto2,aes(y= betaCueSp, x = ringType), size = 7) +
   geom_point(size = 7, color = "maroon") +
   ylim (-30,3) +
-  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, size = 0.5, color = "maroon") +
-  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, size = 1.5, color = "maroon") +
+  geom_errorbar(aes(ymin= error05, ymax = error95,xmin= ringType, xmax = ringType), width= 0, linewidth = 0.5, color = "maroon") +
+  geom_errorbar(aes(ymin= error25, ymax = error75,xmin= ringType, xmax = ringType), width= 0, linewidth = 1.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  #annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
-  labs( x = "Pore distribution type", y = "Height photoperiod response (days/m)", main = NA) +
-  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1), axis.text.y = element_text(size = 18), axis.title = element_text(size = 25)) 
+  annotate("text", x = 0.75, y = 3, label = "c)", cex = 10) +
+  labs( x = "Pore distribution type", y = "Photoperiod response (days/m)", main = NA) +
+  theme(legend.title = element_blank(), axis.text.x = element_text(size = 20, angle = 45, hjust = 1),
+        axis.text.y = element_text(size = 18), axis.title = element_text(size = 20)) 
 
-pdf("figures/ringPorosityHeightHundoa.pdf", width = 6, height = 8)
-ringChill
-dev.off()
+# pdf("figures/ringPorosityHeightHundoa.pdf", width = 6, height = 8)
+# ringChill
+# dev.off()
+# 
+# pdf("figures/ringPorosityHeightHundob.pdf", width = 6, height = 8)
+# ringForce
+# dev.off()
+# 
+# pdf("figures/ringPorosityHeightHundoc.pdf", width = 6, height = 8)
+# ringPhoto
+# dev.off()
 
-pdf("figures/ringPorosityHeightHundob.pdf", width = 6, height = 8)
-ringForce
-dev.off()
 
-pdf("figures/ringPorosityHeightHundoc.pdf", width = 6, height = 8)
-ringPhoto
-dev.off()
-
-
-pdf("figures/ringPorosityHeightHundo.pdf", width = 12, height = 4)
+pdf("analysis/figures/ringPorosityHeightHundo.pdf", width = 12, height = 6)
 plot_grid(ringChill, ringForce, ringPhoto, nrow = 1, ncol = 3, align = "v")
 dev.off()
 

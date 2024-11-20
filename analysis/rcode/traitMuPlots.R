@@ -12,33 +12,33 @@ require(cowplot)
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/Treetraits") 
 }  else{
-  setwd("/home/deirdre/Treetraits") # for midge
+  setwd("~/Documents/github/Treetraits") # for midge
 }
 
 # want plots with just the cues and plot with just the traitxcue interactions
 
-spInfo <- read.csv("input/species_ring.csv")
-pheno <- read.csv("input/phenoDataWChill.csv")
+spInfo <- read.csv("analysis/input/species_ring.csv")
+pheno <- read.csv("analysis/input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
-trtPheno <- read.csv("input/trtPhenoDummy.csv")
+trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
 
-load("output/htContLatHundoLat.Rdata")
+load("analysis/output/htContLatHundoLatFinal.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
-load("output/lmaContLatHundoLat.Rdata")
+load("analysis/output/lmaContLatHundoLatFinal.Rdata")
 postLMA <- rstan::extract(mdlLMA)
 sumLMA<- summary(mdlLMA)$summary
 
-load("output/dbhContLatHundoLat.Rdata")
+load("analysis/output/dbhContLatHundoLatFinal.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 sumDBH<- summary(mdlDBH)$summary
 
-load("output/ssdContLatHundoLat.Rdata")
-postSSD <- rstan::extract(mdlSSD)
-sumSSD<- summary(mdlSSD)$summary
+load("analysis/output/ssdContLatHundoLatFinal.Rdata")
+postSSD <- rstan::extract(mdlSSD6)
+sumSSD<- summary(mdlSSD6)$summary
 
-load("output/lncContLatHundoLat.Rdata")
+load("analysis/output/lncContLatHundoLatFinal.Rdata")
 postCN <- rstan::extract(mdlPerN)
 sumCN<- summary(mdlPerN)$summary
 # load("output/cnContLat.Rdata")
@@ -64,7 +64,6 @@ sumCN<- summary(mdlPerN)$summary
 # load("output/cnDummyIntGrandZ25.Rdata")
 # postCN <- rstan::extract(mdl)
 # sumCN<- summary(mdl)$summary
-
 
 muForceHt = mean((sumHt[grep("muForceSp", rownames(sumHt)), 1]))
 muForceHt5 <- quantile(postHt$muForceSp, c(0.05))
@@ -517,9 +516,10 @@ cueHeightPlot <- ggplot(cueHt,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") + 
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in budburst day", y = "", main = NA) +  annotate("text", x = -20, y = 3.4, label = "Height", cex = 10) + 
+  labs( x = "Change in budburst day", y = "", main = NA) +  annotate("text", x = -18, y = 3.4, label = "a) Height", cex = 10) + 
   scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
+cueHeightPlot
 
 cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "darkolivegreen") +
@@ -530,9 +530,10 @@ cueLMAPlot <- ggplot(cueLMA,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in budburst day", y = "", main = NA) +  annotate("text", x = -22, y = 3.4, label = "LMA", cex = 10) + 
+  labs( x = "Change in budburst day", y = "", main = NA) +  annotate("text", x = -20, y = 3.4, label = "d) LMA", cex = 10) + 
   scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
+cueLMAPlot 
 
 cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "goldenrod") +
@@ -543,28 +544,29 @@ cueDBHPlot <- ggplot(cueDBH,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -22, y = 3.4, label = "DBH", cex = 10) + 
+  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -20, y = 3.4, label = "c) DBH", cex = 10) + 
   scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
+cueDBHPlot
 
 cueCNPlot <- ggplot(cueCN,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "purple4") +
   geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-25,5)+
+  xlim (-35,5)+
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "purple4") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
   scale_y_discrete(limits=rev) +
-  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -22, y = 3.4, label = "LNC", cex = 10) +
+  labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -30, y = 3.4, label = "e) LNC", cex = 10) +
   theme(legend.title = element_blank()) 
-
+cueCNPlot
 
 cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
   geom_point(size = 7, color = "maroon") +
   geom_vline(xintercept = 0, linetype='dashed') +
-  xlim (-25,5)+
+  xlim (-60,10)+
   geom_errorbar(aes(xmin= five, xmax = nintyFive), size = 1, width = 0, color = "maroon") +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
@@ -573,24 +575,25 @@ cueSSDPlot <- ggplot(cueSSD,aes(y= cue, x = mean), size = 7) +
   labs( x = "Change in budburst day", y = "", main = NA) + annotate("text", x = -22, y = 3.4, label = "WSD", cex = 10) +
   scale_y_discrete(limits=rev) +
   theme(legend.title = element_blank()) 
-
-pdf("figures/muCuePlotsHundoa.pdf", height =5, width = 7)
-cueHeightPlot
-dev.off()
-pdf("figures/muCuePlotsHundob.pdf", height =5, width = 7)
-cueDBHPlot
-dev.off()
-pdf("figures/muCuePlotsHundoc.pdf", height =5, width = 7)
 cueSSDPlot
-dev.off()
-pdf("figures/muCuePlotsHundod.pdf", height =5, width = 7)
-cueLMAPlot
-dev.off()
-pdf("figures/muCuePlotsHundoe.pdf", height =5, width = 7)
-cueCNPlot 
-dev.off()
 
-pdf("figures/muCuePlotsHundo.pdf", height =5, width = 25)
+# pdf("figures/muCuePlotsHundoa.pdf", height =5, width = 7)
+# cueHeightPlot
+# dev.off()
+# pdf("figures/muCuePlotsHundob.pdf", height =5, width = 7)
+# cueDBHPlot
+# dev.off()
+# pdf("figures/muCuePlotsHundoc.pdf", height =5, width = 7)
+# cueSSDPlot
+# dev.off()
+# pdf("figures/muCuePlotsHundod.pdf", height =5, width = 7)
+# cueLMAPlot
+# dev.off()
+# pdf("figures/muCuePlotsHundoe.pdf", height =5, width = 7)
+# cueCNPlot 
+# dev.off()
+
+pdf("analysis/figures/muCuePlotsHundo.pdf", height =5, width = 28)
 plot_grid( cueHeightPlot,cueDBHPlot,cueSSDPlot,cueLMAPlot,cueCNPlot , ncol = 5, nrow =1 ,align = "v", rel_widths = c(0.9,0.9,1,0.9,0.9))
 dev.off()
 #####################################################
@@ -604,7 +607,7 @@ cueTraitHeightPlot <- ggplot(cueTraitHt,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -0.75, y = 3.4, label = "Height", cex = 10) + 
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -.38, y = 3.4, label = "Height", cex = 10) + 
   scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
@@ -616,7 +619,7 @@ cueTraitLMAPlot <- ggplot(cueTraitLMA,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -4, y = 3.4, label = "LMA", cex = 10) + 
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -2.75, y = 3.4, label = "LMA", cex = 10) + 
   scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 ##
@@ -629,7 +632,7 @@ cueTraitDBHPlot <- ggplot(cueTraitDBH,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in cue", y = "", main = NA) + annotate("text", x = -0.75, y = 3.4, label = "DBH", cex = 10) + 
+  labs( x = "Change in cue", y = "", main = NA) + annotate("text", x = -0.5, y = 3.4, label = "DBH", cex = 10) + 
   scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
@@ -641,7 +644,7 @@ cueTraitCNPlot <- ggplot(cueTraitCN,aes(y= cue, x = mean), size = 7) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
     panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
   theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
-  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -4, y = 3.4, label = "LNC", cex = 10) + 
+  labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -2.5, y = 3.4, label = "LNC", cex = 10) + 
   scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
 cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
@@ -651,32 +654,34 @@ cueTraitSSDPlot <- ggplot(cueTraitSSD,aes(y= cue, x = mean), size = 7) +
   xlim (-20,22) +
   #geom_errorbar(aes(xmin= twentyFive, xmax = seventyFive, ymin= cue, ymax = cue), size =2.5, color = "maroon") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"), legend.position = "none") +
-  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), axis.text.x=element_text(size = 20)) +
+    panel.background = element_blank(), axis.line = element_line(colour = "black"), 
+    legend.position = "none") +
+  theme(axis.title.x = element_text( size=25), axis.text.y=element_text(size = 20), 
+        axis.text.x=element_text(size = 20)) +
   labs( x = "Change in cue", y = "", main = NA) +  annotate("text", x = -15, y = 3.4, label = "WSD", cex = 10) + 
   scale_y_discrete(limits=rev) +theme(legend.title = element_blank()) 
 
-pdf("figures/muCueTraitPlotsHundoa.pdf", height =5, width = 7)
-cueTraitHeightPlot
-dev.off()
+# pdf("analysis/figures/muCueTraitPlotsHundoa.pdf", height =5, width = 7)
+# cueTraitHeightPlot
+# dev.off()
+# 
+# pdf("figures/muCueTraitPlotsHundob.pdf", height =5, width = 7)
+# cueTraitDBHPlot
+# dev.off()
+# 
+# pdf("figures/muCueTraitPlotsHundoc.pdf", height =5, width = 7)
+# cueTraitSSDPlot
+# dev.off()
+# 
+# pdf("figures/muCueTraitPlotsHundod.pdf", height =5, width = 7)
+# cueTraitLMAPlot
+# dev.off()
+# 
+# pdf("figures/muCueTraitPlotsHundoe.pdf", height =5, width = 7)
+# cueTraitCNPlot
+# dev.off()
 
-pdf("figures/muCueTraitPlotsHundob.pdf", height =5, width = 7)
-cueTraitDBHPlot
-dev.off()
-
-pdf("figures/muCueTraitPlotsHundoc.pdf", height =5, width = 7)
-cueTraitSSDPlot
-dev.off()
-
-pdf("figures/muCueTraitPlotsHundod.pdf", height =5, width = 7)
-cueTraitLMAPlot
-dev.off()
-
-pdf("figures/muCueTraitPlotsHundoe.pdf", height =5, width = 7)
-cueTraitCNPlot
-dev.off()
-
-pdf("figures/muCueTraitPlotsHundo.pdf", height =5, width = 25)
+pdf("analysis/figures/muCueTraitPlotsHundo.pdf", height =5, width = 25)
 plot_grid( cueTraitHeightPlot,cueTraitDBHPlot,cueTraitSSDPlot,cueTraitLMAPlot,cueTraitCNPlot , ncol = 5, nrow =1,align = "hv")
 dev.off()
 # , rel_widths = c(1, 0.05, 1)

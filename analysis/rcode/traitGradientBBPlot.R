@@ -13,13 +13,13 @@ require(cowplot)
 if(length(grep("deirdreloughnan", getwd()) > 0)) { 
   setwd("~/Documents/github/Treetraits") 
 }  else{
-  setwd("/home/deirdre/Treetraits") # for midge
+  setwd("~/Documents/github/Treetraits") # for midge
 }
-spInfo <- read.csv("input/species_ring.csv")
+spInfo <- read.csv("analysis/input/species_ring.csv")
 colnames(spInfo)[colnames(spInfo) == "X"] <- "ringType"
 spInfo <- spInfo[,1:5]
 
-trtPheno <- read.csv("input/trtPhenoDummy.csv")
+trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
 trtMeans <- aggregate(trtPheno[c("ssd","ht","lma","dbh","C.N","per.N")], trtPheno[c("species")], FUN = mean, na.rm = T)
 
 spInfo <- merge(spInfo, trtMeans, by = "species")
@@ -28,7 +28,7 @@ spInfo <- merge(spInfo, trtMeans, by = "species")
 # sumHt <- summary(mdlHt)$summary
 # postHt <- rstan::extract(mdlHt)
 
-load("output/htContLatHundoLat.Rdata")
+load("analysis/output/htContLatHundoLatFinal.Rdata")
 sumHt <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
@@ -44,7 +44,7 @@ postHt <- rstan::extract(mdlHt)
 # postSSD <- rstan::extract(mdlSSD)
 # sumSSD<- summary(mdlSSD)$summary
 
-load("output/lncContLatHundoLat.Rdata")
+load("analysis/output/lncContLatHundoLatFinal.Rdata")
 postCN <- rstan::extract(mdlPerN)
 sumCN<- summary(mdlPerN)$summary
 
@@ -248,7 +248,7 @@ names(meanPtE) <- c("species.name","type","transect","Budburst", "BudburstHigh",
    ylim (-20,35) +
   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(7,28)) +
   labs( x = "", y = "Day of budburst", main = NA) +
-  theme(legend.title = element_blank()) + # annotate("text", x = 15, y = 35, label = "a) Eastern transect - height", cex =8) +
+  theme(legend.title = element_blank()) + annotate("text", x = 15, y = 35, label = "a) Eastern transect - height", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
@@ -314,21 +314,21 @@ htW <- ggplot(meanPtW) +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtW, col = "black") +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtW, col = "black") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
         axis.text.y=element_text(size = 15),
         axis.title=element_text(size=20)) +
   ylim (-20,35) +
   scale_x_continuous( breaks = west$meanBB, labels = west$species,limits = c(7,30)) +
   labs( x = "", y = "Day of budburst", main = NA) +
-  theme(legend.title = element_blank()) +#  annotate("text", x = 16, y = 35, label = "b) Western transect - height", cex =8) +
+  theme(legend.title = element_blank()) + annotate("text", x = 15, y = 35, label = "b) Western transect - height", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
                                    "intercept" ),
                         breaks = c("Budburst","BudburstHigh", "Intercept"))
 htW
+
 # htOrderW <- ggplot(meanPtW) +
 #   geom_point(aes(y= Budburst, x = ht, shape = "Budburst", col=type ), size = 5) +
 #   geom_point(aes(y= BudburstHigh, x = ht, shape = "BudburstHigh", col=type), size = 5) +
@@ -586,21 +586,20 @@ CNE <- ggplot(meanPtE) +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtE, col = "black") +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtE, col = "black") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
         axis.text.y=element_text(size = 15),
-        axis.title=element_text(size=20)) +
+        axis.title=element_text(size=20))+
   ylim (-20,35) +
   scale_x_continuous( breaks = east$meanBB, labels = east$species,limits = c(5,21)) +
   labs( x = "", y = "Day of budburst", main = NA) +
-  theme(legend.title = element_blank()) +#  annotate("text", x = 11, y = 35, label = "c) Eastern transect - LNC", cex =8) +
+  theme(legend.title = element_blank()) +  annotate("text", x = 11, y = 35, label = "c) Eastern transect - LNC", cex =8) +
   scale_color_manual(values = c("maroon","cyan4")) +
   scale_shape_discrete( labels = c("low cue",
                                    "high cue",
                                    "intercept" ),
                         breaks = c("Budburst","BudburstHigh", "Intercept"))
-
+CNE
 
 # CNOrderE <- ggplot(meanPtE) +
 #   geom_point(aes(y= Budburst, x = CN, shape = "Budburst", col=type ), size = 5) +
@@ -639,8 +638,7 @@ CNW <- ggplot(meanPtW) +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = Budburst), data = meanPtW, col = "black") +
   geom_segment(aes(x = Budburst, y = Intercept, xend = Budburst, yend = BudburstHigh), data = meanPtW, col = "black") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_blank(), axis.line = element_line(colour = "black"),
-        legend.key=element_rect(fill="white")) +
+        panel.background = element_blank(), axis.line = element_line(colour = "black")) +
   theme(axis.text.x = element_text( size=15, angle = 78,  hjust=1),
         axis.text.y=element_text(size = 15),
         axis.title=element_text(size=20)) +
@@ -673,23 +671,23 @@ CNW <- ggplot(meanPtW) +
 #     "high cue",
 #     "intercept" ),
 #     breaks = c("Budburst","BudburstHigh", "Intercept"))
-pdf("figures/dotShrubTreeHtCNHundoa.pdf", width = 7, height = 5)
-htE
-dev.off()
+# pdf("figures/dotShrubTreeHtCNHundoa.pdf", width = 7, height = 5)
+# htE
+# dev.off()
+# 
+# pdf("figures/dotShrubTreeHtCNHundob.pdf", width = 7, height = 5)
+# htW
+# dev.off()
+# 
+# pdf("figures/dotShrubTreeHtCNHundoc.pdf", width = 7, height = 5)
+# CNE
+# dev.off()
+# 
+# pdf("figures/dotShrubTreeHtCNHundod.pdf", width = 7, height = 5)
+# CNW
+# dev.off()
 
-pdf("figures/dotShrubTreeHtCNHundob.pdf", width = 7, height = 5)
-htW
-dev.off()
-
-pdf("figures/dotShrubTreeHtCNHundoc.pdf", width = 7, height = 5)
-CNE
-dev.off()
-
-pdf("figures/dotShrubTreeHtCNHundod.pdf", width = 7, height = 5)
-CNW
-dev.off()
-
-pdf("figures/dotShrubTreeHtCNHundo.pdf", width = 15, height = 10)
+pdf("analysis/figures/dotShrubTreeHtCNHundo.pdf", width = 15, height = 10)
 plot_grid(htE, htW, CNE,CNW, nrow = 2, ncol = 2, align = "v")
 dev.off()
 # 
