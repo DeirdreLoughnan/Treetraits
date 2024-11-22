@@ -36,11 +36,10 @@ put.fig.letter <- function(label, location="topleft", x=NULL, y=NULL,
   text(labels=label[1], x=this.x, y=this.y, xpd=T, cex = 2, ...)
 }
 
-spInfo <- read.csv("input/species_ring.csv")
-pheno <- read.csv("input/phenoDataWChill.csv")
+spInfo <- read.csv("..//analysis/input/species_ring.csv")
+pheno <- read.csv("..//analysis/input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
-trtPheno <- read.csv("input/trtPhenoDummy.csv")
-
+trtPheno <- read.csv("..//analysis/input/trtPhenoDummy.csv")
 
 # Get the data
 # dl <- read.csv("input/dl_allbb.csv")
@@ -162,7 +161,7 @@ specieslist <- sort(unique(trtPheno$species))
 
 ################################
 # Height
-load("output/htContLatHundoLat.Rdata")
+load("..//analysis/output/htContLatHundoLatFinal.Rdata")
 
 ModelFit <- rstan::extract(mdlHt)
 
@@ -223,14 +222,14 @@ col3.sp <-c( rgb(124 / 252, 166 / 255, 0 / 255, alpha = 0.05))
 col4.sp <- c( rgb(34 / 255, 166 / 255, 167 / 255, alpha = 0.05))
 col5.sp <- c( rgb(141 / 255, 34 / 255, 171 / 255, alpha = 0.05))
 
-pdf("figures/cuetraitHundoa.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+pdf("..//analysis/figures/cuetraitHundo.pdf", height = 20, width = 15)
+par(mar = c(5, 5, 2, 2), mfrow = c(5,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Height (m)", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "Forcing", adj = 0, cex = 3)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 }
 # for(j in 1:length(muForceSp[,1])){
 #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
@@ -305,7 +304,7 @@ arrows(
 
 #my.label <- paste("a", ".", sep="")
 #put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 #------------------------------------------------------------------------------#
 betaChillSp <- data.frame(ModelFit$betaChillSp)
 betaChillSpMean <- colMeans(betaChillSp)
@@ -338,14 +337,14 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
 #pdf(paste("figures/chill", files[i], ".pdf", sep = ""))
 #pdf(paste("figures/chill", "lnc", ".pdf", sep = ""), height = 5, width = 5)
-pdf("figures/cuetraitHundob.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundob.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Height (m)", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "Chilling", adj = 0, cex = 3)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= col1.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 }
 # for(j in 1:length(muChillSp[,1])){
 #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
@@ -420,7 +419,7 @@ arrows(
 #my.label <- p
 #my.label <- paste("b", ".", sep="")
 #put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 #------------------------------------------------------------------------------#
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
 betaPhotoSpMean <- colMeans(betaPhotoSp)
@@ -450,14 +449,14 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
 #pdf(paste("figures/photo", files[i], ".pdf", sep = ""))
 #pdf(paste("figures/photo", "height", ".pdf", sep = ""), height = 5, width = 5)
-pdf("figures/cuetraitHundoc.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundoc.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Height (m)", cex.lab = 1.4) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "Photoperiod", adj = 0, cex = 3)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= col4.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 }
 # for(j in 1:length(muPhotoSp[,1])){
 #   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
@@ -532,10 +531,10 @@ arrows(
 #my.label <- p
 # my.label <- paste("c", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ##########################################
 # LMA
-load("output/lmaContLatHundoLat.Rdata")
+load("..//analysis/output/lmaContLatHundoLatFinal.Rdata")
 
 ModelFit <- rstan::extract(mdlLMA)
 
@@ -585,14 +584,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundod.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundod.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 }
 abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
@@ -632,7 +631,7 @@ arrows(
 # my.label <- paste("d", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
 
-dev.off()
+#dev.off()
 ######################################################
 betaChillSp <- data.frame(ModelFit$betaChillSp)/100
 betaChillSpMean <- colMeans(betaChillSp)
@@ -663,14 +662,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundoe.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundoe.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)),  ylab = "Species level chilling slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col = col1.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0")
 }# for(j in 1:length(muChillSp[,1])){
 #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 # }
@@ -711,7 +710,7 @@ arrows(
 
 # my.label <- paste("e", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 #######################################################################
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)/100
 betaPhotoSpMean <- colMeans(betaPhotoSp)
@@ -739,13 +738,13 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundof.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundof.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = bquote('Leaf mass area '~(g/m^2)),cex.lab = 1.5) # blank plot with x range 
 
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= col4.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 }
 # for(j in 1:length(muPhotoSp[,1])){
 #   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
@@ -789,10 +788,10 @@ arrows(
 # my.label <- paste("f", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
 
-dev.off()
+#dev.off()
 ####################
 # DBH
-load("output/dbhContLatHundoLat.Rdata")
+load("..//analysis/output/dbhContLatHundoLatFinal.Rdata")
 
 ModelFit <- rstan::extract(mdlDBH)
 
@@ -843,14 +842,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundog.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundog.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Diameter at breast height (m)",  cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp)
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 }
 # for(j in 1:length(muForceSp[,1])){
 #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
@@ -892,7 +891,7 @@ arrows(
 
 # my.label <- paste("g", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 betaChillSp <- data.frame(ModelFit$betaChillSp) 
 betaChillSpMean <- colMeans(betaChillSp)
@@ -923,14 +922,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundoh.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundoh.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Diameter at breast height (m)", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= col1.sp) 
-  }
+for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
+}
 # for(j in 1:length(muChillSp[,1])){
 #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
 # }
@@ -972,7 +971,7 @@ arrows(
 
 # my.label <- paste("h", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
 betaPhotoSpMean <- colMeans(betaPhotoSp)
@@ -1000,13 +999,13 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundoi.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundoi.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Diameter at breast height (m)", cex.lab =1.5 ) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)  
-for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= col4.sp) 
+for(j in 1:length(apoly[,1])){abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 }
 
 # for(j in 1:length(muPhotoSp[,1])){
@@ -1050,13 +1049,13 @@ arrows(
 
 # my.label <- paste("i", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 ####################
 # SSD
-load("output/ssdContLatHundoLat.Rdata")
+load("..//analysis/output/ssdContLatHundoLatFinal.Rdata")
 
-ModelFit <- rstan::extract(mdlSSD)
+ModelFit <- rstan::extract(mdlSSD6)
 
 muSp <- data.frame(ModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -1104,15 +1103,15 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundoj.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundoj.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
 
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp) 
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 }
 
 # for(j in 1:length(muForceSp[,1])){
@@ -1156,7 +1155,7 @@ arrows(
 
 # my.label <- paste("j", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 betaChillSp <- data.frame(ModelFit$betaChillSp)
 betaChillSpMean <- colMeans(betaChillSp)
@@ -1187,14 +1186,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundok.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundok.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= col1.sp) 
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 }
 
 # for(j in 1:length(muChillSp[,1])){
@@ -1237,7 +1236,7 @@ arrows(
 
 # my.label <- paste("k", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
 betaPhotoSpMean <- colMeans(betaPhotoSp)
@@ -1262,18 +1261,17 @@ b95 <- quantile(betaTraitxPhoto$ModelFit.betaTraitxPhoto, prob = c(0.75))
 bpolly <- subset(betaTraitxPhoto, ModelFit.betaTraitxPhoto > b5 & ModelFit.betaTraitxPhoto < b95)
 betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 
-
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundol.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 1.5) # blank plot with x range 
+#pdf("figures/cuetraitHundol.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), 5), ylab = "Species level photoperiod slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=col4.sp) 
+  abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0") 
 }
 
 # for(j in 1:length(muPhotoSp[,1])){
@@ -1317,10 +1315,10 @@ arrows(
 
 # my.label <- paste("l", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 #########################################################################################################################
 # LNC
-load("output/lncContLatHundoLat.Rdata")
+load("..//analysis/output/lncContLatHundoLatFinal.Rdata")
 
 ModelFit <- rstan::extract(mdlPerN)
 
@@ -1370,14 +1368,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundom.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundom.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), ylab = "Species level forcing slope", xlab = "Leaf nitrogen content (%)", cex.lab = 1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= col2.sp) 
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 }
 
 # for(j in 1:length(muForceSp[,1])){
@@ -1420,7 +1418,7 @@ arrows(
 
 # my.label <- paste("m", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 betaChillSp <- data.frame(ModelFit$betaChillSp)
 betaChillSpMean <- colMeans(betaChillSp)
@@ -1451,14 +1449,14 @@ mg_df_west <- mg_df[mg_df$species %in% westSp, ]
 bcs_df_east <- bcs_df[bcs_df$species %in% eastSp, ]
 bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundon.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundon.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), ylab = "Species level chilling slope", xlab = "Leaf nitrogen conent (%)", cex.lab =1.5) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= col1.sp) 
+  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 }
 
 # for(j in 1:length(muChillSp[,1])){
@@ -1501,7 +1499,7 @@ arrows(
 
 # my.label <- paste("n", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
-dev.off()
+#dev.off()
 ###############################################################
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
 betaPhotoSpMean <- colMeans(betaPhotoSp)
@@ -1529,14 +1527,14 @@ betaTraitxPhotoMean <- colMeans(betaTraitxPhoto)
 bps_df_east <- bps_df[bps_df$species %in% eastSp, ]
 bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
-pdf("figures/cuetraitHundoo.pdf", height = 4, width = 5)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+#pdf("figures/cuetraitHundoo.pdf", height = 4, width = 5)
+#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), max(bps_df$photo75)), ylab = "Species level photoperiod slope", xlab = "Leaf nitrogen content (%)", cex.lab = 1.4) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.25)
 for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col=col4.sp) 
+  abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0") 
 }
 
 # for(j in 1:length(muPhotoSp[,1])){

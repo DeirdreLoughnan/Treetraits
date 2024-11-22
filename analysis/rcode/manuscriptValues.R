@@ -1,7 +1,6 @@
 # aim of this code is to generate the values referenced in the sweave file:
 
 library(rstan)
-require(shinystan)
 library(tidybayes)
 library(reshape2)
 
@@ -130,7 +129,7 @@ noIndivPheno <- nrow(pheno)
 # chillCueL <- round(quantile(fit$mu_b_chill1, c(0.05)),1)
 
 
-load("..//analysis/output/htContLatHundoLat.Rdata")
+load("..//analysis/output/htContLatHundoLatFinal.Rdata")
 
 htModelFit <- rstan::extract(mdlHt)
 muSp <- data.frame(htModelFit$mu_grand_sp)
@@ -187,7 +186,7 @@ lower_htsigmaSp <- format(round(quantile(htModelFit$sigma_sp, prob = 0.05),1), n
 upper_htsigmaSp <- round(quantile(htModelFit$sigma_sp, prob = 0.95),1)
 ######## Leaf mass area###############################
 
-load("..//analysis/output/lmaContLatHundoLat.Rdata")
+load("..//analysis/output/lmaContLatHundoLatFinal.Rdata")
 lmaModelFit <- rstan::extract(mdlLMA)
 muSp <- data.frame(lmaModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)/100
@@ -225,7 +224,7 @@ upper_lmaMuCSpMean <- round(quantile(lmaModelFit$muChillSp, prob = 0.95),1)
 lmaMuCSpMean; lower_lmaMuCSpMean; upper_lmaMuCSpMean
 
 #muPhotoSp
-lmaMuPSpMean <- as.numeric(round(mean(lmaModelFit$muPhotoSp),1))
+lmaMuPSpMean <- format(as.numeric(round(mean(lmaModelFit$muPhotoSp),1)), nsmall = 1)
 lower_lmaMuPSpMean <- format(round(quantile(lmaModelFit$muPhotoSp, prob = 0.05),1), nsmall =1)
 upper_lmaMuPSpMean <- round(quantile(lmaModelFit$muPhotoSp, prob = 0.95),1)
 lmaMuPSpMean; lower_lmaMuPSpMean; upper_lmaMuPSpMean
@@ -243,7 +242,7 @@ lower_lmasigmaSp <- format(round(quantile(lmaModelFit$sigma_sp, prob = 0.05),1),
 upper_lmasigmaSp <- round(quantile(lmaModelFit$sigma_sp, prob = 0.95),1)
 ##### C:N ###############################
 
-load("..//analysis/output/lncContLatHundoLat.Rdata")
+load("..//analysis/output/lncContLatHundoLatFinal.Rdata")
 lncModelFit <- rstan::extract(mdlPerN)
 muSp <- data.frame(lncModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -304,8 +303,8 @@ lncsigmaSp <- as.numeric(round(mean(lncModelFit$sigma_sp),1))
 lower_lncsigmaSp <- format(round(quantile(lncModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_lncsigmaSp <- round(quantile(lncModelFit$sigma_sp, prob = 0.95),1)
 ##### SSD  ###############################
-load("..//analysis/output/ssdContLatHundoLat.Rdata")
-ssdModelFit <- rstan::extract(mdlSSD)
+load("..//analysis/output/ssdContLatHundoLatFinal.Rdata")
+ssdModelFit <- rstan::extract(mdlSSD6)
 muSp <- data.frame(ssdModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 ssdFold <- round(max(muSpMean)/min(muSpMean),0)
@@ -359,7 +358,7 @@ ssdsigmaSp <- as.numeric(round(mean(ssdModelFit$sigma_sp),1))
 lower_ssdsigmaSp <- format(round(quantile(ssdModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_ssdsigmaSp <- round(quantile(ssdModelFit$sigma_sp, prob = 0.95),1)
 ########## DBH ###############################
-load("..//analysis/output/dbhContLatHundoLat.Rdata")
+load("..//analysis/output/dbhContLatHundoLatFinal.Rdata")
 dbhModelFit <- rstan::extract(mdlDBH)
 muSp <- data.frame(dbhModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
