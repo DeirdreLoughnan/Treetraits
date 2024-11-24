@@ -304,7 +304,7 @@ lower_lncsigmaSp <- format(round(quantile(lncModelFit$sigma_sp, prob = 0.05),1),
 upper_lncsigmaSp <- round(quantile(lncModelFit$sigma_sp, prob = 0.95),1)
 ##### SSD  ###############################
 load("..//analysis/output/ssdContLatHundoLatFinal.Rdata")
-ssdModelFit <- rstan::extract(mdlSSD6)
+ssdModelFit <- rstan::extract(mdlSSDSm)
 muSp <- data.frame(ssdModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 ssdFold <- round(max(muSpMean)/min(muSpMean),0)
