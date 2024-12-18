@@ -201,13 +201,6 @@ all.data <- list(yTraiti = trt.dat$yTraiti,
                  chilli = pheno.datTrait$chilli,
                  photoi = pheno.datTrait$photoi)
 
-
-# mdl <- stan("stan/testTraitPhenoLatitudeTraitOnly.stan",
-#                data = all.data,
-#                iter = 4000, warmup = 3000, chains=4,
-#             include = FALSE, pars = c("y_hat")
-# )
-
 mdl <- stan("stan/modelDevelopment/justDummyIntZChill.stan",
             data = all.data,
             iter = 4000, warmup = 3000, chains=4,
@@ -274,92 +267,3 @@ abline(0,1)
 dev.off()
 
 
-# muPhenoSp <- sumer[grep("alphaPhenoSp", rownames(sumer))]
-# muTraitSp <- sumer[grep("muSp", rownames(sumer))]
-# muStudyEsti <- sumer[grep("muStudy", rownames(sumer))]
-# muGrandSp <- sumer[grep("mu_grand_sp", rownames(sumer))]
-
-# pdf("GeoffsMdl_5_5_comparisons.pdf",width = 6, height = 6)
-# par(mfrow = c(2,2))
-# plot(muTraitSp ~ alphaTraitSp, xlab = "simulated muTraitSp", ylab = "mdl estimated muTraitSp")
-# abline(0,1)
-# plot(muStudyEsti ~ muStudy, xlab = "simulated muStudy", ylab = "mdl estimated muStudy")
-# abline(0,1)
-# plot(muPhenoSp ~ alphaPhenoSp, xlab = "simulated muPhenoSp", ylab = "mdl estimated muPhenoSp")
-# abline(0,1)
-# plot(muGrandSp ~ unique(trt.dat$mu_grand_sp), xlab = "simulated muGrandSp", ylab = "mdl estimated muGrandSp")
-# abline(0,1)
-# dev.off()
-# 
-# # More complex model runs:
-# mdl <- stan("stan/phenoBc_mdl_simp.stan",
-#             data = pheno.data,
-#             iter = 4000, warmup = 3000, chains=4,
-#             include = FALSE, pars = c("y_hat")
-# )
-# mu_grand <- sumer[grep("mu_grand", rownames(sumer)),c("mean","2.5%","97.5%")]
-# sigma_sp <- sumer[grep("sigma_sp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# popTwo <- sumer[grep("b_pop2", rownames(sumer)), c("mean","2.5%","97.5%")]
-# popThree <- sumer[grep("b_pop3", rownames(sumer)), c("mean","2.5%","97.5%")]
-# popFour <- sumer[grep("b_pop4", rownames(sumer)), c("mean","2.5%","97.5%")]
-# sigma_traity <- sumer[grep("sigma_traity", rownames(sumer)), c("mean","2.5%","97.5%")]
-
-# mu_chillsp <- sumer[grep("muChillSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# sigma_chillsp <- sumer[grep("sigmaChillSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# beta_tc <- sumer[grep("betaTraitxChill", rownames(sumer)), c("mean","2.5%","97.5%")]
-# 
-# mu_photosp <- sumer[grep("muPhotoSp", rownames(sumer)),c("mean","2.5%","97.5%")]
-# sigma_photosp <- sumer[grep("sigmaPhotoSp", rownames(sumer)),c("mean","2.5%","97.5%")]
-# beta_tp <- sumer[grep("betaTraitxPhoto", rownames(sumer)), c("mean","2.5%","97.5%")]
-# 
-# mu_forcesp <- sumer[grep("muForceSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# mu_phenosp <- sumer[grep("muPhenoSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# alpha.forcingsp <- sumer[grep("alphaForcingSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# sigma_forcesp <- sumer[grep("sigmaForceSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# sigma_phenosp <- sumer[grep("sigmaPhenoSp", rownames(sumer)), c("mean","2.5%","97.5%")]
-# sigma_phenoy <- sumer[grep("sigmapheno_y", rownames(sumer)), c("mean","2.5%","97.5%")]
-# beta_tf <- sumer[grep("betaTraitxForce", rownames(sumer)),c("mean","2.5%","97.5%")]
-# beta_tc <- sumer[grep("betaTraitxChill", rownames(sumer)),c("mean","2.5%","97.5%")]
-# beta_tp <- sumer[grep("betaTraitxPhoto", rownames(sumer)),c("mean","2.5%","97.5%")]
-# 
-# mdl.out <- data.frame( "Parameter" = c("mu_grand","sigma_sp","pop2","pop3","pop4","sigma_traity","mu_forcesp","mu_chillsp","mu_photosp","mu_phenosp","sigma_forcesp","sigma_chillsp","sigma_photosp", "sigma_phenosp", "sigma_phenoy", "beta_tf", "beta_tc","beta_tp"),  
-#                        "Test.data.values" = c(mu.grand, sigma.species, mu.pop2,mu.pop3,mu.pop4, trt.var, mu.force, mu.chill, mu.photo, mu.pheno.sp, sigma.force, sigma.chill, sigma.photo, sigma.pheno.sp,sigma.pheno.y, betaTraitxForce, betaTraitxChill, betaTraitxPhoto) ,
-#                        "Estiamte"= c(mu_grand[1,1], sigma_sp[1], popTwo[1], popThree[1], popFour[1], sigma_traity[1],  mu_forcesp[1], mu_chillsp[1], mu_photosp[1], mu_phenosp[1], sigma_forcesp[1], sigma_chillsp[1], sigma_photosp[1], sigma_phenosp[1], sigma_phenoy[1], beta_tf[1], beta_tc[1],  beta_tp[1]),
-#                        "2.5"= c(mu_grand[1,2], sigma_sp[2], popTwo[2], popThree[2], popFour[2], sigma_traity[2],  mu_forcesp[2], mu_chillsp[2], mu_photosp[2], mu_phenosp[2], sigma_forcesp[2], sigma_chillsp[2], sigma_photosp[2], sigma_phenosp[2], sigma_phenoy[2], beta_tf[2], beta_tc[2],  beta_tp[2]),
-#                        "97.5"= c(mu_grand[1,3], sigma_sp[3], popTwo[3], popThree[3], popFour[3], sigma_traity[3],  mu_forcesp[3], mu_chillsp[3], mu_photosp[3], mu_phenosp[3], sigma_forcesp[3], sigma_chillsp[3], sigma_photosp[3], sigma_phenosp[3], sigma_phenoy[3], beta_tf[3], beta_tc[3],  beta_tp[3]) )
-# 
-# mdl.out
-# 
-# muPhenoSp <- sumer[grep("alphaPhenoSp", rownames(sumer))]
-# muTraitSp <- sumer[grep("muSp", rownames(sumer))]
-# muStudyEsti <- sumer[grep("muStudy", rownames(sumer))]
-# muGrandSp <- sumer[grep("mu_grand_sp", rownames(sumer))]
-# 
-# pdf("GeoffsMdl_5_5_comparisons.pdf",width = 6, height = 6)
-# par(mfrow = c(2,2))
-# plot(muTraitSp ~ alphaTraitSp, xlab = "simulated muTraitSp", ylab = "mdl estimated muTraitSp")
-# abline(0,1)
-# plot(muStudyEsti ~ muStudy, xlab = "simulated muStudy", ylab = "mdl estimated muStudy")
-# abline(0,1)
-# plot(muPhenoSp ~ alphaPhenoSp, xlab = "simulated muPhenoSp", ylab = "mdl estimated muPhenoSp")
-# abline(0,1)
-# plot(muGrandSp ~ unique(trt.dat$mu_grand_sp), xlab = "simulated muGrandSp", ylab = "mdl estimated muGrandSp")
-# abline(0,1)
-# dev.off()
-
-
-# trt.out  <- data.frame( 
-#   "Parameter" = c("mu_grand","sigma_sp","pop2","pop3","pop4","sigma_traity"),  
-#   "Test.data.values" = c(mu.grand, sigma.species, mu.pop2,mu.pop3,mu.pop4, trt.var) ,
-#   "Estiamte"= c(mu_grand[1,1], sigma_sp[1], popTwo[1], popThree[1], popFour[1], sigma_traity[1]),
-#   "2.5"= c(mu_grand[1,2], sigma_sp[2], popTwo[2], popThree[2], popFour[2], sigma_traity[2]),
-#   "97.5"= c(mu_grand[1,3], sigma_sp[3], popTwo[3], popThree[3], popFour[3], sigma_traity[3])
-#   
-# )
-# trt.out
-# 
-# 
-# muSpEsti <- sumer[grep("muSp\\[", rownames(sumer))]
-# 
-# plot(muSpEsti ~ mu.trtsp, xlab = "simulated muSpecies", ylab = "mdl estimated muSpecies")
-# abline(0,1)
