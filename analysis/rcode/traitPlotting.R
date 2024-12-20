@@ -30,7 +30,7 @@ trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
 
 # Ht and DBH and CN natural, LMA and SSD rescaled by 100
 # cues and latitude still z scored by only by 1 sd
-load("analysis/output/htContLatHundoLatFinal.Rdata")
+load("analysis/output/htContLatHundoLatFina.Rdata")
 sumerht <- summary(mdlHt)$summary
 postHt <- rstan::extract(mdlHt)
 
@@ -48,30 +48,30 @@ load("analysis/output/lncContLatHundoLatFinal.Rdata")
 postCN <- rstan::extract(mdlPerN)
 
 # How do transect effects differ?
-sumHt <- summary(mdlHt)$summary
+sumHt <- summary(mdlHt)$summary[c("mu_grand", "b_tranE", "b_tranlat", "sigma_traity", "sigma_sp"),]
 
-a_spHt = mean((sumHt[grep("mu_grand", rownames(sumHt)), 1]))
-a_spHt5 <- quantile(postHt$mu_grand, c(0.05))
-a_spHt95 <- quantile(postHt$mu_grand, c(0.95))
-a_spHt25 <- quantile(postHt$mu_grand, c(0.25))
-a_spHt75 <- quantile(postHt$mu_grand, c(0.75))
-a_spHt <- cbind(a_spHt, a_spHt5,a_spHt95, a_spHt25,a_spHt75)
+# 
+# a_spHt = mean((sumHt[grep("mu_sp", rownames(sumHt)), 1]))
+a_spHtQuant <- quantile(postHt$mu_grand, c(0.05, 0.95))
+# a_spHt25 <- quantile(postHt$mu_grand, c(0.25))
+# a_spHt75 <- quantile(postHt$mu_grand, c(0.75))
+# a_spHt <- cbind(a_spHt, a_spHt5,a_spHt95, a_spHt25,a_spHt75)
 #a_spHt <- a_spHt*100
 
 b_tranHt <- sumHt[grep("b_tranE", rownames(sumHt)), 1]
-b_tranHt5 <- quantile(postHt$b_tranE, c(0.05))
-b_tranHt95 <- quantile(postHt$b_tranE, c(0.95))
-b_tranHt25 <- quantile(postHt$b_tranE, c(0.25))
-b_tranHt75 <- quantile(postHt$b_tranE, c(0.75))
-b_tranHt <- cbind(b_tranHt, b_tranHt5,b_tranHt95, b_tranHt25,b_tranHt75)
+b_tranHtQuant <- quantile(postHt$b_tranE, c(0.05, 0.95))
+# b_tranHt95 <- quantile(postHt$b_tranE, c(0.95))
+# b_tranHt25 <- quantile(postHt$b_tranE, c(0.25))
+# b_tranHt75 <- quantile(postHt$b_tranE, c(0.75))
+# b_tranHt <- cbind(b_tranHt, b_tranHt5,b_tranHt95, b_tranHt25,b_tranHt75)
 #b_tranHt <- b_tranHt*100
 
 b_tranlatHt <- sumHt[grep("b_tranlat", rownames(sumHt)), 1]
-b_tranlatHt5 <- quantile(postHt$b_tranlat, c(0.05))
-b_tranlatHt95 <- quantile(postHt$b_tranlat, c(0.95))
-b_tranlatHt25 <- quantile(postHt$b_tranlat, c(0.25))
-b_tranlatHt75 <- quantile(postHt$b_tranlat, c(0.75))
-b_tranlatHt <- cbind(b_tranlatHt, b_tranlatHt5,b_tranlatHt95, b_tranlatHt25,b_tranlatHt75)
+b_tranlatHtQuant <- quantile(postHt$b_tranlat, c(0.05, 0.95))
+# b_tranlatHt95 <- quantile(postHt$b_tranlat, c(0.95))
+# b_tranlatHt25 <- quantile(postHt$b_tranlat, c(0.25))
+# b_tranlatHt75 <- quantile(postHt$b_tranlat, c(0.75))
+# b_tranlatHt <- cbind(b_tranlatHt, b_tranlatHt5,b_tranlatHt95, b_tranlatHt25,b_tranlatHt75)
 #b_tranlatHt <- b_tranlatHt*100
 ## Simulate interaction with transect and latitude:
 
@@ -86,14 +86,14 @@ tranW <- 0
 tranE <- 1
 
 # plot first for west coast
-ht_w = a_spHt[1] + b_tranHt[1] * tranW + b_tranlatHt[1] * (tranW*lati)
-ht_e = a_spHt[1] + b_tranHt[1] * tranE + b_tranlatHt[1] * (tranE*lati)
+ht_w = sumHt["mu_grand",1] + sumHt["b_tranE",1] * tranW + sumHt["b_tranlat",1] * (tranW*lati)
+ht_e = sumHt["mu_grand",1] + sumHt["b_tranE",1] * tranE + sumHt["b_tranlat",1] * (tranE*lati)
 
-ht_w5 = a_spHt[2] + b_tranHt[2] * tranW + b_tranlatHt[2] * (tranW*lati)
-ht_e5 = a_spHt[2] + b_tranHt[2] * tranE + b_tranlatHt[2] * (tranE*lati)
+ht_w5 = a_spHtQuant[1] + b_tranHtQuant[1] * tranW + b_tranlatHtQuant[1] * (tranW*lati)
+ht_e5 = a_spHtQuant[1] + b_tranHtQuant[1] * tranE + b_tranlatHtQuant[1] * (tranE*lati)
 
-ht_w95 = a_spHt[3] + b_tranHt[3] * tranW + b_tranlatHt[3] * (tranW*lati)
-ht_e95 = a_spHt[3] + b_tranHt[3] * tranE + b_tranlatHt[3] * (tranE*lati)
+ht_w95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranW + b_tranlatHtQuant[2] * (tranW*lati)
+ht_e95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranE + b_tranlatHtQuant[2] * (tranE*lati)
 
 htEW <- data.frame(htw = ht_w, hte = ht_e,  ht_w5 =ht_w5, ht_w95 = ht_w95, ht_e5 = ht_e5, ht_e95 = ht_e95  )
 

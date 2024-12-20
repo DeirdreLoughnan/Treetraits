@@ -10,10 +10,10 @@ require(rstan)
 
 setwd("~/Documents/github/Treetraits")
 
-Nrep <- 20# rep per trait
+Nrep <- 10# rep per trait
 Npop <- 8
 Ntran <- 2
-Nspp <- 40# number of species with traits (making this 20 just for speed for now)
+Nspp <- 80# number of species with traits (making this 20 just for speed for now)
 
 # First making a data frame for the test trait data
 Ntrt <- Nspp * Npop * Nrep# total number of traits observations
@@ -39,13 +39,13 @@ trt.dat$mutranE <- mu.tranE*trt.dat$dumE
 mu.tranlat  <- 2
 trt.dat$alpha.tranlat <- mu.tranlat*(trt.dat$dumE*trt.dat$latZ)
 
-sigma.species <- 0.1 # we want to keep the variation across spp. high
+sigma.species <- 10 # we want to keep the variation across spp. high
 
-mu.trtsp <- rnorm(Nspp, 0.5, sigma.species)
+mu.trtsp <- rnorm(Nspp, 50, sigma.species)
 trt.dat$mu.trtsp <- rep(mu.trtsp, each = Nrep) #adding ht data for ea. sp
 #hist(mu.trtsp)
 # general variance
-trt.var <- 0.5 #sigma_traity in the stan code
+trt.var <- 5 #sigma_traity in the stan code
 trt.dat$trt.er <- rnorm(Ntrt, 0, trt.var)
 
 # generate yhat - heights -  for this first trt model
@@ -177,7 +177,7 @@ for (i in 1:Nph){
 }
 
 for (i in 1:Nph){
-  pheno.datTrait$yMu[i] <-  pheno.datTrait$alphaPhenoSp[i] + pheno.datTrait$betaChillSp[i] * pheno.datTrait$chilli[i] #+  pheno.datTrait$betaForceSp[i] * pheno.datTrait$forcei[i] +  pheno.datTrait$betaPhotoSp[i] * pheno.datTrait$photoi[i] 
+  pheno.datTrait$yMu[i] <-  pheno.datTrait$alphaPhenoSp[i] + pheno.datTrait$betaChillSp[i] * pheno.datTrait$chilli[i] +  pheno.datTrait$betaForceSp[i] * pheno.datTrait$forcei[i] +  pheno.datTrait$betaPhotoSp[i] * pheno.datTrait$photoi[i] 
 }
 
 pheno.datTrait$yPhenoi <- pheno.datTrait$yMu + pheno.datTrait$ePhen
@@ -201,7 +201,7 @@ all.data <- list(yTraiti = trt.dat$yTraiti,
                  chilli = pheno.datTrait$chilli,
                  photoi = pheno.datTrait$photoi)
 
-mdl <- stan("stan/modelDevelopment/justDummyIntZChill.stan",
+mdl <- stan("stan/modelDevelopment/justDummyIntZ.stan",
             data = all.data,
             iter = 4000, warmup = 3000, chains=4,
             include = FALSE, pars = c("y_hat")
@@ -231,18 +231,10 @@ betaFT <- sumer[grep("betaTraitxForce", rownames(sumer)), c("mean","2.5%","25%",
 betaCT <- sumer[grep("betaTraitxChill", rownames(sumer)), c("mean","2.5%","25%","50%", "75%","97.5%")]
 betaPT <- sumer[grep("betaTraitxPhoto", rownames(sumer)), c("mean","2.5%","25%","50%", "75%","97.5%")]
 
-# mdl.out <- data.frame( "Parameter" = c("bTranE","bTranLat","sigma_sp","sigma_traity","mu_chillsp","sigma_chillsp", "sigma_phenoy","betaC"),
-#   "Test.data.values" = c( mu.tranE, mu.tranlat, sigma.species, trt.var,mu.chill, sigma.chill,sigma.pheno.y,betaTraitxChill) ,
-#   "Estiamte"= c(bTranE[1], bTranLat[1],  sigma_sp[1], sigma_traity[1],muChill[1],sigma_chill[1], sigma_phenoy[1], betaCT[1]),
-#   "2.5"= c(bTranE[2], bTranLat[2],  sigma_sp[2], sigma_traity[2],muChill[2],sigma_chill[2], sigma_phenoy[2], betaCT[2]),
-#   "25"= c( bTranE[3], bTranLat[3],  sigma_sp[3], sigma_traity[3],muChill[3],sigma_chill[3], sigma_phenoy[3], betaCT[3]),
-#   "50"= c( bTranE[4], bTranLat[4],  sigma_sp[4], sigma_traity[4],muChill[4],sigma_chill[4], sigma_phenoy[4], betaCT[4]),
-#   "75"= c( bTranE[5], bTranLat[5],  sigma_sp[5], sigma_traity[5],muChill[5],sigma_chill[5], sigma_phenoy[5], betaCT[5]),
-#   "97.5"= c(bTranE[6], bTranLat[6],  sigma_sp[6], sigma_traity[6],muChill[6],sigma_chill[6], sigma_phenoy[6], betaCT[6]))
-# 
-# mdl.out
-
-mdl.out <- data.frame( "Parameter" = c("mutran","mutranLat","mu_forcesp","mu_chillsp","mu_photosp","mu_phenosp","sigma_traity", "sigma_sp","sigma_forcesp","sigma_chillsp","sigma_photosp", "sigma_phenoy","betaF", "betaC", "betaP"),  
+mdl.out <- data.frame( "Parameter" = 
+    c("mutran","mutranLat","mu_forcesp","mu_chillsp","mu_photosp","mu_phenosp",
+      "sigma_traity", "sigma_sp","sigma_forcesp","sigma_chillsp","sigma_photosp", 
+      "sigma_phenoy","betaF", "betaC", "betaP"),  
                        "Test.data.values" = c( mu.tranE, mu.tranlat ,mu.force, mu.chill, mu.photo, mu.pheno.sp, trt.var, sigma.species, sigma.force, sigma.chill, sigma.photo,sigma.pheno.y,betaTraitxForce,betaTraitxChill,betaTraitxPhoto) ,
                        "Estiamte"= c(bTranE[1], bTranLat[1], muForce[1], muChill[1], muPhoto[1], muPheno[1], sigma_traity[1], sigma_sp[1], sigma_force[1], sigma_chill[1], sigma_photo[1], sigma_phenoy[1], betaFT[1], betaCT[1],betaPT[1]),
                        "2.5"= c(bTranE[2],bTranLat[2],muForce[2], muChill[2], muPhoto[2],muPheno[2], sigma_traity[2], sigma_sp[2], sigma_force[2], sigma_chill[2], sigma_photo[2], sigma_phenoy[2],betaFT[2], betaCT[2],betaPT[2]),
@@ -252,18 +244,35 @@ mdl.out <- data.frame( "Parameter" = c("mutran","mutranLat","mu_forcesp","mu_chi
 
 mdl.out
 
-postLMA<- data.frame(rstan::extract(mdl))
+# Parameter Test.data.values    Estiamte        X2.5         X55         X50         X75      X97.5
+# 1         mutran                5   4.7180702   4.1419345   4.5146800   4.7135841   4.9221097   5.296150
+# 2      mutranLat                2   2.2290689   1.5452195   1.9988924   2.2325799   2.4692511   2.892048
+# 3     mu_forcesp              -10 -10.0168913 -12.1073613 -10.7438022 -10.0506820  -9.2684616  -7.945515
+# 4     mu_chillsp              -14 -14.5300854 -16.9042080 -15.3608747 -14.5675223 -13.6647878 -12.109585
+# 5     mu_photosp               -5  -5.4247022  -6.8634576  -5.9516105  -5.4564071  -4.8874566  -3.895768
+# 6     mu_phenosp               80  80.3587164  77.9590554  79.5359570  80.3723926  81.1714601  82.732046
+# 7   sigma_traity                5   4.9130902   4.8270385   4.8829401   4.9132615   4.9420710   5.002455
+# 8       sigma_sp               10  10.7699891   9.2335413  10.1295446  10.7084796  11.3305787  12.674339
+# 9  sigma_forcesp                1   1.0349833   0.7823935   0.9384598   1.0308520   1.1249996   1.309711
+# 10 sigma_chillsp                1   0.8102007   0.3266061   0.6802449   0.8198023   0.9574059   1.204739
+# 11 sigma_photosp                1   0.8482172   0.6871503   0.7842336   0.8428351   0.9076939   1.038829
+# 12  sigma_phenoy                3   3.0212577   2.9838130   3.0084186   3.0208992   3.0343502   3.058598
+# 13         betaF                3   3.0042213   2.9635365   2.9907854   3.0046815   3.0178851   3.044582
+# 14         betaC               -4  -3.9976865  -4.0426522  -4.0135536  -3.9975950  -3.9818976  -3.950773
+# 15         betaP               -2  -1.9979220  -2.0258830  -2.0081868  -1.9974009  -1.9876068  -1.971152
 
-pdf("betaTraitChillPostPrior.pdf")
-hist(postLMA$betaTraitxForce, main ="betaTraitxChill", col=rgb(0,0,1,1/4),  xlim = c(-5,5))
-hist(rnorm(1000, 0,1), col=rgb(1,0,1,1/4), add = T)
-abline(v =0, col="red", lwd=3, lty=2)
-dev.off()
-
-muTraitSp <- sumer[grep("muSp", rownames(sumer))]
-pdf("latitudeMdlEstivsSimNoGrand.pdf")
-plot(muTraitSp ~ mu.trtsp, xlab = "simulated muTraitSp", ylab = "mdl estimated muTraitSp")
-abline(0,1)
-dev.off()
-
-
+# postLMA<- data.frame(rstan::extract(mdl))
+# 
+# pdf("betaTraitChillPostPrior.pdf")
+# hist(postLMA$betaTraitxForce, main ="betaTraitxChill", col=rgb(0,0,1,1/4),  xlim = c(-5,5))
+# hist(rnorm(1000, 0,1), col=rgb(1,0,1,1/4), add = T)
+# abline(v =0, col="red", lwd=3, lty=2)
+# dev.off()
+# 
+# muTraitSp <- sumer[grep("muSp", rownames(sumer))]
+# pdf("latitudeMdlEstivsSimNoGrand.pdf")
+# plot(muTraitSp ~ mu.trtsp, xlab = "simulated muTraitSp", ylab = "mdl estimated muTraitSp")
+# abline(0,1)
+# dev.off()
+# 
+# 
