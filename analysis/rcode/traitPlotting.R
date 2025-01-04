@@ -30,9 +30,9 @@ trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
 
 # Ht and DBH and CN natural, LMA and SSD rescaled by 100
 # cues and latitude still z scored by only by 1 sd
-load("analysis/output/htContLatHundoLatFina.Rdata")
+load("analysis/output/htContLatHundoLatFinal.Rdata")
 sumerht <- summary(mdlHt)$summary
-postHt <- rstan::extract(mdlHt)
+postHt <- (rstan::extract(mdlHt))
 
 load("analysis/output/lmaContLatHundoLatFinal.Rdata")
 postLMA <- rstan::extract(mdlLMA)
@@ -80,7 +80,9 @@ wData <- subset(trtPheno, transect == "0" )
 
 # Make the other parameters constant
 
-lati <- seq(40, 60, by = 0.5)
+#lati <- seq(40, 60, length.out = 4000)
+lati <- seq(40, 60, length.out = 20)
+
 #lati <- (lati/100)
 tranW <- 0
 tranE <- 1
@@ -96,6 +98,26 @@ ht_w95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranW + b_tranlatHtQuant[2] * (tran
 ht_e95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranE + b_tranlatHtQuant[2] * (tranE*lati)
 
 htEW <- data.frame(htw = ht_w, hte = ht_e,  ht_w5 =ht_w5, ht_w95 = ht_w95, ht_e5 = ht_e5, ht_e95 = ht_e95  )
+
+postHt <- data.frame(postHt)
+trtHt <- postHt[3001:4000,c("mu_grand", "b_tranE", "b_tranlat")]
+
+lati <- seq(40, 60, length.out = 25)
+
+output <- data.frame(cbind(
+  rep(1:(length(lati)*nrow(trtHt))), 
+  rep(trtHt$mu_grand, times = length(lati)), 
+  rep(trtHt$b_tranE, times = length(lati)),
+  rep(trtHt$b_tranlat, times = length(lati)),
+  rep(lati, each = 1000)))
+
+names(output) <- c("iter", "mu_grand","b_tranE", "b_tranLat","lat")
+output$latTrend <- NA  
+
+for (i in 1:nrow(output)){
+  temp <- output$mu_grand[i] + output$b_tranE[i]* tranE + output$b_tranLat[i]* (tranE*output$lat[i])
+  output$latTrend[output$iter == i] <- temp
+}
 
 intHt <- ggplot(htEW) +
   geom_line(aes(y = htw, x = lati), col = "cyan4", lty = "dashed") +
@@ -113,8 +135,45 @@ intHt <- ggplot(htEW) +
   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
   theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "a)", cex = 10) 
-  
 
+
+
+ggplot(output) +
+  geom_point(aes(x = lat, y = latTrend))+
+  geom_ribbon( aes(ymin = quantile(output$mu_grand, prob = 0.05), ymax = quantile(output$mu_grand, prob = 0.95), x= lat), alpha = 0.2, fill = "cyan4")+
+  geom_ribbon( aes(ymin = quantile(latTrend, prob = 0.05), ymax = quantile(latTrend, prob = 0.95), x= lat), alpha = 0.2, fill = "cyan4") +
+  xlab("Latitude") + ylab("Height (m)") +
+  xlim (min(lati), max(lati)) + 
+  #ylim (-70,70) + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    panel.background = element_blank(), axis.line = element_line(colour = "black"),
+    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+  theme(legend.key=element_blank(),legend.text = element_text(size = 15)) +
+  #scale_fill_manual( labels = c("Low force", "High force")) +
+  scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
+  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "a)", cex = 10) 
+
+plot(NA, xlim = c(min(output$lat), max(output$lat)), ylim = c(-10, 10),
+  xlab = "Latitude", ylab = "Height (m)",
+  # bty = "n",
+  # xaxt = "n",
+  # yaxt = "n",
+  cex.lab = 1.5)
+polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
+  y = c(quantile(output$mu_grand, prob =c (0.025)),quantile(output$mu_grand, prob =c (0.025)), 
+    quantile(output$mu_grand, prob =c (0.975)),quantile(output$mu_grand, prob =c (0.975))),                             # Y-Coordinates of polygon
+  col = (rgb(204 / 255, 102 / 255, 119 / 255, alpha = 0.3)),border = NA )  
+
+polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
+  y = c(quantile(subset(output, lat == 40)$latTrend, prob =c (0.025)),quantile(subset(output, lat == 60)$latTrend, prob =c (0.025)), 
+    quantile(subset(output, lat == 40)$latTrend, prob =c (0.975)),quantile(subset(output, lat == 60)$latTrend, prob =c (0.975))),                             # Y-Coordinates of polygon
+  col = (rgb(68 / 255, 170 / 255, 153 / 255, alpha = 0.3)),border = NA )  
+
+for (i in 1: nrow(output)){
+ abline(a = output$mu_grand[i] , b= 0, col = "maroon" )
+abline(lm(output$latTrend ~ output$lat ), col = "cyan4")
+}
 ################################################
 ##lma
 
