@@ -88,18 +88,14 @@ source("..//analysis/rcode/manuscriptValues.R")
 @
 
 \section*{Summary}
-% 267 words
-Phenology---the timing of life events---is an important trait in defining species temporal niche and responses to environmental cues. But this trait has rarely been studied in the existing trait frameworks,  such as the leaf economic spectrum. But this approach has the promise of providing a better understanding of the underlying sources of variation and to develop more predictive models of species-level difference. Here we combined the results of controlled environment studies of budburst phenology with a suite of traits for species that span a gradient from acquisitive to conservative growth strategies to test for trait-phenology relationships across species. Our study includes six trait measurements from 47 trees and shrubs taken from eight deciduous forests from across North America, creating a database consisting of \Sexpr{nSSD} individual plants per trait. Using a joint Bayesian model, we found most traits to have relationships to photopheriod cues for budburst. But only the relationship of photoperiod to leaf mass area and diameter at breast height, and between wood specific density and chilling and forcing cues, exhibited trends in agreement to that of existing frameworks. Despite measuring traits from populations that different in latitude and environments, the phenology-trait relationships we observed were consistent across sites. These results offer considerable insight into the importance of spatial scale on these phenology-trait relationships, as well as the influence of traits to phenological responses to environmental cues. Our holistic approach to understanding the drivers shaping species temporal niche will allow us to accurately forecast species future responses to climate change and better predict the impacts on ecological communities.
+% Set up the population-level variation as important
+% Phenology---the timing of life events---is an important trait in defining species temporal niche and responses to environmental cues. But this trait has rarely been studied in the existing trait frameworks,  such as the leaf economic spectrum. But this approach has the promise of providing a better understanding of the underlying sources of variation and to develop more predictive models of species-level difference. Here we combined the results of controlled environment studies of budburst phenology with a suite of traits for species that span a gradient from acquisitive to conservative growth strategies to test for trait-phenology relationships across species. Our study includes six trait measurements from 47 trees and shrubs taken from eight deciduous forests from across North America, creating a database consisting of \Sexpr{nSSD} individual plants per trait. Using a joint Bayesian model, we found most traits to have relationships to photopheriod cues for budburst. But only the relationship of photoperiod to leaf mass area and diameter at breast height, and between wood specific density and chilling and forcing cues, exhibited trends in agreement to that of existing frameworks. Despite measuring traits from populations that different in latitude and environments, the phenology-trait relationships we observed were consistent across sites. These results offer considerable insight into the importance of spatial scale on these phenology-trait relationships, as well as the influence of traits to phenological responses to environmental cues. Our holistic approach to understanding the drivers shaping species temporal niche will allow us to accurately forecast species future responses to climate change and better predict the impacts on ecological communities.
 
 \section*{Introduction}
 
 Climate change is causing species phenologies---the timing of life history events---to shift, with widespread advances being observed across the tree of life \citep{Root2003,Parmesan2003}. These general phenological response, however, average over high variability across species \citep{Thackeray2016, Cohen2018, Kharouba2018}, posing a challenge to accurate forecasts. In plants, species variation can in part be explained by differences their strategies of growth, which are generally inferred from traits \citep{Violle2007}. Decades of research on plant traits have worked to build predictive models of species responses to the environment \citep{Green2022}, which could be promising to explain species-level variability in phenological responses. Phenology, however, has generally be excluded from plant trait research, making it difficult to leverage this important framework to explain phenological variation and improve predictions. \\
 
-Drawing on the relationships between traits and species growth strategies can potentially further our understanding of how plant communities assemble. To date, many studies have focused on community-level responses, using metrics of functional diversity or community weighted means \citep[such as classic work by ][]{Grime1974}. But these methods fail to account for the high degrees of intraspecific variation across traits \citep{Albert2010} and are limited in their ability to account for the diversity of factors that lead to trait variation, like changes in species abundance across populations \citep{Hawkins2017,Peresneto2017,Miller2019}. To best understand the processes that define species strategies, we much account for variation at multiple scales---from proximate to ultimate drivers---and use analytical methods that can accurately partition variance across its many sources. \\
-
-Variation in traits can arise from differences in environmental drivers at both proximate and ultimate scales. Proximate drivers include local short-term environmental factors, such as temperature, soil moisture, and daylength, that can alter observed plant traits, like the rate of plant growth, or leafout phenology  \citep{Menzel2006}. But environmental factors at larger spatial and temporal scales may also act as ultimate drivers of variation. In temperate systems, temperature variation across the growing season can produce greater abiotic stress early in the season through high risks of frost events \citep{Sakai1987, Gotelli1996, Augspurger2009}. If species avoid this risk by leafing out later, this variation could also produce greater biotic stress later in the season through a more competitive environment. These ultimate drivers may thus determine how species respond to environmental cues and the effects of biotic interactions to shape species ecological niche and local species assemblages. Together, proximate and ultimate drivers shape a given species' shape their phenotype. \\
-
-Research on trait ecology has illustrated the ways in which species traits correlate with their growth strategies and responses to environments. The consistency in these relationships across communities allows trait values to provide inferences of growth strategies and community processes independent of species identity \citep{McGill2006}. In plants this has led to the development of frameworks, including the leaf economic spectrum \citep{Wright2004} and wood economic spectrum \citep{Chave2009}. Under these frameworks, trait values follow distinct gradients that range from acquisitive strategies---fast growing plants that produce cheaper tissue ---to conservative strategies---under which plants invest in long-lived tissue but grow at slower rates \citep{Wright2004,Diaz2016}. These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions \citep{Shipley2016}, but can still provide considerable insights into the mechanisms shaping plant communities globally.\\
+Research on trait ecology has shown species traits to correlate with growth strategies and responses to environments. Gradients in traits can arise from differences local environmental factors, such as temperature, soil moisture, and daylength, that can alter like the rate of plant growth, or leaf development \citep{Menzel2006}. But environmental factors at larger spatial and temporal scales may also drive of variation. In temperate systems, changes in temperature in spring can produce gradients in abiotic stress through the decreasing risk of frost events later in the season \citep{Sakai1987, Gotelli1996, Augspurger2009}. If species avoid this risk by leafing out later, this variation could also produce greater biotic stress later in the season through a more competitive environment. These relationships have proven to be consistent across communities, allowing trait values to infer growth strategies and community processes independent of species identity \citep{McGill2006}. In plants this has been synthesized into several frameworks, including the leaf economic spectrum \citep{Wright2004} and wood economic spectrum \citep{Chave2009}, under which trait values follow distinct gradients that range from acquisitive strategies---fast growing plants that produce cheaper tissue ---to conservative strategies---with plants that invest in long-lived tissue but slower growth rates \citep{Wright2004,Diaz2016}. These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions \citep{Shipley2016}, but can still provide considerable insights into the mechanisms shaping plant communities globally.\\
 
 Phenology itself is considered a trait with high inter- and intra-specific variability. Previous studies have found high variation in phenology for the same species when observed over different years or sites \citep{Primack2009,Chuine2010}. This variability is often given as justification for excluding phenology from broader functional trait frameworks. But given the importance of phenology in defining species temporal niches and the environmental conditions of growth periods, phenological variation may correlate with other functional traits along the axis of acquisitive to conservative growth strategies. \\%While considerable, this species-level variation is only likely to explain a portion of the variability we observe, highlighting the need to identify other sources of variation.
 
@@ -223,13 +219,7 @@ Across temperature and precipitation gradients, leaf size and shape, for example
 \bibliography{refs/biblio.bib}
 \clearpage
 
-\section*{Figures}
-\begin{figure}[ht]
- \centering
- \includegraphics[width=.5\textwidth]{..//analysis/figures/phenoTraitMap.pdf}
-\caption{We measured leaf and structural traits in eight temperate deciduous forests, spanning four eastern populations and four western population, across a latitudinal gradients of 4-6$^{\circ}$. The branch clippings used in our two growth chamber experiments were taken from the most northern and most southern populations in each transect.}
-\label{fig:map}
-\end{figure}
+
  
 \begin{figure}[ht]\centering\hfill
  \centering
@@ -261,237 +251,22 @@ Across temperature and precipitation gradients, leaf size and shape, for example
 \end{figure}
 \newpage
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/muCuePlotsHundo.pdf}
-\caption{We found fairly consistent estimates for budburst cue responses to chilling, forcing, and photoperiod for each of our trait models: a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. leaf nitrogen contnet. Lines represent 90\% uncertainty intervals and points the mean estimate.}
-\label{fig:muCuePlot}
-\end{figure}
+% \begin{figure}[ht]\centering\hfill
+%  \centering
+%  \includegraphics[width=\textwidth]{..//analysis/figures/muCuePlotsHundo.pdf}
+% \caption{We found fairly consistent estimates for budburst cue responses to chilling, forcing, and photoperiod for each of our trait models: a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. leaf nitrogen contnet. Lines represent 90\% uncertainty intervals and points the mean estimate.}
+% \label{fig:muCuePlot}
+% \end{figure}
+% 
+% \begin{figure}[ht]\centering\hfill
+%  \centering
+%  \includegraphics[width=\textwidth]{..//analysis/figures/muCueTraitPlotsHundo.pdf}
+% \caption{The relationships between traits and cue responses varied considerably across each of our trait models, a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. leaf nitrogen content, and for individual cues. Lines represent 90\% uncertainty intervals and points the mean estimate. Note the differences in the scale of the x-axis.}
+% \label{fig:muCueTraitPlot}
+% \end{figure}
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/muCueTraitPlotsHundo.pdf}
-\caption{The relationships between traits and cue responses varied considerably across each of our trait models, a. height, b. diameter at breast height, c. stem specific density, d. leaf mass area, and e. leaf nitrogen content, and for individual cues. Lines represent 90\% uncertainty intervals and points the mean estimate. Note the differences in the scale of the x-axis.}
-\label{fig:muCueTraitPlot}
-\end{figure}
-
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/dotShrubTreeHtCNHundo.pdf}
-\caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a \& c) and western (b \& d) populations, spanning from early budbursting shrubs, in red, to late budbursting trees in blue. For traits such as height (a \& b) we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits, with our model of leaf nitrogen content showing highly mixed budburst order of shrub and tree species (c \& d). }
-\label{fig:bbShrubTree}
-\end{figure}
-\newpage
-\clearpage
-
-
-\section*{Tables}
-<<label= tableht, echo=FALSE , results= tex >>=
-
-require(xtable)
-require(rstan)
-
-load("..//analysis/output/htContLatHundoLatFinal.Rdata")
-
-sum <- summary(mdlHt)$summary
-
-fit <- rstan::extract(mdlHt)
-
-mu_params_4 <- c(
-  "b_tranE","b_tranlat",
-  "muForceSp", "muChillSp", "muPhotoSp", 
-  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-  
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
-names(meanz4) <- "mean"
-
-rownames(meanz4) = c( "Transect", "Transect x latitude",
-                      "Forcing","Chilling", "Photoperiod",
-                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
-)
-
-# now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
-upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
-
-meanz4 <- cbind(meanz4,  upper)
-
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in its interaction term with transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
-
-
-@
-
-
-<<label= tableDBH, echo=FALSE , results= tex >>=
-
-require(xtable)
-require(rstan)
-
-load("..//analysis/output/DBHContLatHundoLatFinal.Rdata")
-
-sum <- summary(mdlDBH)$summary
-
-fit <- rstan::extract(mdlDBH)
-
-mu_params_4 <- c(
-  "b_tranE","b_tranlat",
-  "muForceSp", "muChillSp", "muPhotoSp", 
-  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-  
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
-names(meanz4) <- "mean"
-
-rownames(meanz4) = c( "Transect", "Transect x latitude",
-                      "Forcing","Chilling", "Photoperiod",
-                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
-)
-
-# now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
-
-upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
-
-meanz4 <- cbind(meanz4, upper)
-
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in its interaction term with transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
-@
-
-
-<<label= tableSSD, echo=FALSE , results= tex >>=
-
-require(xtable)
-require(rstan)
-
-load("..//analysis/output/ssdContLatHundoLatFinal.Rdata")
-
-sum <- summary(mdlSSDSm)$summary
-
-fit <- rstan::extract(mdlSSDSm)
-
-mu_params_4 <- c(
-  "b_tranE","b_tranlat",
-  "muForceSp", "muChillSp", "muPhotoSp", 
-  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-  
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
-names(meanz4) <- "mean"
-
-rownames(meanz4) = c( "Transect", "Transect x latitude",
-                      "Forcing","Chilling", "Photoperiod",
-                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
-)
-
-# now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
-
-upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
-
-meanz4 <- cbind(meanz4, upper)
-
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in its interaction term with transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
-@
-
-<<label= tableLMA, echo=FALSE , results= tex >>=
-
-require(xtable)
-require(rstan)
-
-load("..//analysis/output/lmaContLatHundoLatFinal.Rdata")
-
-sum <- summary(mdlLMA)$summary
-
-fit <- rstan::extract(mdlLMA)
-
-mu_params_4 <- c(
-  "b_tranE","b_tranlat",
-  "muForceSp", "muChillSp", "muPhotoSp", 
-  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-  
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
-names(meanz4) <- "mean"
-
-rownames(meanz4) = c( "Transect", "Transect x latitude",
-                      "Forcing","Chilling", "Photoperiod",
-                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
-)
-
-# now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
-
-upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
-
-meanz4 <- cbind(meanz4, upper)
-
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in its interaction term with transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
-@
-
-<<label= tableCN, echo=FALSE , results= tex >>=
-
-require(xtable)
-require(rstan)
-
-load("..//analysis/output/lncContLatHundoLatFinal.Rdata")
-
-sum <- summary(mdlPerN)$summary
-
-fit <- rstan::extract(mdlPerN)
-
-mu_params_4 <- c(
-  "b_tranE","b_tranlat",
-  "muForceSp", "muChillSp", "muPhotoSp", 
-  "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-  
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
-names(meanz4) <- "mean"
-
-rownames(meanz4) = c( "Transect", "Transect x latitude",
-                      "Forcing","Chilling", "Photoperiod",
-                      "Trait x forcing","Trait x chilling", "Trait x photoperiod"
-)
-
-# now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
-
-upper <- rbind(bTranU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
-
-meanz4 <- cbind(meanz4, upper)
-
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous in its interaction term with transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
-@
 
 \end{document}
+
+% scrape
+%Drawing on the relationships between traits and species growth strategies can potentially further our understanding of how plant communities assemble. To date, many studies have focused on community-level responses, using metrics of functional diversity or community weighted means \citep[such as classic work by ][]{Grime1974}. But these methods fail to account for the high degrees of intraspecific variation across traits \citep{Albert2010} and are limited in their ability to account for the diversity of factors that lead to trait variation, like changes in species abundance across populations \citep{Hawkins2017,Peresneto2017,Miller2019}. To best understand the processes that define species strategies, we much account for variation at multiple scales---from proximate to ultimate drivers---and use analytical methods that can accurately partition variance across its many sources. \\
