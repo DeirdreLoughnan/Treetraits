@@ -37,11 +37,11 @@ put.fig.letter <- function(label, location="topleft", x=NULL, y=NULL,
   text(labels=label[1], x=this.x, y=this.y, xpd=T, cex = 2, ...)
 }
 
-spInfo <- read.csv("analysis/input/species_ring.csv")
-trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
+spInfo <- read.csv("..//analysis/input/species_ring.csv")
+trtPheno <- read.csv("..//analysis/input/trtPhenoDummy.csv")
 specieslist <- sort(unique(trtPheno$species))
 
-load("analysis/output/ssdContLatHundoLatFinal.Rdata")
+load("..//analysis/output/ssdContLatHundowLat10.Rdata")
 
 ModelFit <- rstan::extract(mdlSSD)
 
@@ -104,11 +104,11 @@ bfs_df_diffRing <- bfs_df[bfs_df$species %in% diffRing, ]
 bfs_df_semiRing <- bfs_df[bfs_df$species %in% semiRing, ]
 bfs_df_ring <- bfs_df[bfs_df$species %in% ring, ]
 
-pdf("analysis/figures/cuetraitRingType_Known.pdf", height = 4, width = 15)
+pdf("..//analysis/figures/cuetraitRingType_KnownLat.pdf", height = 4, width = 15)
 par(mar = c(5, 5, 2, 2), mfrow = c(1,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
       type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), 
-      ylab = "Species level forcing slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level forcing slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,-0.5, "a)", cex =2)
 # 3 columns, mean, quantile
 # min and max defined by quantiles
@@ -248,8 +248,8 @@ bcs_df_ring <- bcs_df[bcs_df$species %in% ring, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), 
-      ylab = "Species level chilling slope", 
-      xlab = bquote('Wood specific density'~(g/cm^2)),
+      ylab = "Species-level chilling slope", 
+      xlab = bquote('Wood specific density'~(kg/m^2)),
       cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,8, "b)", cex =2)
 # 3 columns, mean, quantile
@@ -385,7 +385,7 @@ bps_df_ring <- bps_df[bps_df$species %in% ring, ]
 
 #pdf("figures/cuetraitHundol.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), 5), ylab = "Species level photoperiod slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), 5), ylab = "Species-level photoperiod slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,4.5, "c)", cex =2)# min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){   
