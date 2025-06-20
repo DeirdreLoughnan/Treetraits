@@ -49,7 +49,7 @@
 % more optionals! %
 
 %\graphicspath{ {./DoseResponse_WriteupImages/} }% tell latex where to find photos 
-\externaldocument[supp-]{Traitors_Manuscript_supp}
+\externaldocument{traitPhenoSM}
 
 %%% end preambling. %%%
 
@@ -89,13 +89,14 @@ source("..//analysis/rcode/manuscriptValues.R")
 
 \section*{Summary}
 % Set up the population-level variation as important
+% Main point: where does phenology fit into trait framework, daylength matters but differs from what we see globally
 % Phenology---the timing of life events---is an important trait in defining species temporal niche and responses to environmental cues. But this trait has rarely been studied in the existing trait frameworks,  such as the leaf economic spectrum. But this approach has the promise of providing a better understanding of the underlying sources of variation and to develop more predictive models of species-level difference. Here we combined the results of controlled environment studies of budburst phenology with a suite of traits for species that span a gradient from acquisitive to conservative growth strategies to test for trait-phenology relationships across species. Our study includes six trait measurements from 47 trees and shrubs taken from eight deciduous forests from across North America, creating a database consisting of \Sexpr{nSSD} individual plants per trait. Using a joint Bayesian model, we found most traits to have relationships to photopheriod cues for budburst. But only the relationship of photoperiod to leaf mass area and diameter at breast height, and between wood specific density and chilling and forcing cues, exhibited trends in agreement to that of existing frameworks. Despite measuring traits from populations that different in latitude and environments, the phenology-trait relationships we observed were consistent across sites. These results offer considerable insight into the importance of spatial scale on these phenology-trait relationships, as well as the influence of traits to phenological responses to environmental cues. Our holistic approach to understanding the drivers shaping species temporal niche will allow us to accurately forecast species future responses to climate change and better predict the impacts on ecological communities.
 
 \section*{Introduction}
 
 Climate change is causing species phenologies---the timing of life history events---to shift, with widespread advances being observed across the tree of life \citep{Root2003,Parmesan2003}. These general phenological response, however, average over high variability across species \citep{Thackeray2016, Cohen2018, Kharouba2018}, posing a challenge to accurate forecasts. In plants, species variation can in part be explained by differences their strategies of growth, which are generally inferred from traits \citep{Violle2007}. Decades of research on plant traits have worked to build predictive models of species responses to the environment \citep{Green2022}, which could be promising to explain species-level variability in phenological responses. Phenology, however, has generally be excluded from plant trait research, making it difficult to leverage this important framework to explain phenological variation and improve predictions. \\
 
-Research on trait ecology has shown species traits to correlate with growth strategies and responses to environments. Gradients in traits can arise from differences local environmental factors, such as temperature, soil moisture, and daylength, that can alter like the rate of plant growth, or leaf development \citep{Menzel2006}. But environmental factors at larger spatial and temporal scales may also drive of variation. In temperate systems, changes in temperature in spring can produce gradients in abiotic stress through the decreasing risk of frost events later in the season \citep{Sakai1987, Gotelli1996, Augspurger2009}. If species avoid this risk by leafing out later, this variation could also produce greater biotic stress later in the season through a more competitive environment. These relationships have proven to be consistent across communities, allowing trait values to infer growth strategies and community processes independent of species identity \citep{McGill2006}. In plants this has been synthesized into several frameworks, including the leaf economic spectrum \citep{Wright2004} and wood economic spectrum \citep{Chave2009}, under which trait values follow distinct gradients that range from acquisitive strategies---fast growing plants that produce cheaper tissue ---to conservative strategies---with plants that invest in long-lived tissue but slower growth rates \citep{Wright2004,Diaz2016}. These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions \citep{Shipley2016}, but can still provide considerable insights into the mechanisms shaping plant communities globally.\\
+Research on trait ecology has shown species traits to correlate with growth strategies and responses to environments. Gradients in traits can arise from differences local environmental factors, such as temperature, soil moisture, and daylength, that can alter like the rate of plant growth, or leaf development \citep{Menzel2006}. But environmental factors at larger spatial and temporal scales may also drive of variation. In temperate systems, changes in temperature in spring can produce gradients in abiotic stress through the decreasing risk of frost events later in the season \citep{Sakai1987, Gotelli1996, Augspurger2009}. If species avoid this risk by leafing out later, this variation could also produce greater biotic stress later in the season through a more competitive environment. These relationships have proven to be consistent across communities, allowing trait values to infer growth strategies and community processes independent of species identity \citep{McGill2006}. In plants this has been synthesized into several frameworks, including the leaf economic spectrum \citep{Wright2004} and wood economic spectrum \citep{Chave2009}, under which trait values follow distinct gradients that range from acquisitive strategies---fast growing plants that produce cheaper tissue ---to conservative strategies---with plants that invest in long-lived tissue but slower growth rates \citep{Wright2004,Diaz2016}. Leveraging insights from predictive models of phenology, we can begin to disentangle the environmental cues that shape phenology from those that are shaped by other traits and growth strategies. %These traits serve as proxies for difficult to measure physiological processes and responses to biotic interactions \citep{Shipley2016}, but can still provide considerable insights into the mechanisms shaping plant communities globally.\\
 
 Phenology itself is considered a trait with high inter- and intra-specific variability. Previous studies have found high variation in phenology for the same species when observed over different years or sites \citep{Primack2009,Chuine2010}. This variability is often given as justification for excluding phenology from broader functional trait frameworks. But given the importance of phenology in defining species temporal niches and the environmental conditions of growth periods, phenological variation may correlate with other functional traits along the axis of acquisitive to conservative growth strategies. \\%While considerable, this species-level variation is only likely to explain a portion of the variability we observe, highlighting the need to identify other sources of variation.
 
@@ -131,16 +132,16 @@ For our growth chamber study, we collected branch cuttings from our highest and 
 \subsection*{Statistical Anlaysis}
 Our analysis combined our \emph{in situ} trait data with budburst data from the controlled environment. For each trait, we developed a joint Bayesian model, in which the relationship between traits and cues is used to estimate budburst. This statistical approach improves upon previous analyses of multiple traits, as it allows us to carry through uncertainty between trait and phenology data---and is better at partitioning the drivers of variation in species phenologies\\
 
-Our joint model consists of two parts. The first is a hierarchical linear model, in which we have partitioned the variation of individual observations (\emph{i}) of a given trait value ($Y_{\text{trait}}$) to account for the effects of species (\emph{j}), population-level differences arising from transects (\emph{t}), as well as the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and finally, residual variation or `measurement error' ($\sigma_{\text{m}}^2$). \\
+Our joint model consists of two parts. The first is a hierarchical linear model, in which we have partitioned the variation of individual observations (\emph{i}) of a given trait value ($Y_{\text{trait}}$) to account for the effects of species (\emph{j}), population-level differences arising from transects (\emph{t}), latitude, as well as the interaction between transects and latitude (\emph{transect} $\times$ \emph{latitude}), and finally, residual variation or `measurement error' ($\sigma_{\text{m}}^2$). \\
 
 \begin{align}
   Y_{\text{trait}_{i,j}} \sim \mathcal{N}(\mu_{i,j}, \sigma_{\text{m}}^2)
 \end{align}
 
 \begin{align}
-  \mu_{i,j} = \alpha_{\text{grand trait}} + \alpha_{\text{trait}_j} + \beta_{\text{transect}_t} \times transect  +\beta_{\text{transect} \times \text{latitude}} \times (transect \cdot latitude)\\
+  \mu_{i,j} = \alpha_{\text{grand trait}} + \alpha_{\text{trait}_j} + \beta_{\text{transect}_t} \times transect + \\
+  \beta_{\text{latitude}} \times (latitude) + \beta_{\text{transect} \times \text{latitude}} \times (transect \cdot latitude)\\
 \end{align}
-
 \begin{align}
   \boldsymbol{\alpha_{\text{trait}}} = \{\alpha_{\text{trait}_1}, ..., \alpha_{\text{trait}_n}\}^T \text{ such that } \boldsymbol{\alpha_{\text{trait}}} \sim \mathcal{N}(0, \sigma_{\text{trait}}^2) \\
 \end{align}
@@ -155,7 +156,7 @@ We used partial pooling to uniquely estimate species-level variance ($\alpha_{\t
   \beta_{\text{photo}_k}= \alpha_{\text{photo},k} + \beta_{\text{trait.photo}} \cdot \alpha_{\text{trait},k} \nonumber
 \end{align}
 
-In addition to the species-level estimates, the second part of our model estimates the overall effect of each trait on each cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$). From this we can estimate how well traits explain species-level differences---by estimating the the species-level cue variation not explained by traits ($\alpha_{\text{chill,k}}$, $\alpha_{\text{force,k}}$, $\alpha_{\text{photo,k}}$) and individual species responses to cues ($c_g$, $f_g$, $p_g$, respectively). Finally, our model estimates the residual budburst variation across species ($Y_{\text{pheno,k}}$), observations ($\sigma_{\text{do}}^2$), as well as the variation in cues not attributed to the trait (using partial pooling).
+In addition to the species-level estimates, the second part of our model estimates the overall effect of each trait on each cue ($\beta_{\text{trait}.\text{chill}}$, $\beta_{\text{trait}.\text{force}}$, $\beta_{\text{trait}.\text{photo}}$). From this we can estimate how well traits explain species-level differences---by estimating the the species-level cue variation not explained by traits ($\alpha_{\text{chill,k}}$, $\alpha_{\text{force,k}}$, $\alpha_{\text{photo,k}}$) and individual species responses to cues ($c_g$, $f_g$, $p_g$, respectively). Finally, our model estimates the residual budburst variation across species ($Y_{\text{pheno,k}}$), observations ($\sigma_{\text{d}}^2$), as well as the variation in cues not attributed to the trait (using partial pooling).
 
 \begin{align}
   Y_{\text{pheno}_{k,g}} \sim \mathcal{N}(\mu_{k,g}, \sigma_{\text{d}}^2)
@@ -223,8 +224,8 @@ Across temperature and precipitation gradients, leaf size and shape, for example
  
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/intrxnPlotsHundo.pdf}
-\caption{We found geographic differences for only one of our functional traits, the majority exhibiting no differences between latitudes or across transects. Depicted are the spatial trends for, a. height, b. diameter at base height, c. stem specific density, d. leaf mass area, and e. leaf nitrogen content. Dashed lines represent the western transect and solid lines the eastern transect.} 
+ \includegraphics[width=\textwidth]{..//analysis/figures/traitLatInt.pdf}
+\caption{We found geographic differences for only one of our functional traits, the majority exhibiting no differences between latitudes or across transects. Depicted are the spatial trends for, a. height, b. diameter at base height, c. wood specific density, d. leaf mass area, and e. leaf nitrogen content. Dashed lines represent the western transect and solid lines the eastern transect.} 
 \label{fig:tranInt}
 \end{figure}
 
@@ -238,18 +239,18 @@ Across temperature and precipitation gradients, leaf size and shape, for example
 
 \begin{figure}[ht]\centering\hfill
  \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitHundo.pdf}
-\caption{Relationships between species traits and cue responses showed considerable variation across a-c. height, d-f. leaf mass area, g-i. diameter at breast height, j-l. stem specific density, and m-o. the leaf nitrogen content. Point colours representing different species groups, with tree species are depicted in maroon and shrub species in teal. The blue band depicts the 90\% uncertainty interval.}
+ \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitLat.pdf}
+\caption{Relationships between species traits and cue responses showed considerable variation across a-c. height, d-f. leaf mass area, g-i. diameter at breast height, j-l. wood specific density, and m-o. the leaf nitrogen content. Point colours representing different species groups, with tree species shown in red and shrub species in blue. Crosses depict the 50\% uncertainty interval of the model estimates of species trait values and estimated responses to cues.  The grey band depicts the 90\% uncertainty interval and the black line the mean response.}
 \label{fig:traitSlopes}
 \end{figure}
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/ringPorosityHeightHundo.pdf}
-\caption{Despite species wood structures causing differing growth strategies in the spring, we did not find this trait to correlate with differences in cues across species. Thinner lines represent the 90\% UI and thicker lines the 50\% UI. Here we show the correlation using the posterior estimates from the height model only, but trends were consistent across all traits (Table \ref{tabDBH}-\ref{tabLNC}).}
-\label{fig:ringPorosity}
-\end{figure}
-\newpage
+% \begin{figure}[ht]\centering\hfill
+%  \centering
+%  \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitRingType_KnownLat.pdf}
+% \caption{Despite species wood structures causing differing growth strategies in the spring, we did not find this trait to correlate with differences in cues across species. Thinner lines represent the 90\% UI and thicker lines the 50\% UI. Here we show the correlation using the posterior estimates from the height model only, but trends were consistent across all traits (Table \ref{tabDBH}-\ref{tabLNC}).}
+% \label{fig:ringPorosity}
+% \end{figure}
+% \newpage
 
 % \begin{figure}[ht]\centering\hfill
 %  \centering

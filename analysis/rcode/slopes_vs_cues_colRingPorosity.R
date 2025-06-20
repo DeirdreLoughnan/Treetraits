@@ -104,10 +104,10 @@ bfs_df_diffRing <- bfs_df[bfs_df$species %in% diffRing, ]
 bfs_df_semiRing <- bfs_df[bfs_df$species %in% semiRing, ]
 bfs_df_ring <- bfs_df[bfs_df$species %in% ring, ]
 
-pdf("..//analysis/figures/cuetraitRingType_KnownLat.pdf", height = 4, width = 15)
+pdf("..//analysis/figures/cuetraitRingType_KnownLat.pdf", height = 5, width = 15)
 par(mar = c(5, 5, 2, 2), mfrow = c(1,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
-      type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), max(bfs_df$force75)), 
+      type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,-0.5, "a)", cex =2)
 # 3 columns, mean, quantile
@@ -156,22 +156,6 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 4
 )
 
-# arrows(
-#   mg_df_unknown[,"muSpMean"], # x mean
-#   bfs_df_unknown[,"force25"], # y 25
-#   mg_df_unknown[,"muSpMean"],
-#   bfs_df_unknown[,"force75"],
-#   length = 0, col= "green4", lwd = 4
-# )
-# 
-# arrows(
-#   mg_df_unknown[,"trait25"], # x mean
-#   bfs_df_unknown[,"betaForceSpMean"], # y 25
-#   mg_df_unknown[,"trait75"], # x mean
-#   bfs_df_unknown[,"betaForceSpMean"],
-#   length = 0, col = "green4", lwd = 4
-# )
-
 arrows(
   mg_df_semiRing[,"muSpMean"], # x mean
   bfs_df_semiRing[,"force25"], # y 25
@@ -204,6 +188,7 @@ arrows(
   length = 0, col = "goldenrod", lwd = 4
 )
 
+text(0.2, 9.2, "a)", cex = 2)
 
 # my.label <- paste("j", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
@@ -247,7 +232,7 @@ bcs_df_ring <- bcs_df[bcs_df$species %in% ring, ]
 #pdf("figures/cuetraitHundok.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
-      ylim = c(min(bcs_df$chill25), max(bcs_df$chill75)), 
+      ylim = c(min(bcs_df$chill25), 10), 
       ylab = "Species-level chilling slope", 
       xlab = bquote('Wood specific density'~(kg/m^2)),
       cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
@@ -297,22 +282,6 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 4
 )
 
-# arrows(
-#   mg_df_unknown[,"muSpMean"], # x mean
-#   bcs_df_unknown[,"chill25"], # y 25
-#   mg_df_unknown[,"muSpMean"],
-#   bcs_df_unknown[,"chill75"],
-#   length = 0, col= "green4", lwd = 4
-# )
-# 
-# arrows(
-#   mg_df_unknown[,"trait25"], # x mean
-#   bcs_df_unknown[,"betaChillSpMean"], # y 25
-#   mg_df_unknown[,"trait75"], # x mean
-#   bcs_df_unknown[,"betaChillSpMean"],
-#   length = 0, col = "green4", lwd = 4
-# )
-
 arrows(
   mg_df_semiRing[,"muSpMean"], # x mean
   bcs_df_semiRing[,"chill25"], # y 25
@@ -344,6 +313,9 @@ arrows(
   bcs_df_ring[,"betaChillSpMean"],
   length = 0, col = "goldenrod", lwd = 4
 )
+
+text(0.2, 9, "b)", cex = 2)
+
 # my.label <- paste("k", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
 #dev.off()
@@ -385,7 +357,9 @@ bps_df_ring <- bps_df[bps_df$species %in% ring, ]
 
 #pdf("figures/cuetraitHundol.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bps_df$photo25), 5), ylab = "Species-level photoperiod slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
+      ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope", 
+      xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,4.5, "c)", cex =2)# min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){   
@@ -430,22 +404,6 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 4
 )
 
-# arrows(
-#   mg_df_unknown[,"muSpMean"], # x mean
-#   bps_df_unknown[,"photo25"], # y 25
-#   mg_df_unknown[,"muSpMean"],
-#   bps_df_unknown[,"photo75"],
-#   length = 0, col= "green4", lwd = 4
-# )
-# 
-# arrows(
-#   mg_df_unknown[,"trait25"], # x mean
-#   bps_df_unknown[,"betaPhotoSpMean"], # y 25
-#   mg_df_unknown[,"trait75"], # x mean
-#   bps_df_unknown[,"betaPhotoSpMean"],
-#   length = 0, col = "green4", lwd = 4
-# )
-
 arrows(
   mg_df_semiRing[,"muSpMean"], # x mean
   bps_df_semiRing[,"photo25"], # y 25
@@ -478,7 +436,10 @@ arrows(
   length = 0, col = "goldenrod", lwd = 4
 )
 
-legend(53, 5.5,legend = c("Ring", "Semi-ring", "Diffuse", "Diffuse-ring"),
+legend(3.5 , 9.5,legend = c("Ring", "Semi-ring", "Diffuse", "Diffuse-ring"),
        col  = c( "goldenrod", "purple4", "#218380","#8f2d56"), lwd =4, bty = "n", cex = 1.5)
+
+text(0.2, 9.5, "c)", cex = 2)
+
 
 dev.off()

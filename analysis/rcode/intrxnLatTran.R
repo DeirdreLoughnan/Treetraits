@@ -83,7 +83,7 @@ plot(NA, xlim = c(42,54), ylim = c(-5, 10),
      cex.lab = 1.5,
      cex.axis = 1.5)
 axis(side = 1, at = seq(42,54, by =1), cex.axis =1.5)
-text(42.5, 9, 'a)', cex = 2)
+text(42.5, 9.5, 'a)', cex = 2)
 
 polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
         y = c(quantile(subset(output, lat == 40)$latTrendW, prob =c (0.025)),quantile(subset(output, lat == 55)$latTrendW, prob =c (0.025)), 
@@ -176,7 +176,7 @@ plot(NA, xlim = c(42,54), ylim = c(0,10),
      cex.lab = 1.5,
      cex.axis = 1.5)
 axis(side = 1, at = seq(42,54, by =1), cex.axis =1.5)
-text(42.5, 9, 'c)', cex = 2)
+text(42.5, 9.5, 'c)', cex = 2)
 polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
         y = c(quantile((subset(output, lat == 40)$latTrendW), prob =c (0.025)),quantile((subset(output, lat == 55)$latTrendW), prob =c (0.025)), 
               quantile((subset(output, lat == 55)$latTrendW), prob =c (0.975)),quantile((subset(output, lat == 40)$latTrendW), prob =c (0.975))),                             # Y-Coordinates of polygon
@@ -218,7 +218,7 @@ plot(NA, xlim = c(42,54), ylim = c(00, 0.10),
      cex.lab = 1.5,
      cex.axis = 1.5)
 axis(side = 1, at = seq(42,54, by =1), cex.axis =1.5)
-text(42.5, 0.09, 'd)', cex = 2)
+text(42.5, 0.095, 'd)', cex = 2)
 polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
         y = c(quantile(subset(output, lat == 40)$latTrendW/100, prob =c (0.025)),quantile(subset(output, lat == 55)$latTrendW/100, prob =c (0.025)), 
               quantile(subset(output, lat == 55)$latTrendW/100, prob =c (0.975)),quantile(subset(output, lat == 40)$latTrendW/100, prob =c (0.975))),        

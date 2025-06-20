@@ -8,8 +8,8 @@ library(reshape2)
 ########## General values ###############################
 spInfo <- read.csv("..//analysis/input/species_ring.csv")
 
-perTreeRing <- round((nrow(subset(spInfo, X != ""))/47)*100,1)
-nRing <- nrow(subset(spInfo, X != ""))
+perTreeRing <- round((nrow(subset(spInfo, !is.na(ring.type)))/47)*100,1)
+nRing <- nrow(subset(spInfo, !is.na(ring.type)))
 spInfoE <- subset(spInfo, transect != "west")
 spInfoW <- subset(spInfo, transect != "east")
 
@@ -129,7 +129,7 @@ noIndivPheno <- nrow(pheno)
 # chillCueL <- round(quantile(fit$mu_b_chill1, c(0.05)),1)
 
 
-load("..//analysis/output/htContLatHundoLatFinal.Rdata")
+load("..//analysis/output/htContLatHundowLat.Rdata")
 
 htModelFit <- rstan::extract(mdlHt)
 muSp <- data.frame(htModelFit$mu_grand_sp)
@@ -186,7 +186,7 @@ lower_htsigmaSp <- format(round(quantile(htModelFit$sigma_sp, prob = 0.05),1), n
 upper_htsigmaSp <- round(quantile(htModelFit$sigma_sp, prob = 0.95),1)
 ######## Leaf mass area###############################
 
-load("..//analysis/output/lmaContLatHundoLatFinal.Rdata")
+load("..//analysis/output/lmaContLatHundowLat.Rdata")
 lmaModelFit <- rstan::extract(mdlLMA)
 muSp <- data.frame(lmaModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)/100
@@ -242,7 +242,7 @@ lower_lmasigmaSp <- format(round(quantile(lmaModelFit$sigma_sp, prob = 0.05),1),
 upper_lmasigmaSp <- round(quantile(lmaModelFit$sigma_sp, prob = 0.95),1)
 ##### C:N ###############################
 
-load("..//analysis/output/lncContLatHundoLatFinal.Rdata")
+load("..//analysis/output/lncContLatHundowLat.Rdata")
 lncModelFit <- rstan::extract(mdlPerN)
 muSp <- data.frame(lncModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -303,8 +303,8 @@ lncsigmaSp <- as.numeric(round(mean(lncModelFit$sigma_sp),1))
 lower_lncsigmaSp <- format(round(quantile(lncModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_lncsigmaSp <- round(quantile(lncModelFit$sigma_sp, prob = 0.95),1)
 ##### SSD  ###############################
-load("..//analysis/output/ssdContLatHundoLatFinal.Rdata")
-ssdModelFit <- rstan::extract(mdlSSDSm)
+load("..//analysis/output/ssdContLatHundowLat.Rdata")
+ssdModelFit <- rstan::extract(mdlSSD)
 muSp <- data.frame(ssdModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
 ssdFold <- round(max(muSpMean)/min(muSpMean),0)
@@ -358,7 +358,7 @@ ssdsigmaSp <- as.numeric(round(mean(ssdModelFit$sigma_sp),1))
 lower_ssdsigmaSp <- format(round(quantile(ssdModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
 upper_ssdsigmaSp <- round(quantile(ssdModelFit$sigma_sp, prob = 0.95),1)
 ########## DBH ###############################
-load("..//analysis/output/dbhContLatHundoLatFinal.Rdata")
+load("..//analysis/output/dbhContLatHundowLat.Rdata")
 dbhModelFit <- rstan::extract(mdlDBH)
 muSp <- data.frame(dbhModelFit$mu_grand_sp)
 muSpMean <- colMeans(muSp)
@@ -407,7 +407,7 @@ dbhChillMax <- max(dbhChillSpMean)
 
 dbhLatTran <- as.numeric(round(mean(dbhModelFit$b_tranlat),1))
 lower_dbhLatTran <- format(round(quantile(dbhModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
-upper_dbhLatTran <- round(quantile(dbhModelFit$b_tranlat, prob = 0.95),1)
+upper_dbhLatTran <- format(round(quantile(dbhModelFit$b_tranlat, prob = 0.95),1), nsmall = 1)
 
 dbhsigmaSp <- as.numeric(round(mean(dbhModelFit$sigma_sp),1))
 lower_dbhsigmaSp <- format(round(quantile(dbhModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
