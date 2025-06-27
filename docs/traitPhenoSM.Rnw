@@ -116,7 +116,7 @@ mu_params_4 <- c(
   "muForceSp", "muChillSp", "muPhotoSp", 
   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
   
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 names(meanz4) <- "mean"
 
 rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
@@ -160,7 +160,7 @@ mu_params_4 <- c(
   "muForceSp", "muChillSp", "muPhotoSp", 
   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
   
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 names(meanz4) <- "mean"
 
 rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
@@ -203,7 +203,7 @@ mu_params_4 <- c(
   "muForceSp", "muChillSp", "muPhotoSp", 
   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
   
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 names(meanz4) <- "mean"
 
 rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
@@ -245,7 +245,7 @@ mu_params_4 <- c(
   "muForceSp", "muChillSp", "muPhotoSp", 
   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
   
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 names(meanz4) <- "mean"
 
 rownames(meanz4) = c( "Transect","Latitude", "Transect x latitude",
@@ -287,7 +287,7 @@ mu_params_4 <- c(
   "muForceSp", "muChillSp", "muPhotoSp", 
   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
   
-meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),1)
+meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 names(meanz4) <- "mean"
 
 rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
