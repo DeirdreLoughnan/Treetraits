@@ -271,7 +271,7 @@ meanz4 <- cbind(meanz4, upper)
 print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous, and includes an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
-<<label= tableCN, echo=FALSE , results= tex >>=
+<<label= tabLNC, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
