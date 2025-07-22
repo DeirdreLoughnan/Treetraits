@@ -26,7 +26,8 @@
 \usepackage[small]{caption}
 
 \usepackage{xr-hyper} %refer to Fig.s in another document
-\usepackage{hyperref}
+
+\externaldocument{traitPheno} 
 
 \setlength{\captionmargin}{30pt}
 \setlength{\abovecaptionskip}{0pt}
@@ -41,16 +42,6 @@
 % \renewcommand{\baselinestretch}{1.5} % 1.5 lines between lines
 \parindent 0pt		  % sets leading space for paragraphs
 % optional: cute, fancy headers
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhead[LO]{Loughnan et al. 2023}
-\fancyhead[RO]{Temporal Ecology Lab}
-% more optionals! %
-
-%\graphicspath{ {./DoseResponse_WriteupImages/} }% tell latex where to find photos 
-\externaldocument[supp-]{Traitors_Manuscript_supp}
-
-%%% end preambling. %%%
 
 \begin{document}
 
@@ -76,15 +67,15 @@
 \section*{Figures}
 \begin{figure}[ht]
  \centering
- \includegraphics[width=.75\textwidth]{..//analysis/figures/phenoTraitMap.pdf}
-\caption{We measured leaf and structural traits in eight temperate deciduous forests, spanning four eastern communities and four western communities, across a latitudinal gradients of 4-6$^{\circ}$. The branch clippings used in our two growth chamber experiments were taken from the most northern and most southern populations in each transect.}
+ \includegraphics[width=.75\textwidth]{..//analysis/figures/phenoTraitMapNAm.pdf}
+\caption{We measured leaf and structural traits in eight temperate deciduous forests, spanning four eastern communities shown in blue and four western communities shown in yellow, across a latitudinal gradients of 4-6$^{\circ}$. The branch clippings used in our two growth chamber experiments were taken from the most northern and most southern populations in each transect, as represented by the circles.}
 \label{fig:map}
 \end{figure}
 
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitRingType_KnownLat.pdf}
-\caption{ Despite species wood structures causing differing growth strategies in the spring, we did not find species-level estimates of cue responses to vary with different types of wood architecure relative to their wood specific densities. Each cross represents the 50\% uncertainty interval of the cue response and trait value, with colors depicting different types of wood architecture.  a. Depicts the relationship to forcing, b. chilling , and c. photoperiod. }
+\caption{ Despite previous studies finding relationships between leaf out timing and species wood xylem structures, we did not find clear differences in species-level estimates of cue responses with wood structure or relative to their wood specific densities. Each cross represents the 50\% uncertainty interval of \textbf{a}. forcing, \textbf{b.} chilling, and \textbf{c.} photoperiod responses and WSD, with colors depicting different types of wood structure.  }
 \label{fig:cueSlopeRing}
 \end{figure}
 \newpage
@@ -93,7 +84,7 @@
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//analysis/figures/dotShrubTreeHtCNHundo.pdf}
-\caption{We found budburst estimates differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the eastern (a \& c) and western (b \& d) populations, and in general span from early budbursting shrubs, in red, to late budbursting trees in blue. For traits such as height (a \& b) we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits, with our model of leaf nitrogen content showing highly mixed budburst order of shrub and tree species (c \& d). }
+\caption{We found the estimated day of budburst differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the \textbf{a \& c} eastern \textbf{b \& d} and western populations, and in general span from early budbursting shrubs shown in red, to late budbursting trees shown in blue. \textbf{a \& b} For traits such as height we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits,\textbf{c \& d}  with the ranked order of species in our model of leaf nitrogen content exhibiting a highly mixed budburst order for our shrub and tree species. }
 \label{fig:bbShrubTree}
 \end{figure}
 \newpage
@@ -125,20 +116,20 @@ rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 )
 
 # now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),2)
+bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),2)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),2)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
 upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
 
 meanz4 <- cbind(meanz4,  upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous, and includes an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 
 
 @
@@ -169,21 +160,21 @@ rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 )
 
 # now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),2)
+bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),2)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),2)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
 
 upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous, and includes an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
@@ -212,21 +203,21 @@ rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 )
 
 # now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),2)
+bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),2)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),2)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
 
 upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of SSD and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous, and includes an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of wood specific density and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableLMA, echo=FALSE , results= tex >>=
@@ -254,24 +245,24 @@ rownames(meanz4) = c( "Transect","Latitude", "Transect x latitude",
 )
 
 # now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),2)
+bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),2)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),2)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
 
 upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous, and includes an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
-<<label= tabLNC, echo=FALSE , results= tex >>=
+<<label= tableLNC, echo=FALSE , results= tex >>=
 
 require(xtable)
 require(rstan)
@@ -296,21 +287,21 @@ rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 )
 
 # now get the 90% UI:
-bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),1)
-bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),1)
-bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),1)
-chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),1)
-photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),1)
-forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),1)
-intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),1)
+bTranU <- round(quantile(fit$b_tranE, c(0.05, 0.25, 0.75,0.95)),2)
+bLatU <- round(quantile(fit$b_lat, c(0.05, 0.25, 0.75,0.95)),2)
+bTranLatU <- round(quantile(fit$b_tranlat, c(0.05, 0.25, 0.75,0.95)),2)
+chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
+photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
+forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
+intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
 
 upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The effect of transect is modeled as a categorical variable and latitude as continuous, and includes an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
