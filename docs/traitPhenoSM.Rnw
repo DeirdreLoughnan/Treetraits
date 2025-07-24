@@ -52,13 +52,6 @@
 
 \SweaveOpts{concordance=TRUE} % For RStudio hiccups
 
-%Alternate title ideas: 
-% a) Photoperiod shows strong relationships with leaf and wood traits but not woody plant budburst --- too bold not very representative
-% b) Differences in leaf and wood traits predict phenological sensitivity to daylength more than temperature
-% c) Photoperiod more than temperature cues plant trait effects on phenologies
-% d) Photoperiod more than temperature cues plant trait relative to phenologies %relationships with phenologies
-% d) Tradeoffs between tree traits predict phenological sensitivity to daylength more than temperature
-
 \title{Supplementary Material: Differences in traits predict phenological responses to daylength more than temperature} 
 \date{}
 \author{Deirdre Loughnan$^1$, Faith A M Jones$^1,^2$, and E M Wolkovich$^1$}
