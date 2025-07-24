@@ -42,7 +42,7 @@ load("analysis/output/dbhContLatHundoLatFinal.Rdata")
 postDBH <- rstan::extract(mdlDBH)
 
 load("analysis/output/ssdContLatHundoLatFinal.Rdata")
-postSSD <- rstan::extract(mdlSSD6)
+postSSD <- rstan::extract(mdlSSD)
 
 load("analysis/output/lncContLatHundoLatFinal.Rdata")
 postCN <- rstan::extract(mdlPerN)
@@ -78,29 +78,29 @@ b_tranlatHtQuant <- quantile(postHt$b_tranlat, c(0.05, 0.95))
 eData <- subset(trtPheno, transect == "1" )
 wData <- subset(trtPheno, transect == "0" )
 
-# Make the other parameters constant
-
-#lati <- seq(40, 60, length.out = 4000)
-lati <- seq(40, 60, length.out = 20)
-
-#lati <- (lati/100)
-tranW <- 0
-tranE <- 1
-
-# plot first for west coast
-ht_w = sumHt["mu_grand",1] + sumHt["b_tranE",1] * tranW + sumHt["b_tranlat",1] * (tranW*lati)
-ht_e = sumHt["mu_grand",1] + sumHt["b_tranE",1] * tranE + sumHt["b_tranlat",1] * (tranE*lati)
-
-ht_w5 = a_spHtQuant[1] + b_tranHtQuant[1] * tranW + b_tranlatHtQuant[1] * (tranW*lati)
-ht_e5 = a_spHtQuant[1] + b_tranHtQuant[1] * tranE + b_tranlatHtQuant[1] * (tranE*lati)
-
-ht_w95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranW + b_tranlatHtQuant[2] * (tranW*lati)
-ht_e95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranE + b_tranlatHtQuant[2] * (tranE*lati)
-
-htEW <- data.frame(htw = ht_w, hte = ht_e,  ht_w5 =ht_w5, ht_w95 = ht_w95, ht_e5 = ht_e5, ht_e95 = ht_e95  )
+# # Make the other parameters constant
+# 
+# #lati <- seq(40, 60, length.out = 4000)
+# lati <- seq(40, 60, length.out = 20)
+# 
+# #lati <- (lati/100)
+# tranW <- 0
+# tranE <- 1
+# 
+# # plot first for west coast
+# ht_w = sumHt["mu_grand",1] + sumHt["b_tranE",1] * tranW + sumHt["b_tranlat",1] * (tranW*lati)
+# ht_e = sumHt["mu_grand",1] + sumHt["b_tranE",1] * tranE + sumHt["b_tranlat",1] * (tranE*lati)
+# 
+# ht_w5 = a_spHtQuant[1] + b_tranHtQuant[1] * tranW + b_tranlatHtQuant[1] * (tranW*lati)
+# ht_e5 = a_spHtQuant[1] + b_tranHtQuant[1] * tranE + b_tranlatHtQuant[1] * (tranE*lati)
+# 
+# ht_w95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranW + b_tranlatHtQuant[2] * (tranW*lati)
+# ht_e95 = a_spHtQuant[2] + b_tranHtQuant[2] * tranE + b_tranlatHtQuant[2] * (tranE*lati)
+# 
+# htEW <- data.frame(htw = ht_w, hte = ht_e,  ht_w5 =ht_w5, ht_w95 = ht_w95, ht_e5 = ht_e5, ht_e95 = ht_e95  )
 
 postHt <- data.frame(postHt)
-trtHt <- postHt[3001:4000,c("mu_grand", "b_tranE", "b_tranlat")]
+trtHt <- postHt[2001:4000,c("mu_grand", "b_tranE", "b_tranlat")]
 
 lati <- seq(40, 60, length.out = 25)
 
@@ -119,40 +119,22 @@ for (i in 1:nrow(output)){
   output$latTrend[output$iter == i] <- temp
 }
 
-intHt <- ggplot(htEW) +
-  geom_line(aes(y = htw, x = lati), col = "cyan4", lty = "dashed") +
-  geom_ribbon(data = htEW, aes(ymin = ht_w5, ymax = ht_w95, x= lati), alpha = 0.2, fill = "cyan4") +
-  geom_line(aes(y = hte, x = lati), col = "cyan3") + 
-  geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= lati), alpha = 0.2, fill = "cyan3") + 
-  xlab("Latitude") + ylab("Height (m)") +
-  xlim (min(lati), max(lati)) + 
-  ylim (-70,70) + 
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"),
-    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
-  theme(legend.key=element_blank(),legend.text = element_text(size = 15)) +
-  #scale_fill_manual( labels = c("Low force", "High force")) +
-  scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
-  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "a)", cex = 10) 
-
-
-
-ggplot(output) +
-  geom_point(aes(x = lat, y = latTrend))+
-  geom_ribbon( aes(ymin = quantile(output$mu_grand, prob = 0.05), ymax = quantile(output$mu_grand, prob = 0.95), x= lat), alpha = 0.2, fill = "cyan4")+
-  geom_ribbon( aes(ymin = quantile(latTrend, prob = 0.05), ymax = quantile(latTrend, prob = 0.95), x= lat), alpha = 0.2, fill = "cyan4") +
-  xlab("Latitude") + ylab("Height (m)") +
-  xlim (min(lati), max(lati)) + 
-  #ylim (-70,70) + 
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-    panel.background = element_blank(), axis.line = element_line(colour = "black"),
-    axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
-  theme(legend.key=element_blank(),legend.text = element_text(size = 15)) +
-  #scale_fill_manual( labels = c("Low force", "High force")) +
-  scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
-  #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
-  theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "a)", cex = 10) 
+# intHt <- ggplot(htEW) +
+#   geom_line(aes(y = htw, x = lati), col = "cyan4", lty = "dashed") +
+#   geom_ribbon(data = htEW, aes(ymin = ht_w5, ymax = ht_w95, x= lati), alpha = 0.2, fill = "cyan4") +
+#   geom_line(aes(y = hte, x = lati), col = "cyan3") + 
+#   geom_ribbon(data = htEW, aes(ymin = ht_e5, ymax = ht_e95, x= lati), alpha = 0.2, fill = "cyan3") + 
+#   xlab("Latitude") + ylab("Height (m)") +
+#   xlim (min(lati), max(lati)) + 
+#   ylim (-70,70) + 
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+#     panel.background = element_blank(), axis.line = element_line(colour = "black"),
+#     axis.text = element_text(size = 15), axis.title = element_text(size = 20))+
+#   theme(legend.key=element_blank(),legend.text = element_text(size = 15)) +
+#   #scale_fill_manual( labels = c("Low force", "High force")) +
+#   scale_color_manual(values = c("cyan3","cyan4"), labels = c("Eastern", "Western"), name = "") +
+#   #scale_colour_discrete(labels=c("High forcing","Low forcing"), name = "") +
+#   theme(legend.title = element_blank()) +  annotate("text", x = 41, y = 70, label = "a)", cex = 10) 
 
 plot(NA, xlim = c(min(output$lat), max(output$lat)), ylim = c(-10, 10),
   xlab = "Latitude", ylab = "Height (m)",
@@ -170,10 +152,9 @@ polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)
     quantile(subset(output, lat == 40)$latTrend, prob =c (0.975)),quantile(subset(output, lat == 60)$latTrend, prob =c (0.975))),                             # Y-Coordinates of polygon
   col = (rgb(68 / 255, 170 / 255, 153 / 255, alpha = 0.3)),border = NA )  
 
-for (i in 1: nrow(output)){
- abline(a = output$mu_grand[i] , b= 0, col = "maroon" )
+abline(a = mean(output$mu_grand) , b= 0, col = "cyan3" )
 abline(lm(output$latTrend ~ output$lat ), col = "cyan4")
-}
+
 ################################################
 ##lma
 
