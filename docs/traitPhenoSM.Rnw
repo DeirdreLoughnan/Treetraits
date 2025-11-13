@@ -84,6 +84,27 @@
 \clearpage
 
 \section*{Tables}
+
+\begin{table}[ht!]
+\centering
+\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station was used for our Smithers samples. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest and in St. Hippolyte respectively. Listed below are the total chill units that include both field and experimental chilling. } 
+\label{tabChill}
+\begin{tabular}{llrrr}
+  \hline
+Site & Chilling treatment & Chill hours & Utah model & Chill portions \\ 
+  \hline
+Harvard forest & Field chilling & 892 & 814.50 & 56.62 \\ 
+  Harvard forest & Field chilling + 30 d at 4$^\circ$C & 2140 & 2062.50 & 94.06 \\ 
+  St. Hippoltye & Field chilling & 682 & 599.50 & 44.63 \\ 
+  St. Hippoltye & Field chilling + 30 d at 4$^\circ$C & 1930 & 1847.50 & 82.06 \\ 
+  Smithers & Field chilling + 21 d at 4$^\circ$C & 1317 & 1368.00 & 54.95 \\ 
+  Smithers & Field chilling + 56 d at 4$^\circ$C & 1965 & 2016.00 & 74.67 \\ 
+  Manning park & Field chilling + 21 d at 4$^\circ$C & 1213 & 1377.00 & 55.09 \\ 
+  Manning park & Field chilling + 56 d at 4$^\circ$C & 1861 & 2025.00 & 75.33 \\ 
+  \end{tabular}
+\end{table}
+\newpage
+
 <<label= tableht, echo=FALSE , results= tex >>=
 
 require(xtable)
