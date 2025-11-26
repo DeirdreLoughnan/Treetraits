@@ -57,31 +57,24 @@
 \author{Deirdre Loughnan$^1$, Faith A M Jones$^1,^2$, and E M Wolkovich$^1$}
 \maketitle 
 
-\section*{Figures}
-\begin{figure}[ht]
- \centering
- \includegraphics[width=.75\textwidth]{..//analysis/figures/phenoTraitMapNAm.pdf}
-\caption{We measured leaf and structural traits in eight temperate deciduous forests, spanning four eastern communities shown in blue and four western communities shown in yellow, across a latitudinal gradients of 4-6$^{\circ}$. The branch clippings used in our two growth chamber experiments were taken from the most northern and most southern populations in each transect, as represented by the circles.}
-\label{fig:map}
-\end{figure}
+% \section*{Figures}
+% \begin{figure}[ht]
+%  \centering
+%  \includegraphics[width=.75\textwidth]{..//analysis/figures/phenoTraitMapNAm.pdf}
+% \caption{We measured leaf and structural traits in eight temperate deciduous forests, spanning four eastern communities shown in blue and four western communities shown in yellow, across a latitudinal gradients of 4-6$^{\circ}$. The branch clippings used in our two growth chamber experiments were taken from the most northern and most southern populations in each transect, as represented by the circles.}
+% \label{fig:map}
+% \end{figure}
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitRingType_KnownLat.pdf}
-\caption{ Despite previous studies finding relationships between leaf out timing and species wood xylem structures, we did not find clear differences in species-level estimates of cue responses with wood structure or relative to their wood specific densities. Each cross represents the 50\% uncertainty interval of \textbf{a}. forcing, \textbf{b.} chilling, and \textbf{c.} photoperiod responses and WSD, with colors depicting different types of wood structure.  }
-\label{fig:cueSlopeRing}
-\end{figure}
-\newpage
-\clearpage
 
-\begin{figure}[ht]\centering\hfill
- \centering
- \includegraphics[width=\textwidth]{..//analysis/figures/dotShrubTreeHtCNHundo.pdf}
-\caption{We found the estimated day of budburst differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the \textbf{a \& c} eastern \textbf{b \& d} and western populations, and in general span from early budbursting shrubs shown in red, to late budbursting trees shown in blue. \textbf{a \& b} For traits such as height we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits,\textbf{c \& d}  with the ranked order of species in our model of leaf nitrogen content exhibiting a highly mixed budburst order for our shrub and tree species. }
-\label{fig:bbShrubTree}
-\end{figure}
-\newpage
-\clearpage
+
+% \begin{figure}[ht]\centering\hfill
+%  \centering
+%  \includegraphics[width=\textwidth]{..//analysis/figures/dotShrubTreeHtCNHundo.pdf}
+% \caption{We found the estimated day of budburst differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the \textbf{a \& c} eastern \textbf{b \& d} and western populations, and in general span from early budbursting shrubs shown in red, to late budbursting trees shown in blue. \textbf{a \& b} For traits such as height we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits,\textbf{c \& d}  with the ranked order of species in our model of leaf nitrogen content exhibiting a highly mixed budburst order for our shrub and tree species. }
+% \label{fig:bbShrubTree}
+% \end{figure}
+% \newpage
+% \clearpage
 
 \section*{Tables}
 

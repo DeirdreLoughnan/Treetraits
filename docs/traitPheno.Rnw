@@ -239,7 +239,7 @@ Across temperature and precipitation gradients, leaf size and shape also change,
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//analysis/figures/traitLatInt.pdf}
-\caption{We found geographic differences for only one of our functional traits, the majority exhibiting no differences between latitudes or across transects. Depicted are the spatial trends for, a. height, b. diameter at base height, c. wood specific density, d. leaf mass area, and e. leaf nitrogen content. Dashed lines represent the western transect and solid lines the eastern transect.} 
+\caption{We found a. height, b. diameter, c. branch stem density, and d. leaf mass area to all experience a strong interaction between latitude and transect, e. while leaf nitrogen content showed a strong effect of latitude alone.  } 
 \label{fig:tranInt}
 \end{figure}
 
@@ -258,6 +258,14 @@ Across temperature and precipitation gradients, leaf size and shape also change,
 \label{fig:traitSlopes}
 \end{figure}
 
+\begin{figure}[ht]\centering\hfill
+ \centering
+ \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitRingType_KnownLat.pdf}
+\caption{ Despite previous studies finding relationships between leaf out timing and species wood xylem structures, we did not find clear differences in species-level estimates of cue responses with wood structure or relative to their wood specific densities. Each cross represents the 50\% uncertainty interval of \textbf{a}. forcing, \textbf{b.} chilling, and \textbf{c.} photoperiod responses and WSD, with colors depicting different types of wood structure.  }
+\label{fig:cueSlopeRing}
+\end{figure}
+\newpage
+\clearpage
 % \begin{figure}[ht]\centering\hfill
 %  \centering
 %  \includegraphics[width=\textwidth]{..//analysis/figures/cuetraitRingType_KnownLat.pdf}
