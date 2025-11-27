@@ -495,7 +495,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, 
       y = bfs_df$betaForceSpMean, type="n", 
-      xlim = c(0, max(mg_df$trait75)), 
+      xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 0.1), 
       ylab = "Species level forcing slope", 
       xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
@@ -577,7 +577,7 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, 
       y = bcs_df$betaChillSpMean, type="n", 
-      xlim = c(0, max(mg_df$trait75)), 
+      xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 0.1), 
       ylab = "Species level chilling slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
@@ -654,7 +654,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
 #pdf("figures/cuetraitHundof.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0, max(mg_df$trait75)), 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 0.1), ylab = "Species level photoperiod slope",
       xlab = bquote('Leaf mass area '~(g/m^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 
@@ -1292,7 +1292,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
 #pdf("figures/cuetraitHundom.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(0, max(mg_df$trait75)), ylim = c(min(bfs_df$force25), 10), 
+plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(2, max(mg_df$trait75)), ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species level forcing slope", xlab = "Leaf nitrogen content (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
@@ -1372,7 +1372,7 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 
 #pdf("figures/cuetraitHundon.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(0, max(mg_df$trait75)), 
+plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(2, max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), ylab = "Species level chilling slope", 
       xlab = "Leaf nitrogen conent (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
@@ -1451,7 +1451,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 
 #pdf("figures/cuetraitHundoo.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
-plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0, max(mg_df$trait75)), 
+plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(2, max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), 
       ylab = "Species level photoperiod slope", 
       xlab = "Leaf nitrogen content (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
