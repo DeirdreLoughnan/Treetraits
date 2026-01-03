@@ -227,17 +227,17 @@ par(mar = c(5, 5, 4, 2), mfrow = c(5,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
       type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
-      ylab = "Species level forcing slope", xlab = "Height (m)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level forcing slope", xlab = "Height (m)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "Forcing", adj = 0, cex = 2)
-for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
-}
-# for(j in 1:length(muForceSp[,1])){
-#   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 # }
-abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+# # for(j in 1:length(muForceSp[,1])){
+# #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
 arrows(
   mg_df_east[,"muSpMean"], # x mean
@@ -312,17 +312,17 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species level chilling slope", xlab = "Height (m)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = "Height (m)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 mtext(side = 3, text = "Chilling", adj = 0, cex = 2)
-for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
-}
-# for(j in 1:length(muChillSp[,1])){
-#   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 # }
-abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
+# # for(j in 1:length(muChillSp[,1])){
+# #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
 arrows(
   mg_df_east[,"muSpMean"], # x mean
@@ -393,7 +393,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", 
       xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10),
-      ylab = "Species level photoperiod slope", xlab = "Height (m)", 
+      ylab = "Specieslevel photoperiod slope", xlab = "Height (m)", 
       cex.lab = 2.25, cex.axis = 2) 
 
 text(0.3, 9, "c)", cex = 2)
@@ -497,15 +497,15 @@ plot( x= mg_df$muSpMean,
       y = bfs_df$betaForceSpMean, type="n", 
       xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 0.1), 
-      ylab = "Species level forcing slope", 
+      ylab = "Species-level forcing slope", 
       xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
-}
-abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+# for(j in 1:length(apoly[,1])){
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
+# }
+# abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
 arrows(
   mg_df_east[,"muSpMean"], # x mean
@@ -540,7 +540,7 @@ arrows(
 )
 
 
-text(0.001, 0.09, "d)", cex = 2)
+text(0.02, 0.09, "d)", cex = 2)
 
 #dev.off()
 ######################################################
@@ -579,16 +579,16 @@ plot( x= mg_df$muSpMean,
       y = bcs_df$betaChillSpMean, type="n", 
       xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 0.1), 
-      ylab = "Species level chilling slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0")
-}# for(j in 1:length(muChillSp[,1])){
-#   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
-# }
-abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
+# for(j in 1:length(apoly[,1])){
+#   abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0")
+# }# for(j in 1:length(muChillSp[,1])){
+# #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
 arrows(
   mg_df_east[,"muSpMean"], # x mean
@@ -623,7 +623,7 @@ arrows(
 )
 
 
-text(0.0001, 0.09, "e)", cex = 2)
+text(0.02, 0.09, "e)", cex = 2)
 
 #######################################################################
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)/100
@@ -655,7 +655,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundof.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0.02, max(mg_df$trait75)), 
-      ylim = c(min(bps_df$photo25), 0.1), ylab = "Species level photoperiod slope",
+      ylim = c(min(bps_df$photo25), 0.1), ylab = "Species-level photoperiod slope",
       xlab = bquote('Leaf mass area '~(g/m^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
@@ -701,7 +701,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-text(0.001, 0.09, "f)", cex = 2)
+text(0.02, 0.09, "f)", cex = 2)
 
 ####################
 # DBH
@@ -759,18 +759,18 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundog.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
-      ylim = c(min(bfs_df$force25), 10), ylab = "Species level forcing slope", 
-      xlab = "Diameter at breast height (m)",  cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylim = c(min(bfs_df$force25), 10), ylab = "Species-level forcing slope", 
+      xlab = "Diameter at breast height (cm)",  cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
-}
-# for(j in 1:length(muForceSp[,1])){
-#   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0")
 # }
-abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+# # for(j in 1:length(muForceSp[,1])){
+# #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
 
 arrows(
@@ -841,16 +841,16 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species level chilling slope", xlab = "Diameter at breast height (m)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = "Diameter at breast height (cm)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-# for(j in 1:length(muChillSp[,1])){
-#   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
+# # for(j in 1:length(muChillSp[,1])){
+# #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
 
 arrows(
@@ -918,8 +918,8 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundoi.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
-      ylim = c(min(bps_df$photo25), 10), ylab = "Species level photoperiod slope", 
-      xlab = "Diameter at breast height (m)", cex.lab = 2.25, cex.axis = 2 ) # blank plot with x range 
+      ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope", 
+      xlab = "Diameter at breast height (cm)", cex.lab = 2.25, cex.axis = 2 ) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)  
@@ -1024,20 +1024,20 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
-      ylab = "Species level forcing slope", 
-      xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level forcing slope", 
+      xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
 
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-
-# for(j in 1:length(muForceSp[,1])){
-#   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+# 
+# # for(j in 1:length(muForceSp[,1])){
+# #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
 
 arrows(
@@ -1109,18 +1109,18 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species level chilling slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-
-# for(j in 1:length(muChillSp[,1])){
-#   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
+# 
+# # for(j in 1:length(muChillSp[,1])){
+# #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
 
 arrows(
@@ -1188,20 +1188,20 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundol.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
-      ylim = c(min(bps_df$photo25), 10), ylab = "Species level photoperiod slope", 
-      xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope", 
+      xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0") 
-}
-
-# for(j in 1:length(muPhotoSp[,1])){
-#   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0") 
 # }
-abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
-
+# 
+# # for(j in 1:length(muPhotoSp[,1])){
+# #   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
+# 
 
 arrows(
   mg_df_east[,"muSpMean"], # x mean
@@ -1293,18 +1293,18 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundom.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(2, max(mg_df$trait75)), ylim = c(min(bfs_df$force25), 10), 
-      ylab = "Species level forcing slope", xlab = "Leaf nitrogen content (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level forcing slope", xlab = "Leaf nitrogen content (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-
-# for(j in 1:length(muForceSp[,1])){
-#   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+# 
+# # for(j in 1:length(muForceSp[,1])){
+# #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
 arrows(
   mg_df_east[,"muSpMean"], # x mean
@@ -1373,19 +1373,19 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundon.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(2, max(mg_df$trait75)), 
-      ylim = c(min(bcs_df$chill25), 10), ylab = "Species level chilling slope", 
-      xlab = "Leaf nitrogen conent (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylim = c(min(bcs_df$chill25), 10), ylab = "Species-level chilling slope", 
+      xlab = "Leaf nitrogen content (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-
-# for(j in 1:length(muChillSp[,1])){
-#   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
+# 
+# # for(j in 1:length(muChillSp[,1])){
+# #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
 
 arrows(
@@ -1453,7 +1453,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(2, max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), 
-      ylab = "Species level photoperiod slope", 
+      ylab = "Species-level photoperiod slope", 
       xlab = "Leaf nitrogen content (%)", cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
