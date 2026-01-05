@@ -145,7 +145,7 @@ upper_htTran <- round(quantile(htModelFit$b_tranE, prob = 0.95),1)
 
 htLatTran <- as.numeric(round(mean(htModelFit$b_tranlat),1))
 lower_htLatTran <- format(round(quantile(htModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
-upper_htLatTran <- round(quantile(htModelFit$b_tranlat, prob = 0.95),1)
+upper_htLatTran <- format(round(quantile(htModelFit$b_tranlat, prob = 0.95),1), nsmall =1)
 
 htBFSpMean <- as.numeric(round(mean(htModelFit$betaTraitxForce),1))
 lower_htBFSpMean <- format(round(quantile(htModelFit$betaTraitxForce, prob = 0.05),1), nsmall =1)
@@ -223,7 +223,7 @@ lmaMuFSpMean; lower_lmaMuFSpMean; upper_lmaMuFSpMean
 #muChillSP
 lmaMuCSpMean <- as.numeric(round(mean(lmaModelFit$muChillSp),1))
 lower_lmaMuCSpMean <- format(round(quantile(lmaModelFit$muChillSp, prob = 0.05),1), nsmall =1)
-upper_lmaMuCSpMean <- round(quantile(lmaModelFit$muChillSp, prob = 0.95),1)
+upper_lmaMuCSpMean <- format(round(quantile(lmaModelFit$muChillSp, prob = 0.95),1), nsmall =1)
 lmaMuCSpMean; lower_lmaMuCSpMean; upper_lmaMuCSpMean
 
 #muPhotoSp
@@ -301,7 +301,7 @@ upper_lncLatTran <- round(quantile(lncModelFit$b_tranlat, prob = 0.95),1)
 
 lncLat <- as.numeric(round(mean(lncModelFit$b_lat),1))
 lower_lncLat <- format(round(quantile(lncModelFit$b_lat, prob = 0.05),1), nsmall =1)
-upper_lncLat <- round(quantile(lncModelFit$b_lat, prob = 0.95),2)
+upper_lncLat <- format(-0.0, nsmall =1)#format(round(quantile(lncModelFit$b_lat, prob = 0.95),1), nsmall =1)
 #lncmuSp <- apply(posterior_ssd$muSp, MARGIN = 2, FUN = mean)
 
 lncTran <- as.numeric(round(mean(lncModelFit$b_tranE),1))

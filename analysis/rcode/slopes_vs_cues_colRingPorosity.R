@@ -45,7 +45,7 @@ load("..//analysis/output/ssdContLatHundowLat10.Rdata")
 
 ModelFit <- rstan::extract(mdlSSD)
 
-muSp <- data.frame(ModelFit$mu_grand_sp)
+muSp <- data.frame(ModelFit$mu_grand_sp)/10
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
@@ -109,19 +109,19 @@ par(mar = c(5, 5, 2, 2), mfrow = c(1,3))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
       type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
-text ( 25,-0.5, "a)", cex =2)
+# text ( 25,0.1, "a)", cex =2)
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
-
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-
-# for(j in 1:length(muForceSp[,1])){
-#   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# 
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
+# 
+# # for(j in 1:length(muForceSp[,1])){
+# #   abline(a = muForceSp[j,], b = betaTraitxForceMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muForceSpMean, b=betaTraitxForceMean, col = "black")
 
 
 arrows(
@@ -188,7 +188,7 @@ arrows(
   length = 0, col = "goldenrod", lwd = 4
 )
 
-text(0.2, 9.2, "a)", cex = 2)
+text(0.05, 9.2, "a)", cex = 3)
 
 # my.label <- paste("j", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
@@ -240,14 +240,14 @@ text ( 25,8, "b)", cex =2)
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
-}
-
-# for(j in 1:length(muChillSp[,1])){
-#   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col= "#E0E0E0") 
 # }
-abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
+# 
+# # for(j in 1:length(muChillSp[,1])){
+# #   abline(a = muChillSp[j,], b = betaTraitxChillMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muChillSpMean, b=betaTraitxChillMean, col = "black")
 
 
 arrows(
@@ -314,7 +314,7 @@ arrows(
   length = 0, col = "goldenrod", lwd = 4
 )
 
-text(0.2, 9, "b)", cex = 2)
+text(0.05, 9, "b)", cex = 3)
 
 # my.label <- paste("k", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
@@ -362,14 +362,14 @@ plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_d
       xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,4.5, "c)", cex =2)# min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
-for(j in 1:length(apoly[,1])){   
-  abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0") 
-}
-
-# for(j in 1:length(muPhotoSp[,1])){
-#   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
+# for(j in 1:length(apoly[,1])){   
+#   abline(a = apoly[j,], b = bpolly[j,], col = "#E0E0E0") 
 # }
-abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
+# 
+# # for(j in 1:length(muPhotoSp[,1])){
+# #   abline(a = muPhotoSp[j,], b = betaTraitxPhotoMean, col=alpha("#73d2de", 0.085))
+# # }
+# abline(a=muPhotoSpMean, b=betaTraitxPhotoMean, col = "black")
 
 
 arrows(
@@ -439,7 +439,7 @@ arrows(
 legend(3.5 , 9.5,legend = c("Ring", "Semi-ring", "Diffuse", "Diffuse-ring"),
        col  = c( "goldenrod", "purple4", "#218380","#8f2d56"), lwd =4, bty = "n", cex = 1.5)
 
-text(0.2, 9.5, "c)", cex = 2)
+text(0.05, 9.5, "c)", cex = 3)
 
 
 dev.off()

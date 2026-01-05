@@ -448,7 +448,7 @@ ModelFit <- rstan::extract(mdlLMA)
 muSp <- (data.frame(ModelFit$mu_grand_sp)/100)
 muSpMean <- colMeans(muSp)
 
-betaForceSp <- data.frame(ModelFit$betaForceSp)/100
+betaForceSp <- data.frame(ModelFit$betaForceSp)
 betaForceSpMean <- colMeans(betaForceSp)
 
 quantile2575 <- function(x){
@@ -496,7 +496,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, 
       y = bfs_df$betaForceSpMean, type="n", 
       xlim = c(0.02, max(mg_df$trait75)), 
-      ylim = c(min(bfs_df$force25), 0.1), 
+      ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", 
       xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
@@ -540,11 +540,11 @@ arrows(
 )
 
 
-text(0.02, 0.09, "d)", cex = 2)
+text(0.02, 9, "d)", cex = 2)
 
 #dev.off()
 ######################################################
-betaChillSp <- data.frame(ModelFit$betaChillSp)/100
+betaChillSp <- data.frame(ModelFit$betaChillSp)
 betaChillSpMean <- colMeans(betaChillSp)
 bc_quan <- apply(betaChillSp, 2, quantile2575)
 
@@ -555,7 +555,7 @@ colnames(bcs_df)[colnames(bcs_df) == "X25."] <- "chill25"
 colnames(bcs_df)[colnames(bcs_df) == "X75."] <- "chill75"
 bcs_df$species <- specieslist
 
-muChillSp <- data.frame(ModelFit$muChillSp)/100
+muChillSp <- data.frame(ModelFit$muChillSp)
 muChillSpMean <- colMeans(muChillSp)
 a5 <- quantile(muChillSp$ModelFit.muChillSp, prob = c(0.25))
 a95 <- quantile(muChillSp$ModelFit.muChillSp, prob = c(0.75))
@@ -578,7 +578,7 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, 
       y = bcs_df$betaChillSpMean, type="n", 
       xlim = c(0.02, max(mg_df$trait75)), 
-      ylim = c(min(bcs_df$chill25), 0.1), 
+      ylim = c(min(bcs_df$chill25), 10), 
       ylab = "Species-level chilling slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
@@ -623,10 +623,10 @@ arrows(
 )
 
 
-text(0.02, 0.09, "e)", cex = 2)
+text(0.02, 9, "e)", cex = 2)
 
 #######################################################################
-betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)/100
+betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
 betaPhotoSpMean <- colMeans(betaPhotoSp)
 bp_quan <- apply(betaPhotoSp, 2, quantile2575)
 
@@ -637,13 +637,13 @@ colnames(bps_df)[colnames(bps_df) == "X25."] <- "photo25"
 colnames(bps_df)[colnames(bps_df) == "X75."] <- "photo75"
 bps_df$species <- specieslist
 
-muPhotoSp <- data.frame(ModelFit$muPhotoSp)/100
+muPhotoSp <- data.frame(ModelFit$muPhotoSp)
 muPhotoSpMean <- colMeans(muPhotoSp)
 a5 <- quantile(muPhotoSp$ModelFit.muPhotoSp, prob = c(0.25))
 a95 <- quantile(muPhotoSp$ModelFit.muPhotoSp, prob = c(0.75))
 apoly <- subset(muPhotoSp, ModelFit.muPhotoSp > a5 & ModelFit.muPhotoSp < a95)
 
-betaTraitxPhoto<- data.frame(ModelFit$betaTraitxPhoto)
+betaTraitxPhoto<- data.frame(ModelFit$betaTraitxPhoto)*100
 b5 <- quantile(betaTraitxPhoto$ModelFit.betaTraitxPhoto, prob = c(0.25))
 b95 <- quantile(betaTraitxPhoto$ModelFit.betaTraitxPhoto, prob = c(0.75))
 bpolly <- subset(betaTraitxPhoto, ModelFit.betaTraitxPhoto > b5 & ModelFit.betaTraitxPhoto < b95)
@@ -655,7 +655,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #pdf("figures/cuetraitHundof.pdf", height = 4, width = 5)
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0.02, max(mg_df$trait75)), 
-      ylim = c(min(bps_df$photo25), 0.1), ylab = "Species-level photoperiod slope",
+      ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope",
       xlab = bquote('Leaf mass area '~(g/m^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
@@ -701,7 +701,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-text(0.02, 0.09, "f)", cex = 2)
+text(0.02, 9, "f)", cex = 2)
 
 ####################
 # DBH
@@ -974,7 +974,7 @@ load("..//analysis/output/ssdContLatHundowLat10.Rdata")
 
 ModelFit <- rstan::extract(mdlSSD)
 
-muSp <- data.frame(ModelFit$mu_grand_sp)
+muSp <- data.frame(ModelFit$mu_grand_sp)/10
 muSpMean <- colMeans(muSp)
 
 betaForceSp <- data.frame(ModelFit$betaForceSp)
@@ -1073,7 +1073,7 @@ arrows(
 )
 
 
-text(0.2, 9, "j)", cex = 2)
+text(0.01, 9, "j)", cex = 2)
 
 ###############################################################
 betaChillSp <- data.frame(ModelFit$betaChillSp)
@@ -1155,7 +1155,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-text(0.2, 9, "k)", cex = 2)
+text(0.01, 9, "k)", cex = 2)
 
 
 ###############################################################
@@ -1236,7 +1236,7 @@ arrows(
 )
 
 
-text(0.2, 9, "i)", cex = 2)
+text(0.01, 9, "i)", cex = 2)
 
 #########################################################################################################################
 # LNC
