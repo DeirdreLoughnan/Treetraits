@@ -223,7 +223,7 @@ col4.sp <- c( rgb(34 / 255, 166 / 255, 167 / 255, alpha = 0.05))
 col5.sp <- c( rgb(141 / 255, 34 / 255, 171 / 255, alpha = 0.05))
 
 pdf("..//analysis/figures/cuetraitLat.pdf", height = 20, width = 15)
-par(mar = c(5, 5, 4, 2), mfrow = c(5,3))
+par(mar = c(5, 5, 4, 2), mfrow = c(5,3), mgp = c(3.5,1,0))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
       type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
@@ -498,7 +498,7 @@ plot( x= mg_df$muSpMean,
       xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", 
-      xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Leaf mass area '~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
@@ -579,7 +579,7 @@ plot( x= mg_df$muSpMean,
       y = bcs_df$betaChillSpMean, type="n", 
       xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species-level chilling slope", xlab = bquote('Leaf mass area '~(g/m^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = bquote('Leaf mass area '~(g/cm^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
@@ -656,7 +656,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope",
-      xlab = bquote('Leaf mass area '~(g/m^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Leaf mass area '~(g/cm^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){
@@ -1021,11 +1021,11 @@ bfs_df_east <- bfs_df[bfs_df$species %in% eastSp, ]
 bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 
 #pdf("figures/cuetraitHundoj.pdf", height = 4, width = 5)
-#par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
+# par(mgp = c(3.5, 1,0))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", 
-      xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
@@ -1109,7 +1109,7 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species-level chilling slope", xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
@@ -1189,7 +1189,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope", 
-      xlab = bquote('Wood specific density'~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)

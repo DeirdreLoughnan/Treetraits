@@ -105,10 +105,10 @@ bfs_df_semiRing <- bfs_df[bfs_df$species %in% semiRing, ]
 bfs_df_ring <- bfs_df[bfs_df$species %in% ring, ]
 
 pdf("..//analysis/figures/cuetraitRingType_KnownLat.pdf", height = 5, width = 15)
-par(mar = c(5, 5, 2, 2), mfrow = c(1,3))
+par(mar = c(5, 5, 2, 2), mfrow = c(1,3), mgp =c(3.5, 1, 0))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
       type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), ylim = c(min(bfs_df$force25), 10), 
-      ylab = "Species-level forcing slope", xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level forcing slope", xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # text ( 25,0.1, "a)", cex =2)
 # 3 columns, mean, quantile
 # min and max defined by quantiles
@@ -234,7 +234,7 @@ bcs_df_ring <- bcs_df[bcs_df$species %in% ring, ]
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
       ylab = "Species-level chilling slope", 
-      xlab = bquote('Wood specific density'~(kg/m^2)),
+      xlab = bquote('Wood specific density'~(g/cm^3)),
       cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,8, "b)", cex =2)
 # 3 columns, mean, quantile
@@ -359,7 +359,7 @@ bps_df_ring <- bps_df[bps_df$species %in% ring, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope", 
-      xlab = bquote('Wood specific density'~(kg/m^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 text ( 25,4.5, "c)", cex =2)# min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 # for(j in 1:length(apoly[,1])){   

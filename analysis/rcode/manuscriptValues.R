@@ -239,9 +239,9 @@ lmaChillMax <- max(lmaChillSpMean)
 lmaLat <- as.numeric(round(mean(lmaModelFit$b_lat),1))
 
 
-lmaLatTran <- as.numeric(round(mean(lmaModelFit$b_tranlat),1))
-lower_lmaLatTran <- format(round(quantile(lmaModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
-upper_lmaLatTran <- round(quantile(lmaModelFit$b_tranlat, prob = 0.95),1)
+lmaLatTran <- as.numeric(round(mean(lmaModelFit$b_tranlat)/100,3))
+lower_lmaLatTran <- format(round(quantile(lmaModelFit$b_tranlat, prob = 0.05)/100,3), nsmall =1)
+upper_lmaLatTran <- round(quantile(lmaModelFit$b_tranlat, prob = 0.95)/100,3)
 
 lmasigmaSp <- as.numeric(round(mean(lmaModelFit$sigma_sp),1))
 lower_lmasigmaSp <- format(round(quantile(lmaModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
@@ -362,9 +362,9 @@ ssdChillMax <- max(ssdChillSpMean)
 
 ssdLat <- as.numeric(round(mean(ssdModelFit$b_lat),1))
 
-ssdLatTran <- as.numeric(round(mean(ssdModelFit$b_tranlat),1))
-lower_ssdLatTran <- format(round(quantile(ssdModelFit$b_tranlat, prob = 0.05),1), nsmall =1)
-upper_ssdLatTran <- round(quantile(ssdModelFit$b_tranlat, prob = 0.95),1)
+ssdLatTran <- as.numeric(round(mean(ssdModelFit$b_tranlat)/10,2))
+lower_ssdLatTran <- format(round(quantile(ssdModelFit$b_tranlat, prob = 0.05)/10,2), nsmall =1)
+upper_ssdLatTran <- format(0.0, nsmall =1)#round(quantile(ssdModelFit$b_tranlat, prob = 0.95)/10,2)
 
 ssdsigmaSp <- as.numeric(round(mean(ssdModelFit$sigma_sp),1))
 lower_ssdsigmaSp <- format(round(quantile(ssdModelFit$sigma_sp, prob = 0.05),1), nsmall =1)
