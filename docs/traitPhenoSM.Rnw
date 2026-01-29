@@ -70,7 +70,7 @@
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//analysis/figures/dotShrubTreeHtCNHundo.pdf}
-\caption{We found the estimated day of budburst differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the \textbf{a \& c} eastern \textbf{b \& d} and western populations, and in general span from early budbursting shrubs shown in red, to late budbursting trees shown in blue. \textbf{a \& b} For traits such as height we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits,\textbf{c \& d}  with the ranked order of species in our model of leaf nitrogen content exhibiting a highly mixed budburst order for our shrub and tree species. }
+\caption{We found the estimated day of budburst differed between our full model (intercept plus cues, depicted as triangles for high cues and as circles for low cues), versus the intercepts only model (without cues, shown as squares). Species are ordered in increasing budburst dates for both the \textbf{a \& c} eastern \textbf{b \& d} and western populations, and in general span from early budbursting shrubs shown in red, to late budbursting trees shown in blue. \textbf{a \& b} For traits such as height we found distinct partitioning of budburst across shrub and tree species, but this was not the case for all traits, \textbf{c \& d}  with the ranked order of species in our model of leaf nitrogen content exhibiting a highly mixed budburst order for our shrub and tree species. }
 \label{fig:bbShrubTree}
 \end{figure}
 \newpage
@@ -80,7 +80,7 @@
 
 \begin{table}[ht!]
 \centering
-\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station was used for our Smithers samples. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest and in St. Hippolyte respectively. Listed below are the total chill units that include both field and experimental chilling. } 
+\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station was used for our Smithers samples. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest and in St. Hippolyte respectively. Listed below are the total chill units that include both field and experimental chilling. }  %emwJan28: Can you give some sort of website for each or a better ID or such? These names seem hard to track down ... 
 \label{tabChill}
 \begin{tabular}{llrrr}
   \hline
@@ -136,7 +136,7 @@ upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU
 
 meanz4 <- cbind(meanz4,  upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 
 
 @
@@ -181,7 +181,7 @@ upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of DBH and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
@@ -224,7 +224,7 @@ upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of wood specific density and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. For this model the trait data was rescaled by 10 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of wood specific density and budburst phenology in which species are partially pooled. For this model the trait data was rescaled by 10 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableLMA, echo=FALSE , results= tex >>=
@@ -266,7 +266,7 @@ upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. For this model the trait data was rescaled by 100 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LMA and budburst phenology in which species are partially pooled. For this model the trait data was rescaled by 100 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableLNC, echo=FALSE , results= tex >>=
@@ -308,7 +308,7 @@ upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The effect of transect is modeled as a dummy variable and latitude as continuous, with an interaction term between latitude and transect. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 
