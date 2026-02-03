@@ -345,8 +345,8 @@ upper_ssdMuFSpMean <- round(quantile(ssdModelFit$muForceSp, prob = 0.95),1)
 ssdMuFSpMean; lower_ssdMuFSpMean; upper_ssdMuFSpMean
 
 #muChillSP
-ssdMuCSpMean <- as.numeric(round(mean(ssdModelFit$muChillSp),1))
-lower_ssdMuCSpMean <- format(round(quantile(ssdModelFit$muChillSp, prob = 0.05),1), nsmall =1)
+ssdMuCSpMean <- as.numeric(round(mean(ssdModelFit$muChillSp)/10,1))
+lower_ssdMuCSpMean <- format(round(quantile(ssdModelFit$muChillSp, prob = 0.05)/10,1), nsmall =1)
 upper_ssdMuCSpMean <- round(quantile(ssdModelFit$muChillSp, prob = 0.95),1)
 ssdMuCSpMean; lower_ssdMuCSpMean; upper_ssdMuCSpMean
 

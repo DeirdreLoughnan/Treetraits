@@ -67,8 +67,8 @@ output <- data.frame(cbind(
 names(output) <- c("iter", "mu_grand","b_tranE", "b_tranLat","b_lat","lat")
 
 for (i in 1:nrow(output)){
-  temp <- output$mu_grand[i] + output$b_tranE[i]* tranE + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranE*output$lat[i])
-  output$latTrendE[output$iter == i] <- temp
+  # temp <- output$mu_grand[i] + output$b_tranE[i]* tranE + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranE*output$lat[i])
+  # output$latTrendE[output$iter == i] <- temp
   tempW <- output$mu_grand[i] + output$b_tranE[i]* tranW + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranW*output$lat[i])
   output$latTrendW[output$iter == i] <- tempW
 }
@@ -100,7 +100,7 @@ abline(lm(output$latTrendE ~ output$lat ), col = "navy", lty = 2)
 
 legend("bottomleft",legend = c("Eastern transect", 
                                "Western transect"),
-col = c("navy", "navy"), lty = c(1,2), bty = "n", lwd = 2, cex = 1.5)
+col = c("navy", "navy"), lty = c(2,1), bty = "n", lwd = 2, cex = 1.5)
 
 
 
@@ -127,7 +127,7 @@ for (i in 1:nrow(output)){
 }
 
 plot(NA, xlim = c(42,54), ylim = c(-5, 15),
-     xlab = "Latitude", ylab = "Diameter at breast height (m)",
+     xlab = "Latitude", ylab = "Diameter at breast height (cm)",
      xaxt = "n",
      cex.lab = 1.5,
      cex.axis = 1.5)
@@ -170,25 +170,25 @@ for (i in 1:nrow(output)){
 }
 
 
-plot(NA, xlim = c(42,54), ylim = c(0,10),
-     xlab = "Latitude", ylab = bquote('Wood specific density'~(kg/m^2)),
+plot(NA, xlim = c(42,54), ylim = c(0,0.8),
+     xlab = "Latitude", ylab = bquote('Wood specific density'~(g/cm^3)),
      xaxt = "n",
      cex.lab = 1.5,
      cex.axis = 1.5)
 axis(side = 1, at = seq(42,54, by =1), cex.axis =1.5)
-text(42.5, 9.5, 'c)', cex = 2)
+text(42.5, 0.75, 'c)', cex = 2)
 polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
-        y = c(quantile((subset(output, lat == 40)$latTrendW), prob =c (0.025)),quantile((subset(output, lat == 55)$latTrendW), prob =c (0.025)), 
-              quantile((subset(output, lat == 55)$latTrendW), prob =c (0.975)),quantile((subset(output, lat == 40)$latTrendW), prob =c (0.975))),                             # Y-Coordinates of polygon
+        y = c(quantile((subset(output, lat == 40)$latTrendW)/10, prob =c (0.025)),quantile((subset(output, lat == 55)$latTrendW)/10, prob =c (0.025)), 
+              quantile((subset(output, lat == 55)$latTrendW)/10, prob =c (0.975)),quantile((subset(output, lat == 40)$latTrendW)/10, prob =c (0.975))),                             # Y-Coordinates of polygon
         col = (rgb(176 / 255, 48 / 255, 96 / 255, alpha = 0.3)),border = NA )  
 
 polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
-        y = c(quantile((subset(output, lat == 40)$latTrendE), prob =c (0.025)),quantile((subset(output, lat == 55)$latTrendE), prob =c (0.025)), 
-              quantile((subset(output, lat == 55)$latTrendE), prob =c (0.975)),quantile((subset(output, lat == 40)$latTrendE), prob =c (0.975))),                             # Y-Coordinates of polygon
+        y = c(quantile((subset(output, lat == 40)$latTrendE), prob =c (0.025))/10,quantile((subset(output, lat == 55)$latTrendE)/10, prob =c (0.025)), 
+              quantile((subset(output, lat == 55)$latTrendE), prob =c (0.975))/10,quantile((subset(output, lat == 40)$latTrendE)/10, prob =c (0.975))),                             # Y-Coordinates of polygon
         col = (rgb(139 / 255, 28 / 255, 98 / 255, alpha = 0.3)),border = NA )  
 
-abline(lm((output$latTrendW) ~ output$lat ), col = "maroon4" )
-abline(lm((output$latTrendE) ~ output$lat ), col = "maroon4", lty = 2)
+abline(lm((output$latTrendW)/10 ~ output$lat ), col = "maroon4" )
+abline(lm((output$latTrendE)/10 ~ output$lat ), col = "maroon4", lty = 2)
 
 # LMA:
 postLMA <- data.frame(postLMA)
@@ -213,7 +213,7 @@ for (i in 1:nrow(output)){
 }
 
 plot(NA, xlim = c(42,54), ylim = c(00, 0.10),
-     xlab = "Latitude", ylab =  bquote('Leaf mass area '~(g/m^2)),
+     xlab = "Latitude", ylab =  bquote('Leaf mass area '~(g/cm^2)),
      xaxt = "n",
      cex.lab = 1.5,
      cex.axis = 1.5)
@@ -248,8 +248,8 @@ names(output) <- c("iter", "mu_grand","b_tranE", "b_tranLat","b_lat","lat")
 output$latTrend <- NA  
 
 for (i in 1:nrow(output)){
-  temp <- output$mu_grand[i] + output$b_tranE[i]* tranE + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranE*output$lat[i])
-  output$latTrendE[output$iter == i] <- temp
+  # temp <- output$mu_grand[i]  + output$b_lat[i]* output$lat[i] 
+  # output$latTrendE[output$iter == i] <- temp
   tempW <- output$mu_grand[i] + output$b_tranE[i]* tranW + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranW*output$lat[i])
   output$latTrendW[output$iter == i] <- tempW
 }
@@ -267,13 +267,9 @@ polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)
               quantile(subset(output, lat == 55)$latTrendW, prob =c (0.975)),quantile(subset(output, lat == 40)$latTrendW, prob =c (0.975))),                             # Y-Coordinates of polygon
         col = (rgb(155 / 255, 32 / 255, 240 / 255, alpha = 0.3)),border = NA )  
 
-polygon(x = c(min(output$lat), max(output$lat), max(output$lat), min(output$lat)),    # X-Coordinates of polygon
-        y = c(quantile(subset(output, lat == 40)$latTrendE, prob =c (0.025)),quantile(subset(output, lat == 55)$latTrendE, prob =c (0.025)), 
-              quantile(subset(output, lat == 55)$latTrendE, prob =c (0.975)),quantile(subset(output, lat == 40)$latTrendE, prob =c (0.975))),                             # Y-Coordinates of polygon
-        col = (rgb(85 / 255, 26 / 255, 139 / 255, alpha = 0.3)),border = NA )  
 
-abline(lm(output$latTrendW ~ output$lat ), col = "purple" )
-abline(lm(output$latTrendE ~ output$lat ), col = "purple4", lty = 2)
+abline(lm(output$latTrendW ~ output$lat ), col = "purple4", lty = 4 )
+# abline(lm(output$latTrendE ~ output$lat ), col = "purple4", lty = 2)
 
 dev.off()
 
