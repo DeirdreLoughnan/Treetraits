@@ -498,7 +498,7 @@ plot( x= mg_df$muSpMean,
       xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", 
-      xlab = bquote('Leaf mass area '~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Leaf mass per area '~(g/cm^2)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
@@ -579,7 +579,7 @@ plot( x= mg_df$muSpMean,
       y = bcs_df$betaChillSpMean, type="n", 
       xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species-level chilling slope", xlab = bquote('Leaf mass area '~(g/cm^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = bquote('Leaf mass per area '~(g/cm^2)), cex.lab =2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
@@ -656,7 +656,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(0.02, max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope",
-      xlab = bquote('Leaf mass area '~(g/cm^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Leaf mass per area '~(g/cm^2)),cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
 for(j in 1:length(apoly[,1])){
@@ -1338,7 +1338,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-text(0, 9, "m)", cex = 2)
+text(2, 9, "m)", cex = 2)
 
 ###############################################################
 betaChillSp <- data.frame(ModelFit$betaChillSp)
@@ -1420,7 +1420,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-text(0, 9, "n)", cex = 2)
+text(2, 9, "n)", cex = 2)
 
 ###############################################################
 betaPhotoSp <- data.frame(ModelFit$betaPhotoSp)
@@ -1500,7 +1500,7 @@ arrows(
   length = 0, col = "#8f2d56", lwd = 2
 )
 
-text(0,9, "o)", cex = 2)
+text(2,9, "o)", cex = 2)
 # my.label <- paste("o", ".", sep="")
 # put.fig.letter(label=my.label, location= "topleft", font=2)
 dev.off()
