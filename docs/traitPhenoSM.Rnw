@@ -80,7 +80,7 @@
 
 \begin{table}[ht!]
 \centering
-\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station was used for our Smithers samples. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest and in St. Hippolyte respectively. Listed below are the total chill units that include both field and experimental chilling. }  %emwJan28: Can you give some sort of website for each or a better ID or such? These names seem hard to track down ... 
+\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Government of Canada's Environmental and natural resources' historical data, using the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station for our Smithers samples \citep{ENRCan}. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest \citep{climHF} and in the Government of Canada's Environmental and natural resources' historical data from the St. Hippolyte weather station \citep{ENRCan}. Listed below are the total chill units that include both field and experimental chilling. }  
 \label{tabChill}
 \begin{tabular}{llrrr}
   \hline
@@ -310,6 +310,10 @@ meanz4 <- cbind(meanz4, upper)
 
 print(xtable(meanz4, caption="Summary output from a joint Bayesian model of LNC and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
+\clearpage
 
+\bibliographystyle{refs/bibstyles/amnat}% 
+\bibliography{refs/biblio.bib}
+\clearpage
 
 \end{document}
