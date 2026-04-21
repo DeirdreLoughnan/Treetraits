@@ -36,10 +36,10 @@ put.fig.letter <- function(label, location="topleft", x=NULL, y=NULL,
   text(labels=label[1], x=this.x, y=this.y, xpd=T, cex = 2, ...)
 }
 
-spInfo <- read.csv("..//analysis/input/species_ring.csv")
-pheno <- read.csv("..//analysis/input/phenoDataWChill.csv")
+spInfo <- read.csv("analysis/input/species_ring.csv")
+pheno <- read.csv("analysis/input/phenoDataWChill.csv")
 # trtPheno <- read.csv("input/trtData.csv")
-trtPheno <- read.csv("..//analysis/input/trtPhenoDummy.csv")
+trtPheno <- read.csv("analysis/input/trtPhenoDummy.csv")
 
 # Get the data
 # dl <- read.csv("input/dl_allbb.csv")
@@ -107,7 +107,7 @@ trtPheno <- read.csv("..//analysis/input/trtPhenoDummy.csv")
 # sort(unique(pheno.t$species.fact)) # 47 bc two species occur in both transects
 # 
 # # Now get the trait data and subset to only include spp we have pheno data for:
-# setwd("..//Treetraits")
+# setwd("Treetraits")
 # trtData <- read.csv("data/allTrt.csv", stringsAsFactors = FALSE)
 # head(trtData)
 # 
@@ -161,7 +161,7 @@ specieslist <- sort(unique(trtPheno$species))
 
 ################################
 # Height
-load("..//analysis/output/htContLatHundoLat.Rdata")
+load("analysis/output/htContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlHt)
 
@@ -222,7 +222,7 @@ col3.sp <-c( rgb(124 / 252, 166 / 255, 0 / 255, alpha = 0.05))
 col4.sp <- c( rgb(34 / 255, 166 / 255, 167 / 255, alpha = 0.05))
 col5.sp <- c( rgb(141 / 255, 34 / 255, 171 / 255, alpha = 0.05))
 
-pdf("..//analysis/figures/cuetraitLat.pdf", height = 20, width = 15)
+pdf("analysis/figures/cuetraitLat.pdf", height = 20, width = 15)
 par(mar = c(5, 5, 4, 2), mfrow = c(5,3), mgp = c(3.5,1,0))
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, 
       type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
@@ -441,7 +441,7 @@ arrows(
 
 ##########################################
 # LMA
-load("..//analysis/output/lmaContLatHundoLat.Rdata")
+load("analysis/output/lmaContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlLMA)
 
@@ -705,7 +705,7 @@ text(0.02, 9, "f)", cex = 2)
 
 ####################
 # DBH
-load("..//analysis/output/dbhContLatHundoLat.Rdata")
+load("analysis/output/dbhContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlDBH)
 
@@ -970,7 +970,7 @@ text(0, 9, "i)", cex = 2)
 ###############################################################
 ####################
 # SSD
-load("..//analysis/output/ssdContLatHundowLat10.Rdata")
+load("analysis/output/ssdContLatHundowLat10.Rdata")
 
 ModelFit <- rstan::extract(mdlSSD)
 
@@ -1025,7 +1025,7 @@ bfs_df_west <- bfs_df[bfs_df$species %in% westSp, ]
 plot( x= mg_df$muSpMean, y = bfs_df$betaForceSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bfs_df$force25), 10), 
       ylab = "Species-level forcing slope", 
-      xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Wood density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Forcing", adj = 0, cex = 1.5)
@@ -1109,7 +1109,7 @@ bcs_df_west <- bcs_df[bcs_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bcs_df$betaChillSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bcs_df$chill25), 10), 
-      ylab = "Species-level chilling slope", xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      ylab = "Species-level chilling slope", xlab = bquote('Wood density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Chilling", adj = 0, cex = 1.5)
@@ -1189,7 +1189,7 @@ bps_df_west <- bps_df[bps_df$species %in% westSp, ]
 #par(mar = c(5, 5, 2, 2), mfrow = c(1,1))
 plot( x= mg_df$muSpMean, y = bps_df$betaPhotoSpMean, type="n", xlim = c(min(mg_df$trait25), max(mg_df$trait75)), 
       ylim = c(min(bps_df$photo25), 10), ylab = "Species-level photoperiod slope", 
-      xlab = bquote('Wood specific density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
+      xlab = bquote('Wood density'~(g/cm^3)), cex.lab = 2.25, cex.axis = 2) # blank plot with x range 
 # 3 columns, mean, quantile
 # min and max defined by quantiles
 #mtext(side = 3, text = "Photoperiod", adj = 0, cex = 1.5)
@@ -1240,7 +1240,7 @@ text(0.01, 9, "i)", cex = 2)
 
 #########################################################################################################################
 # LNC
-load("..//analysis/output/lncContLatHundoLat.Rdata")
+load("analysis/output/lncContLatHundoLat.Rdata")
 
 ModelFit <- rstan::extract(mdlPerN)
 

@@ -67,13 +67,13 @@ output <- data.frame(cbind(
 names(output) <- c("iter", "mu_grand","b_tranE", "b_tranLat","b_lat","lat")
 
 for (i in 1:nrow(output)){
-  # temp <- output$mu_grand[i] + output$b_tranE[i]* tranE + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranE*output$lat[i])
-  # output$latTrendE[output$iter == i] <- temp
+   temp <- output$mu_grand[i] + output$b_tranE[i]* tranE + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranE*output$lat[i])
+   output$latTrendE[output$iter == i] <- temp
   tempW <- output$mu_grand[i] + output$b_tranE[i]* tranW + output$b_lat[i]* output$lat[i] + output$b_tranLat[i]* (tranW*output$lat[i])
   output$latTrendW[output$iter == i] <- tempW
 }
 
-pdf("analysis/figures/traitLatIntJune15.pdf", width = 15, height = 4)
+pdf("analysis/figures/traitLatInt.pdf", width = 15, height = 4)
 par(mfrow = c(1,5), mar = c(5.1, 4.5, 4.1, 2.1), mgp=c(2.25,1,0))
 plot(NA, xlim = c(42,54), ylim = c(-5, 10),
      xlab = "Latitude", ylab = "Height (m)",
@@ -171,7 +171,7 @@ for (i in 1:nrow(output)){
 
 
 plot(NA, xlim = c(42,54), ylim = c(0,0.8),
-     xlab = "Latitude", ylab = bquote('Wood specific density'~(g/cm^3)),
+     xlab = "Latitude", ylab = bquote('Wood density'~(g/cm^3)),
      xaxt = "n",
      cex.lab = 1.5,
      cex.axis = 1.5)
@@ -213,7 +213,7 @@ for (i in 1:nrow(output)){
 }
 
 plot(NA, xlim = c(42,54), ylim = c(00, 0.10),
-     xlab = "Latitude", ylab =  bquote('Leaf mass area '~(g/cm^2)),
+     xlab = "Latitude", ylab =  bquote('Leaf mass per area '~(g/cm^2)),
      xaxt = "n",
      cex.lab = 1.5,
      cex.axis = 1.5)
