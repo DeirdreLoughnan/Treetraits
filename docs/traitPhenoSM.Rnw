@@ -224,7 +224,7 @@ upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU
 
 meanz4 <- cbind(meanz4, upper)
 
-print(xtable(meanz4, caption="Summary output from a joint Bayesian model of wood specific density and budburst phenology in which species are partially pooled. For this model the trait data was rescaled by 10 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+print(xtable(meanz4, caption="Summary output from a joint Bayesian model of branch wood density and budburst phenology in which species are partially pooled. For this model the trait data was rescaled by 10 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 @
 
 <<label= tableLMA, echo=FALSE , results= tex >>=
