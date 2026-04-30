@@ -1,6 +1,11 @@
 %%% start preambling . . .  %%%
 \documentclass{article}
 
+% hit 
+% try to add phylogeny on the residuals
+% estimate leafout for what ever is most real from the mdoel---pagel's lambda---cite Gelman and hill ---linear model intercept is the var not explained by other cues---are encapsulating some of the treat
+% test whether phylo dist is related to leafout timing---extract number and put it into Pagel's lambda or bloombergs K---add to the supp
+
 % required 
 \usepackage[hyphens]{url} % this wraps my URL versus letting it spill across the page, a bad habit LaTeX has
 
@@ -25,6 +30,8 @@
 % Fig. produced will be titled plus its number or label (e.g., demoFig-nqpbetter.pdf')
 % make your captioning look better
 \usepackage[small]{caption}
+\usepackage{setspace}
+\onehalfspacing
 
 \setlength{\captionmargin}{30pt}
 \setlength{\abovecaptionskip}{0pt}
@@ -64,7 +71,9 @@
 \title{Traits predict forest phenological responses to photoperiod more than temperature} 
 
 \author{Deirdre Loughnan$^1$, Faith A M Jones$^1,^2$, and E M Wolkovich$^{1,3,4}$}
+\date{} 
 \maketitle 
+
 $^1$ Department of Forest and Conservation, Faculty of Forestry, University of British Columbia, 2424 Main Mall
 Vancouver, BC Canada V6T 1Z4. \\
 
@@ -82,7 +91,7 @@ $^4$ Organismic \& Evolutionary Biology, Harvard University, 26 Oxford Street, C
 
 Corresponding Author: Deirdre Loughnan deirdre.loughnan@ubc.ca \\
 
-Running title: Traits and budburst both related photoperiod cues
+% Running title: Traits and budburst both related photoperiod cues
 % 41 characters
 
 <<label=runcode1,  echo=FALSE>>=
@@ -94,6 +103,9 @@ source("..//analysis/rcode/manuscriptValues.R")
 \section*{Summary}
 Shifts in the timing of spring phenology, such as budburst and leafout, can have major ecosystem consequences. Understanding how species phenological responses fit within broader frameworks of plant strategies could help predict these consequences and other impacts on plant communities. Theory suggests that species with early spring phenology would have a more acquisitive growth strategy while later species would be more conservative. Yet testing these predictions has been slow given the high variability of spring phenology when measured in natural settings across space and time. Using controlled environment studies, we reduce phenological variation into its component responses to chilling (cool winter temperatures), forcing (spring warming temperatures) and photoperiod, and test for trait relationships across 47 species sampled from eight forest communities (1428 individuals) across North America. We find phenology connects to four major plant functional traits---height, diameter, leaf mass per area and nitrogen content---via responses to photoperiod, but not temperature. Our results suggest photoperiod responses may be a critical component of how spring phenology fits within plant strategies, which could help predict future shifts in forest growth with continued climate change.  
 
+\section*{Keywords}
+Phenology, budburst, leafout, traits, forest communities, woody plants.\\
+
 \section*{Introduction}
 
 Climate change is causing species phenologies---the timing of life history events---to shift, with widespread advances being observed across the tree of life \citep{Parmesan2003,IPCC2018_symb}. This common phenological fingerprint, however, averages over high variability across species \citep{Thackeray2016, Cohen2018, Kharouba2018}, posing a challenge to accurate forecasts.\\
@@ -102,9 +114,7 @@ In plants, species variation can be explained, in part, by differences in growth
 
 Correlations between plant traits, growth strategies, and responses to environments have been synthesized into several global frameworks, including the leaf economic spectrum \citep{Wright2004} and wood economic spectrum \citep{Chave2009}. These frameworks have identified key traits that exhibit distinct gradients, ranging from acquisitive strategies---fast growing plants that produce cheaper tissue ---to conservative strategies---with plants that invest in long-lived tissue but slower growth rates \citep{Wright2004,Diaz2016}. In temperate systems, changes in temperature in spring can produce gradients in abiotic stress, including frost risk, soil nutrients, and light availability \citep{Sakai1987,Gotelli1996,Augspurger2009}, in addition to differences in biotic interactions from herbivory or competition later in the season \citep{Lopez2008,Wolkovich2014}. Species that vary in their timing of leafout should therefore exhibit traits and growth strategies that allow them to tolerate or avoid these abiotic and biotic factors, but testing how phenology fits within major functional trait frameworks requires working across within- and between-species variation. \\
 
-Phenology is generally observed in natural conditions where variation in the environment across space and time generates high variation in leafout, flowering and other phenological events \citep{Chuine2000,Korner2010}, which has stymied previous efforts to understand the role of phenology in existing trait frameworks. 
-
-Increasing evidence, however, shows that phenology---especially spring phenology---is often far less variable when measured in experiments \citep{Basler2014,Vitasse2009a}. Experiments in controlled environments (growth chambers) in particular can consistently decompose spring phenology for woody plants into its individual environmental cues \citep[][]{Chuine1999,Harrington2015,Flynn2018}: chilling (cool winter temperatures), forcing (warm spring temperatures), and photoperiod. Decades of experiments now show how these cues combine to determine early versus late spring phenology across species. While all species show strong responses to temperature cues, with chilling generally the strongest cue, later species tend to have larger responses to forcing, chilling and photoperiod \citep{Ettinger2020}. Within species, some evidence further suggests spatial gradients in climate may drive variation in responses to cues \citep{Vitasse2018,Wang2025}. \\
+Phenology is generally observed in natural conditions where variation in the environment across space and time generates high variation in leafout, flowering and other phenological events \citep{Chuine2000,Korner2010}, which has stymied previous efforts to understand the role of phenology in existing trait frameworks. Increasing evidence, however, shows that phenology---especially spring phenology---is often far less variable when measured in experiments \citep{Basler2014,Vitasse2009a}. Experiments in controlled environments (growth chambers) in particular can consistently decompose spring phenology for woody plants into its individual environmental cues \citep[][]{Chuine1999,Harrington2015,Flynn2018}: chilling (cool winter temperatures), forcing (warm spring temperatures), and photoperiod. Decades of experiments now show how these cues combine to determine early versus late spring phenology across species. While all species show strong responses to temperature cues, with chilling generally the strongest cue, later species tend to have larger responses to forcing, chilling and photoperiod \citep{Ettinger2020}. Within species, some evidence further suggests spatial gradients in climate may drive variation in responses to cues \citep{Vitasse2018,Wang2025}. \\
 
 Here, we tested whether phenological variation was aligned with existing trait frameworks using data on spring budburst paired with a suite of traits that capture acquisitive to conservative growth strategies. We decomposed the high phenological variation in budburst date by using experiments to estimate chilling, forcing, and photoperiod cues for each species. We predicted that early spring species, which generally budburst before canopy closure \citep{Augspurger2008,Vitasse2013}, will have smaller responses to temperature and photoperiod and have traits associated with acquisitive growth. They would thus be shorter, with smaller trunks or stem diameters, and a lower investment in wood structure and leaf tissue, resulting in low branch wood density, diffuse-porous wood anatomy, and low leaf mass per area, but high leaf nitrogen content for a greater photosynthetic potential (Fig. \ref{fig:concept}). In contrast, we predicted species with later budburst (requiring more chilling, forcing, and longer photoperiods) to predominately include canopy species that have more conservative growth strategies. These species should incur greater investments in long-lived tissue, with ring-porous wood anatomy, taller heights and greater diameter, denser wood and high leaf mass per area, but low leaf nitrogen content (Fig. \ref{fig:concept}). We further expected traits to vary spatially, with individuals at more northern sites being relatively smaller, with lower leaf mass per area relative to our southern sites, but follow similar responses in both our eastern and western transect. We used a joint-modeling approach to estimate the relationships between these plant traits and phenological responses to cues, while partitioning the variance from species- and population-level differences.
 
@@ -206,7 +216,7 @@ with
 \alpha_{\text{photoperiod}_n}
 \end{bmatrix}
 \text{ such that }
-\boldsymbol{\alpha_{\text{photoperiod}}} \sim \emph{Normal} (\mu_{\text{photoperiod}}, \sigma_{\text{photoperiod}}^2)\nonumber
+\boldsymbol{\alpha_{\text{photoperiod}}} \sim \emph{Normal} (\mu_{\text{photoperiod}}, \sigma_{\text{photoperiod}}^2)
 \end{align}
 
 We modeled each trait individually, with the exception of ring-porosity, which we compared across species using the posterior estimates of our wood density model, allowing us to account for inherent differences in wood anatomy across species and growth form. We included all three cues (chilling, forcing, and photoperiod) as continuous variables in our model. We converted chilling temperatures to total chill portions, including both the chilling experienced in the field prior to sampling and during the experiment. For this we used local weather station data and the chillR package \citep[v. 0.73.1,][]{Luedeling2020}. To account for differences in thermoperiodicity between our eastern and western growth chamber studies \citep{Buonaiuto2023}, we also converted forcing temperatures to mean daily temperatures for each treatment. Finally, we $z$-scored each cue and site using two standard deviations to allow direct comparisons between results across parameters \citep{Gelman2008}. \\
@@ -248,6 +258,18 @@ Our results offer novel insights into how broader correlations between growth st
 
 Our findings of correlations between phenology and other commonly measured traits highlight how accurate forecasts of future changes in phenology could benefit from accounting for the response of other traits to climate change. Across temperature and precipitation gradients, leaf size and shape also change, as species shift to conserve water and mitigate the effects of transpiration under higher temperatures \citep{DelaRiva2016}. These changes could impact species photosynthetic potential and ultimately ecosystem services, such as carbon sequestration. While phenological research has focused on forecasting responses to temperature, the correlation of other traits with photoperiod suggests it is also an important cue.  Considering the tradeoffs and differences in cues that together shape plants growth strategies may yield more accurate forecasts of species phenology and community dynamics under future climates.\\ 
 
+\section*{Acknowledgements}
+We thank M. Yasutake, K. Slimon, S. Larter, P. Autio, and S. Collins for their help running the Western part of this experiment; D. Flynn and T. Savas for contributions to the Eastern experimental data; and to J. Hopps and K. Wilson for their support during our work at E. C. Manning Park and P. Crawford and D. Belford for their support while working in Babine Provincial Park. Funding was provided by a Natural Sciences and Engineering Research Council (NSERC) Canada Graduate Scholarship-Doctoral award to Deirdre Loughnan and Canada Research Chair award in Temporal Ecology and NSERC Discovery awards to E.M. Wolkovich.\\
+
+\section*{Competing interests}
+The authors have no competing interests. \\
+
+\section*{Author contributions}
+Both D.L. and E.M.W. conceived the study, D.L., F.A.J. and E.M.W. all contributed to the analysis and code and contributed to the writing and revision of the manuscript. DL led field and experimental data collection.\\
+
+\section*{Data availability}
+The phenology data used in this study is published on the Knowledge Network of Biocomplexity for both the eastern transect (urn:uuid:efeccd2b-b850-4b48-b721-9bed8040562e) and western transect (doi:10.5063/F1W66J82). Trait data from the eastern transect is available through the Harvard Forest Data Archive (doi:10.6073/pasta/dc68c63764f0c5edf6f09e7a60a0468a). Trait data from the western transect will be published on the Knowledge Network of Biocomplexity.
+
 \bibliographystyle{refs/bibstyles/amnat}% 
 \bibliography{refs/biblio.bib}
 \clearpage
@@ -262,12 +284,6 @@ Our findings of correlations between phenology and other commonly measured trait
 \label{fig:concept}
 \end{figure}
 
-% \begin{figure}[ht]\centering\hfill
-%  \centering
-%  \includegraphics[width=\textwidth]{..//figures/betaTraitxCueZ25.pdf}
-% \caption{Only some traits were related to budburst phenological cues. For leaf mass per area, stem specific density, and the ratio of carbon to nitrogen, traits no effect on budburst timing.}
-% \label{fig:betaTraitxCue}
-% \end{figure}
 \begin{figure}[ht]\centering\hfill
  \centering
  \includegraphics[width=\textwidth]{..//analysis/figures/traitLatInt.pdf}
