@@ -76,24 +76,83 @@
 \newpage
 \clearpage
 
-\section*{Tables}
+\begin{table}[ht!]
+\centering
+\caption{List of species names and abbreviations, as well as the transect in which each species was sampled from and plant architecure.} 
+\label{tabPhenoSp}
+\begin{tabular}{lrrrrr}
+  \hline
+Species & Spp. abbreviation & Transect & Plant architecture \\ 
+  \hline
+\emph{Acer glabrum} & acegla & Western & Tree \\ 
+  \emph{Acer pensylvanicum} & acepen & Eastern & Tree  \\ 
+  \emph{Acer rubrum} & acerub & Eastern & Tree \\ 
+  \emph{Acer saccharum} & acesac & Eastern & Tree  \\ 
+  \emph{Alnus incana} & alninc & Eastern and Western & Shrub \\ 
+  \emph{Alnus viridis} & alnvir & Western & Shrub \\ 
+  \emph{Amelanchier alnifolia} & amealn & Western & Shrub \\ 
+  \emph{Aronia melanocarpa} & aromel & Eastern & Shrub  \\ 
+  \emph{Betula alleghaniensis} & betall & Eastern & Tree  \\ 
+  \emph{Betula lenta} & betlen & Eastern & Tree \\ 
+  \emph{Betula papyrifera} & betpap & Eastern & Tree \\ 
+  \emph{Betula papyrifera} & betpap & Eastern and Western & Shrub  \\ 
+  \emph{Corylus cornuta} & corcor & Eastern & Shrub  \\ 
+  \emph{Cornus stolonifera} & corsto & Western & Shrub \\ 
+  \emph{Fagus grandifolia} & faggra & Eastern & Tree  \\ 
+  \emph{Fraxinus nigra} & franig  & Eastern & Tree  \\ 
+  \emph{Hamamelis virginiana} & hamvir &  Eastern & Shrub   \\ 
+  \emph{Ilex mucronata} & ilemuc &  Eastern & Shrub   \\ 
+  \emph{Kalmia angustifolia} & kalang &  Eastern & Shrub   \\ 
+  \emph{Lonicera canadensis} & loncan &  Eastern & Shrub  \\ 
+  \emph{Lonicera involucrata} & loninv & Western & Shrub \\ 
+  \emph{Lyonia ligustrina} & lyolig &  Eastern & Shrub   \\ 
+  \emph{Menziesia ferruginea} & menfer & Western & Shrub \\ 
+  \emph{Nyssa sylvatica} & nyssyl &  Eastern & Tree   \\ 
+  \emph{Populus balsamifera} & popbal & Western & Tree \\ 
+  \emph{Populus grandidentata} & popgra & Eastern & Tree  \\ 
+  \emph{Populus tremuloides} & poptre & Eastern and Western & Shrub \\ 
+  \emph{Prunus pensylvanica} & prupen & Eastern & Tree  \\ 
+  \emph{Quercus alba} & quealb & Eastern & Tree  \\ 
+  \emph{Quercus rubra} & querub & Eastern & Tree  \\ 
+  \emph{Quercus velutina} & quevel & Eastern & Tree  \\ 
+  \emph{Rhamnus frangula} & rhafran &  Eastern & Shrub   \\ 
+  \emph{Rhododendron albiflorum} & rhoalb & Western & Shrub  \\ 
+  \emph{Rhododendron prinophyllum} & rhopri &  Eastern & Shrub   \\ 
+  \emph{Ribes lacustre} & riblac & Western & Shrub \\ 
+  \emph{Rubus parviflorus} & rubpar & Western & Shrub \\ 
+  \emph{Sambucus racemosa} & samrac & Western & Shrub  \\ 
+  \emph{Shepherdia canadensis} & shecan & Western & Shrub \\ 
+  \emph{Sorbus scopulina} & sorsco & Western & Shrub \\ 
+  \emph{Spiraea alba} & spialb & Western & Shrub  \\ 
+  \emph{Spiraea betulifolia} & spibet & Western & Shrub \\ 
+  \emph{Spiraea pyramidata} & spipyr & Western & Shrub \\ 
+  \emph{Symphoricarpos albus} & symalb & Western & Shrub \\ 
+  \emph{Vaccinium membranaceum} & vacmem & Western & Shrub \\ 
+  \emph{Vaccinium myrtilloides} & vacmyr &  Eastern & Shrub   \\ 
+  \emph{Viburnum cassinoides} & vibcas &  Eastern & Shrub   \\ 
+  \emph{Viburnum edule} & vibedu & Western & Shrub \\ 
+  \emph{Viburnum lantanoides} & viblan &  Eastern & Shrub   \\ 
+  \end{tabular}
+\end{table}
+\newpage
+
 
 \begin{table}[ht!]
 \centering
-\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Government of Canada's Environmental and natural resources' historical data, using the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station for our Smithers samples \citep{ENRCan}. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest \citep{climHF} and in the Government of Canada's Environmental and natural resources' historical data from the St. Hippolyte weather station \citep{ENRCan}. Listed below are the total chill units that include both field and experimental chilling. }  
+\caption{We obtained the temperature data we used to calculate field chilling from the nearest weather station to each site. Temperature data for the fall of 2019 and winter 2020 was obtained from the Government of Canada's Environmental and natural resources' historical data, using the Hope Slide weather station for our E.C. Manning park samples and the Smithers airport weather station for our Smithers samples \citep{ENRCan}. For our eastern samples, weather data for the fall of 2014 and winter 2015 was obtained from weather stations at Harvard Forest \citep{climHF} and in the Government of Canada's Environmental and natural resources' historical data from the St. Hippolyte weather station \citep{ENRCan}. Listed below are the total chill portions that include both field and experimental chilling. Chill portions were calculated using the Dynamic Model in the chillR package \citep[v. 0.73.1,][]{Luedeling2020}. }
 \label{tabChill}
 \begin{tabular}{llrrr}
   \hline
-Site & Chilling treatment & Chill hours & Utah model & Chill portions \\ 
+Site & Chilling treatment & Chill portions \\ 
   \hline
-Harvard forest & Field chilling & 892 & 814.50 & 56.62 \\ 
-  Harvard forest & Field chilling + 30 d at 4$^\circ$C & 2140 & 2062.50 & 94.06 \\ 
-  St. Hippoltye & Field chilling & 682 & 599.50 & 44.63 \\ 
-  St. Hippoltye & Field chilling + 30 d at 4$^\circ$C & 1930 & 1847.50 & 82.06 \\ 
-  Smithers & Field chilling + 21 d at 4$^\circ$C & 1317 & 1368.00 & 54.95 \\ 
-  Smithers & Field chilling + 56 d at 4$^\circ$C & 1965 & 2016.00 & 74.67 \\ 
-  Manning park & Field chilling + 21 d at 4$^\circ$C & 1213 & 1377.00 & 55.09 \\ 
-  Manning park & Field chilling + 56 d at 4$^\circ$C & 1861 & 2025.00 & 75.33 \\ 
+Harvard forest & Field chilling & 56.62 \\ 
+  Harvard forest & Field chilling + 30 d at 4$^\circ$C & 94.06 \\ 
+  St. Hippoltye & Field chilling & 44.63 \\ 
+  St. Hippoltye & Field chilling + 30 d at 4$^\circ$C & 82.06 \\ 
+  Smithers & Field chilling + 21 d at 4$^\circ$C & 54.95 \\ 
+  Smithers & Field chilling + 56 d at 4$^\circ$C & 74.67 \\ 
+  Manning park & Field chilling + 21 d at 4$^\circ$C & 55.09 \\ 
+  Manning park & Field chilling + 56 d at 4$^\circ$C & 75.33 \\ 
   \end{tabular}
 \end{table}
 \newpage
