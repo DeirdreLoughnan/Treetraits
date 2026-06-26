@@ -95,7 +95,7 @@ Species & Spp. abbreviation & Transect & Plant architecture \\
   \emph{Betula alleghaniensis} & betall & Eastern & Tree  \\ 
   \emph{Betula lenta} & betlen & Eastern & Tree \\ 
   \emph{Betula papyrifera} & betpap & Eastern & Tree \\ 
-  \emph{Betula papyrifera} & betpap & Eastern and Western & Shrub  \\ 
+  \emph{Betula papyrifera} & betpap & Eastern and Western & Tree  \\ 
   \emph{Corylus cornuta} & corcor & Eastern & Shrub  \\ 
   \emph{Cornus stolonifera} & corsto & Western & Shrub \\ 
   \emph{Fagus grandifolia} & faggra & Eastern & Tree  \\ 
@@ -110,7 +110,7 @@ Species & Spp. abbreviation & Transect & Plant architecture \\
   \emph{Nyssa sylvatica} & nyssyl &  Eastern & Tree   \\ 
   \emph{Populus balsamifera} & popbal & Western & Tree \\ 
   \emph{Populus grandidentata} & popgra & Eastern & Tree  \\ 
-  \emph{Populus tremuloides} & poptre & Eastern and Western & Shrub \\ 
+  \emph{Populus tremuloides} & poptre & Eastern and Western & Tree \\ 
   \emph{Prunus pensylvanica} & prupen & Eastern & Tree  \\ 
   \emph{Quercus alba} & quealb & Eastern & Tree  \\ 
   \emph{Quercus rubra} & querub & Eastern & Tree  \\ 
