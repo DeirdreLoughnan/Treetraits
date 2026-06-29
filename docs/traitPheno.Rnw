@@ -282,7 +282,7 @@ Both D.L. and E.M.W. conceived the study, D.L., F.A.J. and E.M.W. all contribute
 \section*{Data availability}
 The phenology data used in this study is published on the Knowledge Network of Biocomplexity for both the eastern transect (urn:uuid:efeccd2b-b850-4b48-b721-9bed8040562e) and western transect (doi:10.5063/F1W66J82). Trait data from the eastern transect is available through the Harvard Forest Data Archive (doi:10.6073/pasta/dc68c63764f0c5edf6f09e7a60a0468a). Trait data from the western transect will be published on the Knowledge Network of Biocomplexity.
 
-\bibliographystyle{refs/bibstyles/amnat}% 
+\bibliographystyle{refs/bibstyles/ecolett}% 
 \bibliography{refs/biblio.bib}
 \clearpage
 
