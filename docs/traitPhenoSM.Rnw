@@ -263,28 +263,144 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
   \end{tabular}
 \end{table}\clearpage
 
+\begin{table}[ht]
+\centering
+\caption{Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.} 
+\label{tabHtInt}
+\begin{tabular}{rrrrrr}
+  \hline
+ & Mean & 5\% & 25\% & 75\% & 95\% \\ 
+  \hline
+Transect & 7.53 & -1.06 & 3.97 & 11.04 & 16.36 \\ 
+  Latitude & 0.05 & -0.03 & 0.02 & 0.08 & 0.13 \\ 
+  Transect x latitude & -0.20 & -0.39 & -0.28 & -0.12 & -0.01 \\ 
+  Forcing & -9.73 & -12.03 & -10.47 & -8.86 & -7.79 \\ 
+  Chilling & -13.75 & -18.29 & -15.37 & -12.04 & -9.64 \\ 
+  Photoperiod & -2.57 & -4.16 & -3.29 & -1.92 & -0.82 \\ 
+  Forcing x photoperiod & 0.12 & -0.98 & -0.32 & 0.56 & 1.22 \\ 
+  Forecing x chilling & 7.98 & 6.18 & 7.29 & 8.69 & 9.69 \\ 
+  Chilling x photoperiod & -0.35 & -1.77 & -0.93 & 0.22 & 1.09 \\ 
+  Trait x forcing & 0.24 & -0.11 & 0.10 & 0.38 & 0.59 \\ 
+  Trait x chilling & 0.36 & -0.47 & 0.03 & 0.70 & 1.16 \\ 
+  Trait x photoperiod & -0.35 & -0.53 & -0.42 & -0.28 & -0.16 \\ 
+  \end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Summary output from a joint Bayesian model of diameter at breast height and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.} 
+\label{tabDBHInt}
+\begin{tabular}{rrrrrr}
+  \hline
+ & Mean & 5\% & 25\% & 75\% & 95\% \\ 
+  \hline
+Transect & -23.48 & -41.64 & -30.86 & -15.98 & -4.80 \\ 
+  Latitude & 0.17 & 0.01 & 0.11 & 0.24 & 0.33 \\ 
+  Transect x latitude & 0.50 & 0.10 & 0.34 & 0.67 & 0.90 \\ 
+  Forcing & -8.72 & -10.76 & -9.59 & -7.94 & -6.43 \\ 
+  Chilling & -12.31 & -16.82 & -14.02 & -10.61 & -7.39 \\ 
+  Photoperiod & -4.05 & -6.27 & -4.78 & -3.26 & -2.06 \\ 
+  Forcing x photoperiod & 1.91 & -158.44 & -62.65 & 69.81 & 163.38 \\ 
+  Forecing x chilling & 7.93 & 6.08 & 7.24 & 8.64 & 9.74 \\ 
+  Chilling x photoperiod & -0.23 & -1.72 & -0.84 & 0.36 & 1.32 \\ 
+  Trait x forcing & 0.12 & -0.13 & 0.01 & 0.22 & 0.39 \\ 
+  Trait x chilling & 0.24 & -0.31 & 0.02 & 0.47 & 0.80 \\ 
+  Trait x photoperiod & -0.21 & -0.35 & -0.26 & -0.15 & -0.07 \\ 
+  \end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Summary output from a joint Bayesian model of stem specific density and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.} 
+\label{tabSSDInt}
+\begin{tabular}{rrrrrr}
+  \hline
+ & Mean & 5\% & 25\% & 75\% & 95\% \\ 
+  \hline
+Transect & 7.07 & 4.07 & 5.91 & 8.23 & 9.95 \\ 
+  Latitude & 0.03 & 0.01 & 0.02 & 0.04 & 0.06 \\ 
+  Transect x latitude & -0.14 & -0.21 & -0.17 & -0.12 & -0.08 \\ 
+  Forcing & -14.36 & -22.03 & -16.99 & -11.50 & -7.75 \\ 
+  Chilling & -25.12 & -39.27 & -30.21 & -19.52 & -12.69 \\ 
+  Photoperiod & 0.08 & -3.87 & -1.79 & 1.61 & 4.55 \\ 
+  Forcing x photoperiod & 0.39 & -56.64 & -22.57 & 23.96 & 56.39 \\ 
+  Forecing x chilling & 7.98 & 6.22 & 7.31 & 8.66 & 9.74 \\ 
+  Chilling x photoperiod & -0.35 & -1.81 & -0.97 & 0.23 & 1.17 \\ 
+  Trait x forcing & 1.69 & -0.34 & 0.87 & 2.55 & 3.72 \\ 
+  Trait x chilling & 3.85 & 0.15 & 2.37 & 5.34 & 7.64 \\ 
+  Trait x photoperiod & -1.11 & -2.35 & -1.58 & -0.60 & 0.07 \\ 
+  \end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Summary output from a joint Bayesian model of leaf mass area and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.} 
+\label{tabLMAInt}
+\begin{tabular}{rrrrrr}
+  \hline
+ & Mean & 5\% & 25\% & 75\% & 95\% \\ 
+  \hline
+Transect & -22.73 & -27.31 & -24.66 & -20.82 & -18.07 \\ 
+  Latitude & -0.16 & -0.20 & -0.18 & -0.14 & -0.11 \\ 
+  Transect x latitude & 0.50 & 0.40 & 0.46 & 0.54 & 0.60 \\ 
+  Forcing & -0.81 & -17.62 & -7.80 & 6.07 & 15.36 \\ 
+  Chilling & 2.56 & -33.76 & -14.13 & 18.04 & 41.94 \\ 
+  Photoperiod & -14.26 & -24.91 & -18.30 & -10.29 & -3.56 \\ 
+  Forcing x photoperiod & 0.19 & -0.96 & -0.28 & 0.66 & 1.31 \\ 
+  Forecing x chilling & 8.04 & 6.59 & 7.45 & 8.63 & 9.49 \\ 
+  Chilling x photoperiod & -0.45 & -1.69 & -0.98 & 0.04 & 0.86 \\ 
+  Trait x forcing & -0.69 & -2.06 & -1.27 & -0.10 & 0.73 \\ 
+  Trait x chilling & -1.29 & -4.56 & -2.59 & 0.08 & 1.75 \\ 
+  Trait x photoperiod & 0.89 & -0.00 & 0.58 & 1.22 & 1.73 \\ 
+  \end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Summary output from a joint Bayesian model of leaf nitrogen content and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.} 
+\label{tabHtInt}
+\begin{tabular}{rrrrrr}
+  \hline
+ & Mean & 5\% & 25\% & 75\% & 95\% \\ 
+  \hline
+Transect & -5.16 & -13.48 & -8.37 & -1.90 & 2.90 \\ 
+  Latitude & -0.14 & -0.22 & -0.17 & -0.11 & -0.06 \\ 
+  Transect x latitude & 0.05 & -0.12 & -0.02 & 0.12 & 0.23 \\ 
+  Forcing & -15.23 & -35.95 & -22.27 & -8.04 & 4.59 \\ 
+  Chilling & -43.14 & -88.88 & -57.98 & -25.91 & -6.55 \\ 
+  Photoperiod & 6.89 & -1.71 & 3.13 & 10.32 & 16.46 \\ 
+  Forcing x photoperiod & 0.03 & -59.47 & -24.07 & 25.22 & 58.06 \\ 
+  Forecing x chilling & 8.00 & 6.24 & 7.32 & 8.71 & 9.68 \\ 
+  Chilling x photoperiod & -0.44 & -1.91 & -1.02 & 0.14 & 1.03 \\ 
+  Trait x forcing & 0.56 & -1.23 & -0.09 & 1.26 & 2.32 \\ 
+  Trait x chilling & 2.73 & -0.58 & 1.33 & 4.15 & 6.19 \\ 
+  Trait x photoperiod & -0.95 & -1.74 & -1.26 & -0.64 & -0.18 \\ 
+  \end{tabular}
+\end{table}\clearpage
 
 % <<label= tableht, echo=FALSE , results= tex >>=
 % 
 % require(xtable)
 % require(rstan)
 % 
-% load("..//analysis/output/htContLatHundowLat.Rdata")
+% load("..//analysis/output/htContLatHundowLat_wInteract.Rdata")
 % 
-% sum <- summary(mdlHt)$summary
+% sum <- summary(mdlHtInt)$summary
 % 
-% fit <- rstan::extract(mdlHt)
+% fit <- rstan::extract(mdlHtInt)
 % 
 % mu_params_4 <- c(
 %   "b_tranE","b_lat","b_tranlat",
-%   "muForceSp", "muChillSp", "muPhotoSp", 
+%   "muForceSp", "muChillSp", "muPhotoSp",
+%   "mu_b_inter_wp","mu_b_inter_wc","mu_b_inter_pc",
 %   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-%   
+% 
 % meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 % names(meanz4) <- "Mean"
 % 
 % rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 %                       "Forcing","Chilling", "Photoperiod",
+%                       "Forcing x photoperiod","Forecing x chilling","Chilling x photoperiod",
 %                       "Trait x forcing","Trait x chilling", "Trait x photoperiod"
 % )
 % 
@@ -295,14 +411,17 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
 % photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
 % forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+% wpCueU <- round(quantile(fit$mu_b_inter_wp, c(0.05, 0.25, 0.75,0.95)),2)
+% wcCueU <- round(quantile(fit$mu_b_inter_wc, c(0.05, 0.25, 0.75,0.95)),2)
+% pcCueU <- round(quantile(fit$mu_b_inter_pc, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
-% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU, wpCueU, wcCueU,pcCueU, intrxnFU,intrxnCU,intrxnPU)
 % 
 % meanz4 <- cbind(meanz4,  upper)
 % 
-% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of height and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHtInt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % 
 % 
 % @
@@ -313,22 +432,24 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % require(xtable)
 % require(rstan)
 % 
-% load("..//analysis/output/dbhContLatHundowLat.Rdata")
+% load("..//analysis/output/dbhContLatHundowLat_wInteract.Rdata")
 % 
-% sum <- summary(mdlDBH)$summary
+% sum <- summary(mdlDBHInt)$summary
 % 
-% fit <- rstan::extract(mdlDBH)
+% fit <- rstan::extract(mdlDBHInt)
 % 
 % mu_params_4 <- c(
 %   "b_tranE","b_lat","b_tranlat",
-%   "muForceSp", "muChillSp", "muPhotoSp", 
+%   "muForceSp", "muChillSp", "muPhotoSp",
+%   "mu_b_inter_wp","mu_b_inter_wc","mu_b_inter_pc",
 %   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-%   
+% 
 % meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 % names(meanz4) <- "Mean"
 % 
 % rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 %                       "Forcing","Chilling", "Photoperiod",
+%                       "Forcing x photoperiod","Forecing x chilling","Chilling x photoperiod",
 %                       "Trait x forcing","Trait x chilling", "Trait x photoperiod"
 % )
 % 
@@ -339,15 +460,18 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
 % photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
 % forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+% wpCueU <- round(quantile(fit$mu_b_inter_wp, c(0.05, 0.25, 0.75,0.95)),2)
+% wcCueU <- round(quantile(fit$mu_b_inter_wc, c(0.05, 0.25, 0.75,0.95)),2)
+% pcCueU <- round(quantile(fit$mu_b_inter_pc, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
+% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU, wpCueU, wcCueU,pcCueU, intrxnFU,intrxnCU,intrxnPU)
 % 
-% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+% meanz4 <- cbind(meanz4,  upper)
 % 
-% meanz4 <- cbind(meanz4, upper)
+% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of diameter at breast height and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabDBHInt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % 
-% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of diameter and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues",label = "tabDBH"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % @
 % 
 % 
@@ -356,22 +480,24 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % require(xtable)
 % require(rstan)
 % 
-% load("..//analysis/output/ssdContLatHundowLat10.Rdata")
+% load("..//analysis/output/ssdContLatHundowLat10_wInteract.Rdata")
 % 
-% sum <- summary(mdlSSD)$summary
+% sum <- summary(mdlSSDInt)$summary
 % 
-% fit <- rstan::extract(mdlSSD)
+% fit <- rstan::extract(mdlSSDInt)
 % 
 % mu_params_4 <- c(
 %   "b_tranE","b_lat","b_tranlat",
-%   "muForceSp", "muChillSp", "muPhotoSp", 
+%   "muForceSp", "muChillSp", "muPhotoSp",
+%   "mu_b_inter_wp","mu_b_inter_wc","mu_b_inter_pc",
 %   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-%   
+% 
 % meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 % names(meanz4) <- "Mean"
 % 
 % rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 %                       "Forcing","Chilling", "Photoperiod",
+%                       "Forcing x photoperiod","Forecing x chilling","Chilling x photoperiod",
 %                       "Trait x forcing","Trait x chilling", "Trait x photoperiod"
 % )
 % 
@@ -382,15 +508,18 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
 % photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
 % forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+% wpCueU <- round(quantile(fit$mu_b_inter_wp, c(0.05, 0.25, 0.75,0.95)),2)
+% wcCueU <- round(quantile(fit$mu_b_inter_wc, c(0.05, 0.25, 0.75,0.95)),2)
+% pcCueU <- round(quantile(fit$mu_b_inter_pc, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
+% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU, wpCueU, wcCueU,pcCueU, intrxnFU,intrxnCU,intrxnPU)
 % 
-% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+% meanz4 <- cbind(meanz4,  upper)
 % 
-% meanz4 <- cbind(meanz4, upper)
+% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of wood density and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSDInt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % 
-% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of branch wood density and budburst phenology in which species are partially pooled. For this model the trait data was rescaled by 10 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabSSD"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % @
 % 
 % <<label= tableLMA, echo=FALSE , results= tex >>=
@@ -398,22 +527,24 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % require(xtable)
 % require(rstan)
 % 
-% load("..//analysis/output/lmaContLatHundowLat.Rdata")
+% load("..//analysis/output/lmaContLatHundowLat_wInteract.Rdata")
 % 
-% sum <- summary(mdlLMA)$summary
+% sum <- summary(mdlLMAInt)$summary
 % 
-% fit <- rstan::extract(mdlLMA)
+% fit <- rstan::extract(mdlLMAInt)
 % 
 % mu_params_4 <- c(
 %   "b_tranE","b_lat","b_tranlat",
-%   "muForceSp", "muChillSp", "muPhotoSp", 
+%   "muForceSp", "muChillSp", "muPhotoSp",
+%   "mu_b_inter_wp","mu_b_inter_wc","mu_b_inter_pc",
 %   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-%   
+% 
 % meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
 % names(meanz4) <- "Mean"
 % 
-% rownames(meanz4) = c( "Transect","Latitude", "Transect x latitude",
+% rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 %                       "Forcing","Chilling", "Photoperiod",
+%                       "Forcing x photoperiod","Forecing x chilling","Chilling x photoperiod",
 %                       "Trait x forcing","Trait x chilling", "Trait x photoperiod"
 % )
 % 
@@ -424,15 +555,18 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
 % photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
 % forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+% wpCueU <- round(quantile(fit$mu_b_inter_wp, c(0.05, 0.25, 0.75,0.95)),2)
+% wcCueU <- round(quantile(fit$mu_b_inter_wc, c(0.05, 0.25, 0.75,0.95)),2)
+% pcCueU <- round(quantile(fit$mu_b_inter_pc, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
+% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU, wpCueU, wcCueU,pcCueU, intrxnFU,intrxnCU,intrxnPU)
 % 
-% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+% meanz4 <- cbind(meanz4,  upper)
 % 
-% meanz4 <- cbind(meanz4, upper)
+% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of leaf mass area and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMAInt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % 
-% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of leaf mass area and budburst phenology in which species are partially pooled. For this model the trait data was rescaled by 100 and environmental cues were included as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLMA"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % @
 % 
 % <<label= tableLNC, echo=FALSE , results= tex >>=
@@ -440,22 +574,24 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % require(xtable)
 % require(rstan)
 % 
-% load("..//analysis/output/lncContLatHundowLat.Rdata")
+% load("..//analysis/output/lncContLatHundowLat_wInteract.Rdata")
 % 
-% sum <- summary(mdlPerN)$summary
+% sum <- summary(mdlPerNInt)$summary
 % 
-% fit <- rstan::extract(mdlPerN)
+% fit <- rstan::extract(mdlPerNInt)
 % 
 % mu_params_4 <- c(
 %   "b_tranE","b_lat","b_tranlat",
-%   "muForceSp", "muChillSp", "muPhotoSp", 
+%   "muForceSp", "muChillSp", "muPhotoSp",
+%   "mu_b_inter_wp","mu_b_inter_wc","mu_b_inter_pc",
 %   "betaTraitxForce","betaTraitxChill","betaTraitxPhoto")
-%   
+% 
 % meanz4 <- round(data.frame(sum[mu_params_4, "mean"]),2)
-% names(meanz4) <- "mean"
+% names(meanz4) <- "Mean"
 % 
 % rownames(meanz4) = c( "Transect", "Latitude","Transect x latitude",
 %                       "Forcing","Chilling", "Photoperiod",
+%                       "Forcing x photoperiod","Forecing x chilling","Chilling x photoperiod",
 %                       "Trait x forcing","Trait x chilling", "Trait x photoperiod"
 % )
 % 
@@ -466,17 +602,19 @@ Transect & -4.71 & -12.82 & -8.03 & -1.40 & 3.24 \\
 % chillCueU <- round(quantile(fit$muChillSp, c(0.05, 0.25, 0.75,0.95)),2)
 % photoCueU <- round(quantile(fit$muPhotoSp, c(0.05, 0.25, 0.75,0.95)),2)
 % forceCueU <- round(quantile(fit$muForceSp, c(0.05, 0.25, 0.75,0.95)),2)
+% wpCueU <- round(quantile(fit$mu_b_inter_wp, c(0.05, 0.25, 0.75,0.95)),2)
+% wcCueU <- round(quantile(fit$mu_b_inter_wc, c(0.05, 0.25, 0.75,0.95)),2)
+% pcCueU <- round(quantile(fit$mu_b_inter_pc, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnFU <- round(quantile(fit$betaTraitxForce, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnPU <- round(quantile(fit$betaTraitxPhoto, c(0.05, 0.25, 0.75,0.95)),2)
 % intrxnCU <- round(quantile(fit$betaTraitxChill, c(0.05, 0.25, 0.75,0.95)),2)
+% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU, wpCueU, wcCueU,pcCueU, intrxnFU,intrxnCU,intrxnPU)
 % 
-% upper <- rbind(bTranU, bLatU, bTranLatU,forceCueU, chillCueU, photoCueU,intrxnFU,intrxnCU,intrxnPU)
+% meanz4 <- cbind(meanz4,  upper)
 % 
-% meanz4 <- cbind(meanz4, upper)
-% 
-% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of leaf nitrogen content and budburst phenology in which species are partially pooled. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabLNC"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
+% print(xtable(meanz4, caption="Summary output from a joint Bayesian model of leaf nitrogen content and budburst phenology in which species are partially pooled and including interactions between cues. The model includes environmental cues as $z$-scored continuous variables, allowing comparisons to be made across cues.",label = "tabHtInt"),include.rownames=TRUE, caption.placement="top", hline.after=c(-1,0))
 % @
-\clearpage
+% \clearpage
 
 \bibliographystyle{refs/bibstyles/amnat}% 
 \bibliography{refs/biblio.bib}
